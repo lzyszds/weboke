@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+::selection{
+    background: #344449;
+    color: #fff;
+    text-shadow: none;
+}
+.Cannotbeobtained{
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+img{
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+body,html,#app{
+    font-size: 10px;
+    margin: 0;
+    padding: 0;
+}
+a,li,ui{
+    list-style: none;
+    text-decoration: none;
+}
