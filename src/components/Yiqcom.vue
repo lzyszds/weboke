@@ -3,25 +3,38 @@
 </template>
 
 <script>
-import { defineComponent, getCurrentInstance, onMounted, ref } from "vue";
+import {
+  defineComponent,
+  getCurrentInstance,
+  onMounted,
+  ref,
+  watch,
+} from "vue";
 import * as echarts from "echarts";
-import { get } from "@/http/http";
-import china from "@/../public/china.json";
-import { show, hide } from "@/utils/loading.js";
+import china from "/public/china.json";
 export default defineComponent({
   name: "Home",
-  setup() {
+  props: {
+    reactData: Object,
+  },
+
+  setup(props) {
+    const { reactData } = props;
     let currentInstance = null;
     let situationData = ref([]);
+    let MapHandle, chartHandle;
     onMounted(() => {
       currentInstance = getCurrentInstance();
       echarts.registerMap("china", china);
-      const myChart = echarts.init(currentInstance.ctx.$refs.myEchart);
-      const myChartHandle = (data) => {
+      let myChart;
+      //地图数据展示
+      MapHandle = (data) => {
+        if (myChart) myChart.dispose();
+        myChart = echarts.init(currentInstance.ctx.$refs.myEchart);
         let option = {
           backgroundColor: "#eee",
           title: {
-            text: "全国新冠疫情现有确诊",
+            text: "全国新冠疫情" + reactData.title,
             subtext: "",
             x: "center",
             y: 30,
@@ -84,29 +97,79 @@ export default defineComponent({
         };
         myChart.setOption(option);
       };
-      show();
-      get("/api").then((res) => {
-        const data = res.data.data;
-        data.areaTree.forEach((item) => {
-          if (item.name == "中国") {
-            situationData = item;
-          }
-        });
-        let cityData = [];
-
-        situationData.children.forEach((res) => {
-          //现有确诊
-          const existing = res.total.confirm - res.total.dead - res.total.heal;
-          // 总数减死亡与治疗
-          cityData.push({ name: res.name, value: existing });
-        });
-        hide();
-        myChartHandle(cityData);
-      });
+      //疫情趋势 图表展示
+      chartHandle = (data) => {
+        if (myChart) myChart.dispose();
+        myChart = echarts.init(currentInstance.ctx.$refs.myEchart);
+        let xData = [...data.map((item) => item.date)];
+        let yDataDiagnose, yDataSuspected, option;
+        try {
+          yDataDiagnose = [...data.map((item) => item.today.confirm)];
+          yDataSuspected = [...data.map((item) => item.today.suspect)];
+        } catch (error) {
+          console.log("数据不对", error, data);
+        }
+        option = {
+          title: {
+            text: "全国新冠疫情" + reactData.title,
+          },
+          tooltip: {
+            trigger: "axis",
+          },
+          legend: {
+            data: ["确诊", "疑似"],
+          },
+          grid: {
+            left: "3%",
+            right: "4%",
+            bottom: "3%",
+            containLabel: true,
+          },
+          toolbox: {
+            feature: {
+              saveAsImage: {},
+            },
+          },
+          xAxis: {
+            type: "category",
+            boundaryGap: false,
+            data: xData,
+          },
+          yAxis: {
+            type: "value",
+          },
+          color: ["#CF350B", "#FCEA7A"],
+          series: [
+            {
+              name: "确诊",
+              type: "line",
+              data: yDataDiagnose,
+            },
+            {
+              name: "疑似",
+              type: "line",
+              data: yDataSuspected,
+            },
+          ],
+        };
+        myChart.setOption(option);
+      };
     });
-    // echarts.registerMap("china", china);
+    watch(
+      () => {
+        return reactData.cityData;
+      },
+      (value) => {
+        if (reactData.index <= 5) MapHandle(value);
+        else chartHandle(value);
+      },
+      {
+        deep: true,
+      }
+    );
     return {
       situationData,
+      props,
     };
   },
 });

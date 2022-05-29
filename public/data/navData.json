@@ -2,53 +2,63 @@
     "headportrait": "../../src/assets/images/headP.png",
     "Navigation": [{
             "name": "首页",
-            "src": "../../src/assets/icon/home.png",
+            "x": "-25",
+            "y": "-50",
             "url": "/home"
         },
         {
             "name": "仓库",
-            "src": "../../src/assets/icon/github.png",
+            "x": "-50",
+            "y": "-25",
             "url": "/github"
         },
         {
             "name": "日历",
-            "src": "../../src/assets/icon/calendar.png",
+            "x": "-25",
+            "y": "-25",
             "url": "/calendar"
         },
         {
             "name": "相册",
-            "src": "../../src/assets/icon/album.png",
+            "x": "0",
+            "y": "-25",
             "url": "/album"
         },
         {
             "name": "关于",
-            "src": "../../src/assets/icon/about.png",
+            "x": "-48",
+            "y": "-2",
             "url": "/about"
         },
         {
             "name": "相册",
-            "src": "../../src/assets/icon/album.png",
+            "x": "0",
+            "y": "-25",
             "url": "/album"
         },
         {
             "name": "关于",
-            "src": "../../src/assets/icon/about.png",
+            "x": "-48",
+            "y": "-2",
             "url": "/about"
         }
     ],
     "form": [{
             "name": "相册",
-            "src": "../../src/assets/icon/album.png",
+            "x": "0",
+            "y": "-25",
             "url": "/album"
         },
         {
             "name": "关于",
-            "src": "../../src/assets/icon/about.png",
+            "x": "-48",
+            "y": "-2",
             "url": "/about"
         },
         {
             "name": "关于",
-            "src": "../../src/assets/icon/about.png",
+            "x": "-48",
+            "y": "-2",
             "url": "/about"
         }
     ],
@@ -66,7 +76,7 @@
         "type": 2,
         "title": "心理健康测试抑郁分析系统",
         "content": "​本博客将实现Python版本的双目三维重建系统，项目代码实现包含：`双目标定`，`立体校正（含消除畸变)`，`立体匹配`，`视差计算`和`深度距离计算/3D坐标计算` 的知识点。限于篇幅，本博客不会过多赘述算法原理，而是手把手教你，如果搭建一套属于自己的双目三维​本博客将实现Python版本的双目三维重建系统，项目代码实现包含：`双目标定`，`立体校正（含消除畸变)`，`立体匹配`，`视差计算`和`深度距离计算/3D坐标计算` 的知识点。限于篇幅，本博客不会过多赘述算法原理，而是手把手教你，如果搭建一套属于自己的双目三维​本博客将实现Python版本的双目三维重建系统，项目代码实现包含：`双目标定`，`立体校正（含消除畸变)`，`立体匹配`，`视差计算`和`深度距离计算/3D坐标计算` 的知识点。限于篇幅，本博客不会过多赘述算法原理，而是手把手教你，如果搭建一套属于自己的双目三维​本博客将实现Python版本的双目三维重建系统，项目代码实现包含：`双目标定`，`立体校正（含消除畸变)`，`立体匹配`，`视差计算`和`深度距离计算/3D坐标计算` 的知识点。限于篇幅，本博客不会过多赘述算法原理，而是手把手教你，如果搭建一套属于自己的双目三维",
-        "name": "lzy", 
+        "name": "lzy",
         "publishTime": "2021-11-25"
     }]
 }

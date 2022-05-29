@@ -12,11 +12,16 @@ module.exports = {
         '108': '27rem',
         '128': '32rem',
         '144': '36rem',
+        '100px': '100px',
+        '425px': '425px',
         'content': '64.8%',
       },
       borderRadius: {
         '4xl': '2rem',
-      }
+      },
+      colors: {
+        'theme': '#666666'
+      },
     },
     boxShadow: {
       sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
@@ -42,7 +47,7 @@ module.exports = {
       'base': '1rem',
       'lg': '1.125rem',
       'xl': '1.25rem',
-      '1.5xl':'1.375rem',
+      '1.5xl': '1.375rem',
       '2xl': '1.5rem',
       '3xl': '1.875rem',
       '4xl': '2.25rem',
@@ -55,8 +60,8 @@ module.exports = {
       'primary': '#3490dc',
       'secondary': '#ffed4a',
       'danger': '#e3342f',
-      '#F1F3F4':"#F1F3F4"
-     })
+      '#F1F3F4': "#F1F3F4"
+    }),
   },
   variants: {},
   plugins: [],

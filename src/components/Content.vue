@@ -1,12 +1,12 @@
 <template>
   <div class="container absolute w-full h-screen top-28 z-1  ">
-    <div class="bg-white h-screen shadow-xl w-108 float-left "></div>
+    <div class="bg-white h-screen shadow-xl w-96 float-left "></div>
     <!-- 中心内容 -->
     <div class=" bg-#F1F3F4 h-screen w-content float-left">
         <router-view />
     </div>
     <!-- 右边内容 -->
-    <div class=" bg-white h-screen p-6  w-108 float-left">
+    <div class=" bg-white h-screen p-6  w-96 float-left">
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane>
           <template #label class="flex-1">
