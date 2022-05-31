@@ -21,12 +21,18 @@
 2.  启动方式：终端运行npm run serve || yarn serve
 3.  打包方式：终端运行npm run build || yarn build
 
-#### 参与贡献
+#### git使用方式 
 
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
+1.  克隆到本地 ： 
+`git clone 'https://gitee.com/lzy-Team/weboke.git'`
+2.  将要提交的代码放入暂存区 ： 
+`git add . `
+3.  将暂存区的代码存入本地git上( -m 表示分支) : 
+`git commit -m '备注必须要写'`
+4.  提交到git仓库（网络上）:
+`git push`
+5.  拉取最新代码：
+`git pull`
 
 
 
