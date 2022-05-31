@@ -7,11 +7,13 @@
 基于vue3+vite2+TS+tailwindcss的可视化博客系统
 
 
+
 #### 安装教程
 
 1.  node.js
 2.  vite
 3.  vue3
+4.  建议全局安装ni ni可以快捷的在vscode里实现运行、安装、打包等  `npm i -g @antfu/ni`
 
 #### 使用说明
 
