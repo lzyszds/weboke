@@ -6,7 +6,7 @@
         <lzyButton
           v-for="item in reactData.forData"
           :key="item.index"
-          @click="mapHandlefn(item.index)"
+          @click="mapHandle(item.index)"
           :class="reactData.index == item.index ? 'bg-blue-400' : null"
           >{{ item.title }}</lzyButton
         >
@@ -21,7 +21,7 @@
 <script>
 import { defineComponent, reactive } from "vue";
 import ContentHead from "../../components/Content-head.vue";
-import Yiqcom from "../../components/Yiqcom.vue";
+import Yiqcom from "./Yiqcom.vue";
 import { get } from "@/http/http";
 import { show, hide } from "@/untils/loading.js";
 import lzyButton from "@/uiComponents/Button.vue";
@@ -72,17 +72,8 @@ export default defineComponent({
         },
       ],
     });
-    let setInt = null;
     //现有确诊数据判断
     const mapHandle = (_index) => {
-      // setInt = setInterval(() => {
-      //   reactData.count++;
-      //   console.log(reactData.count);
-      //   if (reactData.count == 5) {
-      //     reactData.count = 0;
-      //     setInt.clearInterval();
-      //   }
-      // }, 1000);
       if (reactData.index == _index && reactData.count != 0) return;
       if (!_index) _index = 1;
       reactData.index = _index;
@@ -135,16 +126,10 @@ export default defineComponent({
         hide();
       });
     };
-    const mapHandlefn = (_index) => {
-      console.log(_index);
-      _.debounce(() => {
-        mapHandle(_index);
-      }, 500)();
-    };
-    mapHandlefn();
+    mapHandle();
     return {
       reactData,
-      mapHandlefn,
+      mapHandle,
     };
   },
 });

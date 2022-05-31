@@ -30,22 +30,22 @@ export const show = (id, text) => {
   let _id = document.querySelector(id || 'body')
 
   //如果当前所选元素大于等于页面可视高度，则loading界面设置全屏效果
-  if (_id.clientHeight >= window.screen.height) {
+  if (!_id) {
     _id = document.querySelector('body')
     _id.appendChild(div)
     let _over = document.querySelector('#over')
     let _layout = document.querySelector('#layout')
     _over.style.setProperty('position', 'fixed')
     _layout.style.setProperty('position', 'fixed')
+    console.warn('输入的选择器不存在,默认添加到body,瞧瞧是不是因为异步问题-------来自loading内容')
   } else {
-    if (!_id) {
+    if (_id.clientHeight >= window.screen.height) {
       _id = document.querySelector('body')
       _id.appendChild(div)
       let _over = document.querySelector('#over')
       let _layout = document.querySelector('#layout')
       _over.style.setProperty('position', 'fixed')
       _layout.style.setProperty('position', 'fixed')
-      console.warn('输入的选择器不存在,默认添加到body,瞧瞧是不是因为异步问题-------来自loading内容')
     } else {
       _id.appendChild(div)
       let _over = document.querySelector('#over')
@@ -53,9 +53,11 @@ export const show = (id, text) => {
       _id.style.setProperty('position', 'relative')
       _over.style.setProperty('position', 'absolute')
       _layout.style.setProperty('position', 'absolute')
-
     }
+
+
   }
+
 
   document.getElementById("loadingDiv").style.display = "block";
 }
