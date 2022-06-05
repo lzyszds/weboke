@@ -6,6 +6,7 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
+      //宽高大小
       spacing: {
         '88': '11rem',
         '100': '25rem',
@@ -16,9 +17,29 @@ module.exports = {
         '425px': '425px',
         'content': '64.8%',
       },
+      // 定位top,left等值
+      inset: {
+        '0': 0,
+        '18':'4.5rem',
+        // ...
+        '64': '16rem',
+        '1/5': '20%',
+      },
+      //最小宽度
+      minWidth: {
+        '0': '0',
+        '1/4': '25%',
+        '1/2': '50%',
+        '3/4': '75%',
+        'full': '100%',
+        '425px': '425px',
+        '100px': '100px',
+      },
+      //圆角
       borderRadius: {
         '4xl': '2rem',
       },
+      // 自定义颜色
       colors: {
         'theme': '#666666'
       },

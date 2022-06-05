@@ -1,5 +1,5 @@
 <template >
-  <div class="container w-10/12 relative bg-gray-200 m-auto shadow-xl">
+  <div class="container w-10/12 relative bg-gray-200 m-auto shadow-xl ">
     <Content></Content>
     <Navleft></Navleft>
     <Navtop></Navtop>
