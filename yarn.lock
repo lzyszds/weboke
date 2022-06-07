@@ -1116,6 +1116,16 @@ modern-normalize@^1.1.0:
   resolved "https://registry.npmmirror.com/modern-normalize/-/modern-normalize-1.1.0.tgz#da8e80140d9221426bd4f725c6e11283d34f90b7"
   integrity sha512-2lMlY1Yc1+CUy0gw4H95uNN7vjbpoED7NNRSBHE25nWfLBdmMzFCsPshlzbxHz+gYMcBEUN8V4pU16prcdPSgA==
 
+moment@^2.29.3:
+  version "2.29.3"
+  resolved "https://registry.npmmirror.com/moment/-/moment-2.29.3.tgz#edd47411c322413999f7a5940d526de183c031f3"
+  integrity sha512-c6YRvhEo//6T2Jz/vVtYzqBzwvPT95JBQ+smCytzf7c50oMZRsR/a4w88aD34I+/QVSfnoAnSBFPJHItlOMJVw==
+
+momentjs@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.npmmirror.com/momentjs/-/momentjs-2.0.0.tgz#73df904b4fa418f6e3c605e831cef6ed5518ebd4"
+  integrity sha512-GYMUxLyCwVhECkJR1/LMHEyb9gWYSPRnXi+elGN0m5bet7ngQOxU4QLWUI/eBzgN4N/T194n6yP7lQiE+Udw9A==
+
 naive-ui@^2.19.11:
   version "2.28.2"
   resolved "https://registry.npmmirror.com/naive-ui/-/naive-ui-2.28.2.tgz#266995e5f1e2c126b3de3152da1c3ed55009b207"

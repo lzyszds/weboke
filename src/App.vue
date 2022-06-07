@@ -1,5 +1,5 @@
 <template >
-  <div class="container w-10/12 relative bg-gray-200 m-auto shadow-xl ">
+  <div class="container w-10/12 relative bg-gray-200 m-auto shadow-xl">
     <Content></Content>
     <Navleft></Navleft>
     <Navtop></Navtop>
@@ -11,4 +11,7 @@ import Navleft from "./components/Navleft.vue";
 import Navtop from "./components/Navtop.vue";
 import Content from "./components/Content.vue";
 import Music from "./uiComponents/Music.vue";
+import { NScrollbar } from "naive-ui";
 </script>
+<style scoped>
+</style>

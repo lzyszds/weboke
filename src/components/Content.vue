@@ -1,5 +1,5 @@
 <template>
-  <div class="container absolute w-full h-screen top-28 z-1  ">
+  <div id="container" class="container absolute w-full h-screen top-28 z-1  ">
     <div class="bg-white h-screen shadow-xl w-96 float-left "></div>
     <!-- 中心内容 -->
     <div class=" bg-#F1F3F4 h-screen w-content float-left">
