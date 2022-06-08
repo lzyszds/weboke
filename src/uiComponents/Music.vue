@@ -1,6 +1,5 @@
 <template>
-  <div
-    class="
+  <div class="
       h-24
       fixed
       z-50
@@ -12,31 +11,25 @@
       ease-in-out
       bg-white
       border-solid border-t border-gray-200
-    "
-    :class="data.width"
-  >
+    " :class="data.width">
     <!-- 图片 -->
     <div class="w-32 h-full bg-yellow-100 relative">
-      <img
-        class="w-32 h-32 object-cover"
-        src="https://y.gtimg.cn/music/photo_new/T002R300x300M0000023rvqc3zCopb.jpg?max_age=2592000"
-        alt=""
-      />
-      <img
-        @click="playSvg"
-        class="absolute cursor-pointer transition-all"
+      <img class="w-32 h-32 object-cover"
+        src="https://y.gtimg.cn/music/photo_new/T002R300x300M0000023rvqc3zCopb.jpg?max_age=2592000" alt="" />
+      <img @click="playSvg" class="absolute cursor-pointer transition-all"
         :class="!data.isplaySvg ? data.svg + ' bofang_icon' : data.svg"
-        :src="`src/assets/icon/music/${!data.isplaySvg ? '播放' : '暂停'}.svg`"
-      />
+        :src="`src/assets/icon/music/${!data.isplaySvg ? '播放' : '暂停'}.svg`" />
       <!-- 这个路径得好好瞧瞧，vite不能用cli的 require。 使用这个src的时候，去F12看看路径是否正确 -->
     </div>
+
     <!-- 切歌歌词快进 -->
     <div :style="[data.styleGrid]" style="width: 0" class="pt-3 pl-0">
+      <audio id="player" ref="player" controls="controls" class="">
+        <source :src="data.playUrl" />
+      </audio>
       <!-- <div class="grid grid-cols-3 gap-2"> -->
       <div class="w-128 flex justify-between px-3">
-        <span class="text-xl truncate mr-3 leading-9 select-none"
-          >静寂の森 - Dropの小屋p。</span
-        >
+        <span class="text-xl truncate mr-3 leading-9 select-none">静寂の森 - Dropの小屋p。</span>
         <div class="flex py-1">
           <button class="w-8 h-8 btnsvg">
             <img class="w-8 h-8" src="@/assets/icon/music/top.svg" alt="" />
@@ -53,16 +46,8 @@
         </div>
       </div>
       <div class="w-128 flex justify-start px-3">
-        <audio id="player" ref="player" controls="controls" class="hidden">
-          <source
-            src="https://webfs.ali.kugou.com/202206052042/b11d3544ac726e922fccbac1f92601c3/part/0/960121/KGTX/CLTX001/5cd03a78a74761494a39cadfaa832550.mp3"
-          />
-        </audio>
-        <SliderX
-          :width="145"
-          :height="3"
-          :domAudioyl="data.domAudioyl"
-        ></SliderX>
+
+        <SliderX :width="145" :height="3" :domAudioyl="data.domAudioyl"></SliderX>
         <div class="select-none">
           <span style="margin-left: 15px">02:57</span>
           &nbsp;/&nbsp;
@@ -71,14 +56,9 @@
         <div class="flex py-1 relative">
           <div class="volumeclass">
             <button class="w-8 h-8 btnsvg">
-              <img
-                class="w-8 h-8"
-                src="@/assets/icon/music/volume.svg"
-                alt=""
-              />
+              <img class="w-8 h-8" src="@/assets/icon/music/volume.svg" alt="" />
             </button>
-            <div
-              class="
+            <div class="
                 absolute
                 right-8
                 w-10
@@ -89,14 +69,8 @@
                 flex
                 volumemod
                 transition-all
-              "
-              style="bottom: 25px"
-            >
-              <SliderY
-                :width="5"
-                :height="34"
-                :domAudioyl="data.domAudioyl"
-              ></SliderY>
+              " style="bottom: 25px">
+              <SliderY :width="5" :height="34" :domAudioyl="data.domAudioyl"></SliderY>
             </div>
           </div>
 
@@ -108,8 +82,7 @@
     </div>
 
     <!-- 隐式开关 100  -->
-    <div
-      class="
+    <div class="
         w-8
         h-full
         bg-gray-300
@@ -118,29 +91,25 @@
         absolute
         right-0
         cursor-pointer
-      "
-      @click="click"
-      @mouseout="mouseout"
-    >
-      <img
-        width="30"
-        src="../assets/icon/rightmsk.png"
-        style="transition-all"
-        :class="{ 'transform rotate-180': data.index }"
-      />
+      " @click="click" @mouseout="mouseout">
+      <img width="30" src="../assets/icon/rightmsk.png" style="transition-all"
+        :class="{ 'transform rotate-180': data.index }" />
     </div>
   </div>
 </template>
 
 <script setup>
-import { reactive, ref, onMounted } from "vue";
+import { reactive, ref, onMounted, watch } from "vue";
 import SliderX from "./SliderX.vue";
 import SliderY from "./SliderY.vue";
+import { storeToRefs } from "pinia";
+import { useStore } from '@/store/index'
 let data = reactive({
   width: "w-8",
   gridwidth: "w-0",
   index: false,
   isplaySvg: false, // 播放暂停
+  playUrl: '',
   svg: "top-4 left-8 w-16 h-16",
   styleGrid: "display:none",
   domAudioyl: null, //音频dom属性
@@ -148,12 +117,12 @@ let data = reactive({
   audioCurrentTime: 0, //音频当前时长
   audioCurrentTimeStr: "00:00", //音频当前时长字符串
 });
+const store = useStore()
+// const { musicPlayData } = storeToRefs(useStores)
+// console.log(musicPlayData);
 const player = ref(null);
 data.domAudioyl = player;
 // player.value.duration;
-onMounted(() => {
-  console.log(player.value.duration);
-});
 const w_425px = "w-425px",
   w_100px = "w-100px";
 const mouseout = (e) => {
@@ -178,11 +147,18 @@ const click = (e) => {
 };
 const playSvg = (e) => {
   data.isplaySvg = !data.isplaySvg;
-  if (data.isplaySvg) player.value.play();
-  else player.value.pause();
+  // if (data.isplaySvg) player.value.play();
+  // else player.value.pause();
   if (!data.isplaySvg) data.svg = "top-4 left-8 w-16 h-16";
   else data.svg = "top-12 left-18 w-12 h-12";
 };
+watch(
+  () => store.musicPlayData,
+  (newVal) => {
+    player.value.src = newVal.url
+    player.value.play();
+  }
+);
 </script>
 
 <style scoped>
@@ -190,9 +166,11 @@ const playSvg = (e) => {
   filter: invert(0.5);
   vertical-align: auto;
 }
+
 .btnsvg:hover {
   filter: invert(0);
 }
+
 .volumeclass:hover .volumemod {
   height: 35px;
 }

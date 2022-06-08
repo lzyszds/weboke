@@ -10,12 +10,15 @@ import "./assets/css/tailwind.css"
 import ArcoVue from '@arco-design/web-vue';
 import '@arco-design/web-vue/dist/arco.css';
 // import common from '@/untils/common.js'; //全局按钮防抖事件
-import store from './store'
 // Vue.config.globalProperties.$noMulClicks = common.noMulClicks
 const app = createApp(App)
+import {
+  createPinia
+} from 'pinia'
+const pinia = createPinia()
 
-app.use(store)
 app.use(ArcoVue)
+app.use(pinia)
 app.use(ElementPlus)
 app.use(router)
 app.mount('#app')
