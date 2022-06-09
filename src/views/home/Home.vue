@@ -12,7 +12,7 @@
         >
       </div>
       <div class="wrapper">
-        <Yiqcom :reactData="reactData"></Yiqcom>
+        <!-- <Yiqcom :reactData="reactData"></Yiqcom> -->
       </div>
     </div>
   </div>
@@ -21,7 +21,7 @@
 <script setup>
 import { defineComponent, reactive } from "vue";
 import ContentHead from "../../components/Content-head.vue";
-import Yiqcom from "./Yiqcom.vue";
+// import Yiqcom from "./Yiqcom.vue";
 import { get } from "@/http/http";
 import { show, hide } from "@/untils/loading.js";
 import lzyButton from "@/uiComponents/Button.vue";

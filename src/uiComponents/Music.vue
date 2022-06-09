@@ -25,7 +25,8 @@
     <!-- 切歌歌词快进 -->
     <div :style="[data.styleGrid]" style="width: 0" class="pt-3 pl-0">
       <audio id="player" ref="player" controls="controls" class=" hidden">
-        <source :src="data.playUrl" />
+        <source
+          src="http://m701.music.126.net/20220609232139/01e051a3cc144c047e88b0bbe4dcb4e5/jdymusic/obj/wo3DlMOGwrbDjj7DisKw/8680756992/2725/ac6b/711a/11d3650af35dc16b75f738f53ed9abd5.mp3" />
       </audio>
       <!-- <div class="grid grid-cols-3 gap-2"> -->
       <div class="w-128 flex justify-between px-3">
@@ -34,8 +35,11 @@
           <button class="w-8 h-8 btnsvg">
             <img class="w-8 h-8" src="@/assets/icon/music/top.svg" alt="" />
           </button>
-          <button class="w-8 h-8 btnsvg">
+          <button class="w-8 h-8 btnsvg" @click="playSvg" v-if="!data.isplaySvg">
             <img class="w-8 h-8" src="@/assets/icon/music/play.svg" alt="" />
+          </button>
+          <button class="w-8 h-8 btnsvg" @click="playSvg" v-else>
+            <img class="w-8 h-8" src="@/assets/icon/music/stop.svg" alt="" />
           </button>
           <button class="w-8 h-8 transform rotate-180 btnsvg">
             <img class="w-8 h-8" src="@/assets/icon/music/bottom.svg" alt="" />
@@ -107,6 +111,7 @@ import SliderY from "./SliderY.vue";
 import { storeToRefs } from "pinia";
 import { useStore } from '@/store/index'
 import { ElMessage } from 'element-plus'
+import axios from "axios";
 let data = reactive({
   width: "w-8",
   gridwidth: "w-0",
@@ -119,7 +124,11 @@ let data = reactive({
   audioLenght: 0, //音频总时长
   audioCurrentTime: '0:00', //音频当前时长
   audioCurrentTimeStr: "0:00", //音频当前时长字符串
+  musicList: []
 });
+axios.post('/music/playlist/detail?id=7480206477').then(res => {
+  data.musicList.push(...res.data.privileges)
+})
 let timer
 const store = useStore()
 // const { musicPlayData } = storeToRefs(useStores)
@@ -135,6 +144,40 @@ const mouseout = (e) => {
   data.width = w_100px;
   data.styleWidth = 'width: "0px"';
 };
+/* 公用方法 */
+//播放进度数值修订，0：00/0:00
+function eventList() {
+  let second = 0, min = 0
+  if (timer) clearInterval(timer)
+  timer = setInterval(() => {
+    second++
+    if (second > 59) {
+      min++
+      second = 0
+    }
+    if (second < 10) {
+      second = "0" + second
+    }
+    data.audioCurrentTimeStr = min + ':' + second
+    if ((min * 60) + Number(second) >= parseInt(player.value.duration)) {
+      min = 0
+      clearInterval(timer)
+      data.isplaySvg = false;
+      data.svg = "top-4 left-8 w-16 h-16"
+    }
+  }, 1000)
+  if (parseInt(player.value.duration) === 30) {
+    ElMessage({
+      message: '此歌曲需要会员，仅有试听版！',
+      type: 'warning',
+    })
+  }
+  data.audioCurrentTime = timeToMinute(parseInt(player.value.duration))
+}
+
+
+
+//弹出或关闭 音乐播放器
 const click = (e) => {
   data.index = !data.index;
   data.width = data.index ? w_425px : w_100px;
@@ -150,20 +193,24 @@ const click = (e) => {
     }
   }, 1);
 };
+//播放||暂停音乐 以及按钮的位置动画
 const playSvg = (e) => {
+
   data.isplaySvg = !data.isplaySvg;
-  if (data.isplaySvg) player.value.play();
+  if (data.isplaySvg) {
+    player.value.play()
+    eventList()
+  }
   else player.value.pause();
   if (!data.isplaySvg) data.svg = "top-4 left-8 w-16 h-16";
   else data.svg = "top-12 left-18 w-12 h-12";
 };
-let eventList = null
+
 const timeToMinute = (times) => {
   var t;
   if (times > -1) {
     var hour = Math.floor(times / 3600);
     var min = Math.floor(times / 60) % 60;
-    console.log(min);
     var sec = times % 60;
     if (hour < 10) {
       t = '0' + hour + ":";
@@ -193,35 +240,7 @@ const getMusicPlay = (value) => {
   data.isplaySvg = true;
   data.svg = "top-12 left-18 w-12 h-12";
   player.value.play();
-  eventList = player.value.addEventListener("canplay", function () {
-    let second = 0, min = 0
-    if (timer) clearInterval(timer)
-    timer = setInterval(() => {
-      second++
-      if (second > 59) {
-        min++
-        second = 0
-      }
-      if (second < 10) {
-        second = "0" + second
-      }
-      data.audioCurrentTimeStr = min + ':' + second
-      if ((min * 60) + Number(second) >= parseInt(player.value.duration)) {
-        min = 0
-        clearInterval(timer)
-        data.isplaySvg = false;
-        data.svg = "top-4 left-8 w-16 h-16"
-      }
-    }, 1000)
-    if (parseInt(player.value.duration) === 30) {
-      ElMessage({
-        message: '此歌曲需要会员，仅有试听版！',
-        type: 'warning',
-      })
-    }
-    data.audioCurrentTime = timeToMinute(parseInt(player.value.duration))
-  });
-
+  eventList()
 }
 watch(
   () => store.musicPlayData,

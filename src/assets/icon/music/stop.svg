@@ -1,5 +1,7 @@
-<span class="aplayer-icon aplayer-icon-play">
-  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 17 32">
-    <path d="M14.080 4.8q2.88 0 2.88 2.048v18.24q0 2.112-2.88 2.112t-2.88-2.112v-18.24q0-2.048 2.88-2.048zM2.88 4.8q2.88 0 2.88 2.048v18.24q0 2.112-2.88 2.112t-2.88-2.112v-18.24q0-2.048 2.88-2.048z"></path>
-  </svg>
-</span>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24" height="24" viewBox="0 0 48 48" fill="none"
+  xmlns="http://www.w3.org/2000/svg">
+  <rect width="48" height="48" fill="white" fill-opacity="0.01"/>
+  <path d="M16 12V36" stroke="#333" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M32 12V36" stroke="#333" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
