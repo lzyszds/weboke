@@ -1,13 +1,21 @@
 <script setup>
-import { reactive, ref, defineProps } from "vue";
+import { reactive, ref, defineProps, watch } from "vue";
 const props = defineProps({
   width: String,
   height: String,
   domAudioyl: {},
+  value: String,
+  sumValue: String,
 });
 let data = reactive({
   index: 0,
 });
+const times = (time) => {
+  time = time.split(":");
+  return Math.floor(Number(time[0]) * 60 + Number(time[1]));
+}
+
+
 const mevar = props.width / 100;
 let onmousedown = (e) => {
   const progressLeft = e.clientX - e.srcElement.offsetLeft;
@@ -24,20 +32,19 @@ let onmousedown = (e) => {
 const onmouseclick = (e) => {
   data.index = e.clientX - 86;
 };
+watch(() => {
+  return props.value
+}, (newVal) => {
+  data.index = times(newVal) / times(props.sumValue) * props.width
+  console.log(data.index);
+});
 </script>
 
 <template>
   <div class="content" @click="onmouseclick">
-    <div
-      class="strip"
-      :style="'width:' + props.width + 'px;height:' + props.height + 'px'"
-    ></div>
+    <div class="strip" :style="'width:' + props.width + 'px;height:' + props.height + 'px'"></div>
     <div class="progress" :style="'width:' + data.index + 'px'">
-      <div
-        class="circular"
-        @mousedown="onmousedown"
-        @mousemove="onmousemove"
-      ></div>
+      <div class="circular" @mousedown="onmousedown" @mousemove="onmousemove"></div>
     </div>
   </div>
 </template>
@@ -48,14 +55,17 @@ const onmouseclick = (e) => {
   align-items: center;
   cursor: pointer;
 }
+
 .strip {
   background-color: rgb(144, 144, 144);
 }
+
 .progress {
   position: absolute;
   background-color: aquamarine;
   height: 3px;
 }
+
 .circular {
   position: absolute;
   width: 12px;

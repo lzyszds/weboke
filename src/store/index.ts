@@ -22,7 +22,7 @@ export const useStore = defineStore('main', {
    */
   state: () => {
     return {
-      musicPlayData: []
+      musicPlayData: {}
     }
   },
   /**

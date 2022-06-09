@@ -69,16 +69,17 @@ const search = reactive<Search>({
 });
 const store = useStore()
 const searchChange = (e: any) => {
+  console.log(e);
   axios
-    .post("/music/search", {
-      keywords: e,
-    })
+    .get("/music/search?keywords=" + e)
     .then((res) => {
       if (res.data.code !== 200) {
         console.error(res.data.msg, res.data.code);
         return;
       }
+      search.data = []
       search.data.push(...res.data.result.songs);
+
     });
 };
 const duration = (time: string): string => {
@@ -94,7 +95,10 @@ const searchBlur = () => {
 };
 const dblclick = (row: any, column: object, event: object) => {
   axios.post("/music/song/url?id=" + row.id).then((res) => {
-    store.musicPlayData = res.data.data[0]
+    axios.get('/music/song/detail?ids=' + row.id).then((item) => {
+      console.log(item);
+      store.musicPlayData = { mp3: res.data.data[0].url, img: item.data.songs[0].al.picUrl }
+    })
   });
 };
 </script>
