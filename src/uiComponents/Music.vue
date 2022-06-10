@@ -21,12 +21,12 @@
         :src="`src/assets/icon/music/${!data.isplaySvg ? '播放' : '暂停'}.svg`" />
       <!-- 这个路径得好好瞧瞧，vite不能用cli的 require。 使用这个src的时候，去F12看看路径是否正确 -->
     </div>
-
+    <el-card class="box-card absolute  left-0 w-full h-100">
+      <div v-for="item in data.musicList" :key="item" class="text item">{{ item.id }}</div>
+    </el-card>
     <!-- 切歌歌词快进 -->
     <div :style="[data.styleGrid]" style="width: 0" class="pt-3 pl-0">
-      <audio id="player" ref="player" controls="controls" class=" hidden">
-        <source
-          src="http://m701.music.126.net/20220609232139/01e051a3cc144c047e88b0bbe4dcb4e5/jdymusic/obj/wo3DlMOGwrbDjj7DisKw/8680756992/2725/ac6b/711a/11d3650af35dc16b75f738f53ed9abd5.mp3" />
+      <audio id="player" ref="player" controls="controls" @timeupdate="updata" class="hidden">
       </audio>
       <!-- <div class="grid grid-cols-3 gap-2"> -->
       <div class="w-128 flex justify-between px-3">
@@ -44,7 +44,7 @@
           <button class="w-8 h-8 transform rotate-180 btnsvg">
             <img class="w-8 h-8" src="@/assets/icon/music/bottom.svg" alt="" />
           </button>
-          <button class="w-8 h-8 btnsvg">
+          <button class="w-8 h-8 btnsvg" @click="onListmc">
             <img class="w-8 h-8" src="@/assets/icon/music/menu.svg" alt="" />
           </button>
         </div>
@@ -105,7 +105,7 @@
 </template>
 
 <script setup>
-import { reactive, ref, onMounted, watch } from "vue";
+import { reactive, ref, onMounted, watch, nextTick } from "vue";
 import SliderX from "./SliderX.vue";
 import SliderY from "./SliderY.vue";
 import { storeToRefs } from "pinia";
@@ -144,33 +144,33 @@ const mouseout = (e) => {
   data.width = w_100px;
   data.styleWidth = 'width: "0px"';
 };
+  //isElMessage需要控制提示是否为试听歌曲，防止反复触发提醒
+let isElMessage = true
 /* 公用方法 */
 //播放进度数值修订，0：00/0:00
 function eventList() {
-  let second = 0, min = 0
-  if (timer) clearInterval(timer)
-  timer = setInterval(() => {
-    second++
-    if (second > 59) {
-      min++
-      second = 0
-    }
-    if (second < 10) {
-      second = "0" + second
-    }
-    data.audioCurrentTimeStr = min + ':' + second
-    if ((min * 60) + Number(second) >= parseInt(player.value.duration)) {
-      min = 0
-      clearInterval(timer)
-      data.isplaySvg = false;
-      data.svg = "top-4 left-8 w-16 h-16"
-    }
-  }, 1000)
-  if (parseInt(player.value.duration) === 30) {
+  let min = 0
+  let second = parseInt(player.value.currentTime)
+  if (second > 59) {
+    min = parseInt(second / 60)
+    second -= 60
+  }
+  if (second < 10) {
+    second = "0" + second
+  }
+  //isElMessage需要控制提示是否为试听歌曲，防止反复触发提醒
+  if (isElMessage && parseInt(player.value.duration) === 30) {
     ElMessage({
       message: '此歌曲需要会员，仅有试听版！',
       type: 'warning',
     })
+    isElMessage = false
+  }
+  data.audioCurrentTimeStr = min + ':' + second
+  if ((min * 60) + Number(second) >= parseInt(player.value.duration)) {
+    min = 0
+    data.isplaySvg = false;
+    data.svg = "top-4 left-8 w-16 h-16"
   }
   data.audioCurrentTime = timeToMinute(parseInt(player.value.duration))
 }
@@ -195,17 +195,22 @@ const click = (e) => {
 };
 //播放||暂停音乐 以及按钮的位置动画
 const playSvg = (e) => {
-
   data.isplaySvg = !data.isplaySvg;
   if (data.isplaySvg) {
+    isElMessage = true
     player.value.play()
-    eventList()
   }
   else player.value.pause();
   if (!data.isplaySvg) data.svg = "top-4 left-8 w-16 h-16";
   else data.svg = "top-12 left-18 w-12 h-12";
 };
-
+//获取歌单列表，实现渲染
+const onListmc = () => {
+  console.log(data.musicList);
+  // data.musicList.forEach(item => {
+  //   item.id
+  // });
+}
 const timeToMinute = (times) => {
   var t;
   if (times > -1) {
@@ -240,6 +245,11 @@ const getMusicPlay = (value) => {
   data.isplaySvg = true;
   data.svg = "top-12 left-18 w-12 h-12";
   player.value.play();
+  //需要控制提示是否为试听歌曲，防止反复触发提醒
+  isElMessage = true
+}
+const updata = () => {
+  //音乐每播放一帧执行一次以下方法
   eventList()
 }
 watch(
@@ -263,5 +273,9 @@ watch(
 
 .volumeclass:hover .volumemod {
   height: 35px;
+}
+
+.box-card {
+  bottom: 6.5rem
 }
 </style>

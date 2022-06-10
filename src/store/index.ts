@@ -6,7 +6,7 @@
  *    4. 使用容器中的action
  */
 import { defineStore } from "pinia";
-
+import axios from "axios";
 /**
  * 1. 定义容器并导出
  * 参数一: 容器ID, 唯一, 将来 Pinia 会把所有的容器挂载到根容器
@@ -36,7 +36,14 @@ export const useStore = defineStore('main', {
    * 注意: 里面的函数不能定义成箭头函数(函数体中会用到this)
    */
   actions: {
+    getMusicDetails(id: number) {
+      axios.post("/music/song/url?id=" + id).then((res: any) => {
+        axios.get('/music/song/detail?ids=' + id).then((item) => {
+          this.musicPlayData = { mp3: res.data.data[0].url, img: item.data.songs[0].al.picUrl }
+        })
+      })
 
+    }
   }
 })
 

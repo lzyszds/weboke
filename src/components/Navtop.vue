@@ -96,7 +96,6 @@ const searchBlur = () => {
 const dblclick = (row: any, column: object, event: object) => {
   axios.post("/music/song/url?id=" + row.id).then((res) => {
     axios.get('/music/song/detail?ids=' + row.id).then((item) => {
-      console.log(item);
       store.musicPlayData = { mp3: res.data.data[0].url, img: item.data.songs[0].al.picUrl }
     })
   });
