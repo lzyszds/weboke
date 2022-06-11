@@ -36,7 +36,6 @@ watch(() => {
   return props.value
 }, (newVal) => {
   data.index = times(newVal) / times(props.sumValue) * props.width
-  console.log(data.index);
 });
 </script>
 

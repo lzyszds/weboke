@@ -6,7 +6,7 @@
  *    4. 使用容器中的action
  */
 import { defineStore } from "pinia";
-import axios from "axios";
+import { get, post } from "../http/http";
 /**
  * 1. 定义容器并导出
  * 参数一: 容器ID, 唯一, 将来 Pinia 会把所有的容器挂载到根容器
@@ -22,7 +22,8 @@ export const useStore = defineStore('main', {
    */
   state: () => {
     return {
-      musicPlayData: {}
+      musicPlayData: {},
+      musicData: {}
     }
   },
   /**
@@ -36,14 +37,24 @@ export const useStore = defineStore('main', {
    * 注意: 里面的函数不能定义成箭头函数(函数体中会用到this)
    */
   actions: {
-    getMusicDetails(id: number) {
-      axios.post("/music/song/url?id=" + id).then((res: any) => {
-        axios.get('/music/song/detail?ids=' + id).then((item) => {
-          this.musicPlayData = { mp3: res.data.data[0].url, img: item.data.songs[0].al.picUrl }
+    getMusicDetails(id: [], commit: boolean) {
+      console.log(id);
+      return post("/music/song/url?id=" + id, null).then((res: any) => {
+        return get('/music/song/detail?ids=' + id, null).then((item) => {
+          console.log(item, res);
+          if (commit) {
+            return this.musicPlayData = {
+              mp3: res.data.data[0].url, // 音乐地址
+              img: item.data.songs[0].al.picUrl, // 封面图片
+              name: item.data.songs[0].name,   // 音乐名称
+              artist: item.data.songs[0].ar[0].name // 歌手名称
+            }
+          } else {
+            return { res: res.data.data, item: item.data.songs }
+          }
         })
       })
-
-    }
+    },
   }
 })
 

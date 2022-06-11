@@ -21,8 +21,18 @@
         :src="`src/assets/icon/music/${!data.isplaySvg ? '播放' : '暂停'}.svg`" />
       <!-- 这个路径得好好瞧瞧，vite不能用cli的 require。 使用这个src的时候，去F12看看路径是否正确 -->
     </div>
-    <el-card class="box-card absolute  left-0 w-full h-100">
-      <div v-for="item in data.musicList" :key="item" class="text item">{{ item.id }}</div>
+    <el-card class="box-card absolute  left-0 w-full h-100 p-0 opacity-1" v-if="data.index && data.box_card">
+      <div v-for="(item, index) in data.musicList" :key="index"
+        class="text h-12  item flex justify-between mb-2 px-4 border-l-4  border-solid border-transparent cursor-pointer"
+        :class="{ 'border-gray-400': data.bordermou[index] }" @click="() => {
+          data.bordermou.forEach((item, index) => {
+            data.bordermou[index] = false
+          })
+          data.bordermou[index] = true
+        }">
+        <div class="text-gray-600 leading-10 text-2xl">{{ item.name }}</div>
+        <div class="text-gray-600 leading-10 text-2xl">{{ item.artist }}</div>
+      </div>
     </el-card>
     <!-- 切歌歌词快进 -->
     <div :style="[data.styleGrid]" style="width: 0" class="pt-3 pl-0">
@@ -44,7 +54,7 @@
           <button class="w-8 h-8 transform rotate-180 btnsvg">
             <img class="w-8 h-8" src="@/assets/icon/music/bottom.svg" alt="" />
           </button>
-          <button class="w-8 h-8 btnsvg" @click="onListmc">
+          <button class="w-8 h-8 btnsvg" @click="onListmusic">
             <img class="w-8 h-8" src="@/assets/icon/music/menu.svg" alt="" />
           </button>
         </div>
@@ -113,9 +123,11 @@ import { useStore } from '@/store/index'
 import { ElMessage } from 'element-plus'
 import axios from "axios";
 let data = reactive({
+  bordermou: [true],//歌单列表鼠标移入样式
   width: "w-8",
   gridwidth: "w-0",
-  index: false,
+  index: false,// 打开关闭音乐面板
+  box_card: false,//歌单列表控制
   isplaySvg: false, // 播放暂停
   playUrl: '',
   svg: "top-4 left-8 w-16 h-16",
@@ -124,15 +136,14 @@ let data = reactive({
   audioLenght: 0, //音频总时长
   audioCurrentTime: '0:00', //音频当前时长
   audioCurrentTimeStr: "0:00", //音频当前时长字符串
-  musicList: []
+  musicList: [],
+  musicId: []
 });
 axios.post('/music/playlist/detail?id=7480206477').then(res => {
-  data.musicList.push(...res.data.privileges)
+  data.musicId.push(...res.data.privileges)
 })
 let timer
 const store = useStore()
-// const { musicPlayData } = storeToRefs(useStores)
-// console.log(musicPlayData);
 const player = ref(null);
 const img = ref(null);
 data.domAudioyl = player;
@@ -144,7 +155,7 @@ const mouseout = (e) => {
   data.width = w_100px;
   data.styleWidth = 'width: "0px"';
 };
-  //isElMessage需要控制提示是否为试听歌曲，防止反复触发提醒
+//isElMessage需要控制提示是否为试听歌曲，防止反复触发提醒
 let isElMessage = true
 /* 公用方法 */
 //播放进度数值修订，0：00/0:00
@@ -180,6 +191,7 @@ function eventList() {
 //弹出或关闭 音乐播放器
 const click = (e) => {
   data.index = !data.index;
+  if (!data.index) data.box_card = false;
   data.width = data.index ? w_425px : w_100px;
   let times = data.index ? 0 : 100;
   let cloes = setInterval(() => {
@@ -204,12 +216,27 @@ const playSvg = (e) => {
   if (!data.isplaySvg) data.svg = "top-4 left-8 w-16 h-16";
   else data.svg = "top-12 left-18 w-12 h-12";
 };
+//打开歌单列表
+const onListmusic = () => {
+  data.box_card = !data.box_card;
+}
 //获取歌单列表，实现渲染
 const onListmc = () => {
-  console.log(data.musicList);
-  // data.musicList.forEach(item => {
-  //   item.id
-  // });
+  let urls = []
+  data.musicId.forEach((item, index) => {
+    urls.push(item.id)
+  });
+  store.getMusicDetails(urls, false).then((_data) => {
+    _data.res.forEach((res, index) => {
+      data.musicList.push({
+        id: res.id,
+        url: res.url,
+        name: _data.item[index].name,
+        artist: _data.item[index].ar[0].name,//作者
+        picUrl: _data.item[index].al.picUrl, //封面图片
+      })
+    })
+  })
 }
 const timeToMinute = (times) => {
   var t;
@@ -257,6 +284,13 @@ watch(
   (newVal) => {
     if (timer) clearInterval(timer)
     getMusicPlay(newVal)
+  },
+);
+watch(
+  data.musicId,
+  (newVal) => {
+    console.log(newVal);
+    onListmc()
   }
 );
 </script>

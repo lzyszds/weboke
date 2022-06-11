@@ -13,5 +13,3 @@ import Content from "./components/Content.vue";
 import Music from "./uiComponents/Music.vue";
 import { NScrollbar } from "naive-ui";
 </script>
-<style scoped>
-</style>

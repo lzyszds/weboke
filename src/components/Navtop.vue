@@ -50,25 +50,20 @@
     </n-space>
   </div>
 </template>
-<script lang="ts" setup>
+<script setup>
 import { reactive } from "@vue/reactivity";
 import axios from "axios";
 import { NSpace, NButton, NInput, NDrawer, NDrawerContent } from "naive-ui";
 import moment from "moment";
 import { ElTable, ElTableColumn, ElScrollbar } from "element-plus";
 import { useStore } from "@/store/index";
-interface Search {
-  data: any[];
-  active: boolean;
-  searchBtn: boolean;
-}
-const search = reactive<Search>({
+const search = reactive({
   data: [],
   searchBtn: true,
   active: false,
 });
 const store = useStore()
-const searchChange = (e: any) => {
+const searchChange = (e) => {
   console.log(e);
   axios
     .get("/music/search?keywords=" + e)
@@ -82,7 +77,7 @@ const searchChange = (e: any) => {
 
     });
 };
-const duration = (time: string): string => {
+const duration = (time) => {
   let times = moment(time).format("mm:ss");
   return times;
 };
@@ -93,12 +88,8 @@ const searchFocus = () => {
 const searchBlur = () => {
   search.searchBtn = true;
 };
-const dblclick = (row: any, column: object, event: object) => {
-  axios.post("/music/song/url?id=" + row.id).then((res) => {
-    axios.get('/music/song/detail?ids=' + row.id).then((item) => {
-      store.musicPlayData = { mp3: res.data.data[0].url, img: item.data.songs[0].al.picUrl }
-    })
-  });
+const dblclick = (row, column, event) => {
+  store.getMusicDetails(row.id, true);
 };
 </script>
 

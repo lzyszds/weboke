@@ -6,20 +6,20 @@ let baseUrl = window.location.origin
 // axios配置
 axios.defaults.baseURL = baseUrl
 // 设置请求最大时长
-axios.defaults.timeout = 50000
+axios.defaults.timeout = 5000
 axios.defaults.withCredentials = true
 // 请求拦截器，设置token
-axios.interceptors.request.use(config => {
-  if (localStorage && localStorage.getItem('token')) {
-    const token = localStorage.getItem('token')
-    token && (config.headers.Authorization = token)
-  }
-  return config
-}, error => {
-  // 可以安装elementui等ui组件，将错误信息输出到界面。
-  console.log(error)
-  return Promise.error(error)
-})
+// axios.interceptors.request.use(config => {
+//   if (localStorage && localStorage.getItem('token')) {
+//     const token = localStorage.getItem('token')
+//     token && (config.headers.Authorization = token)
+//   }
+//   return config
+// }, error => {
+//   // 可以安装elementui等ui组件，将错误信息输出到界面。
+//   console.log(error)
+//   return Promise.error(error)
+// })
 // 响应拦截器
 axios.interceptors.response.use(response => {
   if (response.status === 200) {
@@ -42,23 +42,23 @@ axios.interceptors.response.use(response => {
 // @param file 上传文件对象
 // @param auth 是否携带token
 // get请求
-export function get (url, data) {
+export function get(url: string, data: any) {
   return axios.get(url, data)
 }
 // post请求
-export function post (url, data) {
+export function post(url: string, data: any) {
   return axios.post(url, data)
 }
 // put请求
-export function put (url, data) {
+export function put(url: string, data: any) {
   return axios.put(url, data)
 }
 // delete 请求
-export function del (url, data) {
+export function del(url: string, data: any) {
   return axios.delete(url, data)
 }
 // upload 请求
-export function uploader (url, file) {
+export function uploader(url: string, file: any) {
   let params = new FormData()
   params.append('file', file)
   return axios.post(url, params)

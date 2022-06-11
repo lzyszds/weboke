@@ -131,7 +131,7 @@
   </div>
 </template>
 <script>
-import { get } from "../http/http.js";
+import { get } from "../http/http";
 import { defineComponent, reactive, onMounted } from "vue";
 export default defineComponent({
   setup() {
