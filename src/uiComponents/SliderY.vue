@@ -24,14 +24,12 @@ const onmouseclick = (e) => {
   data.index = props.height - (e.screenY - (860 + 150 - props.height));
   return false;
 };
+
 </script>
 
 <template>
   <div class="content" @click="onmouseclick">
-    <div
-      class="strip"
-      :style="'width:' + props.width + 'px;height:' + props.height + 'px'"
-    ></div>
+    <div class="strip" :style="'width:' + props.width + 'px;height:' + props.height + 'px'"></div>
     <div class="progress transition-all" :style="'height:' + data.index + 'px'">
       <div class="circular" @mousedown="onmousedown"></div>
     </div>
@@ -45,10 +43,12 @@ const onmouseclick = (e) => {
   cursor: pointer;
   border-radius: 10px;
 }
+
 .strip {
   background-color: rgb(144, 144, 144);
   border-radius: 10px;
 }
+
 .progress {
   position: absolute;
   background-color: aquamarine;
@@ -57,6 +57,7 @@ const onmouseclick = (e) => {
   bottom: 0;
   border-radius: 10px;
 }
+
 .circular {
   position: absolute;
   width: 12px;

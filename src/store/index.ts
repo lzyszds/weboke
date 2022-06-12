@@ -7,6 +7,7 @@
  */
 import { defineStore } from "pinia";
 import { get, post } from "../http/http";
+import _ from "lodash";
 /**
  * 1. 定义容器并导出
  * 参数一: 容器ID, 唯一, 将来 Pinia 会把所有的容器挂载到根容器
@@ -38,19 +39,25 @@ export const useStore = defineStore('main', {
    */
   actions: {
     getMusicDetails(id: [], commit: boolean) {
-      console.log(id);
       return post("/music/song/url?id=" + id, null).then((res: any) => {
         return get('/music/song/detail?ids=' + id, null).then((item) => {
-          console.log(item, res);
           if (commit) {
             return this.musicPlayData = {
-              mp3: res.data.data[0].url, // 音乐地址
-              img: item.data.songs[0].al.picUrl, // 封面图片
+              url: res.data.data[0].url, // 音乐地址
+              picUrl: item.data.songs[0].al.picUrl, // 封面图片
               name: item.data.songs[0].name,   // 音乐名称
               artist: item.data.songs[0].ar[0].name // 歌手名称
             }
           } else {
-            return { res: res.data.data, item: item.data.songs }
+            let resNew: any = []
+            let itemNew: any = []
+            id.forEach((result) => {
+              const resNewlog: any = _.filter(res.data.data, ['id', result])
+              const itemNewlog: any = _.filter(item.data.songs, ['id', result])
+              resNew.push(...resNewlog)
+              itemNew.push(...itemNewlog)
+            })
+            return { res: resNew, item: itemNew }
           }
         })
       })
