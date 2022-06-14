@@ -3,23 +3,18 @@
     <ContentHead></ContentHead>
     <div class="p-9">
       <div class="mb-12">
-        <lzyButton
-          v-for="item in reactData.forData"
-          :key="item.index"
-          @click="mapHandle(item.index)"
-          :class="reactData.index == item.index ? 'bg-blue-400' : null"
-          >{{ item.title }}</lzyButton
-        >
+        <lzyButton v-for="item in reactData.forData" :key="item.index" @click="mapHandle(item.index)"
+          :class="reactData.index == item.index ? 'bg-blue-400' : null">{{ item.title }}</lzyButton>
       </div>
       <div class="wrapper">
-        <!-- <Yiqcom :reactData="reactData"></Yiqcom> -->
+        <Yiqcom :reactData="reactData"></Yiqcom>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { defineComponent, reactive } from "vue";
+import { reactive, defineAsyncComponent } from "vue";
 import ContentHead from "../../components/Content-head.vue";
 // import Yiqcom from "./Yiqcom.vue";
 import { get } from "@/http/http";
@@ -27,9 +22,9 @@ import { show, hide } from "@/untils/loading.js";
 import lzyButton from "@/uiComponents/Button.vue";
 import _ from "lodash";
 //使用异步组件的方式来加载疫情地图组件
-// const Yiqcom = defineAsyncComponent(() =>
-//   import("../../components/Yiqcom.vue")
-// );
+const Yiqcom = defineAsyncComponent(() =>
+  import("./Yiqcom.vue")
+);
 let reactData = reactive({
   title: "现有确证",
   cityData: [],

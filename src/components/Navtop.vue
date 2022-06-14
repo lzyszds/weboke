@@ -40,13 +40,14 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { reactive } from "@vue/reactivity";
 import axios from "axios";
 import { NSpace, NButton, NInput, NDrawer, NDrawerContent } from "naive-ui";
 import moment from "moment";
 import { ElTable, ElTableColumn, ElScrollbar } from "element-plus";
 import { useStore } from "@/store/index";
+
 const search = reactive({
   data: [],
   searchBtn: true,

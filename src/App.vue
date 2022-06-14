@@ -3,7 +3,9 @@
     <Content></Content>
     <Navleft></Navleft>
     <Navtop></Navtop>
-    <Music></Music>
+    <div class=" w-full relative">
+      <Music></Music>
+    </div>
   </div>
 </template>
 <script setup>

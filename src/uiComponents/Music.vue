@@ -5,7 +5,7 @@
     <!-- 图片 -->
     <div class="w-32 h-full bg-yellow-100 relative z-30">
       <img class="w-32 h-32 object-cover" ref="img"
-        src="https://y.gtimg.cn/music/photo_new/T002R300x300M0000023rvqc3zCopb.jpg?max_age=2592000" alt="" />
+        src="https://y.gtimg.cn/music/photo_new/T002R300x300M0000023rvqc3zCopb.jpg?max_age=2592000" alt />
       <img @click="playSvg" class="absolute cursor-pointer transition-all"
         :class="!data.isplaySvg ? data.svg + ' bofang_icon' : data.svg"
         :src="`src/assets/icon/music/${!data.isplaySvg ? '播放' : '暂停'}.svg`" />
@@ -25,29 +25,32 @@
       <audio id="player" ref="player" controls="controls" @timeupdate="updata" class="hidden"></audio>
       <!-- <div class="grid grid-cols-3 gap-2"> -->
       <div class="w-128 flex justify-between px-3 bg-white">
-        <span class="text-xl truncate mr-3 leading-9 select-none">{{ mcName }}</span>
+        <span class="text-xl truncate mr-3 leading-9 select-none">
+          {{
+              mcName
+          }}
+        </span>
         <div class="flex py-1">
           <button class="w-8 h-8 btnsvg">
-            <img class="w-8 h-8" src="@/assets/icon/music/top.svg" alt="" />
+            <img class="w-8 h-8" src="@/assets/icon/music/top.svg" alt />
           </button>
           <button class="w-8 h-8 btnsvg" @click="playSvg" v-if="!data.isplaySvg">
-            <img class="w-8 h-8" src="@/assets/icon/music/play.svg" alt="" />
+            <img class="w-8 h-8" src="@/assets/icon/music/play.svg" alt />
           </button>
           <button class="w-8 h-8 btnsvg" @click="playSvg" v-else>
-            <img class="w-8 h-8" src="@/assets/icon/music/stop.svg" alt="" />
+            <img class="w-8 h-8" src="@/assets/icon/music/stop.svg" alt />
           </button>
           <button class="w-8 h-8 transform rotate-180 btnsvg">
-            <img class="w-8 h-8" src="@/assets/icon/music/bottom.svg" alt="" />
+            <img class="w-8 h-8" src="@/assets/icon/music/bottom.svg" alt />
           </button>
           <button class="w-8 h-8 btnsvg" @click="onListmusic">
-            <img class="w-8 h-8" src="@/assets/icon/music/menu.svg" alt="" />
+            <img class="w-8 h-8" src="@/assets/icon/music/menu.svg" alt />
           </button>
         </div>
       </div>
       <div class="w-128 flex justify-start px-3 bg-white">
         <SliderX :width="145" :height="3" :value="data.audioCurrentTimeStr" :sumValue="data.audioCurrentTime"
-          :domAudioyl="data.domAudioyl">
-        </SliderX>
+          :domAudioyl="data.domAudioyl"></SliderX>
         <div class="select-none leading-6 mr-10">
           <span style="margin-left: 15px">{{ data.audioCurrentTimeStr }}</span>
           /
@@ -56,16 +59,16 @@
         <div class="flex py-1 relative">
           <div class="volumeclass">
             <button class="w-8 h-8 btnsvg">
-              <img class="w-8 h-8" src="@/assets/icon/music/volume.svg" alt="" />
+              <img class="w-8 h-8" src="@/assets/icon/music/volume.svg" alt />
             </button>
             <div class="absolute right-8 w-10 h-0 z-50 justify-center overflow-hidden flex volumemod transition-all"
               style="bottom: 25px">
               <SliderY :width="5" :height="data.volumeHeight" :domAudioyl="data.domAudioyl"></SliderY>
             </div>
           </div>
-
-          <button class="w-8 h-8 btnsvg">
-            <img class="w-8 h-8" src="@/assets/icon/music/lyric.svg" alt="" />
+          <!-- 歌词开关 -->
+          <button class="w-8 h-8 btnsvg" @click="lyrichandle">
+            <img class="w-8 h-8" src="@/assets/icon/music/lyric.svg" alt />
           </button>
         </div>
       </div>
@@ -77,10 +80,16 @@
       <img width="30" src="../assets/icon/rightmsk.png" style="transition-all"
         :class="{ 'transform rotate-180': data.index }" />
     </div>
+    <!-- 歌词content -->
+    <div class="lyricDiv" v-if="data.islyric">
+      <p class="lyric">aquamarine可口可乐了</p>
+      <p class="lyric">雪碧雷碧屌逼</p>
+    </div>
   </div>
+
 </template>
 
-<script>
+<script setup >
 import { reactive, ref, onMounted, watch, nextTick } from "vue";
 import SliderX from "./SliderX.vue";
 import SliderY from "./SliderY.vue";
@@ -93,6 +102,7 @@ let data = reactive({
   width: "w-8",
   gridwidth: "w-0",
   volumeHeight: 35,
+  islyric: true,// 歌词开关
   index: false, // 打开关闭音乐面板
   box_card: false, //歌单列表控制
   isplaySvg: false, // 播放暂停
@@ -104,9 +114,9 @@ let data = reactive({
   audioCurrentTime: "0:00", //音频当前时长
   audioCurrentTimeStr: "0:00", //音频当前时长字符串
   musicList: [],
-  musicId: [],
+  musicId: []
 });
-axios.post("/music/playlist/detail?id=7480206477").then((res) => {
+axios.post("/music/playlist/detail?id=7480206477").then(res => {
   data.musicId.push(...res.data.privileges);
 });
 let timer;
@@ -118,7 +128,7 @@ data.domAudioyl = player;
 // player.value.duration;
 const w_425px = "w-425px",
   w_100px = "w-100px";
-const mouseout = (e) => {
+const mouseout = e => {
   if (data.width != "w-8") return;
   data.width = w_100px;
   data.styleWidth = 'width: "0px"';
@@ -138,7 +148,7 @@ function eventList() {
   if (isElMessage && parseInt(player.value.duration) === 30) {
     ElMessage({
       message: "此歌曲需要会员，仅有试听版！",
-      type: "warning",
+      type: "warning"
     });
     isElMessage = false;
   }
@@ -159,7 +169,7 @@ function eventList() {
   data.audioCurrentTime = timeToMinute(parseInt(player.value.duration));
 }
 
-const timeToMinute = (times) => {
+const timeToMinute = times => {
   var t;
   if (times > -1) {
     var hour = Math.floor(times / 3600);
@@ -189,7 +199,7 @@ const timeToMinute = (times) => {
 };
 
 //弹出或关闭 音乐播放器
-const click = (e) => {
+const click = e => {
   data.index = !data.index;
   if (!data.index) data.box_card = false;
   data.width = data.index ? w_425px : w_100px;
@@ -206,7 +216,7 @@ const click = (e) => {
   }, 1);
 };
 //播放||暂停音乐 以及按钮的位置动画
-const playSvg = (e) => {
+const playSvg = e => {
   data.isplaySvg = !data.isplaySvg;
   if (data.isplaySvg) {
     isElMessage = true;
@@ -225,7 +235,7 @@ const onListmc = () => {
   data.musicId.forEach((item, index) => {
     urls.push(item.id);
   });
-  store.getMusicDetails(urls, false).then((_data) => {
+  store.getMusicDetails(urls, false).then(_data => {
     console.log(_data);
     _data.res.forEach((res, index) => {
       data.musicList.push({
@@ -233,7 +243,7 @@ const onListmc = () => {
         url: res.url,
         name: _data.item[index].name,
         artist: _data.item[index].ar[0].name, //作者
-        picUrl: _data.item[index].al.picUrl, //封面图片
+        picUrl: _data.item[index].al.picUrl //封面图片
       });
     });
   });
@@ -248,7 +258,7 @@ const mclistTabFn = (e, i) => {
   getMusicPlay(e);
 };
 
-const getMusicPlay = (value) => {
+const getMusicPlay = value => {
   player.value.src = value.url;
   img.value.src = value.picUrl;
   data.isplaySvg = true;
@@ -261,18 +271,23 @@ const updata = () => {
   //音乐每播放一帧执行一次以下方法
   eventList();
 };
+//歌词开关
+const lyrichandle = () => {
+  data.islyric = !data.islyric;
+
+}
 onMounted(() => {
   //默认音量设置
   player.value.volume = data.volumeHeight / 100;
 });
 watch(
   () => store.musicPlayData,
-  (newVal) => {
+  newVal => {
     if (timer) clearInterval(timer);
     getMusicPlay(newVal);
   }
 );
-watch(data.musicId, (newVal) => {
+watch(data.musicId, newVal => {
   onListmc();
   //页面初始的时候播放器默认加入歌单第一首歌曲的数据进入播放器
   setTimeout(() => {
@@ -299,5 +314,18 @@ watch(data.musicId, (newVal) => {
 
 .box-card {
   bottom: 6.5rem;
+}
+
+.lyric {
+  @apply text-#FE9600;
+  text-shadow: -1px -1px 0 rgb(255, 255, 255)
+}
+
+.lyricDiv {
+  @apply w-full h-16 bg-gray-300 pt-2 fixed bottom-0 text-center text-2xl font-douyu select-none
+}
+
+.lyric:nth-child(2) {
+  @apply text-xl pt-2;
 }
 </style>
