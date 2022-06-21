@@ -9,6 +9,7 @@ const props = defineProps({
 });
 let data = reactive({
   index: 0,
+  calibindex: true
 });
 const times = (time) => {
   time = time.split(":");
@@ -16,13 +17,13 @@ const times = (time) => {
 }
 
 
-const mevar = props.width / 100;
 let onmousedown = (e) => {
   const progressLeft = e.clientX - e.srcElement.offsetLeft;
   document.onmousemove = (e) => {
-    data.index = e.clientX - progressLeft;
+    data.index = e.clientX - progressLeft ;
     if (data.index > props.width) data.index = props.width;
     else if (data.index < 0) data.index = 0;
+  //  props.domAudioyl
     return false;
   };
   document.onmouseup = (e) => {
@@ -32,6 +33,9 @@ let onmousedown = (e) => {
 const onmouseclick = (e) => {
   data.index = e.clientX - 86;
 };
+const scaleControl = (boolean) => {
+  data.calibindex = boolean
+}
 watch(() => {
   return props.value
 }, (newVal) => {
@@ -40,10 +44,12 @@ watch(() => {
 </script>
 
 <template>
-  <div class="content" @click="onmouseclick">
+  <div class="content" @click="onmouseclick" @mousemove="scaleControl(true)" @mouseout="scaleControl(false)">
     <div class="strip" :style="'width:' + props.width + 'px;height:' + props.height + 'px'"></div>
     <div class="progress" :style="'width:' + data.index + 'px'">
-      <div class="circular" @mousedown="onmousedown" @mousemove="onmousemove"></div>
+      <div class="circular" :style="data.calibindex ? 'opacity:1' : 'opacity:0'" @mousedown="onmousedown"
+        @mousemove="onmousemove">
+      </div>
     </div>
   </div>
 </template>
@@ -61,7 +67,7 @@ watch(() => {
 
 .progress {
   position: absolute;
-  background-color: aquamarine;
+  background-color: #FE9600;
   height: 3px;
 }
 
@@ -69,10 +75,14 @@ watch(() => {
   position: absolute;
   width: 12px;
   height: 12px;
-  background-color: aquamarine;
+  /* background-color: #FE9600; */
   border-radius: 50%;
-  top: -4px;
-  right: -10px;
+  top: -5px;
+  right: -8px;
   z-index: 999;
+  transition: .3s;
+  opacity: 0;
+  background-image: url('@/assets/icon/橘子.svg');
+  background-size: cover;
 }
 </style>

@@ -1,17 +1,16 @@
 <template >
   <div class="container w-10/12 relative bg-gray-200 m-auto shadow-xl">
-    <Content></Content>
-    <Navleft></Navleft>
-    <Navtop></Navtop>
+    <router-view></router-view>
     <div class=" w-full relative">
       <Music></Music>
+    </div>
+    <div class="w-full absolute bottom-20">
+      <Live2d></Live2d>
     </div>
   </div>
 </template>
 <script setup>
-import Navleft from "./components/Navleft.vue";
-import Navtop from "./components/Navtop.vue";
-import Content from "./components/Content.vue";
-import Music from "./uiComponents/Music.vue";
+import Music from "./uiComponents/music/Music.vue";
+import Live2d from "./uiComponents/live2d/Live2d.vue";
 import { NScrollbar } from "naive-ui";
 </script>

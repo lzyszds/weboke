@@ -40,20 +40,20 @@ export const useStore = defineStore('main', {
   actions: {
     getMusicDetails(id: [], commit: boolean) {
       return post("/music/song/url?id=" + id, null).then((res: any) => {
-        return get('/music/song/detail?ids=' + id, null).then((item) => {
+        return get('/music/song/detail?ids=' + id, null).then((item: any) => {
           if (commit) {
             return this.musicPlayData = {
-              url: res.data.data[0].url, // 音乐地址
-              picUrl: item.data.songs[0].al.picUrl, // 封面图片
-              name: item.data.songs[0].name,   // 音乐名称
-              artist: item.data.songs[0].ar[0].name // 歌手名称
+              url: res.data[0].url, // 音乐地址
+              picUrl: item.songs[0].al.picUrl, // 封面图片
+              name: item.songs[0].name,   // 音乐名称
+              artist: item.songs[0].ar[0].name // 歌手名称
             }
           } else {
             let resNew: any = []
             let itemNew: any = []
             id.forEach((result) => {
-              const resNewlog: any = _.filter(res.data.data, ['id', result])
-              const itemNewlog: any = _.filter(item.data.songs, ['id', result])
+              const resNewlog: any = _.filter(res.data, ['id', result])
+              const itemNewlog: any = _.filter(item.songs, ['id', result])
               resNew.push(...resNewlog)
               itemNew.push(...itemNewlog)
             })

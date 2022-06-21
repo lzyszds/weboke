@@ -4,7 +4,7 @@
             "name": "首页",
             "x": "-25",
             "y": "-50",
-            "url": "/home"
+            "url": "/home/index"
         },
         {
             "name": "仓库",
@@ -28,7 +28,7 @@
             "name": "关于",
             "x": "-48",
             "y": "-2",
-            "url": "/about"
+            "url": "/home/about"
         },
         {
             "name": "相册",

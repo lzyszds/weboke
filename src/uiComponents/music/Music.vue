@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="h-24 fixed z-50 bottom-0 left-0 flex transition-all duration-300 ease-in-out bg-white border-solid border-t border-gray-200"
-    :class="data.width">
+  <div class="musicContent hidden" :class="data.width">
     <!-- 图片 -->
     <div class="w-32 h-full bg-yellow-100 relative z-30">
       <img class="w-32 h-32 object-cover" ref="img"
@@ -11,11 +9,12 @@
         :src="`src/assets/icon/music/${!data.isplaySvg ? '播放' : '暂停'}.svg`" />
       <!-- 这个路径得好好瞧瞧，vite不能用cli的 require。 使用这个src的时候，去F12看看路径是否正确 -->
     </div>
+    <!-- 歌单列表 -->
     <el-card class="box-card absolute left-0 w-full h-100 p-0 opacity-1"
       :style="data.index && data.box_card ? null : 'bottom:-300px;z-index0'">
       <div v-for="(item, index) in data.musicList" :key="index"
         class="text h-12 item flex justify-between mb-2 px-4 border-l-4 border-solid border-transparent cursor-pointer"
-        :class="{ 'border-gray-400': data.bordermou[index] }" @click="mclistTabFn(item, index)">
+        :class="{ 'border-#FE9600': data.bordermou[index] }" @click="mclistTabFn(item, index)">
         <div class="text-gray-600 leading-10 text-2xl">{{ item.name }}</div>
         <div class="text-gray-600 leading-10 text-2xl">{{ item.artist }}</div>
       </div>
@@ -25,11 +24,8 @@
       <audio id="player" ref="player" controls="controls" @timeupdate="updata" class="hidden"></audio>
       <!-- <div class="grid grid-cols-3 gap-2"> -->
       <div class="w-128 flex justify-between px-3 bg-white">
-        <span class="text-xl truncate mr-3 leading-9 select-none">
-          {{
-              mcName
-          }}
-        </span>
+        <!-- 当前播放的歌名 -->
+        <span class="text-xl truncate mr-3 leading-9 select-none"> {{ mcName }} </span>
         <div class="flex py-1">
           <button class="w-8 h-8 btnsvg">
             <img class="w-8 h-8" src="@/assets/icon/music/top.svg" alt />
@@ -77,13 +73,14 @@
     <!-- 隐式开关 100  -->
     <div class="w-8 h-full bg-gray-300 flex items-center absolute right-0 cursor-pointer z-40" @click="click"
       @mouseout="mouseout">
-      <img width="30" src="../assets/icon/rightmsk.png" style="transition-all"
+      <img width="30" src="@/assets/icon/rightmsk.png" style="transition-all"
         :class="{ 'transform rotate-180': data.index }" />
     </div>
     <!-- 歌词content -->
     <div class="lyricDiv" v-if="data.islyric">
-      <p class="lyric">aquamarine可口可乐了</p>
-      <p class="lyric">雪碧雷碧屌逼</p>
+      <!-- <textarea name="lyric" id="" cols="30" rows="10" v-model="data.lyric.content"></textarea> -->
+      <p class="lyric">{{ data.lyric.content[0] }}</p>
+      <p class="lyric">{{ data.lyric.content[1] }}</p>
     </div>
   </div>
 
@@ -96,13 +93,21 @@ import SliderY from "./SliderY.vue";
 import { storeToRefs } from "pinia";
 import { useStore } from "@/store/index";
 import { ElMessage } from "element-plus";
-import axios from "axios";
+import { get } from '@/http/http'
+import { number } from "echarts";
 let data = reactive({
   bordermou: [true], //歌单列表鼠标移入样式
   width: "w-8",
   gridwidth: "w-0",
   volumeHeight: 35,
-  islyric: true,// 歌词开关
+  lyric: { //歌词
+    content: ['暂无歌词', null],
+    state: 2, //1: 有歌词 2:无歌词 3:歌词加载中
+    data: [],
+    minutes: [],
+    index: 0
+  },
+  islyric: false,// 歌词开关
   index: false, // 打开关闭音乐面板
   box_card: false, //歌单列表控制
   isplaySvg: false, // 播放暂停
@@ -116,14 +121,14 @@ let data = reactive({
   musicList: [],
   musicId: []
 });
-axios.post("/music/playlist/detail?id=7480206477").then(res => {
-  data.musicId.push(...res.data.privileges);
+get("/music/playlist/detail?id=7480206477").then(res => {
+  data.musicId.push(...res.privileges);
 });
 let timer;
 const store = useStore();
 const player = ref(null); //audio标签src地址
 const img = ref(null); //歌曲图片地址
-const mcName = ref(null); //歌曲名称
+const mcName = ref('Deyang Gatal Gatal Sa (Remix)'); //歌曲名称
 data.domAudioyl = player;
 // player.value.duration;
 const w_425px = "w-425px",
@@ -219,8 +224,7 @@ const click = e => {
 const playSvg = e => {
   data.isplaySvg = !data.isplaySvg;
   if (data.isplaySvg) {
-    isElMessage = true;
-    player.value.play();
+    getMusicPlay()
   } else player.value.pause();
   if (!data.isplaySvg) data.svg = "top-4 left-8 w-16 h-16";
   else data.svg = "top-12 left-18 w-12 h-12";
@@ -236,7 +240,6 @@ const onListmc = () => {
     urls.push(item.id);
   });
   store.getMusicDetails(urls, false).then(_data => {
-    console.log(_data);
     _data.res.forEach((res, index) => {
       data.musicList.push({
         id: res.id,
@@ -250,7 +253,6 @@ const onListmc = () => {
 };
 //歌单点击播放歌曲事件
 const mclistTabFn = (e, i) => {
-  console.log(e);
   data.bordermou.forEach((item, index) => {
     data.bordermou[index] = false;
   });
@@ -259,23 +261,58 @@ const mclistTabFn = (e, i) => {
 };
 
 const getMusicPlay = value => {
-  player.value.src = value.url;
-  img.value.src = value.picUrl;
+  if (value) {
+    player.value.src = value.url;
+    img.value.src = value.picUrl;
+    // mcName.value = data.musicList[index + 1].name;
+  }
   data.isplaySvg = true;
   data.svg = "top-12 left-18 w-12 h-12";
   player.value.play();
+  theLyricsLogic()
   //需要控制提示是否为试听歌曲，防止反复触发提醒
   isElMessage = true;
 };
 const updata = () => {
   //音乐每播放一帧执行一次以下方法
   eventList();
+  data.lyric.minutes.forEach((res, index) => {
+    if (res < player.value.currentTime) {
+      data.lyric.index = index;
+    }
+  })
+  const lyricconten = data.lyric.data[data.lyric.index]
+  console.log(lyricconten, data.lyric.minutes);
+  const lyricconten1 = data.lyric.data[data.lyric.index + 1]
+  data.lyric.content[0] = lyricconten.substring(lyricconten.indexOf("]") + 1) //当前歌词
+  data.lyric.content[1] = lyricconten1.substring(lyricconten1.indexOf("]") + 1) //下一句歌词
+  // console.log(lyricconten.indexOf("]") + 1);
+
 };
 //歌词开关
 const lyrichandle = () => {
   data.islyric = !data.islyric;
-
+  if (data.islyric) {
+    theLyricsLogic()
+  }
 }
+//歌词逻辑
+const theLyricsLogic = () => {
+  data.lyric.minutes = []
+  let id = null
+  data.musicList.forEach((item, index) => {
+    if (item.picUrl == img.value.src) id = item.id
+  });
+  get('/music/lyric?id=' + id, null).then(res => {
+    // data.lyric.content = res.lrc.lyric
+    data.lyric.state = 1
+    data.lyric.data = res.lrc.lyric.split('\n')
+    data.lyric.data.forEach((item, index) => {
+      const posTime = item.substring(item.indexOf('[') + 1, item.indexOf(']'))
+      data.lyric.minutes.push(Number(posTime.split(":")[0] * 60 + Math.floor(posTime.split(":")[1])))
+    })
+  })
+};
 onMounted(() => {
   //默认音量设置
   player.value.volume = data.volumeHeight / 100;
@@ -299,6 +336,10 @@ watch(data.musicId, newVal => {
 </script>
 
 <style scoped>
+.musicContent {
+  @apply h-24 fixed z-50 bottom-0 left-0 flex transition-all duration-300 ease-in-out bg-white border-solid border-t border-gray-200
+}
+
 .btnsvg {
   filter: invert(0.5);
   vertical-align: auto;
@@ -322,7 +363,7 @@ watch(data.musicId, newVal => {
 }
 
 .lyricDiv {
-  @apply w-full h-16 bg-gray-300 pt-2 fixed bottom-0 text-center text-2xl font-douyu select-none
+  @apply w-full h-16 pt-2 fixed bottom-0 text-center text-2xl font-douyu select-none
 }
 
 .lyric:nth-child(2) {

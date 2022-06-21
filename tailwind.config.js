@@ -35,6 +35,15 @@ module.exports = {
                 '425px': '425px',
                 '100px': '100px',
             },
+            //边框颜色自定义
+            borderColor: theme => ({
+                ...theme('colors'),
+                DEFAULT: theme('colors.gray.300', 'currentColor'),
+                'primary': '#3490dc',
+                'secondary': '#ffed4a',
+                'danger': '#e3342f',
+                '#FE9600': '#FE9600'
+            }),
             //圆角
             borderRadius: {
                 '4xl': '2rem',

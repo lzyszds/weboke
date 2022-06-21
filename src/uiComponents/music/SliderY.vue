@@ -51,7 +51,7 @@ const onmouseclick = (e) => {
 
 .progress {
   position: absolute;
-  background-color: aquamarine;
+  background-color: #FE9600;
   width: 5px;
   height: 0px;
   bottom: 0;

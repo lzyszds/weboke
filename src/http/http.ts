@@ -1,5 +1,6 @@
 // 一、配置axios
 import axios from 'axios'
+import { reject } from 'lodash'
 // import store from '@/store/index' 如果使用vuex，那么token，userinfo都可以在登录以后存储到store中，不需要使用storage
 // 获取浏览器的接口地址。
 let baseUrl = window.location.origin
@@ -43,11 +44,27 @@ axios.interceptors.response.use(response => {
 // @param auth 是否携带token
 // get请求
 export function get(url: string, data: any) {
-  return axios.get(url, data)
+  return new Promise((resolve, reject) => {
+    axios.get(url, data)
+      .then(res => {
+        resolve(res.data)
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
 }
 // post请求
 export function post(url: string, data: any) {
-  return axios.post(url, data)
+  return new Promise((resolve, reject) => {
+    axios.post(url, data)
+      .then(res => {
+        resolve(res.data)
+      })
+      .catch(error => {
+        reject(error)
+      })
+  })
 }
 // put请求
 export function put(url: string, data: any) {

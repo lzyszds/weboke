@@ -14,7 +14,7 @@
 </template>
 
 <script setup>
-import { reactive, defineAsyncComponent } from "vue";
+import { reactive, defineAsyncComponent, onMounted } from "vue";
 import ContentHead from "../../components/Content-head.vue";
 // import Yiqcom from "./Yiqcom.vue";
 import { get } from "@/http/http";
@@ -66,7 +66,7 @@ const mapHandle = (_index) => {
   reactData.cityData = [];
   show(".wrapper");
   get("/api").then((res) => {
-    const data = res.data.data;
+    const data = res.data;
     let arr = [];
     let situationData = null;
     data.areaTree.forEach((item) => {
@@ -112,7 +112,7 @@ const mapHandle = (_index) => {
     hide();
   });
 };
-mapHandle();
+mapHandle()
 </script>
 <style scoped>
 .map-container {

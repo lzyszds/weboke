@@ -56,11 +56,11 @@ const search = reactive({
 const store = useStore();
 const searchChange = (e) => {
   axios.get("/music/search?keywords=" + e).then((res) => {
-    if (res.data.code !== 200) {
+    if (res.code !== 200) {
       return;
     }
     search.data = [];
-    search.data.push(...res.data.result.songs);
+    search.data.push(...res.result.songs);
   });
 };
 const duration = (time) => {

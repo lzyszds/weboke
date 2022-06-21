@@ -142,9 +142,9 @@ export default defineComponent({
     });
     onMounted(() => {
       get("./data/navData.json").then((res) => {
-        navData.headP = res.data.headportrait;
-        navData.Navigation = res.data.Navigation;
-        navData.form = res.data.form;
+        navData.headP = res.headportrait;
+        navData.Navigation = res.Navigation;
+        navData.form = res.form;
       });
     });
     return { navData };
