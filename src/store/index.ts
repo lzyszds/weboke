@@ -6,7 +6,7 @@
  *    4. 使用容器中的action
  */
 import { defineStore } from "pinia";
-import { get, post } from "../http/http";
+import { get, post } from "@/http/http";
 import _ from "lodash";
 /**
  * 1. 定义容器并导出

@@ -1,5 +1,5 @@
 <template >
-  <div class="container w-10/12 relative bg-gray-200 m-auto shadow-xl">
+  <div class="w-screen h-screen relative bg-white overflow-x-hidden">
     <router-view></router-view>
     <div class=" w-full relative">
       <Music></Music>

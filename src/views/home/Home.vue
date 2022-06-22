@@ -15,7 +15,7 @@
 
 <script setup>
 import { reactive, defineAsyncComponent, onMounted } from "vue";
-import ContentHead from "../../components/Content-head.vue";
+import ContentHead from "@/components/Content-head.vue";
 // import Yiqcom from "./Yiqcom.vue";
 import { get } from "@/http/http";
 import { show, hide } from "@/untils/loading.js";

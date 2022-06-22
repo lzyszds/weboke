@@ -1,12 +1,13 @@
 <template>
   <div class="musicContent hidden" :class="data.width">
+    <audio id="player" ref="player" controls="controls" @timeupdate="updata" class="hidden"></audio>
     <!-- 图片 -->
     <div class="w-32 h-full bg-yellow-100 relative z-30">
       <img class="w-32 h-32 object-cover" ref="img"
         src="https://y.gtimg.cn/music/photo_new/T002R300x300M0000023rvqc3zCopb.jpg?max_age=2592000" alt />
       <img @click="playSvg" class="absolute cursor-pointer transition-all"
         :class="!data.isplaySvg ? data.svg + ' bofang_icon' : data.svg"
-        :src="`src/assets/icon/music/${!data.isplaySvg ? '播放' : '暂停'}.svg`" />
+        :src="`/src/assets/icon/music/${!data.isplaySvg ? '播放' : '暂停'}.svg`" />
       <!-- 这个路径得好好瞧瞧，vite不能用cli的 require。 使用这个src的时候，去F12看看路径是否正确 -->
     </div>
     <!-- 歌单列表 -->
@@ -21,7 +22,6 @@
     </el-card>
     <!-- 切歌歌词快进 -->
     <div :style="[data.styleGrid]" style="width: 0" class="pt-3 pl-0 z-30">
-      <audio id="player" ref="player" controls="controls" @timeupdate="updata" class="hidden"></audio>
       <!-- <div class="grid grid-cols-3 gap-2"> -->
       <div class="w-128 flex justify-between px-3 bg-white">
         <!-- 当前播放的歌名 -->
