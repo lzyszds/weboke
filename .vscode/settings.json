@@ -5,7 +5,7 @@
   "css.customData": [
     "./css-data.json"
   ],
-  // "css.validate": false,
-  // "less.validate": false,
-  // "scss.validate": false
+  "css.validate": false,
+  "less.validate": false,
+  "scss.validate": false
 }

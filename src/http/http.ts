@@ -1,6 +1,5 @@
 // 一、配置axios
 import axios from 'axios'
-import { reject } from 'lodash'
 // import store from '@/store/index' 如果使用vuex，那么token，userinfo都可以在登录以后存储到store中，不需要使用storage
 // 获取浏览器的接口地址。
 let baseUrl = window.location.origin
