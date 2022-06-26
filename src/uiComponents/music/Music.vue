@@ -1,20 +1,19 @@
 <template>
-  <div class="musicContent hidden" :class="data.width">
+  <div class="musicContent hidden" :class="data.width" @mouseleave="mouseleave" @mouseenter="mouseenter">
     <audio id="player" ref="player" controls="controls" @timeupdate="updata" class="hidden"></audio>
     <!-- 图片 -->
     <div class="w-32 h-full bg-yellow-100 relative z-30">
       <img class="w-32 h-32 object-cover" ref="img"
         src="https://y.gtimg.cn/music/photo_new/T002R300x300M0000023rvqc3zCopb.jpg?max_age=2592000" alt />
-      <img @click="playSvg" class="absolute cursor-pointer transition-all"
-        :class="!data.isplaySvg ? data.svg + ' bofang_icon' : data.svg"
-        :src="`/src/assets/icon/music/${!data.isplaySvg ? '播放' : '暂停'}.svg`" />
+      <img @click="playSvg" class="absolute cursor-pointer transition-all hidden"
+        :class="!data.isplaySvg ? data.svg + ' bofang_icon' : data.svg" alt=""
+        :src="`/src/assets/icon/music/${!data.isplaySvg ? '播放' : '暂停'}.svg`" ref="bofang_icon" />
       <!-- 这个路径得好好瞧瞧，vite不能用cli的 require。 使用这个src的时候，去F12看看路径是否正确 -->
     </div>
     <!-- 歌单列表 -->
     <el-card class="box-card absolute left-0 w-full h-100 p-0 opacity-1"
       :style="data.index && data.box_card ? null : 'bottom:-300px;z-index0'">
-      <div v-for="(item, index) in data.musicList" :key="index"
-        class="text h-12 item flex justify-between mb-2 px-4 border-l-4 border-solid border-transparent cursor-pointer"
+      <div v-for="(item, index) in data.musicList" :key="index" class="musiclist"
         :class="{ 'border-#FE9600': data.bordermou[index] }" @click="mclistTabFn(item, index)">
         <div class="text-gray-600 leading-10 text-2xl">{{ item.name }}</div>
         <div class="text-gray-600 leading-10 text-2xl">{{ item.artist }}</div>
@@ -25,7 +24,9 @@
       <!-- <div class="grid grid-cols-3 gap-2"> -->
       <div class="w-128 flex justify-between px-3 bg-white">
         <!-- 当前播放的歌名 -->
-        <span class="text-xl truncate mr-3 leading-9 select-none"> {{ mcName }} </span>
+        <span class="text-xl truncate mr-3 leading-9 select-none">
+          {{ mcName }}
+        </span>
         <div class="flex py-1">
           <button class="w-8 h-8 btnsvg">
             <img class="w-8 h-8" src="@/assets/icon/music/top.svg" alt />
@@ -57,8 +58,18 @@
             <button class="w-8 h-8 btnsvg">
               <img class="w-8 h-8" src="@/assets/icon/music/volume.svg" alt />
             </button>
-            <div class="absolute right-8 w-10 h-0 z-50 justify-center overflow-hidden flex volumemod transition-all"
-              style="bottom: 25px">
+            <div class="
+                absolute
+                right-8
+                w-10
+                h-0
+                z-50
+                justify-center
+                overflow-hidden
+                flex
+                volumemod
+                transition-all
+              " style="bottom: 25px">
               <SliderY :width="5" :height="data.volumeHeight" :domAudioyl="data.domAudioyl"></SliderY>
             </div>
           </div>
@@ -71,9 +82,18 @@
     </div>
 
     <!-- 隐式开关 100  -->
-    <div class="w-8 h-full bg-gray-300 flex items-center absolute right-0 cursor-pointer z-40" @click="click"
-      @mouseout="mouseout">
-      <img width="30" src="@/assets/icon/rightmsk.png" style="transition-all"
+    <div class="
+        w-8
+        h-full
+        bg-gray-300
+        flex
+        items-center
+        absolute
+        right-0
+        cursor-pointer
+        z-40
+      " @click="click">
+      <img width="30" src="@/assets/icon/rightmsk.png" alt="" style="transition-all"
         :class="{ 'transform rotate-180': data.index }" />
     </div>
     <!-- 歌词content -->
@@ -83,7 +103,6 @@
       <p class="lyric">{{ data.lyric.content[1] }}</p>
     </div>
   </div>
-
 </template>
 
 <script setup >
@@ -93,21 +112,22 @@ import SliderY from "./SliderY.vue";
 import { storeToRefs } from "pinia";
 import { useStore } from "@/store/index";
 import { ElMessage } from "element-plus";
-import { get } from '@/http/http'
+import { get } from "@/http/http";
 import { number } from "echarts";
 let data = reactive({
   bordermou: [true], //歌单列表鼠标移入样式
   width: "w-8",
   gridwidth: "w-0",
   volumeHeight: 35,
-  lyric: { //歌词
-    content: ['暂无歌词', null],
+  lyric: {
+    //歌词
+    content: ["暂无歌词", null],
     state: 2, //1: 有歌词 2:无歌词 3:歌词加载中
     data: [],
     minutes: [],
-    index: 0
+    index: 0,
   },
-  islyric: false,// 歌词开关
+  islyric: false, // 歌词开关
   index: false, // 打开关闭音乐面板
   box_card: false, //歌单列表控制
   isplaySvg: false, // 播放暂停
@@ -119,24 +139,31 @@ let data = reactive({
   audioCurrentTime: "0:00", //音频当前时长
   audioCurrentTimeStr: "0:00", //音频当前时长字符串
   musicList: [],
-  musicId: []
+  musicId: [],
+  hasClick: false, //是否点击过歌单列表
 });
-get("/music/playlist/detail?id=7480206477").then(res => {
+get("/music/playlist/detail?id=7480206477").then((res) => {
   data.musicId.push(...res.privileges);
 });
 let timer;
 const store = useStore();
+const bofang_icon = ref(null); //audio标签src地址
 const player = ref(null); //audio标签src地址
 const img = ref(null); //歌曲图片地址
-const mcName = ref('Deyang Gatal Gatal Sa (Remix)'); //歌曲名称
+const mcName = ref("Deyang Gatal Gatal Sa (Remix)"); //歌曲名称
 data.domAudioyl = player;
 // player.value.duration;
 const w_425px = "w-425px",
   w_100px = "w-100px";
-const mouseout = e => {
+const mouseenter = (e) => {
   if (data.width != "w-8") return;
+  bofang_icon.value.classList.remove("hidden");
   data.width = w_100px;
-  data.styleWidth = 'width: "0px"';
+};
+const mouseleave = (e) => {
+  if (data.hasClick) return;
+  bofang_icon.value.classList.add("hidden");
+  data.width = "w-8";
 };
 //isElMessage需要控制提示是否为试听歌曲，防止反复触发提醒
 let isElMessage = true;
@@ -153,7 +180,7 @@ function eventList() {
   if (isElMessage && parseInt(player.value.duration) === 30) {
     ElMessage({
       message: "此歌曲需要会员，仅有试听版！",
-      type: "warning"
+      type: "warning",
     });
     isElMessage = false;
   }
@@ -174,7 +201,7 @@ function eventList() {
   data.audioCurrentTime = timeToMinute(parseInt(player.value.duration));
 }
 
-const timeToMinute = times => {
+const timeToMinute = (times) => {
   var t;
   if (times > -1) {
     var hour = Math.floor(times / 3600);
@@ -204,8 +231,9 @@ const timeToMinute = times => {
 };
 
 //弹出或关闭 音乐播放器
-const click = e => {
+const click = (e) => {
   data.index = !data.index;
+  data.hasClick = data.index;
   if (!data.index) data.box_card = false;
   data.width = data.index ? w_425px : w_100px;
   let times = data.index ? 0 : 100;
@@ -221,10 +249,10 @@ const click = e => {
   }, 1);
 };
 //播放||暂停音乐 以及按钮的位置动画
-const playSvg = e => {
+const playSvg = (e) => {
   data.isplaySvg = !data.isplaySvg;
   if (data.isplaySvg) {
-    getMusicPlay()
+    getMusicPlay();
   } else player.value.pause();
   if (!data.isplaySvg) data.svg = "top-4 left-8 w-16 h-16";
   else data.svg = "top-12 left-18 w-12 h-12";
@@ -239,14 +267,14 @@ const onListmc = () => {
   data.musicId.forEach((item, index) => {
     urls.push(item.id);
   });
-  store.getMusicDetails(urls, false).then(_data => {
+  store.getMusicDetails(urls, false).then((_data) => {
     _data.res.forEach((res, index) => {
       data.musicList.push({
         id: res.id,
         url: res.url,
         name: _data.item[index].name,
         artist: _data.item[index].ar[0].name, //作者
-        picUrl: _data.item[index].al.picUrl //封面图片
+        picUrl: _data.item[index].al.picUrl, //封面图片
       });
     });
   });
@@ -260,7 +288,7 @@ const mclistTabFn = (e, i) => {
   getMusicPlay(e);
 };
 
-const getMusicPlay = value => {
+const getMusicPlay = (value) => {
   if (value) {
     player.value.src = value.url;
     img.value.src = value.picUrl;
@@ -269,7 +297,7 @@ const getMusicPlay = value => {
   data.isplaySvg = true;
   data.svg = "top-12 left-18 w-12 h-12";
   player.value.play();
-  theLyricsLogic()
+  theLyricsLogic();
   //需要控制提示是否为试听歌曲，防止反复触发提醒
   isElMessage = true;
 };
@@ -280,38 +308,39 @@ const updata = () => {
     if (res < player.value.currentTime) {
       data.lyric.index = index;
     }
-  })
-  const lyricconten = data.lyric.data[data.lyric.index]
+  });
+  const lyricconten = data.lyric.data[data.lyric.index];
   console.log(lyricconten, data.lyric.minutes);
-  const lyricconten1 = data.lyric.data[data.lyric.index + 1]
-  data.lyric.content[0] = lyricconten.substring(lyricconten.indexOf("]") + 1) //当前歌词
-  data.lyric.content[1] = lyricconten1.substring(lyricconten1.indexOf("]") + 1) //下一句歌词
+  const lyricconten1 = data.lyric.data[data.lyric.index + 1];
+  data.lyric.content[0] = lyricconten.substring(lyricconten.indexOf("]") + 1); //当前歌词
+  data.lyric.content[1] = lyricconten1.substring(lyricconten1.indexOf("]") + 1); //下一句歌词
   // console.log(lyricconten.indexOf("]") + 1);
-
 };
 //歌词开关
 const lyrichandle = () => {
   data.islyric = !data.islyric;
   if (data.islyric) {
-    theLyricsLogic()
+    theLyricsLogic();
   }
-}
+};
 //歌词逻辑
 const theLyricsLogic = () => {
-  data.lyric.minutes = []
-  let id = null
+  data.lyric.minutes = [];
+  let id = null;
   data.musicList.forEach((item, index) => {
-    if (item.picUrl == img.value.src) id = item.id
+    if (item.picUrl == img.value.src) id = item.id;
   });
-  get('/music/lyric?id=' + id, null).then(res => {
+  get("/music/lyric?id=" + id, null).then((res) => {
     // data.lyric.content = res.lrc.lyric
-    data.lyric.state = 1
-    data.lyric.data = res.lrc.lyric.split('\n')
+    data.lyric.state = 1;
+    data.lyric.data = res.lrc.lyric.split("\n");
     data.lyric.data.forEach((item, index) => {
-      const posTime = item.substring(item.indexOf('[') + 1, item.indexOf(']'))
-      data.lyric.minutes.push(Number(posTime.split(":")[0] * 60 + Math.floor(posTime.split(":")[1])))
-    })
-  })
+      const posTime = item.substring(item.indexOf("[") + 1, item.indexOf("]"));
+      data.lyric.minutes.push(
+        Number(posTime.split(":")[0] * 60 + Math.floor(posTime.split(":")[1]))
+      );
+    });
+  });
 };
 onMounted(() => {
   //默认音量设置
@@ -319,12 +348,12 @@ onMounted(() => {
 });
 watch(
   () => store.musicPlayData,
-  newVal => {
+  (newVal) => {
     if (timer) clearInterval(timer);
     getMusicPlay(newVal);
   }
 );
-watch(data.musicId, newVal => {
+watch(data.musicId, (newVal) => {
   onListmc();
   //页面初始的时候播放器默认加入歌单第一首歌曲的数据进入播放器
   setTimeout(() => {
@@ -336,8 +365,12 @@ watch(data.musicId, newVal => {
 </script>
 
 <style scoped>
+.musiclist {
+  @apply h-12  flex justify-between mb-2 px-4 border-l-4 border-solid border-transparent cursor-pointer
+}
+
 .musicContent {
-  @apply h-24 fixed z-50 bottom-0 left-0 flex transition-all duration-300 ease-in-out bg-white border-solid border-t border-gray-200
+  @apply h-24 fixed z-50 bottom-0 left-0 flex transition-all duration-300 ease-in-out bg-white border-solid border-t border-gray-200;
 }
 
 .btnsvg {
@@ -359,11 +392,11 @@ watch(data.musicId, newVal => {
 
 .lyric {
   @apply text-#FE9600;
-  text-shadow: -1px -1px 0 rgb(255, 255, 255)
+  text-shadow: -1px -1px 0 rgb(255, 255, 255);
 }
 
 .lyricDiv {
-  @apply w-full h-16 pt-2 fixed bottom-0 text-center text-2xl font-douyu select-none
+  @apply w-full h-16 pt-2 fixed bottom-0 text-center text-2xl font-douyu select-none;
 }
 
 .lyric:nth-child(2) {

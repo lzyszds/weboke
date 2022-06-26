@@ -68,6 +68,7 @@ function removeMessage() {
   if (contextMenu) contextMenu.remove();
 }
 window.addEventListener("click", removeMessage);
+window.addEventListener("blur", removeMessage);
 
 //提示框
 function ElNotification(options) {

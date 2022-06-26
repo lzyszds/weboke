@@ -1,6 +1,6 @@
 <template>
   <nav class="navbar">
-    <a class="navbar-brand navbar-logo" href="#">LJYasdasa</a>
+    <a class="navbar-brand navbar-logo" href="#"><img width="80" src="@/assets/images/ljzy.png" alt="" />LJYasdasa</a>
     <div class="navbar-toggler">
       <label class="menu-open-button" @click="openfun">
         <span class="lines line-1"></span>
@@ -25,20 +25,28 @@
 
 <script setup>
 import { reactive, onMounted, nextTick, ref } from "vue";
+import { useRouter } from 'vue-router'
+import { debounce } from '@/untils/common'
+const router = useRouter()
 const data = reactive({
   activeIndex: 0,
   items: [
-    { name: "首页" },
-    { name: "文章" },
-    { name: "关于" },
-    { name: "联系" },
-    { name: "相册" },
-    { name: "Github" },
-    { name: "友链" },
+    { name: "首页", path: '/home/index' },
+    { name: "文章", path: '' },
+    { name: "关于", path: '' },
+    { name: "联系", path: '' },
+    { name: "相册", path: '' },
+    { name: "Github", path: '' },
+    { name: "疫情", path: '/home/episit' },
   ],
   opencount: 0,
   selectorpos: 0
 });
+data.items.forEach((item, index) => {
+  if (item.path == router.options.history.location) {
+    data.activeIndex = index
+  }
+})
 const ul = ref(null);
 const bgBoxfun = () => {
   const navitem = document.querySelector(".nav-item.active");
@@ -52,13 +60,25 @@ const menuMethod = (index) => {
   data.activeIndex = index
   nextTick(() => {
     bgBoxfun();
+    router.push(data.items[index].path)
   })
 }
 const openfun = () => {
   data.hasopen = !data.hasopen
   if (data.hasopen) ul.value.style.height = (data.items.length * 40) + 'px'
   else ul.value.style.height = 0
+  const line = document.querySelectorAll(".lines")
+  if (data.hasopen) {
+    line[0].style.transform = 'rotate(45deg) translate3d(0,0,0)'
+    line[1].style.transform = 'scaleX(0)'
+    line[2].style.transform = 'rotate(-45deg) translate3d(0,0,0)'
+  } else {
+    line[0].style.transform = 'rotate(0) translate3d(0, -8px, 0)'
+    line[1].style.transform = 'scaleX(1)'
+    line[2].style.transform = 'rotate(0) translate3d(0, 8px, 0)'
+  }
 }
+
 onMounted(() => {
   bgBoxfun()
   window.addEventListener("resize", bgBoxfun);
@@ -91,6 +111,7 @@ body {
   color: #fff;
   text-decoration: none;
   margin-left: 40px;
+  display: flex
 }
 
 .navbar-nav {
@@ -277,6 +298,7 @@ body {
     position: absolute;
     top: 50%;
     left: 50%;
+    transform: scaleX(1);
     margin-left: -12.5px;
     margin-top: -1.5px;
     -webkit-transition: -webkit-transform 200ms;
