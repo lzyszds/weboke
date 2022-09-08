@@ -6,13 +6,15 @@ import { onMounted } from "vue-demi";
 </script>
 
 <template>
-  <!-- <Content></Content> -->
-  <div id="container" class="absolute w-full h-auto z-1 ">
-    <!-- 中心内容 -->
-    <router-view></router-view>
+  <div>
+    <!-- <Content></Content> -->
+    <div id="container" class="absolute w-full h-auto z-1 ">
+      <!-- 中心内容 -->
+      <router-view></router-view>
+    </div>
+    <!-- <Navleft></Navleft> -->
+    <Navtop></Navtop>
   </div>
-  <!-- <Navleft></Navleft> -->
-  <Navtop></Navtop>
 </template>
 
 <style scoped>

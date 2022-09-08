@@ -2,14 +2,8 @@
   <div class="map-container" ref="myEchart"></div>
 </template>
 
-<script>
-import {
-  defineComponent,
-  getCurrentInstance,
-  onMounted,
-  ref,
-  watch,
-} from "vue";
+<script setup>
+import { defineComponent, getCurrentInstance, onMounted, ref, watch, } from "vue";
 import * as echarts from "echarts";
 import china from "/public/china.json";
 export default defineComponent({
