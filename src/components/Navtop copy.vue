@@ -80,4 +80,5 @@ const dblclick = (row, column, event) => {
 </script>
 
 <style scoped>
+
 </style>

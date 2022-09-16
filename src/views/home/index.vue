@@ -8,7 +8,7 @@ import { onMounted } from "vue-demi";
 <template>
   <div>
     <!-- <Content></Content> -->
-    <div id="container" class="absolute w-full h-auto z-1 ">
+    <div id="container" class="absolute w-full z-1 ">
       <!-- 中心内容 -->
       <router-view></router-view>
     </div>
@@ -20,5 +20,10 @@ import { onMounted } from "vue-demi";
 <style scoped>
 .el-tabs__active-bar {
   background-color: #000
+}
+
+#container {
+  height: calc(100vh - 60px);
+  margin-top: 60px;
 }
 </style>

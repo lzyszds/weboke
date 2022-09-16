@@ -1,6 +1,6 @@
 <template>
   <nav class="navbar">
-    <a class="navbar-brand navbar-logo" href="#"><img width="80" src="@/assets/images/ljzy.png" alt="" />LJYasdasa</a>
+    <a class="navbar-brand navbar-logo" href="#"><img width="80" src="@/assets/images/lzjy.png" alt="" />LJYasdasa</a>
     <div class="navbar-toggler">
       <label class="menu-open-button" @click="openfun">
         <span class="lines line-1"></span>

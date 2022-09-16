@@ -1,6 +1,6 @@
 <template>
   <div class="p-9">
-    <div class="mb-12">
+    <div class="mb-12 ">
       <lzyButton v-for="item in reactData.forData" :key="item.index" @click="mapHandle(item.index)"
         :class="reactData.index == item.index ? 'bg-blue-400' : null">{{ item.title }}</lzyButton>
     </div>

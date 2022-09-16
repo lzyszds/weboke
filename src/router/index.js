@@ -8,23 +8,28 @@ const routes = [{
 },
 {
     path: '/home',
+    name: 'home',
     component: index,
     children: [{
         path: '/home/index',
+        name: 'homeIndex',
         component: Home,
     },
     {
         path: '/home/episit',
+        name: 'homeEpisit',
         component: () =>
             import('@/views/episit/index.vue')
     },
     {
         path: '/home/YIQ',
+        name: 'homeYIQ',
     }
     ]
 },
 {
     path: '/photo',
+    name: 'photo',
     component: () =>
         import('@/views/photo/Photo.vue')
 }

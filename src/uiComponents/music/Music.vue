@@ -111,9 +111,9 @@ import SliderX from "./SliderX.vue";
 import SliderY from "./SliderY.vue";
 import { storeToRefs } from "pinia";
 import { useStore } from "@/store/index";
-import { ElMessage } from "element-plus";
+import { ElMessage, ElNotification } from "element-plus";
 import { get } from "@/http/http";
-import { number } from "echarts";
+import { number, time } from "echarts";
 let data = reactive({
   bordermou: [true], //歌单列表鼠标移入样式
   width: "w-8",
@@ -193,12 +193,21 @@ function eventList() {
     // data.isplaySvg = false;
     // data.svg = "top-4 left-8 w-16 h-16"
     const index = data.bordermou.indexOf(true); //获取当前播放的歌单列表索引
-    console.log(index);
     player.value.src = data.musicList[index + 1].url;
     img.value.src = data.musicList[index + 1].picUrl;
     mcName.value = data.musicList[index + 1].name;
   }
-  data.audioCurrentTime = timeToMinute(parseInt(player.value.duration));
+  //判断当前歌曲是否存在（网易云有些歌曲会莫名其妙被删除）
+  const getDge = player.value.src.indexOf("/null") != -1;
+  if (getDge) {
+    ElNotification({
+      title: "提示",
+      message: "歌曲时长获取失败,歌曲不存在,即将播放下一首",
+      type: "warning",
+    });
+  } else {
+    data.audioCurrentTime = timeToMinute(parseInt(player.value.duration));
+  }
 }
 
 const timeToMinute = (times) => {
@@ -310,7 +319,6 @@ const updata = () => {
     }
   });
   const lyricconten = data.lyric.data[data.lyric.index];
-  console.log(lyricconten, data.lyric.minutes);
   const lyricconten1 = data.lyric.data[data.lyric.index + 1];
   data.lyric.content[0] = lyricconten.substring(lyricconten.indexOf("]") + 1); //当前歌词
   data.lyric.content[1] = lyricconten1.substring(lyricconten1.indexOf("]") + 1); //下一句歌词
@@ -360,13 +368,13 @@ watch(data.musicId, (newVal) => {
     player.value.src = data.musicList[0].url;
     img.value.src = data.musicList[0].picUrl;
     mcName.value = data.musicList[0].name;
-  }, 50);
+  }, 500);
 });
 </script>
 
 <style scoped>
 .musiclist {
-  @apply h-12  flex justify-between mb-2 px-4 border-l-4 border-solid border-transparent cursor-pointer
+  @apply h-12 flex justify-between mb-2 px-4 border-l-4 border-solid border-transparent cursor-pointer;
 }
 
 .musicContent {
