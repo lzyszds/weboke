@@ -11,12 +11,9 @@
 </template>
 <script setup>
 import Music from "./uiComponents/music/Music.vue";
-import Live2d from "./uiComponents/live2d/Live2d.vue";
+import Live2d from "./uiComponents/live2d/Live2d.vue"; 
 </script>
 <style>
-
-
-
 .srcoll_five::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   background-color: #F5F5F5;

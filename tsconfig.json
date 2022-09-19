@@ -15,7 +15,6 @@
       "DOM"
     ],
     "types": [
-      "element-plus/global",
       "vue/ref-macros"
     ],
     "skipLibCheck": true,
@@ -35,9 +34,9 @@
     "src/**/*.tsx",
     "src/**/*.vue"
   ],
-  "references": [
-    {
-      "path": "./tsconfig.node.json"
-    }
-  ],
+  // "references": [
+  //   {
+  //     "path": "./tsconfig.node.json"
+  //   }
+  // ],
 }

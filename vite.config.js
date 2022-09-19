@@ -33,7 +33,12 @@ export default ({ mode }) => defineConfig({
         target: 'http://localhost:1024/',
         changeOrigin: true,
         rewrite: path => path.replace(/^\/music/, '')
-      }
+      },
+      '/live2d': {
+        target: 'https://oss.amogu.cn/blog/live2d/api/model/girls-frontline',
+        changeOrigin: true,
+        rewrite: path => path.replace(/^\/music/, '')
+      },
     }
   }
 })

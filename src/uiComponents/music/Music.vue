@@ -46,7 +46,7 @@
         </div>
       </div>
       <div class="w-128 flex justify-start px-3 bg-white">
-        <SliderX :width="145" :height="3" :value="data.audioCurrentTimeStr" :sumValue="data.audioCurrentTime"
+        <SliderX :width="'145'" :height="'3'" :value="data.audioCurrentTimeStr" :sumValue="data.audioCurrentTime"
           :domAudioyl="data.domAudioyl"></SliderX>
         <div class="select-none leading-6 mr-10">
           <span style="margin-left: 15px">{{ data.audioCurrentTimeStr }}</span>
@@ -70,7 +70,7 @@
                 volumemod
                 transition-all
               " style="bottom: 25px">
-              <SliderY :width="5" :height="data.volumeHeight" :domAudioyl="data.domAudioyl"></SliderY>
+              <SliderY :width="'5'" :height="`${data.volumeHeight}`" :domAudioyl="data.domAudioyl"></SliderY>
             </div>
           </div>
           <!-- 歌词开关 -->
@@ -378,7 +378,8 @@ watch(data.musicId, (newVal) => {
 }
 
 .musicContent {
-  @apply h-24 fixed z-50 bottom-0 left-0 flex transition-all duration-300 ease-in-out bg-white border-solid border-t border-gray-200;
+  @apply h-24 fixed bottom-0 left-0 flex transition-all duration-300 ease-in-out bg-white border-solid border-t border-gray-200;
+  z-index: 9999999;
 }
 
 .btnsvg {
