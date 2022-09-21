@@ -1,7 +1,4 @@
 <script setup>
-import axios from 'axios'
-import { L2Dwidget } from 'live2d-widget'
-import { useEventListener } from '@vueuse/core'
 
 import { onMounted, ref } from "vue";
 const player = ref(null)
@@ -15,7 +12,7 @@ const arr = {
 }
 function scriptfnHandle() {
   const script = document.createElement('script')
-  script.src = '/public/live2d-widget-master/autoload.js'
+  script.src = '/public/live2d/live2d-widget-master/autoload.js'
   document.body.appendChild(script)
 }
 
@@ -24,7 +21,7 @@ onMounted(() => {
   setTimeout(() => {
     const l2dDom = document.getElementById('waifu')
     drag(l2dDom)
-  }, 1000)
+  }, 5000)
 })
 //看板娘拖拽
 function drag(el) {
@@ -33,7 +30,6 @@ function drag(el) {
     let imgMakeBox = document.getElementById("app");
     //算出鼠标相对元素的位置
     let disX = e.clientX - dragBox.offsetLeft;
-    console.log(`lzy ~ disX`, disX)
     let disY = e.clientY - dragBox.offsetTop;
     let moveW = dragBox.offsetWidth;
     let moveH = dragBox.offsetHeight;
