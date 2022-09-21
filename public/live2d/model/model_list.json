@@ -1,0 +1,19 @@
+{
+  "models": [
+    "kp31/index.json",
+    "destroy/index.json",
+    "sagiri/sagiri.model.json",
+    "mashiro_ryoufuku/index.json",
+    "yuzaoqian/index.json",
+    "epsilon/index.json"
+  ],
+  "messages": [
+    "来自 Potion Maker 的 血小板 ~",
+    "来自 Potion Maker 的 Tia 酱 ~",
+    "来自 Bilibili Live 的  哦 ~",
+    "来自 Bilibili Live 的  的说",
+    "Shizuku Talk ！这里是 Shizuku ~",
+    "Nep! Nep! 超次元游戏：海王星 系列",
+    "艦隊これくしょん / 叢雲(むらくも)"
+  ]
+}
