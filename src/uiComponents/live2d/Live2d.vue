@@ -3,13 +3,6 @@
 import { onMounted, ref } from "vue";
 const player = ref(null)
 const contentText = ref('只是因为在人群中多看了你一眼,再也没能忘记你那张苦瓜脸')
-const arr = {
-  'kp31_3101': 'https://cdn.jsdelivr.net/gh/evrstr/live2d-widget-models/live2d_evrstr/kp31_3101/model.json',
-  'g36_2407': 'https://cdn.jsdelivr.net/gh/evrstr/live2d-widget-models/live2d_evrstr/g36_2407/model.json',
-  'kp31_310': 'https://cdn.jsdelivr.net/gh/evrstr/live2d-widget-models/live2d_evrstr/kp31_310/model.json',
-  'sat8_2601南瓜': 'https://cdn.jsdelivr.net/gh/evrstr/live2d-widget-models/live2d_evrstr/sat8_2601/model.json',
-  'xuexiaoban': "https://qiniu.qkongtao.cn/files/live2d/model/tia/model.json"
-}
 function scriptfnHandle() {
   const script = document.createElement('script')
   script.src = '/public/live2d/live2d-widget-master/autoload.js'

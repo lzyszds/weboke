@@ -1,8 +1,5 @@
-
-
-// 防抖
-export function debounce(fn, delay) {
-  var timer = null;
+function debounce(fn, delay) {
+  var timer = 0;
   return function () {
     var context = this;
     var args = arguments;
@@ -18,7 +15,17 @@ export function debounce(fn, delay) {
   };
 }
 
-
+function splitArray(array, size) {
+  let data = [];
+  for (let i = 0; i < array.length; i += size) {
+    data.push(array.slice(i, i + size))
+  }
+  return data
+}
+export default {
+  debounce,// 防抖
+  splitArray,//把一个数组拆分成几个数组
+}
 
 
 

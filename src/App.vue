@@ -28,4 +28,8 @@ import Live2d from "./uiComponents/live2d/Live2d.vue";
   background-color: #999;
   border-radius: 10px;
 }
+
+#nprogress .bar {
+  background: rgb(255, 0, 119) !important;
+}
 </style>

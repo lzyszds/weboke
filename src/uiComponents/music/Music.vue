@@ -5,7 +5,7 @@
     <div class="w-32 h-full bg-yellow-100 relative z-30">
       <img class="w-32 h-32 object-cover" ref="img"
         src="https://y.gtimg.cn/music/photo_new/T002R300x300M0000023rvqc3zCopb.jpg?max_age=2592000" alt />
-      <img @click="playSvg" class="absolute cursor-pointer transition-all hidden"
+      <img @click="playSvg" class="absolute cursor-pointer transition-all"
         :class="!data.isplaySvg ? data.svg + ' bofang_icon' : data.svg" alt=""
         :src="`/src/assets/icon/music/${!data.isplaySvg ? '播放' : '暂停'}.svg`" ref="bofang_icon" />
       <!-- 这个路径得好好瞧瞧，vite不能用cli的 require。 使用这个src的时候，去F12看看路径是否正确 -->
@@ -82,17 +82,7 @@
     </div>
 
     <!-- 隐式开关 100  -->
-    <div class="
-        w-8
-        h-full
-        bg-gray-300
-        flex
-        items-center
-        absolute
-        right-0
-        cursor-pointer
-        z-40
-      " @click="click">
+    <div class="rightBtn" @click="click">
       <img width="30" src="@/assets/icon/rightmsk.png" alt="" style="transition-all"
         :class="{ 'transform rotate-180': data.index }" />
     </div>
@@ -378,7 +368,7 @@ watch(data.musicId, (newVal) => {
 }
 
 .musicContent {
-  @apply h-24 fixed bottom-0 left-0 flex transition-all duration-300 ease-in-out bg-white border-solid border-t border-gray-200;
+  @apply h-24 fixed bottom-0 left-0 flex transition-all duration-300 ease-in-out bg-white border-solid border-gray-200;
   z-index: 9999999;
 }
 
@@ -410,5 +400,10 @@ watch(data.musicId, (newVal) => {
 
 .lyric:nth-child(2) {
   @apply text-xl pt-2;
+}
+
+.rightBtn {
+  @apply w-8 h-full flex items-center absolute right-0 cursor-pointer z-40;
+  background-color: #5161ce;
 }
 </style>

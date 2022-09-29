@@ -1,5 +1,5 @@
 // 注意：live2d_path 参数应使用绝对路径
-let live2d_path = "http://localhost:3000/public/live2d/live2d-widget-master/";
+let live2d_path = "/music/live2d/live2d-widget-master/";
 //const live2d_path = "/live2d-widget/";
 
 // 封装异步加载资源的方法
@@ -35,7 +35,7 @@ if (screen.width >= 768) {
 			waifuPath: live2d_path + "waifu-tips.json",
 			//apiPath: "https://live2d.fghrsh.net/api/",
 			// cdnPath: "https://fastly.jsdelivr.net/gh/fghrsh/live2d_api/"
-			cdnPath: "http://localhost:3000/public/live2d/model/"
+			cdnPath: "/music/live2d/model/"
 		});
 	});
 }

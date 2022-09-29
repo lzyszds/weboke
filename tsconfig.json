@@ -20,8 +20,8 @@
     "skipLibCheck": true,
     "baseUrl": "./",
     "paths": {
-      "src": [
-        "./src/"
+      "@": [
+        "./src"
       ],
       "/": [
         "./public"
@@ -32,7 +32,8 @@
     "src/**/*.ts",
     "src/**/*.d.ts",
     "src/**/*.tsx",
-    "src/**/*.vue"
+    "src/**/*.vue",
+    "src/untils/common.js"
   ],
   // "references": [
   //   {

@@ -1,0 +1,31 @@
+:root {
+  --themeColor: #5161ce;
+  --duration: .7s;
+  --broRadius: 9px;
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+  --breakpoint-xxl: 1600px;
+}
+
+.decoration {
+  font-family: 'almama';
+  color: #fff;
+  cursor: pointer;
+  text-shadow: 1px 3px 3px #000;
+  transition: .6s;
+  background: linear-gradient(#5161ce, #5161ce) no-repeat left 100%/0 1px;
+}
+
+.decoration:hover {
+  color: #5161ce;
+  fill: #5161ce !important;
+  text-shadow: 1px -1px 3px #fff;
+  background: linear-gradient(#5161ce, #5161ce) no-repeat left 100% / 100% 1px;
+}
+
+.lzy-center {
+  width: 100%;
+  text-align: center;
+}

@@ -1,6 +1,7 @@
 <template>
   <nav class="navbar">
-    <a class="navbar-brand navbar-logo" href="#"><img width="80" src="@/assets/images/lzjy.png" alt="" />LJYasdasa</a>
+    <a class="navbar-brand navbar-logo" href="#"><img width="80" src="http://localhost:1024/img/lzjy.png"
+        alt="" />J/Z</a>
     <div class="navbar-toggler">
       <label class="menu-open-button" @click="openfun">
         <span class="lines line-1"></span>
@@ -26,16 +27,16 @@
 <script setup>
 import { reactive, onMounted, nextTick, ref } from "vue";
 import { useRouter } from 'vue-router'
-import { debounce } from '@/untils/common'
+// import { debounce } from '@/untils/common'
 const router = useRouter()
 const data = reactive({
   activeIndex: 0,
   items: [
     { name: "首页", path: '/home/index' },
-    { name: "文章", path: '' },
+    { name: "文章", path: '/home/content' },
     { name: "关于", path: '' },
     { name: "联系", path: '' },
-    { name: "相册", path: '' },
+    { name: "相册", path: '/photo' },
     { name: "Github", path: '' },
     { name: "疫情", path: '/home/episit' },
   ],
