@@ -13,6 +13,7 @@ import { onMounted } from "vue";
       <router-view></router-view>
     </div>
     <!-- <Navleft></Navleft> -->
+    1
     <Navtop></Navtop>
   </div>
 </template>
