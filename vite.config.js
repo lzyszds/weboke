@@ -34,6 +34,18 @@ export default ({ mode }) => defineConfig({
         changeOrigin: true,
         rewrite: path => path.replace(/^\/music/, '')
       },
+      '/mapApi': { //高德地图api
+        target: 'https://restapi.amap.com/v3/',
+        changeOrigin: true,
+        rewrite: path => path.replace(/^\/mapApi/, '')
+      },
+      '/getIp': {
+        target: 'http://pv.sohu.com',//这里是域名，不是完整地址
+        changeOrigin: true,//是否跨域
+        pathRewrite: {
+          '^/getIp': ''
+        }
+      }
       // '/live2d': {
       //   target: 'https://oss.amogu.cn/blog/live2d/api/model/girls-frontline',
       //   changeOrigin: true,

@@ -46,7 +46,7 @@ svg {
 }
 
 svg:hover {
-  cursor: pointer;
+  cursor: var(--linkCup);
   fill: #5161ce !important;
 }
 </style>

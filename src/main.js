@@ -1,25 +1,32 @@
 import { createApp } from 'vue'
-import('@/assets/font/font.css')
-import('@/assets/css/index.css')
 import ElementPlus from 'element-plus'
-import 'element-plus/lib/theme-chalk/index.css'
+import 'element-plus/dist/index.css'
 import App from './App.vue'
 import router from './router'
-import "./assets/css/tailwind.css"
-import ArcoVue from '@arco-design/web-vue';
-import '@arco-design/web-vue/dist/arco.css';
-import '@/assets/iconFont/iconfont.css'
-import '@/assets/iconFont/iconfont.js'
+import 'highlight.js/styles/atom-one-dark.css'
+import 'highlight.js/lib/common'
+import hljsVuePlugin from '@highlightjs/vue-plugin'
+import { Fancybox, Carousel, Panzoom } from "@fancyapps/ui";//图片放大
+import "@fancyapps/ui/dist/fancybox.css";
 import common from '@/untils/common.js'; //全局按钮防抖事件
+import { createPinia } from 'pinia'
+const pinia = createPinia()
 const app = createApp(App)
 app.config.globalProperties.$common = common
-import {
-    createPinia
-} from 'pinia'
-const pinia = createPinia()
+/* 
+  避免当前使用的ip为国外ip 导致的获取不到ip 
+  sougou的查询ip方法不支持国外ip
+*/
+try {
+  app.config.globalProperties.$getip = returnCitySN || ''
+} catch (e) {
+  console.warn(e)
+}
 
-app.use(ArcoVue)
+app.config.globalProperties.$fancyapps = { Fancybox, Carousel, Panzoom }
+
 app.use(ElementPlus)
+app.use(hljsVuePlugin)
 app.use(router)
 app.use(pinia)
 app.mount('#app')

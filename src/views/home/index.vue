@@ -8,12 +8,15 @@ import { onMounted } from "vue";
 <template>
   <div>
     <!-- <Content></Content> -->
-    <div id="container" class="absolute w-full z-1 ">
+    <div id="container">
       <!-- 中心内容 -->
-      <router-view></router-view>
+      <router-view class="router-view" v-slot="{ Component }">
+        <transition name="fade" mode="out-in">
+          <component :is="Component" />
+        </transition>
+      </router-view>
     </div>
     <!-- <Navleft></Navleft> -->
-    1
     <Navtop></Navtop>
   </div>
 </template>
@@ -24,7 +27,22 @@ import { onMounted } from "vue";
 }
 
 #container {
-  height: calc(100vh - 60px);
   margin-top: 60px;
+}
+
+.fade-leave-active,
+.fade-enter-active {
+  transition: all 0.5s;
+  overflow: hidden;
+}
+
+.fade-enter {
+  opacity: 0;
+  transform: translateY(-200px);
+}
+
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(-200px);
 }
 </style>

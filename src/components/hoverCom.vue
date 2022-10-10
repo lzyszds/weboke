@@ -1,3 +1,4 @@
+<!-- 首页的中间介绍 -->
 <script setup lang='ts'>
 import { defineProps, watch, computed } from 'vue'
 import Icon from "@/components/iconAli.vue";
@@ -51,9 +52,6 @@ const { item, index } = prop
   text-align: center;
 }
 
-.itemContent.hover {
-  transform: translateY(-80px) scale(30%);
-}
 
 .itemContentimg img {
   widows: 60px;

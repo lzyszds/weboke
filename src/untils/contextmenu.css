@@ -20,7 +20,7 @@
   overflow: hidden;
   z-index: 9999;
   font-size: 16px;
-  animation: toleft .4s both ;
+  animation: toleft .4s both;
 }
 
 .notification-content {
@@ -46,7 +46,7 @@
   position: absolute;
   top: 18px;
   right: 15px;
-  cursor: pointer;
+  cursor: var(--linkCup);
   font-size: 20px;
 }
 
@@ -118,7 +118,7 @@
   -webkit-animation: menuItemAnimation 0.2s 0s both;
   animation: menuItemAnimation 0.2s 0s both;
   font-family: "Inter", sans-serif;
-  cursor: pointer;
+  cursor: var(--linkCup);
 }
 
 .contextMenu-button:hover {

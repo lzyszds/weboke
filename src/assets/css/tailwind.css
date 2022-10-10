@@ -36,3 +36,7 @@ ui {
     list-style: none;
     text-decoration: none;
 }
+
+.dark {
+    transition: .3s;
+}

@@ -12,7 +12,7 @@
 
 <script setup>
 import { reactive, onMounted, ref, watch } from "vue";
-import { get } from "@/http/http";
+import http from "@/http/http";
 // import { show, hide } from "@/untils/loading.js";
 import lzyButton from "@/uiComponents/Button.vue";
 import _ from "lodash";
@@ -192,7 +192,7 @@ const mapHandle = (_index) => {
   reactData.index = _index;
   reactData.cityData = [];
   // show(".wrapper");
-  get("/api").then((res) => {
+  http.get("/api").then((res) => {
     const data = res.data;
     let arr = [];
     let situationData = null;

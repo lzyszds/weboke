@@ -40,7 +40,7 @@ const onmouseclick = (e) => {
   display: flex;
   justify-items: center;
   align-items: center;
-  cursor: pointer;
+  cursor: var(--linkCup);
   border-radius: 10px;
 }
 

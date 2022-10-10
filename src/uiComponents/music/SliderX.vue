@@ -20,10 +20,10 @@ const times = (time) => {
 let onmousedown = (e) => {
   const progressLeft = e.clientX - e.srcElement.offsetLeft;
   document.onmousemove = (e) => {
-    data.index = e.clientX - progressLeft ;
+    data.index = e.clientX - progressLeft;
     if (data.index > props.width) data.index = props.width;
     else if (data.index < 0) data.index = 0;
-  //  props.domAudioyl
+    //  props.domAudioyl
     return false;
   };
   document.onmouseup = (e) => {
@@ -58,7 +58,7 @@ watch(() => {
   display: flex;
   justify-items: center;
   align-items: center;
-  cursor: pointer;
+  cursor: var(--linkCup);
 }
 
 .strip {

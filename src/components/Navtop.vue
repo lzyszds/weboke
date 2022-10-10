@@ -11,14 +11,16 @@
     </div>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ml-auto" ref="ul">
-        <div class="hori-selector" :style="data.selectorpos">
+        <!-- <div class="hori-selector" :style="data.selectorpos">
           <div class="left"></div>
           <div class="right"></div>
-        </div>
+        </div> -->
         <li class="nav-item" :class="{ active: data.activeIndex == index }" v-for="(item, index) in data.items"
           :key="index" @click="menuMethod(index)">
           <a class="nav-link" href="javascript:void(0);">{{ item.name }}</a>
         </li>
+        <setThemes></setThemes>
+
       </ul>
     </div>
   </nav>
@@ -26,6 +28,7 @@
 
 <script setup>
 import { reactive, onMounted, nextTick, ref } from "vue";
+import setThemes from "@/uiComponents/setupThemes/Setthemes.vue";
 import { useRouter } from 'vue-router'
 // import { debounce } from '@/untils/common'
 const router = useRouter()
@@ -34,18 +37,20 @@ const data = reactive({
   items: [
     { name: "首页", path: '/home/index' },
     { name: "文章", path: '/home/content' },
-    { name: "关于", path: '' },
-    { name: "联系", path: '' },
+    { name: "关于", path: '/about' },
     { name: "相册", path: '/photo' },
-    { name: "Github", path: '' },
     { name: "疫情", path: '/home/episit' },
   ],
   opencount: 0,
   selectorpos: 0
 });
 data.items.forEach((item, index) => {
+  const location = router.options.history.location
   if (item.path == router.options.history.location) {
     data.activeIndex = index
+  }
+  if (location.includes('detail')) {
+    data.activeIndex = 1
   }
 })
 const ul = ref(null);
@@ -182,7 +187,8 @@ body {
 }
 
 .navbar-nav>li.active {
-  color: #5161ce;
+  color: #fff;
+  text-shadow: 1px 1px 5px #000;
   background-color: transparent;
   transition: all 0.7s;
 }
@@ -322,5 +328,10 @@ body {
     -webkit-transform: translate3d(0, 8px, 0);
     transform: translate3d(0, 8px, 0);
   }
+}
+</style>
+<style scoped>
+.dark .navbar {
+  background: var(--darkBgcolor) !important;
 }
 </style>

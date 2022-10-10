@@ -1,18 +1,27 @@
 :root {
   --themeColor: #5161ce;
-  --duration: .7s;
+  --bgcolor: #fff !important;
+  --darkBgcolor: #31363b;
+  --darkColor: rgb(255, 255, 255, .8);
+  --textcolor: #fe9600;
+  --normalCup: url('../icon/Normal.png'), auto;
+  --linkCup: url('../icon/Link.png'), auto;
+  --verticalCup: url('../icon/Vertical.png'), auto;
   --broRadius: 9px;
   --breakpoint-sm: 576px;
   --breakpoint-md: 768px;
   --breakpoint-lg: 992px;
   --breakpoint-xl: 1200px;
   --breakpoint-xxl: 1600px;
+  --purple: rgb(123, 31, 162);
+  --violet: rgb(103, 58, 183);
+  --pink: rgb(244, 143, 177);
 }
 
 .decoration {
   font-family: 'almama';
   color: #fff;
-  cursor: pointer;
+  cursor: var(--linkCup);
   text-shadow: 1px 3px 3px #000;
   transition: .6s;
   background: linear-gradient(#5161ce, #5161ce) no-repeat left 100%/0 1px;

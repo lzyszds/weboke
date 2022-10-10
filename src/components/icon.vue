@@ -20,13 +20,3 @@ const props = defineProps({
   </svg>
 </template>
 
-<style scoped>
-/* svg {
-  transition: .5s;
-}
-
-svg:hover {
-  cursor: pointer;
-  fill: #5161ce !important;
-} */
-</style>

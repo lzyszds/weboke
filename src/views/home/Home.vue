@@ -3,21 +3,24 @@
     <div class="card"
       :style="`background: url('${count == 0?bgicon:list[count-1].icon}') no-repeat center center;background-size: cover;`">
       <Meteorite :quantity="10"></Meteorite>
-      <transition name="fade" mode="out-in">
-        <hoverComVue v-if="count==2" :item='list[count-1]' :index="count-1" :css="{width:'500px',top:'30%'}">
-        </hoverComVue>
-      </transition>
+      <!-- <transition name="fade" mode="out-in"> -->
+      <hoverComVue v-if="count==2" :item='list[count-1]' :index="count-1" :css="{width:'500px',top:'30%'}">
+      </hoverComVue>
+      <!-- </transition> -->
 
     </div>
     <div class="card4">
-      <div class="itemsCard" v-for="(item,index) in list" :key="index" @mouseenter="count = index+1"
-        @mouseleave="count = 0">
-        <div class="itemIcon">
-          <img :class="count!=index+1?'hover':''" :src="item.icon" alt="">
+      <div class="card4Child">
+        <div class="itemsCard" v-for="(item,index) in list" :key="index" @mouseenter="count = index+1"
+          @mouseleave="count = 0">
+          <div class="itemIcon">
+            <img :class="count!=index+1?'hover':''" :src="item.icon" alt="">
+          </div>
+          <hoverComVue :item='item' :index="index"></hoverComVue>
         </div>
-        <hoverComVue :item='item' :index="index"></hoverComVue>
       </div>
     </div>
+    <FooterFactoryVue></FooterFactoryVue>
   </div>
 </template>
 
@@ -25,6 +28,8 @@
 import { onMounted, ref } from "vue";
 import Meteorite from "@/uiComponents/meteorite/meteorite.vue";
 import hoverComVue from "@/components/hoverCom.vue";
+import FooterFactoryVue from "@/components/FooterFactory.vue";
+
 const bgicon = new URL('http://localhost:1024/img/bg.jpg', import.meta.url).href;
 
 const count = ref(0);
@@ -75,20 +80,27 @@ onMounted(() => {
   justify-content: center;
   align-items: center;
   overflow: hidden;
+  margin-top: 30px;
 }
 
 .card4 {
+  width: 100%;
+  height: 300px;
+}
+
+.card4Child {
   width: 70%;
   display: flex;
   justify-content: space-between;
-
+  margin: 40px auto 0;
 }
 
 .itemsCard {
+  width: 70%;
   width: 400px;
   height: 200px;
   position: relative;
-  /* cursor: pointer; */
+  /* cursor: var(--linkCup); */
   overflow: hidden;
   border-radius: 10px;
   box-shadow: 1px 1px 3px 2px #999;
@@ -120,7 +132,7 @@ onMounted(() => {
 }
 
 /* 过度动画 */
-.fade-enter-active {
+/* .fade-enter-active {
   transition: all 0.3s ease-out;
 }
 
@@ -132,5 +144,28 @@ onMounted(() => {
 .fade-leave-to {
   transform: scale(.4);
   opacity: 0;
+} */
+</style>
+<style scoped>
+.dark .home {
+  background: var(--darkBgcolor) !important;
+}
+
+.dark .card {
+  /* background: var(--darkBgcolor) !important; */
+  box-shadow: 1px 4px 8px 5px #333 !important;
+}
+
+.dark .itemsCard {
+  box-shadow: 1px 1px 3px 2px #333 !important;
+}
+
+.dark .footerClass {
+  background: var(--darkBgcolor) !important;
+}
+
+.dark .footerClass>>>.footer .content {
+  border-top: 1px solid #eee;
+  background: var(--darkBgcolor) !important;
 }
 </style>

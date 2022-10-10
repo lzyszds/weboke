@@ -6,6 +6,8 @@
     "build": "vite build"
   },
   "dependencies": {
+    "@fancyapps/ui": "^4.0.31",
+    "@highlightjs/vue-plugin": "^2.1.0",
     "@vueuse/core": "^9.2.0",
     "animejs": "^3.2.1",
     "autoprefixer": "^10.3.7",
@@ -14,8 +16,9 @@
     "core-js": "^3.6.5",
     "dayjs": "^1.11.2",
     "echarts": "^5.3.2",
-    "element-plus": "^1.0.2-beta.71",
+    "element-plus": "^2.2.17",
     "gsap": "^3.10.4",
+    "highlight.js": "^11.6.0",
     "live2d-widget": "^3.1.4",
     "lodash": "^4.17.21",
     "moment": "^2.29.3",

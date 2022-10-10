@@ -5,9 +5,8 @@
     <div class="w-32 h-full bg-yellow-100 relative z-30">
       <img class="w-32 h-32 object-cover" ref="img"
         src="https://y.gtimg.cn/music/photo_new/T002R300x300M0000023rvqc3zCopb.jpg?max_age=2592000" alt />
-      <img @click="playSvg" class="absolute cursor-pointer transition-all"
-        :class="!data.isplaySvg ? data.svg + ' bofang_icon' : data.svg" alt=""
-        :src="`/src/assets/icon/music/${!data.isplaySvg ? '播放' : '暂停'}.svg`" ref="bofang_icon" />
+      <img @click="playSvg" class="absolute cursor-pointer transition-all" :class="data.svg" alt="" ref="bofang_icon"
+        :src="`/src/assets/icon/music/${!data.isplaySvg ? '播放' : '暂停'}.svg`" />
       <!-- 这个路径得好好瞧瞧，vite不能用cli的 require。 使用这个src的时候，去F12看看路径是否正确 -->
     </div>
     <!-- 歌单列表 -->
@@ -102,7 +101,7 @@ import SliderY from "./SliderY.vue";
 import { storeToRefs } from "pinia";
 import { useStore } from "@/store/index";
 import { ElMessage, ElNotification } from "element-plus";
-import { get } from "@/http/http";
+import http from "@/http/http";
 import { number, time } from "echarts";
 let data = reactive({
   bordermou: [true], //歌单列表鼠标移入样式
@@ -122,7 +121,7 @@ let data = reactive({
   box_card: false, //歌单列表控制
   isplaySvg: false, // 播放暂停
   playUrl: "",
-  svg: "top-4 left-8 w-16 h-16",
+  svg: "top-4 left-8 w-16 h-16 hidden",
   styleGrid: "display:none",
   domAudioyl: null, //音频dom属性
   audioLenght: 0, //音频总时长
@@ -132,7 +131,7 @@ let data = reactive({
   musicId: [],
   hasClick: false, //是否点击过歌单列表
 });
-get("/music/playlist/detail?id=7480206477").then((res) => {
+http.get("/music/playlist/detail?id=7480206477").then((res) => {
   data.musicId.push(...res.privileges);
 });
 let timer;
@@ -328,7 +327,7 @@ const theLyricsLogic = () => {
   data.musicList.forEach((item, index) => {
     if (item.picUrl == img.value.src) id = item.id;
   });
-  get("/music/lyric?id=" + id, null).then((res) => {
+  http.get("/music/lyric?id=" + id, null).then((res) => {
     // data.lyric.content = res.lrc.lyric
     data.lyric.state = 1;
     data.lyric.data = res.lrc.lyric.split("\n");
@@ -405,5 +404,6 @@ watch(data.musicId, (newVal) => {
 .rightBtn {
   @apply w-8 h-full flex items-center absolute right-0 cursor-pointer z-40;
   background-color: #5161ce;
+  cursor: var(--linkCup);
 }
 </style>

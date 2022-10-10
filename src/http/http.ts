@@ -2,11 +2,13 @@
 import axios from 'axios'
 // import store from '@/store/index' 如果使用vuex，那么token，userinfo都可以在登录以后存储到store中，不需要使用storage
 // 获取浏览器的接口地址。
+
 let baseUrl = window.location.origin
 // axios配置
 axios.defaults.baseURL = baseUrl
 // 设置请求最大时长
 axios.defaults.timeout = 5000
+//withCredentials 表示跨域请求时是否需要使用凭证
 axios.defaults.withCredentials = true
 // 请求拦截器，设置token
 // axios.interceptors.request.use(config => {
@@ -41,41 +43,45 @@ axios.interceptors.response.use(response => {
 // @param data 携带参数
 // @param file 上传文件对象
 // @param auth 是否携带token
-// get请求
-export function get(url: string, data: any) {
-  return new Promise((resolve, reject) => {
-    axios.get(url, data)
-      .then(res => {
-        resolve(res.data)
-      })
-      .catch(err => {
-        reject(err)
-      })
-  })
-}
-// post请求
-export function post(url: string, data: any) {
-  return new Promise((resolve, reject) => {
-    axios.post(url, data)
-      .then(res => {
-        resolve(res.data)
-      })
-      .catch(error => {
-        reject(error)
-      })
-  })
-}
-// put请求
-export function put(url: string, data: any) {
-  return axios.put(url, data)
-}
-// delete 请求
-export function del(url: string, data: any) {
-  return axios.delete(url, data)
-}
-// upload 请求
-export function uploader(url: string, file: any) {
-  let params = new FormData()
-  params.append('file', file)
-  return axios.post(url, params)
+
+export default class http {
+  // get请求
+
+  static get(url: string, data: any) {
+    return new Promise((resolve, reject) => {
+      axios.get(url, data)
+        .then(res => {
+          resolve(res.data)
+        })
+        .catch(err => {
+          reject(err)
+        })
+    })
+  }
+  // post请求
+  static post(url: string, data: any) {
+    return new Promise((resolve, reject) => {
+      axios.post(url, data)
+        .then(res => {
+          resolve(res.data)
+        })
+        .catch(error => {
+          reject(error)
+        })
+    })
+  }
+  // put请求
+  static put(url: string, data: any) {
+    return axios.put(url, data)
+  }
+  // delete 请求
+  static del(url: string, data: any) {
+    return axios.delete(url, data)
+  }
+  // upload 请求
+  static uploader(url: string, file: any) {
+    let params = new FormData()
+    params.append('file', file)
+    return axios.post(url, params)
+  }
 }
