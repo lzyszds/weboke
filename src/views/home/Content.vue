@@ -2,33 +2,18 @@
 import { ref, reactive, onMounted, getCurrentInstance, nextTick } from 'vue'
 import ContentHead from '@/components/Content-head.vue'
 import ContentDiv from '@/components/Content-div.vue'
-import anime from 'animejs';
 const list = reactive([{ information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1024/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1024/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1024/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1024/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1024/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1024/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1024/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1024/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1024/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1024/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1024/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1024/img/bg.jpg' } },])
 const { proxy } = getCurrentInstance() as any
 const listNew = ref(proxy.$common.splitArray(list, 5))
 const indexList = ref(0)
 const isload = ref(true)
-// onMounted(() => {
-//   anmieFn()
-// })
 const currentChange = (e: number) => {
   isload.value = false
   indexList.value = e - 1
   nextTick(() => {
     isload.value = true
-    // nextTick(() => {
-    //   anmieFn('1%', 500)
-    // })
   })
 }
-// function anmieFn(x = '1%', time = 100) {
-//   anime({
-//     targets: '.listSum .conDiv',
-//     translateX: x,
-//     opacity: 1,
-//     delay: anime.stagger(time, { start: 100 })
-//   });
-// }
 </script>
 
 <template>

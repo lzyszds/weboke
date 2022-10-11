@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import { ref, onMounted, onBeforeMount } from 'vue';
+import { ref } from 'vue';
 const load: any = ref(null)
 const loads: any = ref(null)
 setTimeout(() => {

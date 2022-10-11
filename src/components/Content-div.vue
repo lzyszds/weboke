@@ -66,8 +66,6 @@ onMounted(() => {
 
 .conDiv:hover {
     box-shadow: -1px 1px 6px 1px var(--themeColor);
-    /* animation: shake 0.5s cubic-bezier(0.68, -1.55, 0.265, 4.55) both; */
-    /* animation: 1000ms linear 0s 1 normal both running bottom-up-spring; */
 }
 
 @keyframes bottom-up-spring {

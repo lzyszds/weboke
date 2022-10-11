@@ -13,8 +13,8 @@
 <script setup lang="ts">
 import Music from "./uiComponents/music/Music.vue";
 import { defineAsyncComponent } from 'vue'
-const Live2d = defineAsyncComponent(() => import('./uiComponents/live2d/Live2d.vue'))
-const Loadinge = defineAsyncComponent(() => import('./uiComponents/loader/loading.vue'))
+const Live2d = defineAsyncComponent(() => import('@/uiComponents/live2d/Live2d.vue'))
+const Loadinge = defineAsyncComponent(() => import('@/uiComponents/loader/loading.vue'))
 </script>
 <style>
 .compensate-for-scrollbar {

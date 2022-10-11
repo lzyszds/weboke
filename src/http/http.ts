@@ -3,14 +3,22 @@ import axios from 'axios'
 // import store from '@/store/index' 如果使用vuex，那么token，userinfo都可以在登录以后存储到store中，不需要使用storage
 // 获取浏览器的接口地址。
 
-let baseUrl = window.location.origin
-// axios配置
-axios.defaults.baseURL = baseUrl
-// 设置请求最大时长
-axios.defaults.timeout = 5000
-//withCredentials 表示跨域请求时是否需要使用凭证
-axios.defaults.withCredentials = true
-// 请求拦截器，设置token
+const instance = axios.create({
+  baseURL: window.location.origin,
+  timeout: 5000,
+  withCredentials: true,//表示跨域请求时是否需要使用凭证
+  headers: {
+    'access-control-allow-origin': '*',
+    'Access-Control-Allow-Origin-Type': '*'
+  }
+
+})
+// // 请求拦截器，设置token
+instance.interceptors.request.use(config => {
+  console.log('进入请求状态')
+  return config
+})
+
 // axios.interceptors.request.use(config => {
 //   if (localStorage && localStorage.getItem('token')) {
 //     const token = localStorage.getItem('token')
@@ -23,28 +31,39 @@ axios.defaults.withCredentials = true
 //   return Promise.error(error)
 // })
 // 响应拦截器
-axios.interceptors.response.use(response => {
-  if (response.status === 200) {
-    // 993登录过期
-    if (response.data.code !== '993') {
-      return Promise.resolve(response)
-    } else {
-      console.log('登录过期')
-      // store.commit('clearUserInfo')  // 使用vuex存储过用户信息，这里需要清空一下。
-      window.location.href = '/#/login'
-    }
-  } else {
-    return Promise.reject(response)
-  }
-})
+// axios.interceptors.response.use(response => {
+//   if (response.status === 200) {
+//     // 993登录过期
+//     if (response.data.code !== '993') {
+//       return Promise.resolve(response)
+//     } else {
+//       console.log('登录过期')
+//       // store.commit('clearUserInfo')  // 使用vuex存储过用户信息，这里需要清空一下。
+//       window.location.href = '/#/login'
+//     }
+//   } else {
+//     return Promise.reject(response)
+//   }
+// })
 
 // 2、封装请求方式
 // @param url 接口地址
 // @param data 携带参数
 // @param file 上传文件对象
 // @param auth 是否携带token
-
-export default class http {
+export default function (method = 'get', url = '', params = {}) {
+  return new Promise((resolve, reject) => {
+    instance({ method, url, params })
+      .then(res => {
+        resolve(res.data)
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}
+/* 旧版写法 */
+/* export default class http {
   // get请求
 
   static get(url: string, data: any) {
@@ -84,4 +103,4 @@ export default class http {
     params.append('file', file)
     return axios.post(url, params)
   }
-}
+} */

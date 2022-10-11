@@ -131,7 +131,7 @@ let data = reactive({
   musicId: [],
   hasClick: false, //是否点击过歌单列表
 });
-http.get("/music/playlist/detail?id=7480206477").then((res) => {
+http('get', "/music/playlist/detail?id=7480206477").then((res) => {
   data.musicId.push(...res.privileges);
 });
 let timer;

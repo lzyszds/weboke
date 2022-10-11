@@ -1,18 +1,16 @@
 <script setup lang="ts" >
-import img from '@/assets/icon/weather/import.ts'
-import { ref, onMounted, getCurrentInstance } from 'vue';
+import img from '@/assets/icon/weather/import'
+import { ref, getCurrentInstance } from 'vue';
 import { useDateFormat } from '@vueuse/core'
 
-import http from '@/http/http.ts'
+import http from '@/http/http'
 const data = ref<any>([])
 const { proxy } = getCurrentInstance() as any
-console.log(`lzy ~ proxy.$getip`, proxy.$getip)
-console.log(`lzy ~ proxy`, proxy)
-const { cid, cip, cname } = proxy.$getip || ''
+const { cid, } = proxy.$getip || ''
 //{cip: '116.10.168.123', cid: '450000', cname: '广西壮族自治区'}
 // 高德地图api
 const key = '78182b9b39355dc0ae4ce91dae7f0bbf	'
-data.value = await http.get(`/mapApi/weather/weatherInfo?key=${key}&city=${cid}`)
+data.value = await http('get', `/mapApi/weather/weatherInfo?key=${key}&city=${cid}`)
 function getWeather() {
   /* 
     避免当前使用的ip为国外ip 导致的获取不到ip 
