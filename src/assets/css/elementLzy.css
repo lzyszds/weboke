@@ -1,0 +1,62 @@
+.el-checkbox__input.is-checked .el-checkbox__inner {
+  border-color: var(--themeColor) !important;
+  background-color: var(--themeColor) !important;
+}
+
+.el-checkbox__input.is-indeterminate .el-checkbox__inner {
+  border-color: var(--themeColor) !important;
+  background-color: var(--themeColor) !important;
+}
+
+.el-checkbox__inner:hover {
+  border-color: var(--themeColor) !important;
+}
+
+.lzyColor .el-pager li.is-active {
+  background-color: var(--themeColor) !important;
+}
+
+.lzyColor .el-pager li:hover {
+  color: var(--themeColor);
+}
+
+.toolfooter .el-input__wrapper.is-focus {
+  border-color: var(--themeColor) !important;
+  box-shadow: 0 0 0 1px var(--themeColor) inset !important;
+}
+
+.el-overlay-message-box .el-message-box {
+  border-radius: 10px;
+  box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.25);
+}
+
+.el-select .el-input.is-focus .el-input__wrapper {
+  box-shadow: 0 0 0 1px var(--themeColor) inset !important;
+}
+
+.el-select-dropdown__wrap .eel-select-dropdown__list {
+  border-radius: 10px !important;
+  margin: 0 !important;
+}
+
+.el-message-box__btns button.el-button--primary {
+  background: var(--themeColor);
+}
+
+.el-select-dropdown__item.selected {
+  color: var(--themeColor) !important;
+}
+
+.el-select-dropdown__item.hover,
+.el-select-dropdown__item:hover {
+  background-color: #5161ce30 !important;
+  color: var(--themeColor) !important;
+}
+
+.toolfooter .el-upload {
+  display: block;
+}
+
+.toolfooter .el-dialog__body {
+  padding-top: 0px !important;
+}
