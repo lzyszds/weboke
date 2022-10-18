@@ -9,15 +9,16 @@ const instance = axios.create({
   withCredentials: true,//表示跨域请求时是否需要使用凭证
   headers: {
     'access-control-allow-origin': '*',
-    'Access-Control-Allow-Origin-Type': '*'
+    // 'Content-Type': 'multipart/form-data',
+    'Access-Control-Allow-Origin-Type': '*',
   }
 
 })
 // // 请求拦截器，设置token
-instance.interceptors.request.use(config => {
-  console.log('进入请求状态')
-  return config
-})
+// instance.interceptors.request.use(config => {
+//   console.log('进入请求状态')
+//   return config
+// })
 
 // axios.interceptors.request.use(config => {
 //   if (localStorage && localStorage.getItem('token')) {
@@ -51,9 +52,9 @@ instance.interceptors.request.use(config => {
 // @param data 携带参数
 // @param file 上传文件对象
 // @param auth 是否携带token
-export default function (method = 'get', url = '', params = {}) {
+export default function (method = 'get', url = '', data = {}) {
   return new Promise((resolve, reject) => {
-    instance({ method, url, params })
+    instance({ method, url, data })
       .then(res => {
         resolve(res.data)
       })

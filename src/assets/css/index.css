@@ -18,6 +18,12 @@
   --pink: rgb(244, 143, 177);
 }
 
+::selection {
+  background: #344449;
+  color: #fff;
+  text-shadow: none;
+}
+
 .decoration {
   font-family: 'almama';
   color: #fff;
@@ -38,3 +44,35 @@
   width: 100%;
   text-align: center;
 }
+
+.fa-comment {
+  width: 50px;
+  height: 50px;
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+[class^="icon-"],
+[class*=" icon-"] {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
+}
+
+

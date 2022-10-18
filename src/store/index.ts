@@ -6,7 +6,7 @@
  *    4. 使用容器中的action
  */
 import { defineStore } from "pinia";
-import http from "@/http/http.ts";
+import http from "@/http/http";
 import _ from "lodash";
 /**
  * 1. 定义容器并导出.
@@ -25,7 +25,8 @@ export const useStore = defineStore('main', {
     return {
       musicPlayData: {},
       musicData: {},
-      hoverIndex: -1
+      hoverIndex: -1,
+      dark: true
     }
   },
   /**
@@ -40,8 +41,8 @@ export const useStore = defineStore('main', {
    */
   actions: {
     getMusicDetails(id: [], commit: boolean) {
-      return http.post("/music/song/url?id=" + id, null).then((res: any) => {
-        return http.get('/music/song/detail?ids=' + id, null).then((item: any) => {
+      return http("post", "/music/song/url?id=" + id,).then((res: any) => {
+        return http("get", '/music/song/detail?ids=' + id,).then((item: any) => {
           if (commit) {
             return this.musicPlayData = {
               url: res.data[0].url, // 音乐地址
@@ -63,6 +64,9 @@ export const useStore = defineStore('main', {
         })
       })
     },
+
+
+
   }
 })
 

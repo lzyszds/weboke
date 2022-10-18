@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import { onMounted, ref, getCurrentInstance, nextTick } from 'vue'
+import { onMounted, ref, getCurrentInstance } from 'vue'
 import Icon from '@/components/icon.vue';
 import Maincontent from '../../components/Maincontent.vue';
 import { useEventListener } from '@vueuse/core'
@@ -42,7 +42,6 @@ onMounted(() => {
   handleScroll();
   setTimeout(() => {
     affixElm.value!.style.height = document.querySelector('.main')?.getBoundingClientRect().height + 'px';
-
   }, 500);
   proxy.$fancyapps.Fancybox.bind('[data-fancybox="gallery"]', {
     caption: function (fancybox: any, carousel: any, slide: any) {
@@ -74,7 +73,7 @@ function handleScroll() {
 <template>
   <div class="detail">
     <div class="imgtop">
-      <img src="http://localhost:1024/img/bg.jpg" alt="">
+      <img src="http://localhost:1027/public/img/bg.jpg" alt="">
       <div class="topTitle center">
         <h2>中秋前后 II</h2>
         <p>lzy 2021-09-19 0条评论 中秋前后 II</p>
@@ -128,7 +127,7 @@ function handleScroll() {
       <div class="comContent">
         <div class="comment-item" v-for="(item,index) in listComment" :key="index">
           <div class="comment-item-left">
-            <img src="http://localhost:1024/img/lzy.jpg" alt="">
+            <img src="http://localhost:1027/public/img/lzy.jpg" alt="">
           </div>
           <div class="comment-item-right">
             <div class="comment-item-right-top">

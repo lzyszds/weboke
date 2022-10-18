@@ -80,7 +80,8 @@ pre {
   padding-bottom: 8px;
   border-bottom: 1px dashed #ddd;
   color: #737373;
-  position: relative;
+  position: sticky;
+  top: 0;
   padding-left: 20px;
   font-size: 21px;
   font-weight: 600;

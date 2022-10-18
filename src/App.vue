@@ -48,14 +48,14 @@ body::-webkit-scrollbar-track {
 }
 
 body::-webkit-scrollbar {
-  width: 20px;
+  width: 7px;
   background-color: var(--themeColor);
 }
 
 body::-webkit-scrollbar-thumb {
   background-color: var(--themeColor);
   border-radius: 20px;
-  border: 6px solid rgb(245, 245, 245);
+  border: 1px solid rgb(245, 245, 245);
   transition: 1s all;
 }
 

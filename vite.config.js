@@ -23,6 +23,7 @@ export default ({ mode }) => defineConfig({
   server: {
     hmr: true,
     usePolling: true,
+    port: 1024,
     proxy: {
       '/api': {
         target: 'https://c.m.163.com/ug/api/wuhan/app/data/list-total',
@@ -30,7 +31,7 @@ export default ({ mode }) => defineConfig({
         rewrite: path => path.replace(/^\/api/, '')
       },
       '/music': {
-        target: 'http://localhost:1024/',
+        target: 'http://localhost:1030/',
         changeOrigin: true,
         rewrite: path => path.replace(/^\/music/, '')
       },
@@ -45,7 +46,12 @@ export default ({ mode }) => defineConfig({
         pathRewrite: {
           '^/getIp': ''
         }
-      }
+      },
+      '/admin': {
+        target: 'http://localhost:1027/admin/',//这里是域名，不是完整地址
+        changeOrigin: true,//是否跨域
+        rewrite: path => path.replace(/^\/admin/, '')
+      },
       // '/live2d': {
       //   target: 'https://oss.amogu.cn/blog/live2d/api/model/girls-frontline',
       //   changeOrigin: true,

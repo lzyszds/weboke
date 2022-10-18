@@ -1,5 +1,5 @@
 <template>
-  <div class=" head h-48 b-white p-14 pl-9 bg-white magics">
+  <div class=" head h-48 b-white p-14 pl-9  magics">
     <p class="magic py-3 text-gray-500 text-2xl tracking-widest magic-text">
       <span class="text-5xl leading-none ">项目开始</span>
       <br />
@@ -122,9 +122,9 @@ onMounted(() => {
 }
 
 .magics {
-  position: fixed;
-  top: 60px;
+  text-align: center;
 }
+
 
 .magic-text {
   animation: background-pan 3s linear infinite;

@@ -5,62 +5,64 @@ import undefind404 from '@/views/404.vue'
 //引入 nprogress
 import NProgress from 'nprogress' // 进度条
 import 'nprogress/nprogress.css' // 引入样式
-const routes = [{
-    path: '/',
-    redirect: '/home/index' //注意，没有重定向就会出现两个一模一样的home页面
-},
-{
-    path: "/:catchAll(.*)",
-    name: 'undefind404',
-    component: undefind404 //注意，没有重定向就会出现两个一模一样的home页面
-},
-{
-    path: '/home',
-    name: 'home',
-    component: index,
-    children: [{
-        path: '/home/index',
-        name: 'homeIndex',
-        component: Home,
-    },
+const routes = [
     {
-        path: '/home/episit',
-        name: 'homeEpisit',
-        component: () => import('@/views/episit/index.vue')
-    },
-    {
-        path: '/home/content',
-        name: 'Content',
-        component: () => import('@/views/home/Content.vue'),
-    },
-    {
-        path: '/home/detail/:id',
-        name: 'detail',
-        component: () => import('@/views/home/Content-Detail.vue')
-    },
+        path: '/',
+        redirect: '/home/index' //注意，没有重定向就会出现两个一模一样的home页面
+    }, {
+        path: "/:catchAll(.*)",
+        name: 'undefind404',
+        component: undefind404 //注意，没有重定向就会出现两个一模一样的home页面
+    }, {
+        path: '/home',
+        name: 'home',
+        component: index,
+        children: [{
+            path: '/home/index',
+            name: 'Content',
+            component: () => import('@/views/home/Home.vue'),
+        }, {
+            path: '/home/episit',
+            name: 'homeEpisit',
+            component: () => import('@/views/episit/index.vue')
+        }, {
+            path: '/home/detail/:id',
+            name: 'detail',
+            component: () => import('@/views/home/Content-Detail.vue')
+        }]
+    }, {
+        path: '/about',
+        name: 'about',
+        component: () => import('@/views/about/About.vue')
+    }, {
+        path: '/photo',
+        name: 'photo',
+        component: () =>
+            import('@/views/photo/Photo.vue')
+    }, {
+        path: '/login',
+        name: 'login',
+        component: () =>
+            import('@/views/login/index.vue')
+    }, {
+        path: '/userAdmin',
+        name: 'admin',
+        component: () =>
+            import('@/views/admin/Admin.vue'),
+        children: [{
+            path: '/userAdmin/user',
+            name: 'user',
+            component: () =>
+                import('@/views/admin/children/User.vue')
+        }, {
+            path: '/userAdmin/episit',
+            name: 'episit',
+            component: () =>
+                import('@/views/admin/children/Episit.vue')
+        }]
 
 
-    ]
-},
-{
-    path: '/about',
-    name: 'about',
-    component: () => import('@/views/about/about.vue')
-},
-{
-    path: '/photo',
-    name: 'photo',
-    component: () =>
-        import('@/views/photo/Photo.vue')
-},
-{
-    path: '/login',
-    name: 'login',
-    component: () =>
-        import('@/views/login/index.vue')
-},
-
-]
+    }]
 
 const router = createRouter({
     history: createWebHistory(),
@@ -71,7 +73,10 @@ const router = createRouter({
     },
 })
 router.beforeEach(async to => {
-    document.querySelector('body').classList.add('loading')
+    if (to.hash === '' && to.hash.includes('userAdmin')) {
+        document.querySelector('.navbarContent')?.classList.remove('navbarContent100')
+        document.querySelector('body').classList.add('loading')
+    }
 })
 // 简单配置
 NProgress.inc(0.4)
@@ -88,6 +93,6 @@ router.afterEach(() => {
     NProgress.done()
     setTimeout(() => {
         document.querySelector('body').classList.remove('loading')
-    }, 500)
+    }, 1000)
 })
 export default router

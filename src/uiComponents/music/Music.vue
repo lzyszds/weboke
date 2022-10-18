@@ -327,7 +327,7 @@ const theLyricsLogic = () => {
   data.musicList.forEach((item, index) => {
     if (item.picUrl == img.value.src) id = item.id;
   });
-  http.get("/music/lyric?id=" + id, null).then((res) => {
+  http('get', "/music/lyric?id=" + id, null).then((res) => {
     // data.lyric.content = res.lrc.lyric
     data.lyric.state = 1;
     data.lyric.data = res.lrc.lyric.split("\n");

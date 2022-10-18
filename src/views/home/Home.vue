@@ -1,171 +1,183 @@
+<script setup lang='ts'>
+import { ref, reactive, getCurrentInstance, nextTick, onMounted, onBeforeUnmount } from 'vue'
+import ContentHead from '@/components/Content-head.vue'
+import ContentDiv from '@/components/Content-div.vue'
+import { useEventListener } from '@vueuse/core'
+
+const list = reactive([{ information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1027/public/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1027/public/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1027/public/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1027/public/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1027/public/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1027/public/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1027/public/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1027/public/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1027/public/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1027/public/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1027/public/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1027/public/img/bg.jpg' } },])
+const { proxy } = getCurrentInstance() as any
+const listNew = ref(proxy.$common.splitArray(list, 5))
+const indexList = ref(0)
+const isload = ref(true)
+const currentChange = (e: number) => {
+  isload.value = false
+  indexList.value = e - 1
+  nextTick(() => {
+    isload.value = true
+  })
+}
+onMounted(() => {
+  const listSum = document.querySelector('#listSum') as HTMLElement
+  const example = document.querySelector('#example') as HTMLElement
+  useEventListener(window, 'scroll', () => {
+    if (window.scrollY >= 820) {
+      example.style.opacity = '1'
+      listSum.style.transform = 'translateY(200px)'
+      listSum.style.position = 'fixed'
+    } else {
+      example.style.opacity = '0'
+      listSum.style.transform = 'translateY(1012px)'
+      listSum.style.position = 'absolute'
+    }
+  })
+})
+onBeforeUnmount(() => {
+  const listSum = document.querySelector('#listSum') as HTMLElement
+  const example = document.querySelector('#example') as HTMLElement
+  if (document.querySelector('.navbarContent')) {
+    example.style.opacity = '0'
+    listSum.style.transform = 'translateY(1012px)'
+    listSum.style.position = 'absolute'
+  }
+})
+</script>
+
 <template>
-  <div class="home">
-    <div class="card"
-      :style="`background: url('${count == 0?bgicon:list[count-1].icon}') no-repeat center center;background-size: cover;`">
-      <Meteorite :quantity="10"></Meteorite>
-      <!-- <transition name="fade" mode="out-in"> -->
-      <hoverComVue v-if="count==2" :item='list[count-1]' :index="count-1" :css="{width:'500px',top:'30%'}">
-      </hoverComVue>
-      <!-- </transition> -->
+  <div class="content">
+    <div class="home" id="eleme">
 
     </div>
-    <div class="card4">
-      <div class="card4Child">
-        <div class="itemsCard" v-for="(item,index) in list" :key="index" @mouseenter="count = index+1"
-          @mouseleave="count = 0">
-          <div class="itemIcon">
-            <img :class="count!=index+1?'hover':''" :src="item.icon" alt="">
-          </div>
-          <hoverComVue :item='item' :index="index"></hoverComVue>
-        </div>
+    <ContentHead></ContentHead>
+    <div class="listSum">
+      <!-- 文章内容 -->
+      <div class="listCom" v-if="isload">
+        <img v-lazy class="listImg" id="listSum" src="http://localhost:1027/public/img/leftbg2.jpg" alt="">
+        <router-link v-for="(item,index) in listNew[indexList]" :key="index" :to="`/home/detail/`+index">
+          <ContentDiv :data="item">
+          </ContentDiv>
+        </router-link>
+      </div>
+      <!-- 文章分页 -->
+      <div class="example-pagination-block lzy-center" id="example">
+        <div class="example-demonstration">When the content ends, turn the page to see the new content</div>
+        <el-pagination layout="prev, pager, next" :total="listNew.length*10" @current-change="currentChange" />
       </div>
     </div>
-    <FooterFactoryVue></FooterFactoryVue>
+
   </div>
 </template>
 
-<script setup lang="ts">
-import { onMounted, ref } from "vue";
-import Meteorite from "@/uiComponents/meteorite/meteorite.vue";
-import hoverComVue from "@/components/hoverCom.vue";
-import FooterFactoryVue from "@/components/FooterFactory.vue";
-
-const bgicon = new URL('http://localhost:1024/img/bg.jpg', import.meta.url).href;
-
-const count = ref(0);
-const list = ref([
-  {
-    hover: false,
-    icon: 'http://localhost:1024/img/an1.jpg',
-    title: '恰沐春风共同游，终只叹，木已舟。',
-    content: '当你有两个朝夕相处的朋友，一个以为要离开我，去追求爱情，突然不走了。而另一个以为不离开我，却追求亲情，又可能要走。所以，你看我就没有患得患失的状态。生活悲欢离合，再常见不过了。 要想在平平淡淡的生活中找点事是很简单的，就比如我愿意成为朋友们释放感情的中心。当然，羊毛出在羊身上，我自身的经历就比较丰富，所以都是我自己一手造就。而以上的事，你说这是平常事吗？',
-  },
-  {
-    hover: false,
-    icon: 'http://localhost:1024/img/an2.jpg',
-    headPortrait: 'http://localhost:1024/img/lzy.jpg',
-    title: 'lzy',
-    content: '当你有两个朝夕相处的朋友，一个以为要离开我，去追求爱情，突然不走了。而另一个以为不离开我，却追求亲情，又可能要走。所以，你看我就没有患得患失的状态。生活悲欢离合，再常见不过了。 要想在平平淡淡的生活中找点事是很简单的，就比如我愿意成为朋友们释放感情的中心。当然，羊毛出在羊身上，我自身的经历就比较丰富，所以都是我自己一手造就。而以上的事，你说这是平常事吗？',
-  },
-  {
-    hover: false,
-    icon: 'http://localhost:1024/img/an3.jpg',
-    title: '恰沐春风共同游，终只叹，木已舟。',
-    content: '当你有两个朝夕相处的朋友，一个以为要离开我，去追求爱情，突然不走了。而另一个以为不离开我，却追求亲情，又可能要走。所以，你看我就没有患得患失的状态。生活悲欢离合，再常见不过了。 要想在平平淡淡的生活中找点事是很简单的，就比如我愿意成为朋友们释放感情的中心。当然，羊毛出在羊身上，我自身的经历就比较丰富，所以都是我自己一手造就。而以上的事，你说这是平常事吗？',
-  },
-])
-onMounted(() => {
-
-})
-</script>
 <style scoped>
 .home {
   width: 100%;
-  height: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
+  height: 100vh;
+  background: url('http://localhost:1027/public/img/101608761_p0.png') no-repeat center center;
+  background-size: cover;
 }
 
-.card {
-  position: relative;
-  width: 90%;
-  height: calc(100vh - 360px);
-  box-shadow: 1px 4px 8px 5px #777;
-  border-radius: 10px;
-  transition: .3s;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  margin-top: 30px;
-}
-
-.card4 {
+.content {
   width: 100%;
-  height: 300px;
+  height: inherit;
+  overflow-x: hidden;
 }
 
-.card4Child {
-  width: 70%;
-  display: flex;
-  justify-content: space-between;
-  margin: 40px auto 0;
+.conImg {
+  width: 100%;
+  height: 600px
 }
 
-.itemsCard {
-  width: 70%;
-  width: 400px;
-  height: 200px;
-  position: relative;
-  /* cursor: var(--linkCup); */
-  overflow: hidden;
-  border-radius: 10px;
-  box-shadow: 1px 1px 3px 2px #999;
-}
-
-.itemsCard:hover {
-  border: 2px solid #eee;
-}
-
-.itemIcon {
-  width: 400px;
-  height: 200px;
-  text-align: center;
-
-}
-
-.itemIcon img {
+.conImg img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
+}
+
+.ContentHead {
   width: 100%;
   height: 100%;
-  user-select: none;
-  position: relative;
-  transition: 1s all;
+  text-align: center;
 }
 
-.itemIcon img.hover {
-  transform: scale(1.2);
-  filter: blur(10px);
+.listSum {
+  /* transition: .1s; */
+  padding: 40px;
+  padding-top: 0;
+  height: calc(100% - 808px);
+  margin: 0 auto;
 }
 
-/* 过度动画 */
-/* .fade-enter-active {
-  transition: all 0.3s ease-out;
+.listImg {
+  width: 100vw;
+  object-fit: cover;
+  position: fixed;
+  top: 0;
+  left: 0;
+  transform: translateY(300px);
+  z-index: -1;
 }
 
-.fade-leave-active {
-  transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
+.listCom {
+  margin: 0 auto;
+  padding: 40px;
+  width: 960px;
+  height: 100%;
+  overflow: hidden scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
-.fade-enter-from,
-.fade-leave-to {
-  transform: scale(.4);
+.listCom::-webkit-scrollbar {
+  display: none;
+  /* Chrome Safari */
+}
+
+.lzy-center {
+  padding-top: 6px;
+  border-top: 1px solid #ebeef5;
+}
+
+.lzy-center /deep/ .el-pagination {
+  justify-content: center;
+}
+
+.lzy-center /deep/ .el-pager li.active {
+  color: var(--themeColor);
+}
+
+.lzy-center /deep/ .el-pager li:hover {
+  color: var(--themeColor);
+}
+
+.listSum /deep/ .example-pagination-block {
+  transition: .3s;
   opacity: 0;
-} */
+  width: 50%;
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  background-color: #fff;
+}
+
+.example-demonstration {
+  padding: 2px !important;
+}
 </style>
 <style scoped>
-.dark .home {
+.dark .conDiv {
+  background: var(--darkBgcolor);
+  box-shadow: 0px 0px 0px 1px #fff;
+}
+
+.dark .conDiv /deep/ .conDiv_text div,
+.dark .lzy-center,
+.dark .conDiv /deep/ .conDiv_text .title,
+.dark .content,
+.dark .magics,
+.dark .lzy-center /deep/ .el-pagination button,
+.dark .lzy-center /deep/ .el-pagination li,
+.dark .listSum {
   background: var(--darkBgcolor) !important;
-}
-
-.dark .card {
-  /* background: var(--darkBgcolor) !important; */
-  box-shadow: 1px 4px 8px 5px #333 !important;
-}
-
-.dark .itemsCard {
-  box-shadow: 1px 1px 3px 2px #333 !important;
-}
-
-.dark .footerClass {
-  background: var(--darkBgcolor) !important;
-}
-
-.dark .footerClass>>>.footer .content {
-  border-top: 1px solid #eee;
-  background: var(--darkBgcolor) !important;
+  color: var(--bgcolor);
 }
 </style>

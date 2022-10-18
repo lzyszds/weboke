@@ -2,28 +2,23 @@
 import img from '@/assets/icon/weather/import'
 import { ref, getCurrentInstance } from 'vue';
 import { useDateFormat } from '@vueuse/core'
-
-import http from '@/http/http'
 const data = ref<any>([])
 const { proxy } = getCurrentInstance() as any
-const { cid, } = proxy.$getip || ''
-//{cip: '116.10.168.123', cid: '450000', cname: '广西壮族自治区'}
+const { data: datas, cid } = await proxy.$common.getIpWeather()
+data.value = datas
 // 高德地图api
-const key = '78182b9b39355dc0ae4ce91dae7f0bbf	'
-data.value = await http('get', `/mapApi/weather/weatherInfo?key=${key}&city=${cid}`)
 function getWeather() {
-  /* 
+  /*
     避免当前使用的ip为国外ip 导致的获取不到ip 
     sougou的查询ip方法不支持国外ip
   */
-  if (!proxy.$getip) {
+  if (!cid) {
     console.warn('当前网络环境不支持获取天气信息(把梯子关了才行)')
     return `/src/assets/icon/weather/undefind.svg`
   }
   const { weather, reporttime } = data.value.lives[0]
   const formatted: any = useDateFormat(reporttime, 'HH')
   const isdark = formatted >= 19 || formatted <= 6
-  console.log(`lzy ~ isdark`, weather)
   switch (weather) {
     case '晴':
       return isdark ? img.NightSunny : img.Sunny
@@ -79,10 +74,11 @@ body.loading .loaderbody::before {
   transform: translate(-50%, -50%) scale(1.5);
 }
 
-.loaderbody::before {
+.loaderbody::before,
+.dark .loaderbody::before {
   top: 50%;
   left: 50%;
-  z-index: 2;
+  z-index: 100;
   content: "";
   width: 100vmax;
   height: 100vmax;
@@ -94,22 +90,13 @@ body.loading .loaderbody::before {
 }
 
 .dark .loaderbody::before {
-  top: 50%;
-  left: 50%;
-  z-index: 2;
-  content: "";
-  width: 100vmax;
-  height: 100vmax;
-  position: fixed;
-  border-radius: 50%;
   background: var(--darkBgcolor);
-  transition: transform .5s cubic-bezier(0, 0, .5, 1.25);
-  transform: translate(-50%, -50%) scale(0);
 }
 
 body.loading .loaderbody img {
   opacity: 1;
   visibility: visible;
+  z-index: 101;
   transform: translate(-50%, -50%) scale(1);
 }
 

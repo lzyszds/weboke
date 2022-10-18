@@ -1,6 +1,28 @@
 <template>
+  <div class="navbarContent">
+    <div class="">
+      <a class="navbar-brand navbar-logo" href="#"><img width="80" src="http://localhost:1027/public/img/lzjy.png"
+          alt="" />J/Z</a>
+      <div class="navbar-toggler">
+        <label class="menu-open-button" @click="openfun">
+          <span class="lines line-1"></span>
+          <span class="lines line-2"></span>
+          <span class="lines line-3"></span>
+        </label>
+      </div>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto" ref="ul">
+          <li class="nav-item" :class="{ active: data.activeIndex == index }" v-for="(item, index) in data.items"
+            :key="index" @click="menuMethod(index)">
+            <a class="nav-link" href="javascript:void(0);">{{ item.name }}</a>
+          </li>
+          <setThemes :ons="'navbarContent'"></setThemes>
+        </ul>
+      </div>
+    </div>
+  </div>
   <nav class="navbar">
-    <a class="navbar-brand navbar-logo" href="#"><img width="80" src="http://localhost:1024/img/lzjy.png"
+    <a class="navbar-brand navbar-logo" href="#"><img width="80" src="http://localhost:1027/public/img/lzjy.png"
         alt="" />J/Z</a>
     <div class="navbar-toggler">
       <label class="menu-open-button" @click="openfun">
@@ -11,16 +33,11 @@
     </div>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ml-auto" ref="ul">
-        <!-- <div class="hori-selector" :style="data.selectorpos">
-          <div class="left"></div>
-          <div class="right"></div>
-        </div> -->
         <li class="nav-item" :class="{ active: data.activeIndex == index }" v-for="(item, index) in data.items"
           :key="index" @click="menuMethod(index)">
           <a class="nav-link" href="javascript:void(0);">{{ item.name }}</a>
         </li>
-        <setThemes></setThemes>
-
+        <!-- <setThemes :ons="'navbar'"></setThemes> -->
       </ul>
     </div>
   </nav>
@@ -30,16 +47,17 @@
 import { reactive, onMounted, nextTick, ref } from "vue";
 import setThemes from "@/uiComponents/setupThemes/Setthemes.vue";
 import { useRouter } from 'vue-router'
-// import { debounce } from '@/untils/common'
+import { useEventListener } from '@vueuse/core'
+
 const router = useRouter()
 const data = reactive({
   activeIndex: 0,
   items: [
     { name: "首页", path: '/home/index' },
-    { name: "文章", path: '/home/content' },
     { name: "关于", path: '/about' },
     { name: "相册", path: '/photo' },
     { name: "疫情", path: '/home/episit' },
+    { name: "登陆", path: '/login' },
   ],
   opencount: 0,
   selectorpos: 0
@@ -84,10 +102,16 @@ const openfun = () => {
     line[2].style.transform = 'rotate(0) translate3d(0, 8px, 0)'
   }
 }
-
 onMounted(() => {
   bgBoxfun()
   window.addEventListener("resize", bgBoxfun);
+  useEventListener(window, 'scroll', () => {
+    if (window.scrollY >= 100) {
+      document.querySelector('.navbarContent')?.classList.add('navbarContent100')
+    } else {
+      document.querySelector('.navbarContent')?.classList.remove('navbarContent100')
+    }
+  })
 })
 </script>
 
@@ -99,13 +123,15 @@ body {
 }
 
 .navbar {
-  background-color: #5161ce;
+  /* background-color: #5161ce; */
   padding: 0;
-  position: fixed;
+  position: absolute;
   top: 0;
-  width: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1280px;
   height: 60px;
-  z-index: 1030;
+  z-index: 99;
   display: flex;
   line-height: 60px;
   justify-content: space-between;
@@ -122,6 +148,7 @@ body {
 
 .navbar-nav {
   display: flex;
+  align-items: center;
 }
 
 .hori-selector {
@@ -175,8 +202,8 @@ body {
 .navbar-nav>li {
   padding: 0 20px;
   font-size: 16px;
-  color: rgba(255, 255, 255, 0.5);
-  color: rgba(255, 255, 255, 0.5);
+  color: #fff;
+  font-weight: 600;
   text-decoration: none;
   display: block;
   transition-duration: 0.6s;
@@ -188,7 +215,8 @@ body {
 
 .navbar-nav>li.active {
   color: #fff;
-  text-shadow: 1px 1px 5px #000;
+  font-weight: 600;
+  /* text-shadow: 1px 1px 5px #fff; */
   background-color: transparent;
   transition: all 0.7s;
 }
@@ -329,9 +357,35 @@ body {
     transform: translate3d(0, 8px, 0);
   }
 }
+
+
+.navbarContent {
+  transition: .2s;
+  width: 100%;
+  height: 60px;
+  background-color: var(--themeColor);
+  position: fixed;
+  top: -60px;
+  transform: translateY(-60px);
+  z-index: 99;
+}
+
+.navbarContent /deep/ div:nth-child(1) {
+  margin: 0 auto;
+  width: 1280px;
+  display: flex;
+  line-height: 60px;
+  justify-content: space-between;
+}
+
+.navbarContent100 {
+  position: fixed;
+  top: -60px;
+  transform: translateY(60px);
+}
 </style>
 <style scoped>
-.dark .navbar {
+/* .dark .navbar {
   background: var(--darkBgcolor) !important;
-}
+} */
 </style>

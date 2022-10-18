@@ -26,9 +26,9 @@ import { onMounted } from "vue";
   background-color: #000
 }
 
-#container {
+/* #container {
   margin-top: 60px;
-}
+} */
 
 .fade-leave-active,
 .fade-enter-active {

@@ -1,4 +1,6 @@
 import dayjs from "dayjs";
+import { getCurrentInstance } from 'vue';
+import http from '@/http/http'
 
 function debounce(fn, delay) {
   var timer = 0;
@@ -43,39 +45,44 @@ function timeAgo(time) {
   return ([...mp].find(([n]) => n(t)).pop())(t) + '前'
 }
 
-//获取用户本地ip的方法
-function getUserIP(onNewIP) { // 获取ip地址
-  let MyPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection
-  let pc = new MyPeerConnection({ iceServers: [] })
-  let noop = function () { }
-  let localIPs = {}
-  let ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/g
-  function iterateIP(ip) {
-    if (!localIPs[ip]) onNewIP(ip)
-    localIPs[ip] = true
-  }
-  pc.createDataChannel('')
-  pc.createOffer().then(function (sdp) {
-    sdp.sdp.split('\n').forEach(function (line) {
-      if (line.indexOf('candidate') < 0) return
-      line.match(ipRegex).forEach(iterateIP)
-    })
-    pc.setLocalDescription(sdp, noop, noop)
-  }).catch(function (reason) {
-    // An error occurred, so handle the failure to connect
+
+//获取当前ip以及天气
+function getIpWeather() {
+  const { proxy } = getCurrentInstance()
+  const { cid, cip, cname } = proxy.$getip || ''
+  //{cip: '116.10.168.123', cid: '450000', cname: '广西壮族自治区'}
+
+  const key = '78182b9b39355dc0ae4ce91dae7f0bbf	'
+  return new Promise((resolve, reject) => {
+    http('get', `/mapApi/weather/weatherInfo?key=${key}&city=${cid}`)
+      .then(res => {
+        resolve({ data: res, cid, cip, cname })
+      })
   })
-  // seen for candidate events
-  pc.onicecandidate = function (ice) {
-    if (!ice || !ice.candidate || !ice.candidate.candidate || !ice.candidate.candidate.match(ipRegex)) return
-    ice.candidate.candidate.match(ipRegex).forEach(iterateIP)
-  }
+  // return { data, cid }
 }
+function base64toBlob(dataurl) {
+  // base64 转 二进制流(blob)
+  let arr = dataurl.split(","),
+    mime = arr[0].match(/:(.*?);/)[1],
+    bstr = atob(arr[1]),
+    n = bstr.length,
+    u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new Blob([u8arr], {
+    type: mime,
+  });
+}
+
 
 export default {
   debounce,// 防抖
   splitArray,//把一个数组拆分成几个数组
   timeAgo,//时间转换
-  getUserIP,//获取ip
+  getIpWeather,//获取当前ip以及天气
+  base64toBlob,//base64转二进制流
 }
 
 

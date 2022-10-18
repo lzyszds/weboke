@@ -1,21 +1,36 @@
 <script setup lang='ts'>
 import { useDark, useToggle } from '@vueuse/core'
-
+import { defineProps } from 'vue';
+// import { useStore } from '@/store/index'
+// const store = useStore()
+const props = defineProps({
+  ons: {
+    type: String,
+    default: 'dn'
+  }
+})
 const isDark = useDark({
   selector: 'html',
   attribute: 'class',
   valueDark: 'dark',
   valueLight: '',
 })
-const toggleDark = useToggle(isDark)
-
+const toggleDark = () => {
+  useToggle(isDark)
+  // store.$state.dark = isDark
+  // const dn = document.querySelectorAll('input.dn') as any
+  // dn.forEach((item: any) => {
+  //   console.log(`lzy ~ item`, item)
+  //   item.checked = isDark.value
+  // })
+}
 </script>
 
 <template>
   <div class="setThemes">
     <div class="toggleWrapper">
-      <input @click="toggleDark()" type="checkbox" class="dn" id="dn" v-model="isDark">
-      <label for="dn" class="toggle">
+      <input @click="toggleDark()" type="checkbox" class="dn" :id="props.ons" v-model="isDark">
+      <label :for="props.ons" class="toggle">
         <span class="toggle__handler">
           <span class="crater crater--1"></span>
           <span class="crater crater--2"></span>
@@ -34,6 +49,7 @@ const toggleDark = useToggle(isDark)
 
 <style scoped>
 .setThemes {
+  width: 100px;
   transform: scale(.5);
 }
 

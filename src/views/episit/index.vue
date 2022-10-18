@@ -192,7 +192,7 @@ const mapHandle = (_index) => {
   reactData.index = _index;
   reactData.cityData = [];
   // show(".wrapper");
-  http.get("/api").then((res) => {
+  http('get', "/api").then((res) => {
     const data = res.data;
     let arr = [];
     let situationData = null;

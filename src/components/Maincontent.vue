@@ -16,7 +16,7 @@ onMounted(() => {
         class="wp-editor-md-post-content-link" href="https://ai.mr/x/nbox.html" target="_blank" rel="nofollow">NBOX</a>
       的16盘位 NAS 机箱，实际到货的时间已经是8月份的事了。到手装完机大概花了一个月时间，配件一直在路上所以大部分时间都在等快递，本来是打算整套服务器硬件但是主板有亿丢丢贵。机器详细配置如下，包含硬盘价格大约为 7K
       RMB，手里的闲置硬件能用的就一起顺便装上去了，对了矿渣小主机已出手。</p>
-    <img src="http://localhost:1024/img/background.jpg" class="fancybox">
+    <img src="http://localhost:1027/public/img/background.jpg" class="fancybox">
     <h3 id="toc-head-1">配置信息</h3>
     <table class="table">
       <thead>
@@ -103,11 +103,11 @@ onMounted(() => {
     <h4 id="toc-head-3">总览</h4>
     <!--  <el-image class="elimg" :src="url" hide-on-click-modal :preview-src-list="srcList" :initial-index="4" fit="cover"
       preview-teleported loading="lazy" /> -->
-    <img src="http://localhost:1024/img/bg.jpg" class="fancybox">
-    <img src="http://localhost:1024/img/bg.jpg" class="fancybox">
+    <img src="http://localhost:1027/public/img/101787530_p0.png" class="fancybox">
+    <img src="http://localhost:1027/public/img/b2.jpg" class="fancybox">
     <h4 id="toc-head-4">机箱</h4>
     <p>有点翻车，存放环境有些潮湿没放在干燥房，内部有些锈迹。</p>
-    <img src="http://localhost:1024/img/bg.jpg" class="fancybox">
+    <img src="http://localhost:1027/public/img/101523648_p0.png" class="fancybox">
     <ol>
       <li>
         <p>正面</p>
@@ -224,7 +224,7 @@ p {
   line-height: 40px;
 }
 
-.entry-content>>>img {
+.entry-content /deep/ img {
   box-shadow: 0px 0px 4px 1px #888;
   border: 1px solid #000;
   padding: 2px;
@@ -250,7 +250,7 @@ ol p {
   margin: 0
 }
 
-ol>>>li p:nth-child(1) {
+ol /deep/ li p:nth-child(1) {
   font-size: 19px;
   font-weight: 600;
   color: #555
@@ -260,7 +260,7 @@ ol>>>li p:nth-child(1) {
   color: #fff;
 }
 
-.dark ol>>>li p:nth-child(1) {
+.dark ol /deep/ li p:nth-child(1) {
   color: #fff;
 }
 

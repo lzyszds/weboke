@@ -31,7 +31,7 @@ onMounted(() => {
 
 <template>
     <div class="conDiv">
-        <img :src="image" alt="">
+        <img v-lazy :src="image" alt="">
         <div class="conDiv_text">
             <div class="title">{{title}}</div>
             <div class="synopsis"> {{text}} </div>

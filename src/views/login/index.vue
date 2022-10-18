@@ -1,6 +1,17 @@
 <script setup lang='ts'>
 import { reactive, ref } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
+import http from '@/http/http'
+import { useRouter } from 'vue-router'
+import { ElNotification } from 'element-plus'
+const router = useRouter()
+interface getLoginData {
+  error: number
+  token: string
+  message: string
+  code: number
+}
+
 const fromTool = reactive({
   usernamelable: false,
   passwordlable: false,
@@ -8,7 +19,7 @@ const fromTool = reactive({
 })
 const ruleFormRef = ref<FormInstance>()
 const ruleForm = reactive({
-  name: '',
+  username: '',
   password: '',
 })
 
@@ -19,7 +30,7 @@ const rules = reactive<FormRules>({
   ],
   password: [
     { required: true, message: '请输入密码', trigger: 'blur' },
-    { min: 8, max: 16, message: '密码长度应该是8到16', trigger: 'blur' },
+    { min: 6, max: 16, message: '密码长度应该是6到16', trigger: 'blur' },
   ]
 })
 
@@ -30,7 +41,18 @@ const submitForm = (formEl: FormInstance | undefined) => {
     formEl.validate((valid, fields) => {
       fromTool.button = false
       if (valid) {
-        console.log('submit!')
+        http('post', '/admin/login', ruleForm).then((res: getLoginData) => {
+          if (res.error === 0 || res.code === 200) {
+            localStorage.setItem('lzy_token', res.token)
+            router.push('/userAdmin/User')
+          } else {
+            ElNotification({
+              title: 'Error',
+              message: '账号密码输入错误！',
+              type: 'error',
+            })
+          }
+        })
       } else {
         console.log('error submit!', fields)
       }
@@ -39,8 +61,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
 }
 
 const blurUsername = () => {
-
-  if (ruleForm.name === '') {
+  if (ruleForm.username === '') {
     fromTool.usernamelable = false
   } else {
     fromTool.usernamelable = true
@@ -67,13 +88,13 @@ setTimeout(() => {
       <img class="lovelyImg" :class="{lock:fromTool.usernamelable||fromTool.passwordlable}"
         src="../../assets/image/10.svg" alt="">
       <div class="content_header">
-        <p><img src="http://localhost:1024/img/lzjy.png" alt=""></p>
+        <p><img src="http://localhost:1027/public/img/lzjy.png" alt=""></p>
         <p>Sign In</p>
       </div>
       <div class="input-group">
         <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" class="demo-ruleForm" status-icon>
-          <el-form-item prop="name">
-            <el-input class="input" v-model="ruleForm.name" @focus="fromTool.usernamelable = true"
+          <el-form-item prop="username">
+            <el-input class="input" v-model="ruleForm.username" @focus="fromTool.usernamelable = true"
               @blur="blurUsername" />
             <label class="user-label" :class="{'lableActive':fromTool.usernamelable}">UserName</label>
           </el-form-item>
@@ -86,6 +107,9 @@ setTimeout(() => {
           <el-form-item>
             <el-button :class="{down:fromTool.button}" type="primary" @click="submitForm(ruleFormRef)"></el-button>
           </el-form-item>
+          <router-link to='/'>
+            <el-button type="primary">返回首页</el-button>
+          </router-link>
         </el-form>
       </div>
     </div>
@@ -104,7 +128,7 @@ setTimeout(() => {
 }
 
 .lovelyImg.lock {
-  right: -206px;
+  right: -209px;
   opacity: 1;
 }
 
@@ -116,22 +140,33 @@ setTimeout(() => {
   opacity: 0;
   width: 100vw;
   height: 100vh;
-  background: url('../../assets/image/login.jpg') center center;
+  background: url('http://localhost:1027/public/img/94175072_p0.jpg') no-repeat;
   display: flex;
+  background-repeat: round;
   align-items: center;
-  justify-content: center;
+  justify-content: right;
+}
+
+.login ::selection {
+  background: #fff;
+  color: #000;
+  text-shadow: none;
 }
 
 .login .content {
   z-index: 3;
   position: relative;
   width: 45rem;
-  height: 50rem;
-  /* background: var(--themeColor); */
-  background: rgba(159, 179, 217, 0.9);
-  /* opacity: .8; */
+  height: 55rem;
+  background: rgb(26 26 26 / 73%);
+  backdrop-filter: blur(8px);
   border-radius: 1rem;
-  box-shadow: 0 0 2rem 1px rgb(0, 0, 0)
+  transform: translateX(-230px);
+  transition: .5s;
+}
+
+.login .content:hover {
+  backdrop-filter: blur(0px);
 }
 
 p {
@@ -147,6 +182,7 @@ p {
   width: 100%;
   font-size: 40px;
   color: #fff;
+  user-select: none;
 }
 
 .content_header img {
@@ -193,7 +229,7 @@ p {
   box-shadow: none;
 }
 
-.input>>>.el-icon {
+.input /deep/ .el-icon {
   color: #fff
 }
 
@@ -202,7 +238,7 @@ p {
   color: #fff !important;
 }
 
-.input-group .input>>>.el-input__wrapper {
+.input-group .input /deep/ .el-input__wrapper {
   border-color: transparent;
   background: transparent;
   box-shadow: none;
@@ -210,9 +246,10 @@ p {
   padding: 0;
 }
 
-.input-group .input>>>.el-input__wrapper input {
+.input-group .input /deep/ .el-input__wrapper input {
   color: #fff;
 }
+
 
 .user-label {
   font-size: 19px;
@@ -223,6 +260,7 @@ p {
   pointer-events: none;
   transform: translateY(0);
   transition: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
 }
 
 .input:focus,
@@ -238,15 +276,19 @@ input:valid {
   font-size: 16px;
 }
 
+button:nth-child(1) {
+  background: #79bbfe;
+  color: #fff;
+}
+
 button {
-  width: 50%;
+  width: 100%;
   height: 50px;
-  background: #ffffff;
+  background: #fff;
   border: none;
   border-radius: 1rem;
   font-size: 20px;
   color: #000;
-  margin-top: 20px;
   transition: .3s;
 }
 
@@ -263,17 +305,17 @@ button.activebtn {
   margin-top: 10px;
 }
 
-.el-form-item>>>.el-form-item__content {
+.el-form-item /deep/ .el-form-item__content {
   flex-wrap: nowrap;
   flex: initial;
   margin-top: 15px;
 }
 
-.input>>>.el-input__wrapper input {
+.input /deep/ .el-input__wrapper input {
   height: 20px !important;
 }
 
-.el-form-item>>>.el-form-item__content {
+.el-form-item /deep/ .el-form-item__content {
   width: 100%;
 }
 
@@ -284,7 +326,7 @@ button.activebtn {
 }
 
 .el-form-item__content button::before {
-  content: 'Submit';
+  content: '登陆';
   transition: .3s;
   opacity: 1;
 }
@@ -296,7 +338,7 @@ button.activebtn {
 }
 
 .el-form-item__content button.down::before {
-  content: 'Submit';
+  content: '登陆';
   transform: translateY(30px) scale(.6);
   opacity: 0;
 }
@@ -304,7 +346,7 @@ button.activebtn {
 .el-form-item__content button.down::after {
   content: '';
   position: absolute;
-  border: 3px solid hsla(185, 100%, 62%, 0.2);
+  border: 3px solid rgb(115, 0, 255);
   border-top-color: #fff;
   border-radius: 50%;
   width: 1em;
@@ -313,9 +355,17 @@ button.activebtn {
   opacity: 1;
 }
 
-.el-form-item>>>.el-form-item__error {
+.el-form-item /deep/ .el-form-item__error {
   text-shadow: 1px 1px 3px #000;
   margin-top: 3px;
+  user-select: none;
+}
+
+.el-form-item__content /deep/ .el-button:active {
+  color: #000;
+  border-color: none;
+  background-color: #fff;
+  outline: 0;
 }
 
 @keyframes spin {
@@ -324,3 +374,16 @@ button.activebtn {
   }
 }
 </style>  
+<style>
+input:-webkit-autofill {
+  -webkit-text-fill-color: #fff !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+input:-internal-autofill-selected {
+  -webkit-text-fill-color: #999 !important;
+  background-color: rgb(98, 144, 222) !important;
+  background-image: none !important;
+  color: -internal-light-dark(black, white) !important;
+}
+</style>
