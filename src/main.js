@@ -8,8 +8,8 @@ import App from './App.vue'
 import router from './router'
 import hljsVuePlugin from '@highlightjs/vue-plugin'
 import { Fancybox, Carousel, Panzoom } from "@fancyapps/ui";//图片放大
-import common from '@/untils/common.js'; //全局按钮防抖事件
-import lazy from '@/untils/lazy';
+import common from '@/utils/common.js'; //全局按钮防抖事件
+import lazy from '@/utils/lazy';
 import { createPinia } from 'pinia'
 const pinia = createPinia()
 const app = createApp(App)

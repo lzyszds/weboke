@@ -224,7 +224,7 @@ p {
   line-height: 40px;
 }
 
-.entry-content /deep/ img {
+.entry-content :deep(img) {
   box-shadow: 0px 0px 4px 1px #888;
   border: 1px solid #000;
   padding: 2px;
@@ -250,7 +250,7 @@ ol p {
   margin: 0
 }
 
-ol /deep/ li p:nth-child(1) {
+ol :deep(li) p:nth-child(1) {
   font-size: 19px;
   font-weight: 600;
   color: #555
@@ -260,7 +260,7 @@ ol /deep/ li p:nth-child(1) {
   color: #fff;
 }
 
-.dark ol /deep/ li p:nth-child(1) {
+.dark ol :deep(li) p:nth-child(1) {
   color: #fff;
 }
 

@@ -370,7 +370,7 @@ body {
   z-index: 99;
 }
 
-.navbarContent /deep/ div:nth-child(1) {
+.navbarContent :deep(div):nth-child(1) {
   margin: 0 auto;
   width: 1280px;
   display: flex;

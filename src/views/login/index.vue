@@ -229,7 +229,7 @@ p {
   box-shadow: none;
 }
 
-.input /deep/ .el-icon {
+.input :deep(.el-icon) {
   color: #fff
 }
 
@@ -238,7 +238,7 @@ p {
   color: #fff !important;
 }
 
-.input-group .input /deep/ .el-input__wrapper {
+.input-group .input :deep(.el-input__wrapper) {
   border-color: transparent;
   background: transparent;
   box-shadow: none;
@@ -246,7 +246,7 @@ p {
   padding: 0;
 }
 
-.input-group .input /deep/ .el-input__wrapper input {
+.input-group .input :deep(.el-input__wrapper) input {
   color: #fff;
 }
 
@@ -305,17 +305,17 @@ button.activebtn {
   margin-top: 10px;
 }
 
-.el-form-item /deep/ .el-form-item__content {
+.el-form-item :deep(.el-form-item__content) {
   flex-wrap: nowrap;
   flex: initial;
   margin-top: 15px;
 }
 
-.input /deep/ .el-input__wrapper input {
+.input :deep(.el-input__wrapper) input {
   height: 20px !important;
 }
 
-.el-form-item /deep/ .el-form-item__content {
+.el-form-item :deep(.el-form-item__content) {
   width: 100%;
 }
 
@@ -355,13 +355,13 @@ button.activebtn {
   opacity: 1;
 }
 
-.el-form-item /deep/ .el-form-item__error {
+.el-form-item :deep(.el-form-item__error) {
   text-shadow: 1px 1px 3px #000;
   margin-top: 3px;
   user-select: none;
 }
 
-.el-form-item__content /deep/ .el-button:active {
+.el-form-item__content :deep(.el-button):active {
   color: #000;
   border-color: none;
   background-color: #fff;

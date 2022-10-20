@@ -48,13 +48,13 @@ const instance = axios.create({
 // })
 
 // 2、封装请求方式
-// @param url 接口地址
-// @param data 携带参数
-// @param file 上传文件对象
-// @param auth 是否携带token
-export default function (method = 'get', url = '', data = {}) {
+// @param method(必须)  请求方法
+// @param url(必须)  接口地址
+// @param data(可选)  携带参数
+// @param headers(可选) 请求头可以自己设置，也可以使用默认的（不传）
+export default function (method = 'get', url = '', data = {}, headers?) {
   return new Promise((resolve, reject) => {
-    instance({ method, url, data })
+    instance({ method, url, data, headers })
       .then(res => {
         resolve(res.data)
       })

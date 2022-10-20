@@ -136,19 +136,19 @@ onBeforeUnmount(() => {
   border-top: 1px solid #ebeef5;
 }
 
-.lzy-center /deep/ .el-pagination {
+.lzy-center :deep(.el-pagination) {
   justify-content: center;
 }
 
-.lzy-center /deep/ .el-pager li.active {
+.lzy-center :deep(.el-pager) li.active {
   color: var(--themeColor);
 }
 
-.lzy-center /deep/ .el-pager li:hover {
+.lzy-center:deep(.el-pager) li:hover {
   color: var(--themeColor);
 }
 
-.listSum /deep/ .example-pagination-block {
+.listSum :deep(.example-pagination-block) {
   transition: .3s;
   opacity: 0;
   width: 50%;
@@ -169,13 +169,13 @@ onBeforeUnmount(() => {
   box-shadow: 0px 0px 0px 1px #fff;
 }
 
-.dark .conDiv /deep/ .conDiv_text div,
+.dark .conDiv :deep(.conDiv_text) div,
 .dark .lzy-center,
-.dark .conDiv /deep/ .conDiv_text .title,
+.dark .conDiv :deep(.conDiv_text) .title,
 .dark .content,
 .dark .magics,
-.dark .lzy-center /deep/ .el-pagination button,
-.dark .lzy-center /deep/ .el-pagination li,
+.dark .lzy-center :deep(.el-pagination) button,
+.dark .lzy-center :deep(.el-pagination) li,
 .dark .listSum {
   background: var(--darkBgcolor) !important;
   color: var(--bgcolor);

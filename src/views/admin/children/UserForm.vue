@@ -3,7 +3,6 @@ import { reactive, ref, nextTick, getCurrentInstance } from 'vue'
 import { FormInstance, FormRules } from 'element-plus'
 
 import { useNow } from '@vueuse/core'
-import axios from 'axios';
 import http from '@/http/http';
 const { proxy } = getCurrentInstance() as any
 const formSize = ref('default')
@@ -13,6 +12,7 @@ const rangeDate = () => {
 }
 const ruleForm = reactive({
   headImg: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+  setHeadImg: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
   name: '',
   username: '',
   password: '',
@@ -60,35 +60,38 @@ const resetForm = (formEl: FormInstance | undefined) => {
 const handleExceed = () => {
 
 }
+const messagetxt = ref('limit 1 file, new file will cover the old file')
 const submitUpload = () => {
   nextTick(() => {
     const xFile: any = document.getElementById('xFile') as HTMLInputElement
     let reader = new FileReader();
     reader.readAsDataURL(xFile.files[0]);
+    // console.log(`lzy ~ xFile.files[0]`, xFile.files[0])
     reader.onload = function (e) {
       //e代表事件,可以通过e.target获取FileReader对象然后在获取readAsDataURL读取的base64字符
-      // ruleForm.headImg = e.target?.result as string
       const base64 = e.target?.result as string
       const blob = proxy.$common.base64toBlob(base64)
       //下面是将blob转换为file 用于上传
       let formData = new FormData();
-      formData.append('file', xFile.files[0]);
+      formData.append('headImg', xFile.files[0]);
 
-      let config = {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+      let headers = {
+        'Content-Type': 'multipart/form-data'
       }
+
       // const file: any = new File([blob], 'headImg.png', { type: 'image/png' })
-      axios.post('/admin/uploadHead', formData, config)
-        .then((res) => {
-          console.log(res)
+      http('post', '/admin/uploadHead', formData, headers)
+        .then((res: { code: Number, message }) => {
+          if (res.code === 200) {
+            const objectURL = URL.createObjectURL(blob);
+            ruleForm.headImg = objectURL;
+            ruleForm.setHeadImg = res.message;
+            messagetxt.value = 'limit 1 file, new file will cover the old file'
+          } else {
+            messagetxt.value = res.message
+          }
         })
-        .catch((err) => {
-          console.log(err)
-        })
-      const objectURL = URL.createObjectURL(blob);
-      ruleForm.headImg = objectURL;
+
 
     }
   })
@@ -107,15 +110,15 @@ const submitUpload = () => {
             <label class="ui_button ui_button_primary" for="xFile">
               <el-button type="primary">上传本地</el-button>
             </label>
-            <form method="post" name="headImg">
-              <input class="fileInput" type="file" id="xFile" @change="submitUpload" />
+            <form action="" method="post">
+              <input class="fileInput" name="headImg" type="file" id="xFile" @change="submitUpload" />
             </form>
 
           </div>
           <el-button class="ml-3" type="success" @click="handleExceed"> 系统推荐 </el-button>
         </div>
-        <div class="el-upload__tip text-red ">
-          limit 1 file, new file will cover the old file
+        <div class="el-upload__tip text-red" :class="{grey:messagetxt.indexOf('limit')!=-1}">
+          {{messagetxt}}
         </div>
       </div>
     </div>
@@ -151,12 +154,17 @@ const submitUpload = () => {
 .headelement {
   text-align: center;
 
-  /deep/ .el-form-item__content {
+  :deep(.el-form-item__content) {
     display: block;
   }
 
   .text-red {
     margin-bottom: 20px;
+    color: #f56c6c;
+
+    &.grey {
+      color: #606266;
+    }
   }
 
   .fileBtn {

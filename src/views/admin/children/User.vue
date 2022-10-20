@@ -1,13 +1,15 @@
 <script setup lang='ts'>
-import { ref, h } from 'vue'
+import { ref } from 'vue'
 import { ElTable, ElMessageBox } from 'element-plus'
 import http from '@/http/http'
 import dayjs from 'dayjs'
 import UserForm from './UserForm.vue'
+import load from '@/utils/loadings'
 
 interface httpData {
   code: number
-  data: []
+  data: [],
+  total: number
 }
 interface User {
   uid: string
@@ -20,24 +22,42 @@ interface User {
   lastLoginDate: string,
   headImg: string,
 }
+// const loading = ref(true)
+
+const searchInput = ref('')
+
+const total = ref(1) //分页页数
+const pageSize = ref(9) //分页大小
 
 const multipleTableRef = ref<InstanceType<typeof ElTable>>()
 const multipleSelection = ref<User[]>([])
 const handleSelectionChange = (val: User[]) => {
   multipleSelection.value = val
 }
-const data = await http('get', '/admin/userList') as httpData
 
-const setTime: any = (time: string) => {
-  const formatted = dayjs(time).format('YYYY-MM-DD')
-  return formatted
+const tableData = ref<User[]>()
+const data = ref<httpData>({ code: 0, data: [], total: 0, })
+const handleCurrentChange = async (val: number, number?) => {
+  if (number != 0) load.show('#loadings')
+  total.value = val
+  const pagePara = '/admin/userList?pages=' + total.value + '&limit=' + pageSize.value
+  data.value = await http('get', pagePara) as httpData
+
+  const setTime: any = (time: string) => {
+    const formatted = dayjs(time).format('YYYY-MM-DD')
+    return formatted
+  }
+
+  data.value.data.forEach((item: User) => {
+    item.createDate = setTime(item.createDate)
+    item.lastLoginDate = setTime(item.lastLoginDate)
+  })
+  tableData.value = (data.value.data)
+  setTimeout(() => {
+    load.hide('#loadings')
+  }, 2000)
 }
-
-data.data.forEach((item: User) => {
-  item.createDate = setTime(item.createDate)
-  item.lastLoginDate = setTime(item.lastLoginDate)
-})
-const tableData = ref<User[]>(data.data)
+handleCurrentChange(1, 0)
 const setheadImg = (headImg: User) => {
   return 'http://localhost:1027' + headImg
 }
@@ -66,14 +86,42 @@ const handleClose = (done: () => void) => {
     })
 }
 
+let y, x;
+let t, s, h;
+s = 1;
+t = 1;
+x = 1;
+y = 3;
+h = 1
+while (h > 1e-6) {
+  t = x / y;
+
+  console.log(`lzy${x}/${y}`, s, h, h * t, t)
+  if (s == 1) {
+    s += s * t;
+    h += h * t - 1;
+  } else {
+    h = h * t;
+    s = s + h;
+  }
+  y += 2;
+  x += 1;
+}
+console.log("", ((s + h) * 2));
+
+
 </script>
 
 <template>
-  <div class="tableuser">
+  <div class="search">
+    <el-input class="searchInput" v-model="searchInput" placeholder="search" clearable />
+    <el-button class="btn" type="primary">Go</el-button>
+  </div>
+  <div class="tableuser" id="loadings">
     <el-table ref="multipleTableRef" :data="tableData" cell-class-name="lzyCell" style="width: 100%"
       @selection-change="handleSelectionChange" stripe>
       <el-table-column type="selection" width="55" />
-      <el-table-column property="uid" label="Id" sortable width="120"> </el-table-column>
+      <el-table-column property="uid" label="Id" sortable width="70"> </el-table-column>
       <el-table-column label="uname" width="200" show-overflow-tooltip>
         <template #default="scope">
           <div class="headImg">
@@ -90,7 +138,7 @@ const handleClose = (done: () => void) => {
           </div>
         </template>
       </el-table-column>
-      <el-table-column property="username" label="username" show-overflow-tooltip />
+      <el-table-column property="username" label="登陆账号" align="center" show-overflow-tooltip />
       <el-table-column label="权限" width="100px" align="center">
         <template #default="scope">
           <div class="power">
@@ -103,7 +151,7 @@ const handleClose = (done: () => void) => {
         <template #default="scope">
           <div class="power">
             <div class="checkbox-con">
-              <input id="checkbox" type="checkbox" v-model="scope.row.isUse">
+              <input id="checkbox" type="checkbox" disabled v-model="scope.row.isUse">
             </div>
           </div>
         </template>
@@ -142,16 +190,43 @@ const handleClose = (done: () => void) => {
     </el-dialog>
     <div class="example-pagination-block lzyColor">
       <!-- <div class="example-demonstration">When you have more than 7 pages</div> -->
-      <el-pagination background layout="prev, pager, next" :total="tableData.length*5" />
+      <el-pagination v-model="total" v-model:page-size="pageSize" background layout="prev, pager, next"
+        :total="data.total" @current-change="handleCurrentChange" />
     </div>
   </div>
 </template>
 
 <style lang="less" scoped>
-.tableuser {
-  height: calc(100vh - 150px);
+.search {
+  height: 50px;
+  width: 100%;
 
-  /deep/ .lzyCell {
+  :deep(.searchInput) {
+    width: 200px;
+    margin: 10px 0 0 20px;
+
+    .el-input__wrapper {
+      border-radius: 15px 0 0 15px;
+
+      &.is-focus {
+        box-shadow: 0 0 0 1px var(--themeColor) inset
+      }
+    }
+  }
+
+  :deep(.btn) {
+    margin-top: 10px;
+    border-radius: 0 15px 15px 0;
+    background-color: var(--themeColor);
+    border-color: transparent;
+  }
+}
+
+.tableuser {
+  height: calc(100vh - 200px);
+  // padding-top: 50px;
+
+  :deep(.lzyCell) {
     color: #000 !important;
   }
 
@@ -173,14 +248,23 @@ const handleClose = (done: () => void) => {
 
   .headImg {
     display: grid;
-    grid-template: 1fr / 1fr 3fr;
-    line-height: 40px;
+    grid-template: 1fr / 2fr 5fr;
+    line-height: 50px;
+    font-weight: 600;
+    font-size: 1.5rem;
+    font-family: 'alimama';
 
     img {
-      width: 40px;
-      height: 40px;
+      width: 45px;
+      height: 45px;
       border-radius: 50%;
-      padding: 5px;
+      -o-object-fit: cover;
+      padding: 2px;
+      margin-top: 2px;
+      object-fit: cover;
+      border: 1px solid var(--themeColor);
+      overflow: hidden;
+      box-shadow: 0px 0px 3px 1px #888;
     }
   }
 
@@ -295,12 +379,12 @@ const handleClose = (done: () => void) => {
     transform: translate(-50%, -50%);
     font-size: 20px;
 
-    /deep/ li.active {
+    :deep(li).active {
       color: var(--themeColor);
     }
   }
 
-  /deep/ .el-dialog {
+  :deep(.el-dialog) {
     border-radius: 20px;
     background: #f5f5f5;
     position: relative;
@@ -315,7 +399,13 @@ const handleClose = (done: () => void) => {
       font-family: 'douyu';
 
       button {
-        display: none;
+        // display: none;
+        margin-top: 15px;
+        font-size: 20px;
+
+        &:hover .el-icon {
+          color: var(--themeColor);
+        }
       }
     }
 

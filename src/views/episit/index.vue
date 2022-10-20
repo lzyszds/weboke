@@ -13,7 +13,7 @@
 <script setup>
 import { reactive, onMounted, ref, watch } from "vue";
 import http from "@/http/http";
-// import { show, hide } from "@/untils/loading.js";
+// import { show, hide } from "@/utils/loading.js";
 import lzyButton from "@/uiComponents/Button.vue";
 import _ from "lodash";
 import { } from "vue";
