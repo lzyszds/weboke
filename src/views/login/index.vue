@@ -5,6 +5,8 @@ import http from '@/http/http'
 import { useRouter } from 'vue-router'
 import { ElNotification } from 'element-plus'
 const router = useRouter()
+
+
 interface getLoginData {
   error: number
   token: string
@@ -12,17 +14,20 @@ interface getLoginData {
   code: number
 }
 
+//表单样式属性捆绑
 const fromTool = reactive({
   usernamelable: false,
   passwordlable: false,
   button: false
 })
+// 表单验证 需要捆绑的ref项，需要验证的表单项
 const ruleFormRef = ref<FormInstance>()
+// 账号密码数据，用于提交
 const ruleForm = reactive({
   username: '',
   password: '',
 })
-
+// 表单验证规则
 const rules = reactive<FormRules>({
   name: [
     { required: true, message: '请输入账号', trigger: 'blur' },
@@ -34,14 +39,16 @@ const rules = reactive<FormRules>({
   ]
 })
 
+// 表单验证 通过后执行 登陆请求
 const submitForm = (formEl: FormInstance | undefined) => {
-  if (!formEl) return
+  // fromtool 防止重复提交 以及 按钮提交之后样式
+  if (!formEl || fromTool.button) return
   fromTool.button = true
-  setTimeout(() => {
-    formEl.validate((valid, fields) => {
-      fromTool.button = false
-      if (valid) {
-        http('post', '/admin/login', ruleForm).then((res: getLoginData) => {
+  formEl.validate((valid, fields) => {
+    if (valid) {
+      http('post', '/admin/login', ruleForm).then((res: getLoginData) => {
+        setTimeout(() => {
+          fromTool.button = false
           if (res.error === 0 || res.code === 200) {
             localStorage.setItem('lzy_token', res.token)
             router.push('/userAdmin/User')
@@ -52,14 +59,15 @@ const submitForm = (formEl: FormInstance | undefined) => {
               type: 'error',
             })
           }
-        })
-      } else {
-        console.log('error submit!', fields)
-      }
-    })
-  }, 2000)
+        }, 2000)
+      })
+    } else {
+      console.log('error submit!', fields)
+    }
+  })
 }
 
+// 获取用户名输入框焦点时，修改样式
 const blurUsername = () => {
   if (ruleForm.username === '') {
     fromTool.usernamelable = false
@@ -67,7 +75,10 @@ const blurUsername = () => {
     fromTool.usernamelable = true
   }
 }
+//初始进入就执行一次
 blurUsername()
+
+// 获取密码输入框焦点时，修改样式
 const blurPassword = (() => {
   if (ruleForm.password === '') {
     fromTool.passwordlable = false
@@ -75,7 +86,10 @@ const blurPassword = (() => {
     fromTool.passwordlable = true
   }
 })
+//初始进入就执行一次
 blurPassword()
+
+//提交按钮的加载动画 
 const load = ref()
 setTimeout(() => {
   load.value!.classList.add('loaded')

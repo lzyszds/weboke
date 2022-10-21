@@ -1,18 +1,42 @@
 <script setup lang='ts'>
-import { reactive, ref, nextTick, getCurrentInstance } from 'vue'
+import { reactive, ref, getCurrentInstance, defineProps, defineEmits } from 'vue'
 import { FormInstance, FormRules } from 'element-plus'
-
 import { useNow } from '@vueuse/core'
 import http from '@/http/http';
+const emit = defineEmits(['switchAdd', 'switchMod'])
+const props = defineProps({
+  type: String,
+  data: Object,
+})
 const { proxy } = getCurrentInstance() as any
 const formSize = ref('default')
 const ruleFormRef = ref<FormInstance>()
 const rangeDate = () => {
   return (Math.random() * 1e-4).toString(36).slice(-8)
 }
-const ruleForm = reactive({
-  headImg: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-  setHeadImg: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+//随机推荐头像
+const randomAvatar = () => {
+  const arr: string[] = [
+    'http://localhost:1027/public/img/updataImg/put1.jpg',
+    'http://localhost:1027/public/img/updataImg/put2.jpg',
+    'http://localhost:1027/public/img/updataImg/put3.jpg',
+    'http://localhost:1027/public/img/updataImg/put4.jpg',
+    'http://localhost:1027/public/img/updataImg/put5.jpg',
+    'http://localhost:1027/public/img/updataImg/put6.jpg',
+    'http://localhost:1027/public/img/updataImg/put7.jpg',
+  ]
+  const random = Math.floor(Math.random() * arr.length) as any
+  if (localStorage.getItem('randomAvatar') == random) {
+    return randomAvatar()
+  } else {
+    localStorage.setItem('randomAvatar', random)
+    return arr[random]
+  }
+}
+const random = randomAvatar()
+const ruleForm: any = ref({
+  headImg: random,
+  setHeadImg: random,
   name: '',
   username: '',
   password: '',
@@ -20,6 +44,19 @@ const ruleForm = reactive({
   date: useNow(),
   token: rangeDate() + rangeDate(), // 生成随机token
 })
+if (props.type == 'modify') {
+  ruleForm.value = {
+    headImg: 'http://localhost:1027' + props.data?.headImg,
+    setHeadImg: 'http://localhost:1027' + props.data?.headImg,
+    name: props.data?.uname,
+    username: props.data?.username,
+    password: props.data?.pwd,
+    power: props.data?.power,
+    date: props.data?.date,
+    token: props.data?.token,
+    uid: props.data?.uid,
+  }
+}
 const rules = reactive<FormRules>({
   name: [
     { required: true, message: '名称不能为空,请输入名称', trigger: 'blur' },
@@ -31,21 +68,38 @@ const rules = reactive<FormRules>({
   ],
   password: [
     { required: true, message: '密码不能为空,请输入密码', trigger: 'blur' },
-    { min: 8, max: 16, message: '密码要求不符合(8-16位)', trigger: 'blur' },
+    { min: 6, max: 16, message: '密码要求不符合(6-16位)', trigger: 'blur' },
   ],
 })
 
+const onAddUser = () => {
+  ruleForm.value.setHeadImg = ruleForm.value.headImg.replace('http://localhost:1027', '');
+  http('POST', '/admin/addUserLzy', ruleForm.value)
+    .then(() => {
+      emit('switchAdd', false)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+}
+const onmodifyUser = () => {
+  ruleForm.value.setHeadImg = ruleForm.value.headImg.replace('http://localhost:1027', '');
+  http('POST', '/admin/updateUserLzy', ruleForm.value)
+    .then(() => {
+      emit('switchMod', false)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+}
+
+//提交表单入后台
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   await formEl.validate((valid, fields) => {
     if (valid) {
-      http('POST', '/admin/addUserLzy', ruleForm)
-        .then((res) => {
-          console.log(res)
-        })
-        .catch((err) => {
-          console.log(err)
-        })
+      if (props.type === 'modify') onmodifyUser() //修改用户数据
+      else onAddUser()  //新增用户
     } else {
       console.log('error submit!', fields)
     }
@@ -58,43 +112,44 @@ const resetForm = (formEl: FormInstance | undefined) => {
 }
 
 const handleExceed = () => {
-
+  const random = randomAvatar()
+  ruleForm.value.headImg = random;
+  ruleForm.value.setHeadImg = random?.replace('http://localhost:1027', '');
 }
 const messagetxt = ref('limit 1 file, new file will cover the old file')
+const upClick = () => {
+  const file = document.getElementById('xFile') as HTMLInputElement
+  file.click()
+}
+
+//头像上传按钮 逻辑块
 const submitUpload = () => {
-  nextTick(() => {
-    const xFile: any = document.getElementById('xFile') as HTMLInputElement
-    let reader = new FileReader();
-    reader.readAsDataURL(xFile.files[0]);
-    // console.log(`lzy ~ xFile.files[0]`, xFile.files[0])
-    reader.onload = function (e) {
-      //e代表事件,可以通过e.target获取FileReader对象然后在获取readAsDataURL读取的base64字符
-      const base64 = e.target?.result as string
-      const blob = proxy.$common.base64toBlob(base64)
-      //下面是将blob转换为file 用于上传
-      let formData = new FormData();
-      formData.append('headImg', xFile.files[0]);
-
-      let headers = {
-        'Content-Type': 'multipart/form-data'
-      }
-
-      // const file: any = new File([blob], 'headImg.png', { type: 'image/png' })
-      http('post', '/admin/uploadHead', formData, headers)
-        .then((res: { code: Number, message }) => {
-          if (res.code === 200) {
-            const objectURL = URL.createObjectURL(blob);
-            ruleForm.headImg = objectURL;
-            ruleForm.setHeadImg = res.message;
-            messagetxt.value = 'limit 1 file, new file will cover the old file'
-          } else {
-            messagetxt.value = res.message
-          }
-        })
-
-
+  const xFile: any = document.getElementById('xFile') as HTMLInputElement
+  let reader = new FileReader();
+  reader.readAsDataURL(xFile.files[0]);
+  reader.onload = function (e) {
+    //e代表事件,可以通过e.target获取FileReader对象然后在获取readAsDataURL读取的base64字符
+    const base64 = e.target?.result as string
+    const blob = proxy.$common.base64toBlob(base64)
+    //下面是将blob转换为file 用于上传
+    let formData = new FormData();
+    formData.append('headImg', xFile.files[0]);
+    let headers = {
+      'Content-Type': 'multipart/form-data',
     }
-  })
+    //给后台上传头像图片，并获取后台返回新的图片地址
+    http('post', '/admin/uploadHead', formData, headers)
+      .then((res: { code: Number, message }) => {
+        if (res.code === 200) {
+          const objectURL = URL.createObjectURL(blob);
+          ruleForm.value.headImg = objectURL;//显示的头像blob转化为可图片显示的src
+          ruleForm.value.setHeadImg = res.message; //放入数据库中的图片路径
+          messagetxt.value = 'limit 1 file, new file will cover the old file'
+        } else {
+          messagetxt.value = res.message
+        }
+      })
+  }
 }
 </script>
 
@@ -106,16 +161,15 @@ const submitUpload = () => {
       <div class="upload-demo">
         <div class="fileBtn">
           <div class="fileUpload">
-
             <label class="ui_button ui_button_primary" for="xFile">
-              <el-button type="primary">上传本地</el-button>
+              <el-button type="primary" @click="upClick">上传本地</el-button>
             </label>
             <form action="" method="post">
-              <input class="fileInput" name="headImg" type="file" id="xFile" @change="submitUpload" />
+              <input class="fileInput" name="headImg" type="file" @change="submitUpload" id="xFile" />
             </form>
 
           </div>
-          <el-button class="ml-3" type="success" @click="handleExceed"> 系统推荐 </el-button>
+          <el-button class="recommended" @click="handleExceed"> 系统推荐 </el-button>
         </div>
         <div class="el-upload__tip text-red" :class="{grey:messagetxt.indexOf('limit')!=-1}">
           {{messagetxt}}
@@ -180,16 +234,32 @@ const submitUpload = () => {
       width: 85px;
       position: relative;
       overflow: hidden;
+      background-color: #f56c6c;
+      border-radius: 5px;
+
+      button {
+        background: transparent;
+        border: none;
+      }
+
+      .ui_button {
+        cursor: pointer !important;
+      }
 
       .fileInput {
         position: absolute;
         top: 0;
         left: 0;
-        cursor: pointer;
-        opacity: 0;
+        cursor: pointer !important;
+        display: none;
       }
+    }
 
-
+    :deep(.recommended) {
+      margin-left: 10px;
+      background-color: var(--themeColor);
+      border: none;
+      color: #fff;
     }
   }
 

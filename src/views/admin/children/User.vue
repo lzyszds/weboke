@@ -1,53 +1,38 @@
 <script setup lang='ts'>
-import { ref } from 'vue'
-import { ElTable, ElMessageBox } from 'element-plus'
+import { ref, h } from 'vue'
+import { ElTable, ElMessageBox, ElNotification } from 'element-plus'
 import http from '@/http/http'
 import dayjs from 'dayjs'
 import UserForm from './UserForm.vue'
 import load from '@/utils/loadings'
+import { httpData, User } from './type'
 
-interface httpData {
-  code: number
-  data: [],
-  total: number
-}
-interface User {
-  uid: string
-  uname: string
-  token: string,
-  username: string,
-  password: string,
-  power: string,
-  createDate: string,
-  lastLoginDate: string,
-  headImg: string,
-}
-// const loading = ref(true)
-
+//搜索框内容
 const searchInput = ref('')
 
 const total = ref(1) //分页页数
 const pageSize = ref(9) //分页大小
 
-const multipleTableRef = ref<InstanceType<typeof ElTable>>()
-const multipleSelection = ref<User[]>([])
-const handleSelectionChange = (val: User[]) => {
-  multipleSelection.value = val
-}
 
+//表格数据（前页数据展示进表格中）
 const tableData = ref<User[]>()
+//定义分页size以及当前页数据
 const data = ref<httpData>({ code: 0, data: [], total: 0, })
+
+//分页事件、切换页码时提供load效果
 const handleCurrentChange = async (val: number, number?) => {
   if (number != 0) load.show('#loadings')
   total.value = val
+
   const pagePara = '/admin/userList?pages=' + total.value + '&limit=' + pageSize.value
   data.value = await http('get', pagePara) as httpData
 
+  //时间格式化处理
   const setTime: any = (time: string) => {
     const formatted = dayjs(time).format('YYYY-MM-DD')
     return formatted
   }
-
+  //数据处理 时间格式化 
   data.value.data.forEach((item: User) => {
     item.createDate = setTime(item.createDate)
     item.lastLoginDate = setTime(item.lastLoginDate)
@@ -58,16 +43,26 @@ const handleCurrentChange = async (val: number, number?) => {
   }, 2000)
 }
 handleCurrentChange(1, 0)
+//设置所有图片的地址 
 const setheadImg = (headImg: User) => {
   return 'http://localhost:1027' + headImg
 }
 //屁用没有，但是必须写，不然排序不了 使用模板的table列
 const formatter = () => { }
 
+//新增用户按钮，点击后弹出form表单
 const centVisible = ref(false)
 const addUser = () => {
   centVisible.value = true
 }
+//修改用户按钮，点击后弹出确认框
+const modifyTheVis = ref(false)
+const modifyData = ref<User>()
+const modifyThe = (event: User) => {
+  modifyData.value = event
+  modifyTheVis.value = true
+}
+//开启表单时点击空白地方 关闭form表单时的提示
 const handleClose = (done: () => void) => {
   ElMessageBox({
     title: '提示',
@@ -81,35 +76,41 @@ const handleClose = (done: () => void) => {
     .then(() => {
       done()
     })
-    .catch(() => {
-      // catch error
+}
+//子组件传来的参数 关闭form表单
+const switchAdd = (boolean: boolean) => {
+  centVisible.value = boolean
+  ElNotification({
+    title: '成功',
+    message: '用户新增成功',
+    type: 'success',
+  })
+
+  handleCurrentChange(total.value)
+}
+//子组件传来的参数 关闭form表单
+const switchMod = (boolean: boolean) => {
+  modifyTheVis.value = boolean
+  ElNotification({
+    title: '成功',
+    message: '用户修改成功',
+    type: 'success',
+  })
+  handleCurrentChange(total.value)
+}
+
+//删除用户
+const deleteUser = (event) => {
+  http('post', '/admin/deleteUserLzy', { id: event.uid }).then((res: httpData) => {
+    ElNotification({
+      title: res.code == 200 ? '成功' : '失败',
+      message: '用户' + res.message,
+      type: res.code == 200 ? 'success' : 'error',
     })
+    if (res.code != 200) console.log(`lzy ~ res`, res.err)
+    handleCurrentChange(total.value)
+  })
 }
-
-let y, x;
-let t, s, h;
-s = 1;
-t = 1;
-x = 1;
-y = 3;
-h = 1
-while (h > 1e-6) {
-  t = x / y;
-
-  console.log(`lzy${x}/${y}`, s, h, h * t, t)
-  if (s == 1) {
-    s += s * t;
-    h += h * t - 1;
-  } else {
-    h = h * t;
-    s = s + h;
-  }
-  y += 2;
-  x += 1;
-}
-console.log("", ((s + h) * 2));
-
-
 </script>
 
 <template>
@@ -118,8 +119,7 @@ console.log("", ((s + h) * 2));
     <el-button class="btn" type="primary">Go</el-button>
   </div>
   <div class="tableuser" id="loadings">
-    <el-table ref="multipleTableRef" :data="tableData" cell-class-name="lzyCell" style="width: 100%"
-      @selection-change="handleSelectionChange" stripe>
+    <el-table :data="tableData" cell-class-name="lzyCell" style="width: 100%" stripe>
       <el-table-column type="selection" width="55" />
       <el-table-column property="uid" label="Id" sortable width="70"> </el-table-column>
       <el-table-column label="uname" width="200" show-overflow-tooltip>
@@ -173,10 +173,10 @@ console.log("", ((s + h) * 2));
         </template>
       </el-table-column>
       <el-table-column fixed="right" label="Operations" width="120">
-        <template #default>
+        <template #default="scope">
           <div class="tool">
-            <el-button link type="primary" size="small">修改</el-button>
-            <el-button link type="primary" size="small">删除</el-button>
+            <el-button link type="primary" size="small" @click="modifyThe(scope.row)">修改</el-button>
+            <el-button link type="primary" size="small" @click="deleteUser(scope.row)">删除</el-button>
           </div>
         </template>
       </el-table-column>
@@ -186,12 +186,15 @@ console.log("", ((s + h) * 2));
   <div class="toolfooter">
     <el-button class="add" type="primary" @click="addUser">新增用户</el-button>
     <el-dialog v-model="centVisible" :before-close="handleClose" title="新增用户" width="26%" left>
-      <UserForm />
+      <UserForm v-if="centVisible" type="add" @switchAdd="switchAdd" />
+    </el-dialog>
+    <el-dialog v-model="modifyTheVis" :before-close="handleClose" title="修改用户" width="26%" left>
+      <UserForm v-if="modifyTheVis" type="modify" :data="modifyData" @switchMod="switchMod" />
     </el-dialog>
     <div class="example-pagination-block lzyColor">
       <!-- <div class="example-demonstration">When you have more than 7 pages</div> -->
-      <el-pagination v-model="total" v-model:page-size="pageSize" background layout="prev, pager, next"
-        :total="data.total" @current-change="handleCurrentChange" />
+      <el-pagination v-model="total" :currentPage="total" v-model:page-size="pageSize" background
+        layout="prev, pager, next" :total="data.total" @current-change="handleCurrentChange" />
     </div>
   </div>
 </template>
@@ -445,7 +448,4 @@ console.log("", ((s + h) * 2));
 
   }
 }
-</style>
-<style>
-
 </style>

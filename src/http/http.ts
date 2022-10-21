@@ -1,19 +1,16 @@
 // 一、配置axios
 import axios from 'axios'
+import { ElMessageBox } from 'element-plus'
 // import store from '@/store/index' 如果使用vuex，那么token，userinfo都可以在登录以后存储到store中，不需要使用storage
 // 获取浏览器的接口地址。
 
+// document.cookie = 'admin=' + localStorage.getItem('lzy_token') as string
 const instance = axios.create({
   baseURL: window.location.origin,
   timeout: 5000,
   withCredentials: true,//表示跨域请求时是否需要使用凭证
-  headers: {
-    'access-control-allow-origin': '*',
-    // 'Content-Type': 'multipart/form-data',
-    'Access-Control-Allow-Origin-Type': '*',
-  }
-
 })
+console.log(`lzy ~ localStorage.getItem('lzy_token') as string`, localStorage.getItem('lzy_token') as string)
 // // 请求拦截器，设置token
 // instance.interceptors.request.use(config => {
 //   console.log('进入请求状态')
@@ -32,20 +29,28 @@ const instance = axios.create({
 //   return Promise.error(error)
 // })
 // 响应拦截器
-// axios.interceptors.response.use(response => {
-//   if (response.status === 200) {
-//     // 993登录过期
-//     if (response.data.code !== '993') {
-//       return Promise.resolve(response)
-//     } else {
-//       console.log('登录过期')
-//       // store.commit('clearUserInfo')  // 使用vuex存储过用户信息，这里需要清空一下。
-//       window.location.href = '/#/login'
-//     }
-//   } else {
-//     return Promise.reject(response)
-//   }
-// })
+instance.interceptors.response.use(response => {
+  console.log(`lzy ~ response.data`, response.status)
+  if (response.status === 200) {
+    // 993登录过期
+    if (response.data.code != '10011') {
+      return Promise.resolve(response)
+    } else if (response.data.code == '10011') {
+      // store.commit('clearUserInfo')  // 使用vuex存储过用户信息，这里需要清空一下。
+      localStorage.clear() // 清空本地存储
+      ElMessageBox.alert('登陆验证失败，请重新登陆！！', '提示', {
+        // if you want to disable its autofocus
+        // autofocus: false,
+        confirmButtonText: '确定',
+        callback: () => {
+          window.location.href = '/login'
+        },
+      })
+    }
+  } else {
+    return Promise.reject(response)
+  }
+})
 
 // 2、封装请求方式
 // @param method(必须)  请求方法
@@ -53,6 +58,14 @@ const instance = axios.create({
 // @param data(可选)  携带参数
 // @param headers(可选) 请求头可以自己设置，也可以使用默认的（不传）
 export default function (method = 'get', url = '', data = {}, headers?) {
+  const isHeadPara = headers ? true : false
+  headers = {
+    'access-control-allow-origin': '*',
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin-Type': '*',
+    'Authorization': localStorage.getItem('lzy_token') as string
+  }
+  if (isHeadPara) headers['Content-Type'] = 'multipart/form-data'
   return new Promise((resolve, reject) => {
     instance({ method, url, data, headers })
       .then(res => {
