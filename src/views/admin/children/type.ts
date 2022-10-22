@@ -7,8 +7,8 @@ export interface httpData {
 }
 
 export interface User {
-  id: string
-  name: string
+  uid: string
+  uname: string
   token: string,
   username: string,
   password: string,
@@ -18,5 +18,5 @@ export interface User {
   headImg: string,
   setHeadImg: string,
   date?: any,
-  uid: string
+  perSign: string,
 }

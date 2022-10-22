@@ -3,6 +3,8 @@ import Icon from '@/components/icon.vue'
 import { ref, getCurrentInstance } from 'vue';
 import { useNow, useDateFormat } from '@vueuse/core'
 import { useRouter } from 'vue-router'
+import http from '@/http/http';
+
 const router = useRouter()
 const { proxy } = getCurrentInstance() as any
 interface IWeather {
@@ -16,12 +18,12 @@ interface IWeather {
   winddirection: String
   windpower: String
 }
-const data = ref<IWeather>()
+const datalist = ref<IWeather>()
 const cip = ref<string>()
 // data:天气数据   cid:城市id 
 const promiseion = proxy.$common.getIpWeather()
 promiseion.then(res => {
-  data.value = res.data.lives[0]
+  datalist.value = res.data.lives[0]
   cip.value = res.cip
 })
 const items = [
@@ -59,25 +61,43 @@ const items = [
     name: '网站设置',
     uicon: '<i class="iconfont">&#xe60a;</i>',
     path: '/settingAdmin'
-  }
+  }, {
+    name: '退出登陆',
+    uicon: '<i class="iconfont">&#xe60b;</i>',
+    path: '/login'
+  },
 ]
 const activeIndex = ref(0)
 const activefn = (index) => {
+  if (items[index].name == '退出登陆') {
+    localStorage.removeItem('lzy_token')
+  }
   activeIndex.value = index
   router.push(items[index].path)
 }
 const formatted = useDateFormat(useNow(), 'YYYY-MM-DD HH:mm:ss')
 
+//处理用户详情数据
+const infoData: any = ref()
+const { data } = await http('get', '/admin/getUserInfo') as any
+if (data.perSign) {
+  data.perSign = data.perSign.replace(',', '#,~').split('#,~')
+  data.perSign = data.perSign ? data.perSign : '这个人很懒，什么都没留下'
+} else {
+  data.perSign = ['这个人很懒', '什么都没留下']
+}
+
+infoData.value = data
 </script>
 
 <template>
   <div class="setleft">
     <div class="logo"> Lzyszds </div>
     <div class="userinfo">
-      <div class="headPortrait"><img src="http://localhost:1027/public/img/lzy.jpg" alt=""> </div>
-      <h3>lzy</h3>
-      <p>「连我自己都轻视自己的话」</p>
-      <p>谁来夸奖我啊，只有我了，舍我其谁。</p>
+      <div class="headPortrait"><img :src="'http://localhost:1027'+infoData.headImg" alt=""> </div>
+      <h3>{{infoData.uname}}</h3>
+      <p>「{{infoData.perSign[0]}}」</p>
+      <p>{{infoData.perSign[1]}}</p>
       <p class="essCount">
         <Icon :name="`icon-youxiang`" :fill="`#5161ce`"></Icon>
         <span>17</span>
@@ -93,9 +113,9 @@ const formatted = useDateFormat(useNow(), 'YYYY-MM-DD HH:mm:ss')
     <div class="footer">
       <div class="time">
         <p class="weacher">
-          <span>{{data?.city}} {{data?.weather}} </span>
-          <span>室外温度：{{data?.temperature}}℃</span>
-          <span>湿度：{{data?.humidity}}%RH</span>
+          <span>{{datalist?.city}} {{datalist?.weather}} </span>
+          <span>室外温度：{{datalist?.temperature}}℃</span>
+          <span>湿度：{{datalist?.humidity}}%RH</span>
         </p>
         <p>{{formatted}}</p>
         <a :href="cip">IP: {{cip}}</a>

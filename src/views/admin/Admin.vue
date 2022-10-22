@@ -6,7 +6,9 @@ import SetLeft from './components/setLeft.vue'
   <div class="base">
     <div class="admin">
       <div class="tool">
-        <SetLeft />
+        <Suspense>
+          <SetLeft />
+        </Suspense>
       </div>
       <div class="content">
         <Suspense>

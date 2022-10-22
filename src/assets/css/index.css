@@ -75,4 +75,25 @@
   overflow: hidden;
 }
 
+/* 修改谷歌浏览器存储密码 自动给input添加样式 */
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-text-fill-color: #000 !important;
+  /* //这个地方的颜色是字体颜色，可以根据实际情况修改 */
+  -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+  /* //设置input输入框的背景颜色为透明色 */
+  background-color: transparent;
+  /* //设置input输入框的背景颜色为透明色 */
+  background-image: none;
+  transition: background-color 50000s ease-in-out 0s;
+}
 
+input {
+  background-color: transparent;
+  /* //设置input输入框的背景颜色为透明色 */
+}
+
+input:-webkit-autofill::selection {
+  -webkit-text-fill-color: #fff !important;
+}

@@ -1,7 +1,7 @@
 <template>
   <div class="navbarContent">
     <div class="">
-      <a class="navbar-brand navbar-logo" href="#"><img width="80" src="http://localhost:1027/public/img/lzjy.png"
+      <a class="navbar-brand navbar-logo" href="#"><img width="80" src="http://localhost:1027/public/img/lzjyWhite.png"
           alt="" />J/Z</a>
       <div class="navbar-toggler">
         <label class="menu-open-button" @click="openfun">
@@ -22,7 +22,7 @@
     </div>
   </div>
   <nav class="navbar">
-    <a class="navbar-brand navbar-logo" href="#"><img width="80" src="http://localhost:1027/public/img/lzjy.png"
+    <a class="navbar-brand navbar-logo" href="#"><img width="80" src="http://localhost:1027/public/img/lzjyWhite.png"
         alt="" />J/Z</a>
     <div class="navbar-toggler">
       <label class="menu-open-button" @click="openfun">

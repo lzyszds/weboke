@@ -262,7 +262,5 @@ const submitUpload = () => {
       color: #fff;
     }
   }
-
-
 }
 </style>

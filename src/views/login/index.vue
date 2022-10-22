@@ -3,23 +3,20 @@ import { reactive, ref } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import http from '@/http/http'
 import { useRouter } from 'vue-router'
-import { ElNotification } from 'element-plus'
 const router = useRouter()
-
-
+//进入页面先判断是否登陆着,localStorage.getItem('token')是登陆时候存的token
+if (localStorage.getItem('lzy_token')) {
+  router.push('/userAdmin/User')
+}
 interface getLoginData {
   error: number
   token: string
   message: string
   code: number
 }
+const tipsText = ref('')
+const load = ref(false)
 
-//表单样式属性捆绑
-const fromTool = reactive({
-  usernamelable: false,
-  passwordlable: false,
-  button: false
-})
 // 表单验证 需要捆绑的ref项，需要验证的表单项
 const ruleFormRef = ref<FormInstance>()
 // 账号密码数据，用于提交
@@ -29,35 +26,33 @@ const ruleForm = reactive({
 })
 // 表单验证规则
 const rules = reactive<FormRules>({
-  name: [
+  username: [
     { required: true, message: '请输入账号', trigger: 'blur' },
-    { min: 6, max: 16, message: '账号长度应该是6到16', trigger: 'blur' },
+    { min: 3, max: 16, message: '账号长度应该是6到16', trigger: 'blur' },
   ],
   password: [
     { required: true, message: '请输入密码', trigger: 'blur' },
     { min: 6, max: 16, message: '密码长度应该是6到16', trigger: 'blur' },
   ]
 })
-
-// 表单验证 通过后执行 登陆请求
 const submitForm = (formEl: FormInstance | undefined) => {
+  tipsText.value = ''
+  load.value = true
+  setTimeout(() => {
+    load.value = false
+
+  }, 2000)
   // fromtool 防止重复提交 以及 按钮提交之后样式
-  if (!formEl || fromTool.button) return
-  fromTool.button = true
+  if (!formEl) return
   formEl.validate((valid, fields) => {
     if (valid) {
       http('post', '/admin/login', ruleForm).then((res: getLoginData) => {
         setTimeout(() => {
-          fromTool.button = false
           if (res.error === 0 || res.code === 200) {
             localStorage.setItem('lzy_token', res.token)
             router.push('/userAdmin/User')
           } else {
-            ElNotification({
-              title: 'Error',
-              message: '账号密码输入错误！',
-              type: 'error',
-            })
+            tipsText.value = '账号或密码错误'
           }
         }, 2000)
       })
@@ -66,338 +61,248 @@ const submitForm = (formEl: FormInstance | undefined) => {
     }
   })
 }
-
-// 获取用户名输入框焦点时，修改样式
-const blurUsername = () => {
-  if (ruleForm.username === '') {
-    fromTool.usernamelable = false
-  } else {
-    fromTool.usernamelable = true
-  }
+const back = () => {
+  router.push('/')
 }
-//初始进入就执行一次
-blurUsername()
-
-// 获取密码输入框焦点时，修改样式
-const blurPassword = (() => {
-  if (ruleForm.password === '') {
-    fromTool.passwordlable = false
-  } else {
-    fromTool.passwordlable = true
-  }
-})
-//初始进入就执行一次
-blurPassword()
-
-//提交按钮的加载动画 
-const load = ref()
-setTimeout(() => {
-  load.value!.classList.add('loaded')
-}, 500)
-</script>
+</script>   
 
 <template>
-  <div class="login" ref="load">
-    <div class="content">
-      <img class="lovelyImg" :class="{lock:fromTool.usernamelable||fromTool.passwordlable}"
-        src="../../assets/image/10.svg" alt="">
-      <div class="content_header">
-        <p><img src="http://localhost:1027/public/img/lzjy.png" alt=""></p>
+  <div class="login">
+    <div class="card">
+      <div class="item top">
+        <img src="http://localhost:1027/public/img/lzjyBlack.png" alt="">
         <p>Sign In</p>
       </div>
-      <div class="input-group">
+      <div class="item center">
         <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" class="demo-ruleForm" status-icon>
           <el-form-item prop="username">
-            <el-input class="input" v-model="ruleForm.username" @focus="fromTool.usernamelable = true"
-              @blur="blurUsername" />
-            <label class="user-label" :class="{'lableActive':fromTool.usernamelable}">UserName</label>
+            <el-input @keydown.enter="submitForm(ruleFormRef)" class="input" v-model="ruleForm.username">
+              <template #prepend>账号</template>
+            </el-input>
           </el-form-item>
           <el-form-item prop="password">
-            <el-input class="input" type="password" v-model="ruleForm.password" @focus="fromTool.passwordlable = true"
-              @blur="blurPassword" show-password />
-            <label class="user-label" :class="{'lableActive':fromTool.passwordlable}">Password</label>
+            <el-input @keydown.enter="submitForm(ruleFormRef)" class="input" type="password" v-model="ruleForm.password"
+              show-password>
+              <template #prepend>密码</template>
+            </el-input>
           </el-form-item>
 
           <el-form-item>
-            <el-button :class="{down:fromTool.button}" type="primary" @click="submitForm(ruleFormRef)"></el-button>
+            <el-button :class="{'loadBtn':load}" type="primary" @click="submitForm(ruleFormRef)">
+              <span class="loadingtext">登陆中...</span>
+              <span class="sunb">
+                <el-icon>
+                  <Promotion />
+                </el-icon>
+                <span class="spanTEXT">登陆</span>
+              </span>
+            </el-button>
+            <el-button type="primary" @click="back">
+              <el-icon>
+                <Back />
+              </el-icon> <span>返回</span>
+            </el-button>
           </el-form-item>
-          <router-link to='/'>
-            <el-button type="primary">返回首页</el-button>
-          </router-link>
         </el-form>
       </div>
+      <p class="pwdTips" :class="{'error':tipsText.length}">{{tipsText}}</p>
     </div>
-
   </div>
 </template>
 
-<style scoped>
-.lovelyImg {
-  position: absolute;
-  top: -20px;
-  right: 0px;
-  width: 300px;
-  transition: .3s;
-  opacity: 0;
-}
-
-.lovelyImg.lock {
-  right: -209px;
-  opacity: 1;
-}
-
-.login.loaded {
-  opacity: 1 !important;
-}
-
+<style lang="less" scoped>
 .login {
-  opacity: 0;
   width: 100vw;
   height: 100vh;
-  background: url('http://localhost:1027/public/img/94175072_p0.jpg') no-repeat;
+  background: var(--themeColor);
   display: flex;
-  background-repeat: round;
-  align-items: center;
-  justify-content: right;
-}
-
-.login ::selection {
-  background: #fff;
-  color: #000;
-  text-shadow: none;
-}
-
-.login .content {
-  z-index: 3;
-  position: relative;
-  width: 45rem;
-  height: 55rem;
-  background: rgb(26 26 26 / 73%);
-  backdrop-filter: blur(8px);
-  border-radius: 1rem;
-  transform: translateX(-230px);
-  transition: .5s;
-}
-
-.login .content:hover {
-  backdrop-filter: blur(0px);
-}
-
-p {
-  margin: 0;
-}
-
-.content .content_header {
-  padding-top: 30px;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  font-size: 40px;
-  color: #fff;
-  user-select: none;
-}
-
-.content_header img {
-  width: 30%;
-  border-radius: 1rem;
-  margin: 0 auto;
-}
-
-
-/* From uiverse.io by @alexruix */
-.input-group {
-  margin-top: 30px;
-  font-size: 19px;
-  display: flex;
-  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  position: relative;
-}
-
-.input-group span {
-  color: #fff;
   position: absolute;
-  bottom: 0;
-  left: 0;
-  padding: 10px 0;
-}
+  top: 0;
 
-.input-group-item {
-  position: relative;
-  margin-bottom: 20px;
-}
+  .card {
+    width: 400px;
+    height: 320px;
+    background-color: rgba(255, 255, 255, 1);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    box-shadow: 0 1px 8px 10px rgba(0, 0, 0, .2);
+    transition: .6s;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 10px;
+    font-family: 'almama';
 
-.input-group .input {
-  border-color: transparent;
-  border-bottom: 1px solid #ffffff;
-  /* border-radius: 1rem; */
-  background: none;
-  width: 250px;
-  padding: 3px 0;
-  font-size: 19px;
-  color: #fff;
-  transition: border 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: none;
-}
+    &:focus-within {
+      box-shadow: 0 10px 10px rgba(0, 0, 0, .1),
+        0px -30px 4px -10px rgba(255, 255, 255, .3),
+        0px -60px 4px -20px rgba(255, 255, 255, .2),
+        0px -90px 4px -30px rgba(255, 255, 255, .1),
+    }
 
-.input :deep(.el-icon) {
-  color: #fff
-}
+    .item {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
 
-.input .el-input .el-input__clear:hover,
-.input .el-input .el-input__password:hover {
-  color: #fff !important;
-}
+      &.top {
+        height: 40%;
 
-.input-group .input :deep(.el-input__wrapper) {
-  border-color: transparent;
-  background: transparent;
-  box-shadow: none;
-  color: #fff;
-  padding: 0;
-}
+        p {
+          font-size: 40px;
+          font-weight: 600;
+          color: #000;
+          flex: 3;
+        }
 
-.input-group .input :deep(.el-input__wrapper) input {
-  color: #fff;
-}
+        img {
+          flex: 1;
+          width: 100px;
+          height: 75px;
+          margin-left: 45px;
+        }
+      }
 
+      &.center {
+        padding: 20px 20px 0;
+        margin-top: 10px;
+        width: 300px;
 
-.user-label {
-  font-size: 19px;
-  position: absolute;
-  left: 0;
-  color: #e8e8e8;
-  padding-left: 0;
-  pointer-events: none;
-  transform: translateY(0);
-  transition: 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  user-select: none;
-}
+        & :deep(.el-form-item) {
+          .loadBtn {
 
-.input:focus,
-input:valid {
-  outline: none;
-  /* border: 1.5px solid #1a73e8; */
-}
+            &>span {
+              transition: 1s;
+              transform: translateY(50px) !important;
+            }
+          }
 
-.lableActive {
-  transform: translate(0px, -20px);
-  background-color: transparent;
-  padding-left: 0;
-  font-size: 16px;
-}
+          .el-input .el-input__icon {
+            color: var(--themeColor);
+          }
 
-button:nth-child(1) {
-  background: #79bbfe;
-  color: #fff;
-}
+          &.is-error .el-input__icon {
+            color: var(--el-color-danger) !important;
+          }
 
-button {
-  width: 100%;
-  height: 50px;
-  background: #fff;
-  border: none;
-  border-radius: 1rem;
-  font-size: 20px;
-  color: #000;
-  transition: .3s;
-}
+          .el-form-item__error {
+            user-select: none;
+          }
 
-button.activebtn {
-  background: #85cbed;
-  color: #fff;
-  opacity: 1;
-}
+          .el-input-group__prepend {
+            background-color: var(--themeColor);
+            box-shadow: none;
+            border: 1px solid var(--themeColor);
+            border-radius: 15px 0 0 15px;
+            color: #fff;
+            user-select: none;
+            transition: .6s;
 
+          }
 
-.el-form-item {
-  width: 100%;
-  justify-content: center;
-  margin-top: 10px;
-}
+          .el-input__wrapper {
+            box-shadow: none;
+            border: 1px solid var(--themeColor);
+            border-left: transparent;
+            border-radius: 0 15px 15px 0;
 
-.el-form-item :deep(.el-form-item__content) {
-  flex-wrap: nowrap;
-  flex: initial;
-  margin-top: 15px;
-}
+            input {
+              font-weight: 600;
+              font-family: 'firaCode';
+              color: #000;
+            }
+          }
 
-.input :deep(.el-input__wrapper) input {
-  height: 20px !important;
-}
+          .el-button {
+            text-align: center;
+            margin: 20px 10px 0;
+            font-size: 16px;
+            width: 110px;
+            height: 35px;
+            background-color: var(--themeColor);
+            display: flex;
+            overflow: hidden;
 
-.el-form-item :deep(.el-form-item__content) {
-  width: 100%;
-}
+            &:nth-child(1) span:nth-child(1) {
+              display: flex;
+              flex-wrap: wrap;
+              justify-content: center;
+              align-items: center;
+              transform: translateY(-23px);
+            }
 
-.el-form-item__content button {
-  width: 100%;
-  overflow: hidden;
-  transition: .3s;
-}
+            .sunb {
+              display: flex;
+              flex-wrap: wrap;
+              justify-content: center;
+              align-items: center;
+              margin-top: 30px;
+            }
 
-.el-form-item__content button::before {
-  content: '登陆';
-  transition: .3s;
-  opacity: 1;
-}
+            i {
+              font-size: 25px;
+              margin-right: 12px;
+              background-color: rgba(255, 255, 255, 0.2);
+              backdrop-filter: blur(10px);
+              border-radius: 50%;
+              padding: 4px;
+            }
+          }
+        }
 
-.el-form-item__content button::after {
-  content: '';
-  position: absolute;
-  opacity: 0;
-}
+      }
 
-.el-form-item__content button.down::before {
-  content: '登陆';
-  transform: translateY(30px) scale(.6);
-  opacity: 0;
-}
+    }
 
-.el-form-item__content button.down::after {
-  content: '';
-  position: absolute;
-  border: 3px solid rgb(115, 0, 255);
-  border-top-color: #fff;
-  border-radius: 50%;
-  width: 1em;
-  height: 1em;
-  animation: spin 1s linear infinite;
-  opacity: 1;
-}
+    .pwdTips {
+      color: #000;
+      font-size: 14px;
+      font-weight: 600;
+      user-select: none;
 
-.el-form-item :deep(.el-form-item__error) {
-  text-shadow: 1px 1px 3px #000;
-  margin-top: 3px;
-  user-select: none;
-}
-
-.el-form-item__content :deep(.el-button):active {
-  color: #000;
-  border-color: none;
-  background-color: #fff;
-  outline: 0;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
+      &.error {
+        animation: shake 0.82s cubic-bezier(.36, .07, .19, .97) both;
+      }
+    }
   }
 }
-</style>  
-<style>
-input:-webkit-autofill {
-  -webkit-text-fill-color: #fff !important;
-  transition: background-color 5000s ease-in-out 0s;
+
+@keyframes loadToLeft {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
 }
 
-input:-internal-autofill-selected {
-  -webkit-text-fill-color: #999 !important;
-  background-color: rgb(98, 144, 222) !important;
-  background-image: none !important;
-  color: -internal-light-dark(black, white) !important;
+@keyframes shake {
+
+  10%,
+  90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+
+  20%,
+  80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%,
+  60% {
+    transform: translate3d(4px, 0, 0);
+  }
 }
 </style>

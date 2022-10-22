@@ -1,16 +1,16 @@
 // 一、配置axios
 import axios from 'axios'
 import { ElMessageBox } from 'element-plus'
+import { ref } from 'vue';
 // import store from '@/store/index' 如果使用vuex，那么token，userinfo都可以在登录以后存储到store中，不需要使用storage
 // 获取浏览器的接口地址。
-
+const now = ref(3)
 // document.cookie = 'admin=' + localStorage.getItem('lzy_token') as string
 const instance = axios.create({
   baseURL: window.location.origin,
   timeout: 5000,
   withCredentials: true,//表示跨域请求时是否需要使用凭证
 })
-console.log(`lzy ~ localStorage.getItem('lzy_token') as string`, localStorage.getItem('lzy_token') as string)
 // // 请求拦截器，设置token
 // instance.interceptors.request.use(config => {
 //   console.log('进入请求状态')
@@ -30,22 +30,27 @@ console.log(`lzy ~ localStorage.getItem('lzy_token') as string`, localStorage.ge
 // })
 // 响应拦截器
 instance.interceptors.response.use(response => {
-  console.log(`lzy ~ response.data`, response.status)
   if (response.status === 200) {
     // 993登录过期
     if (response.data.code != '10011') {
       return Promise.resolve(response)
     } else if (response.data.code == '10011') {
+      let timer: any = setTimeout(() => {
+        window.location.href = '/login'
+        console.log(123)
+      }, 2000)
       // store.commit('clearUserInfo')  // 使用vuex存储过用户信息，这里需要清空一下。
       localStorage.clear() // 清空本地存储
-      ElMessageBox.alert('登陆验证失败，请重新登陆！！', '提示', {
+      ElMessageBox.alert('登陆验证失败，请重新登陆！！(2秒后自动退出)', '提示', {
         // if you want to disable its autofocus
         // autofocus: false,
         confirmButtonText: '确定',
         callback: () => {
           window.location.href = '/login'
+          clearTimeout(timer)
         },
       })
+
     }
   } else {
     return Promise.reject(response)
