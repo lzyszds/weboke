@@ -1,7 +1,7 @@
 <script setup lang='ts'>
 import Icon from '@/components/icon.vue'
 import { ref, getCurrentInstance } from 'vue';
-import { useNow, useDateFormat } from '@vueuse/core'
+// import { useNow, useDateFormat } from '@vueuse/core'
 import { useRouter } from 'vue-router'
 import http from '@/http/http';
 
@@ -75,7 +75,7 @@ const activefn = (index) => {
   activeIndex.value = index
   router.push(items[index].path)
 }
-const formatted = useDateFormat(useNow(), 'YYYY-MM-DD HH:mm:ss')
+// const formatted = useDateFormat(useNow(), 'YYYY-MM-DD HH:mm:ss')
 
 //处理用户详情数据
 const infoData: any = ref()
@@ -117,7 +117,7 @@ infoData.value = data
           <span>室外温度：{{datalist?.temperature}}℃</span>
           <span>湿度：{{datalist?.humidity}}%RH</span>
         </p>
-        <p>{{formatted}}</p>
+        <!-- <p>{{formatted}}</p> -->
         <a :href="cip">IP: {{cip}}</a>
       </div>
       <div>

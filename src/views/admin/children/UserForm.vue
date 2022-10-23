@@ -1,7 +1,6 @@
 <script setup lang='ts'>
 import { reactive, ref, getCurrentInstance, defineProps, defineEmits } from 'vue'
 import { FormInstance, FormRules } from 'element-plus'
-import { useNow } from '@vueuse/core'
 import http from '@/http/http';
 const emit = defineEmits(['switchAdd', 'switchMod'])
 const props = defineProps({
@@ -33,17 +32,7 @@ const randomAvatar = () => {
     return arr[random]
   }
 }
-const random = randomAvatar()
-const ruleForm: any = ref({
-  headImg: random,
-  setHeadImg: random,
-  name: '',
-  username: '',
-  password: '',
-  power: 'user',
-  date: useNow(),
-  token: rangeDate() + rangeDate(), // 生成随机token
-})
+const ruleForm: any = ref()
 if (props.type == 'modify') {
   ruleForm.value = {
     headImg: 'http://localhost:1027' + props.data?.headImg,
@@ -55,6 +44,18 @@ if (props.type == 'modify') {
     date: props.data?.date,
     token: props.data?.token,
     uid: props.data?.uid,
+  }
+} else {
+  const random = randomAvatar()
+  ruleForm.value = {
+    headImg: random,
+    setHeadImg: random,
+    name: '',
+    username: '',
+    password: '',
+    power: 'user',
+    date: Date.now(),
+    token: rangeDate() + rangeDate(), // 生成随机token
   }
 }
 const rules = reactive<FormRules>({

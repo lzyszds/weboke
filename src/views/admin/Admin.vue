@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import SetLeft from './components/setLeft.vue'
+import SetLeft from './components/SetLeft.vue'
 </script>
 
 <template>

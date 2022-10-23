@@ -6,18 +6,23 @@ import dayjs from 'dayjs'
 import UserForm from './UserForm.vue'
 import load from '@/utils/loadings'
 import { httpData, User } from './type'
-
-//搜索框内容
-const searchInput = ref('')
+import Seach from '../components/Search.vue'
 
 const total = ref(1) //分页页数
-const pageSize = ref(9) //分页大小
+const pageSize = ref(10) //分页大小
 
 
 //表格数据（前页数据展示进表格中）
 const tableData = ref<User[]>()
+const tableSearchData = ref<User[]>()
 //定义分页size以及当前页数据
 const data = ref<httpData>({ code: 0, data: [], total: 0, })
+
+//时间格式化处理
+const setTime: any = (time: string) => {
+  const formatted = dayjs(time).format('YYYY-MM-DD')
+  return formatted
+}
 
 //分页事件、切换页码时提供load效果
 const handleCurrentChange = async (val: number, number?) => {
@@ -27,11 +32,7 @@ const handleCurrentChange = async (val: number, number?) => {
   const pagePara = '/admin/userList?pages=' + total.value + '&limit=' + pageSize.value
   data.value = await http('get', pagePara) as httpData
 
-  //时间格式化处理
-  const setTime: any = (time: string) => {
-    const formatted = dayjs(time).format('YYYY-MM-DD')
-    return formatted
-  }
+
   //数据处理 时间格式化 
   data.value.data.forEach((item: User) => {
     item.createDate = setTime(item.createDate)
@@ -40,7 +41,7 @@ const handleCurrentChange = async (val: number, number?) => {
   tableData.value = (data.value.data)
   setTimeout(() => {
     load.hide('#loadings')
-  }, 2000)
+  }, 1000)
 }
 handleCurrentChange(1, 0)
 //设置所有图片的地址 
@@ -111,15 +112,25 @@ const deleteUser = (event) => {
     handleCurrentChange(total.value)
   })
 }
+const searchData = (val) => {
+  //数据处理 时间格式化 
+  val.data.forEach((item: User) => {
+    item.createDate = setTime(item.createDate)
+    item.lastLoginDate = setTime(item.lastLoginDate)
+  })
+  console.log(`lzy ~ !val.searchInput`, !val.searchInput.value)
+  if (val.searchInput == '') {
+    tableSearchData.value = undefined
+  } else {
+    tableSearchData.value = val.data
+  }
+}
 </script>
 
 <template>
-  <div class="search">
-    <el-input class="searchInput" v-model="searchInput" placeholder="search" clearable />
-    <el-button class="btn" type="primary">Go</el-button>
-  </div>
+  <Seach type='user' @searchData="searchData" />
   <div class="tableuser" id="loadings">
-    <el-table :data="tableData" cell-class-name="lzyCell" style="width: 100%" stripe>
+    <el-table :data="tableSearchData||tableData" cell-class-name="lzyCell" height="729" style="width: 100%" stripe>
       <el-table-column type="selection" width="55" />
       <el-table-column property="uid" label="Id" sortable width="70"> </el-table-column>
       <el-table-column label="uname" width="200" show-overflow-tooltip>
@@ -191,7 +202,7 @@ const deleteUser = (event) => {
     <el-dialog v-model="modifyTheVis" :before-close="handleClose" title="修改用户" width="26%" left>
       <UserForm v-if="modifyTheVis" type="modify" :data="modifyData" @switchMod="switchMod" />
     </el-dialog>
-    <div class="example-pagination-block lzyColor">
+    <div class="example-pagination-block lzyColor" v-if="!tableSearchData">
       <!-- <div class="example-demonstration">When you have more than 7 pages</div> -->
       <el-pagination v-model="total" :currentPage="total" v-model:page-size="pageSize" background
         layout="prev, pager, next" :total="data.total" @current-change="handleCurrentChange" />
@@ -200,31 +211,6 @@ const deleteUser = (event) => {
 </template>
 
 <style lang="less" scoped>
-.search {
-  height: 50px;
-  width: 100%;
-
-  :deep(.searchInput) {
-    width: 200px;
-    margin: 10px 0 0 20px;
-
-    .el-input__wrapper {
-      border-radius: 15px 0 0 15px;
-
-      &.is-focus {
-        box-shadow: 0 0 0 1px var(--themeColor) inset
-      }
-    }
-  }
-
-  :deep(.btn) {
-    margin-top: 10px;
-    border-radius: 0 15px 15px 0;
-    background-color: var(--themeColor);
-    border-color: transparent;
-  }
-}
-
 .tableuser {
   height: calc(100vh - 200px);
   // padding-top: 50px;

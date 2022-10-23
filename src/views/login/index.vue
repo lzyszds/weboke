@@ -69,10 +69,10 @@ const back = () => {
 <template>
   <div class="login">
     <div class="card">
-      <div class="item top">
+      <!-- <div class="item top">
         <img src="http://localhost:1027/public/img/lzjyBlack.png" alt="">
         <p>Sign In</p>
-      </div>
+      </div> -->
       <div class="item center">
         <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" class="demo-ruleForm" status-icon>
           <el-form-item prop="username">
@@ -114,7 +114,9 @@ const back = () => {
 .login {
   width: 100vw;
   height: 100vh;
-  background: var(--themeColor);
+  background: url('@/assets/image/login/dark-l1.png') center; //var(--themeColor);
+  background-position: center;
+  background-size: 105%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -122,10 +124,10 @@ const back = () => {
   top: 0;
 
   .card {
-    width: 400px;
-    height: 320px;
-    background-color: rgba(255, 255, 255, 1);
-    backdrop-filter: blur(10px);
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, .3);
+    backdrop-filter: blur(3px);
     border-radius: 10px;
     box-shadow: 0 1px 8px 10px rgba(0, 0, 0, .2);
     transition: .6s;
@@ -227,6 +229,7 @@ const back = () => {
             background-color: var(--themeColor);
             display: flex;
             overflow: hidden;
+            border: none;
 
             &:nth-child(1) span:nth-child(1) {
               display: flex;
