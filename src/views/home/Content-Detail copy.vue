@@ -3,12 +3,7 @@ import { onMounted, ref, getCurrentInstance } from 'vue'
 import Icon from '@/components/icon.vue';
 import Maincontent from '../../components/Maincontent.vue';
 import { useEventListener } from '@vueuse/core'
-import { useRoute } from 'vue-router';
-import http from '@/http/http';
-const route = useRoute()
-const aid = route.path.replace('/home/detail/', '')
-const dataDet = ref<any>(await http('get', '/admin/articleDetail?aid=' + aid))
-dataDet.value = dataDet.value.data
+
 const { proxy } = getCurrentInstance() as any
 const tocList = ref<any>([]);
 const tocACindex = ref<string>('#toc-head-1');
@@ -24,7 +19,7 @@ const listComment = ref([
     content: '这是一条评论'
   },
 ])
-// const articleList = await http('get', '/articleList')
+
 
 
 onMounted(() => {
@@ -36,23 +31,28 @@ onMounted(() => {
       element.innerHTML = element.getAttribute('data-line-number')
     });
   })
-  setTimeout(() => {
-    //获取当前文章的索引目录
-    let toc = document.querySelectorAll('h3,h4') as any;
-    toc.forEach((element: any) => {
-      tocList.value.push({
-        title: element.innerText,
-        id: "#" + element.id,
-        top: element.offsetTop,
-        nodeName: element.nodeName
-      })
+  //获取当前文章的索引目录
+  let toc = document.querySelectorAll('h3,h4') as any;
+  toc.forEach((element: any) => {
+    tocList.value.push({
+      title: element.innerText,
+      id: "#" + element.id,
+      top: element.offsetTop,
+      nodeName: element.nodeName
     })
-    //监听滚动事件
-    handleScroll();
-    setTimeout(() => {
-      affixElm.value!.style.height = document.querySelector('.main')?.getBoundingClientRect().height + 'px';
-    }, 500);
-  }, 1000)
+  })
+  //监听滚动事件
+  handleScroll();
+  setTimeout(() => {
+    affixElm.value!.style.height = document.querySelector('.main')?.getBoundingClientRect().height + 'px';
+  }, 500);
+  proxy.$fancyapps.Fancybox.bind('[data-fancybox="gallery"]', {
+    caption: function (fancybox: any, carousel: any, slide: any) {
+      return (
+        `${slide.index + 1} / ${carousel.slides.length} <br />` + slide.caption
+      );
+    },
+  })
 })
 function setTimestamp(time: string) {
   return proxy.$common.timeAgo(time)
@@ -80,11 +80,11 @@ function handleScroll() {
     <div class="imgtop">
       <img src="http://localhost:1027/public/img/bg.jpg" alt="">
       <div class="topTitle center">
-        <h2>{{ dataDet.title }}</h2>
-        <p>{{ dataDet.author }} {{ dataDet.createTime }} {{ dataDet.comNumber }}条评论</p>
+        <h2>中秋前后 II</h2>
+        <p>lzy 2021-09-19 0条评论 中秋前后 II</p>
       </div>
     </div>
-    <Maincontent :main="dataDet.main"></Maincontent>
+    <Maincontent></Maincontent>
     <div class="affix-container" ref="affixElm">
       <div class="affix">
         <div class="affix-title">

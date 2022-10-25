@@ -12,7 +12,11 @@ import { onMounted } from "vue";
       <!-- 中心内容 -->
       <router-view class="router-view" v-slot="{ Component }">
         <transition name="fade" mode="out-in">
-          <component :is="Component" />
+          <Suspense>
+
+            <component :is="Component" />
+          </Suspense>
+
         </transition>
       </router-view>
     </div>

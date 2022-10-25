@@ -50,6 +50,20 @@ import SetLeft from './components/SetLeft.vue'
     height: 100%;
     background-color: #fff;
     border-radius: 0 10px 10px 0;
+
+    &::after {
+      content: '';
+      display: block;
+      height: 170px;
+      width: 120px;
+      position: absolute;
+      top: -10px;
+      right: 36px;
+      transform: translateX(-50%);
+      background: url('@/assets/image/没有更多笔记.svg') no-repeat;
+      z-index: 1;
+      opacity: 1;
+    }
   }
 }
 </style>

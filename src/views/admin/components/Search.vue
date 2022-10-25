@@ -1,7 +1,7 @@
 <script setup lang='ts'>
 import http from '@/http/http';
 import { ref, defineProps, defineEmits } from 'vue';
-import { httpData } from '../children/type'
+import { httpData } from '../children/user/type'
 const emit = defineEmits(['searchData'])
 const props = defineProps({
   type: {
@@ -17,10 +17,8 @@ const search = () => {
     case 'user':
       const pagePara = '/admin/searchUser?search=' + searchInput.value
       http('get', pagePara).then((res: httpData) => {
-        emit('searchData', {
-          data: res.data,
-          searchInput: searchInput.value
-        })
+        emit('searchData', { data: res.data, searchInput: searchInput.value })
+
       })
       break;
   }

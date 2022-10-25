@@ -50,15 +50,15 @@ const routes = [
         component: () =>
             import('@/views/admin/Admin.vue'),
         children: [{
-            path: '/userAdmin/user',
+            path: '/userAdmin/User',
             name: 'user',
             component: () =>
-                import('@/views/admin/children/User.vue')
+                import('@/views/admin/children/user/User.vue')
         }, {
-            path: '/userAdmin/episit',
+            path: '/userAdmin/Article',
             name: 'episit',
             component: () =>
-                import('@/views/admin/children/Episit.vue')
+                import('@/views/admin/children/article/Article.vue')
         }]
 
 

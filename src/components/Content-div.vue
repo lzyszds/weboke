@@ -10,13 +10,13 @@ const list = [
 const props: any = defineProps({
     data: {},
 })
-const { taikong9, taikong13, taikong17 } = props.data.information
+const { createTime, authorId, comNumber } = props.data
 const selectHandle = (index: number) => {
-    if (index == 0) return taikong13
-    if (index == 1) return taikong9
-    if (index == 2) return taikong17 + '条评论'
+    if (index == 0) return authorId
+    if (index == 1) return createTime
+    if (index == 2) return comNumber + '条评论'
 }
-const { text, image, title } = props.data.content
+const { content, titleImg, title } = props.data
 onMounted(() => {
     const con = document.querySelectorAll('.conDiv')
     con.forEach((item: any, index) => {
@@ -31,14 +31,14 @@ onMounted(() => {
 
 <template>
     <div class="conDiv">
-        <img v-lazy :src="image" alt="">
+        <img v-lazy :src="titleImg" alt="">
         <div class="conDiv_text">
-            <div class="title">{{title}}</div>
-            <div class="synopsis"> {{text}} </div>
+            <div class="title">{{ title }}</div>
+            <div class="synopsis"> {{ content }} </div>
             <div class="time">
-                <span v-for="(item,index) in list " :key="index">
+                <span v-for="(item, index) in list " :key="index">
                     <Icon :fill="item.fill" :name="item.name"></Icon>
-                    {{selectHandle(index)}}
+                    {{ selectHandle(index) }}
                 </span>
             </div>
         </div>
@@ -56,8 +56,8 @@ onMounted(() => {
     margin-top: 3px;
     background-color: #fff;
     /* transition: 0.5s all; */
-    opacity: 0;
-    display: none;
+    opacity: 1;
+    /* display: none; */
 }
 
 .conDiv.animate {
@@ -405,6 +405,7 @@ onMounted(() => {
 /* 超出数量显示省略号 */
 .synopsis {
     /* width: 500px; */
+    height: 60px;
     font-size: 14px;
     color: #888;
     text-overflow: -o-ellipsis-lastline;

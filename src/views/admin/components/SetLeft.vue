@@ -4,6 +4,7 @@ import { ref, getCurrentInstance } from 'vue';
 // import { useNow, useDateFormat } from '@vueuse/core'
 import { useRouter } from 'vue-router'
 import http from '@/http/http';
+import dayjs from 'dayjs'
 
 const router = useRouter()
 const { proxy } = getCurrentInstance() as any
@@ -26,6 +27,7 @@ promiseion.then(res => {
   datalist.value = res.data.lives[0]
   cip.value = res.cip
 })
+
 const items = [
   {
     name: '用户管理',
@@ -35,7 +37,7 @@ const items = [
   {
     name: '文章管理',
     uicon: '<i class="iconfont">&#xe606;</i>',
-    path: '/userAdmin/episit'
+    path: '/userAdmin/Article'
   },
   {
     name: '评论管理',
@@ -67,7 +69,14 @@ const items = [
     path: '/login'
   },
 ]
+
 const activeIndex = ref(0)
+items.forEach((item, index) => {
+  if (item.path === router.currentRoute.value.path) {
+    activeIndex.value = index
+  }
+})
+
 const activefn = (index) => {
   if (items[index].name == '退出登陆') {
     localStorage.removeItem('lzy_token')
@@ -75,8 +84,10 @@ const activefn = (index) => {
   activeIndex.value = index
   router.push(items[index].path)
 }
-// const formatted = useDateFormat(useNow(), 'YYYY-MM-DD HH:mm:ss')
-
+const formatted = ref(dayjs()?.format('YYYY-MM-DD HH:mm:ss'))
+setInterval(() => {
+  formatted.value = dayjs()?.format('YYYY-MM-DD HH:mm:ss')
+}, 1000)
 //处理用户详情数据
 const infoData: any = ref()
 const { data } = await http('get', '/admin/getUserInfo') as any
@@ -88,16 +99,17 @@ if (data.perSign) {
 }
 
 infoData.value = data
+
 </script>
 
 <template>
   <div class="setleft">
     <div class="logo"> Lzyszds </div>
     <div class="userinfo">
-      <div class="headPortrait"><img :src="'http://localhost:1027'+infoData.headImg" alt=""> </div>
-      <h3>{{infoData.uname}}</h3>
-      <p>「{{infoData.perSign[0]}}」</p>
-      <p>{{infoData.perSign[1]}}</p>
+      <div class="headPortrait"><img :src="'http://localhost:1027' + infoData.headImg" alt=""> </div>
+      <h3>{{ infoData.uname }}</h3>
+      <p>「{{ infoData.perSign[0] }}」</p>
+      <p>{{ infoData.perSign[1] }}</p>
       <p class="essCount">
         <Icon :name="`icon-youxiang`" :fill="`#5161ce`"></Icon>
         <span>17</span>
@@ -105,20 +117,20 @@ infoData.value = data
     </div>
     <div class="list">
       <div class="list_item" v-for="(item, index) in items" :key="index" @click="activefn(index)"
-        :class="{'active':activeIndex==index}">
+        :class="{ 'active': activeIndex == index }">
         <span v-html="item.uicon"></span>
-        <span>{{item.name}}</span>
+        <span>{{ item.name }}</span>
       </div>
     </div>
     <div class="footer">
       <div class="time">
         <p class="weacher">
-          <span>{{datalist?.city}} {{datalist?.weather}} </span>
-          <span>室外温度：{{datalist?.temperature}}℃</span>
-          <span>湿度：{{datalist?.humidity}}%RH</span>
+          <span>{{ datalist?.city }} {{ datalist?.weather }} </span>
+          <span>室外温度：{{ datalist?.temperature }}℃</span>
+          <span>湿度：{{ datalist?.humidity }}%RH</span>
         </p>
-        <!-- <p>{{formatted}}</p> -->
-        <a :href="cip">IP: {{cip}}</a>
+        <p>{{ formatted }}</p>
+        <a :href="cip">IP: {{ cip }}</a>
       </div>
       <div>
         <p>© 2022 Lzyszds</p>

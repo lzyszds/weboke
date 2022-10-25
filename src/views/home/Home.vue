@@ -1,12 +1,12 @@
 <script setup lang='ts'>
-import { ref, reactive, getCurrentInstance, nextTick, onMounted, onBeforeUnmount } from 'vue'
+import { ref, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import ContentHead from '@/components/Content-head.vue'
 import ContentDiv from '@/components/Content-div.vue'
 import { useEventListener } from '@vueuse/core'
+import http from '@/http/http';
 
-const list = reactive([{ information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1027/public/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1027/public/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1027/public/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1027/public/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1027/public/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1027/public/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1027/public/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1027/public/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1027/public/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1027/public/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1027/public/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1027/public/img/bg.jpg' } },])
-const { proxy } = getCurrentInstance() as any
-const listNew = ref(proxy.$common.splitArray(list, 5))
+const list = ref(await http('get', '/admin/articleList?page=1&limit=5')) as any
+//const list = reactive([{ information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1027/public/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1027/public/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1027/public/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1027/public/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1027/public/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1027/public/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1027/public/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1027/public/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1027/public/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1027/public/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1027/public/img/bg.jpg' } }, { information: { taikong13: 'lzy', taikong9: '2021-09-19', taikong17: '0', }, content: { title: '中秋前后 II', text: `上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇 是2019年了，那是我刚上研究生的时候，时隔三年。今年生日的时候本来是想写一篇博文，但是写了一上一篇`, image: 'http://localhost:1027/public/img/bg.jpg' } },])
 const indexList = ref(0)
 const isload = ref(true)
 const currentChange = (e: number) => {
@@ -17,9 +17,10 @@ const currentChange = (e: number) => {
   })
 }
 onMounted(() => {
-  const listSum = document.querySelector('#listSum') as HTMLElement
-  const example = document.querySelector('#example') as HTMLElement
   useEventListener(window, 'scroll', () => {
+    const listSum = document.querySelector('#listSum') as HTMLElement
+    const example = document.querySelector('#example') as HTMLElement
+    if (!example) return
     if (window.scrollY >= 820) {
       example.style.opacity = '1'
       listSum.style.transform = 'translateY(200px)'
@@ -52,7 +53,7 @@ onBeforeUnmount(() => {
       <!-- 文章内容 -->
       <div class="listCom" v-if="isload">
         <img v-lazy class="listImg" id="listSum" src="http://localhost:1027/public/img/leftbg2.jpg" alt="">
-        <router-link v-for="(item,index) in listNew[indexList]" :key="index" :to="`/home/detail/`+index">
+        <router-link v-for="(item, index) in list.data" :key="index" :to="'/home/detail/' + item.aid">
           <ContentDiv :data="item">
           </ContentDiv>
         </router-link>
@@ -60,7 +61,7 @@ onBeforeUnmount(() => {
       <!-- 文章分页 -->
       <div class="example-pagination-block lzy-center" id="example">
         <div class="example-demonstration">When the content ends, turn the page to see the new content</div>
-        <el-pagination layout="prev, pager, next" :total="listNew.length*10" @current-change="currentChange" />
+        <el-pagination layout="prev, pager, next" :total="list.total" @current-change="currentChange" />
       </div>
     </div>
 
