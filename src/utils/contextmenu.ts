@@ -12,9 +12,9 @@ const menuItems = [
     events: {
       click: (e) => {
         //获取当前浏览器选中的文本
-        const text = window.getSelection().toString()
+        const text = window.getSelection()!.toString()
         //将文本通过 clipboard 传入剪切板
-        navigator.clipboard.writeText(text).then(function (res) {
+        navigator.clipboard.writeText(text).then(() => {
           if (!text) return ElNotification({ title: '复制失败', message: '请选择文本' })
           ElNotification({ title: '提示', message: '复制成功：' + text })
           /* clipboard successfully set */
@@ -38,7 +38,7 @@ const menuItems = [
     divider: "top", // top, bottom, top-bottom
   },
 ];
-let ul = null;
+let ul
 window.addEventListener("contextmenu", (e) => {
   e.preventDefault();
   if (ul) ul.remove();
@@ -47,7 +47,7 @@ window.addEventListener("contextmenu", (e) => {
   ul.classList.add("contextMenu");
   menuItems.forEach((item, index) => {
     const button = document.createElement("button");
-    const li = document.createElement("li");
+    const li: any = document.createElement("li");
     button.classList.add("contextMenu-button");
     li.classList.add("contextMenu-item");
     button.innerHTML = item.content;
@@ -72,7 +72,7 @@ window.addEventListener("blur", removeMessage);
 
 //提示框
 function ElNotification(options) {
-  const content = document.querySelectorAll('.notification-content')
+  const content: any = document.querySelectorAll('.notification-content')
   let top = null
   if (content.length > 0) {
     top = content[content.length - 1].parentNode.offsetTop +
@@ -91,14 +91,14 @@ function ElNotification(options) {
       <svg viewBox="0 0 24 24" width="17" height="17" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
     </div>
   `;
-  const close = notification.querySelector('.notification-close')
+  const close: any = notification.querySelector('.notification-close')
   const closeclick = close.addEventListener('click', function (e) {
     close.removeEventListener('click', closeclick)
     notification.remove()
   })
   document.body.appendChild(notification);
-  const title = notification.querySelector('.notification-title')
-  const message = notification.querySelector('.notification-message')
+  const title = notification.querySelector('.notification-title') as HTMLDivElement
+  const message = notification.querySelector('.notification-message') as HTMLDivElement
   notification.style.height =
     title.scrollHeight
     + message.scrollHeight + 34 + 'px'

@@ -1,6 +1,5 @@
 <script setup lang='ts'>
 import { onMounted, ref, getCurrentInstance } from 'vue'
-import Icon from '@/components/icon.vue';
 import Maincontent from '../../components/Maincontent.vue';
 import { useEventListener } from '@vueuse/core'
 import { useRoute } from 'vue-router';
@@ -38,7 +37,7 @@ onMounted(() => {
   })
   setTimeout(() => {
     //获取当前文章的索引目录
-    let toc = document.querySelectorAll('h3,h4') as any;
+    let toc = document.querySelectorAll('h2,h3,h4') as any;
     toc.forEach((element: any) => {
       tocList.value.push({
         title: element.innerText,
@@ -54,6 +53,7 @@ onMounted(() => {
     }, 500);
   }, 1000)
 })
+//处理时间戳转换成距离当前日期的时间（一天前，两天前）
 function setTimestamp(time: string) {
   return proxy.$common.timeAgo(time)
 }
@@ -80,15 +80,15 @@ function handleScroll() {
     <div class="imgtop">
       <img src="http://localhost:1027/public/img/bg.jpg" alt="">
       <div class="topTitle center">
-        <h2>{{ dataDet.title }}</h2>
-        <p>{{ dataDet.author }} {{ dataDet.createTime }} {{ dataDet.comNumber }}条评论</p>
+        <h1>{{ dataDet.title }}</h1>
+        <p>{{ dataDet.author }} {{ setTimestamp(dataDet.createTime) }} {{ dataDet.comNumber }}条评论</p>
       </div>
     </div>
     <Maincontent :main="dataDet.main"></Maincontent>
     <div class="affix-container" ref="affixElm">
       <div class="affix">
         <div class="affix-title">
-          <Icon :name="`icon-icon-taikong17`"></Icon>
+          <lzyIcon :name="`icon-icon-taikong17`"></lzyIcon>
           <span>目录</span>
         </div>
         <ul class="affix-list">
@@ -101,7 +101,7 @@ function handleScroll() {
     </div>
     <footer class="post-footer center ">
       <div class="tool">
-        <Icon :name="`icon-icon-taikong20`" :fill="`#000`"></Icon>
+        <lzyIcon :name="`icon-icon-taikong20`" :fill="`#000`"></lzyIcon>
         <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享署名-非商业性使用-相同方式共享 4.0
           国际许可协议</a>
       </div>
@@ -112,7 +112,7 @@ function handleScroll() {
           <a href="https://wp.gxnas.com/11358.html#respond" rel="nofollow">日常</a>
         </div>
         <div class="footer-share">
-          <Icon :name="`icon-icon-taikong1`" :fill="`#000`"></Icon>
+          <lzyIcon :name="`icon-icon-taikong1`" :fill="`#000`"></lzyIcon>
           <span>分享</span>
         </div>
       </div>
@@ -195,7 +195,7 @@ function handleScroll() {
   text-shadow: 1px 2px 4px #000;
 }
 
-.topTitle h2 {
+.topTitle h1 {
   font-size: 40px;
   margin-bottom: 20px;
   font-family: 'douyu';
@@ -351,11 +351,11 @@ function handleScroll() {
 .affix-container {
   position: absolute;
   top: 480px;
-  right: 30px;
+  right: 0px;
   background-color: #fff;
   font-size: 16px;
   z-index: 1;
-  width: 200px;
+  /* width: 200px; */
   height: 100%;
   background-color: transparent;
   right: calc(40% - 520px);
@@ -384,6 +384,10 @@ function handleScroll() {
 
 .affix-title span {
   line-height: 28px;
+}
+
+.affix-list {
+  padding: 0 10px;
 }
 
 .affix-list .active {

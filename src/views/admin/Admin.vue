@@ -28,42 +28,8 @@ import SetLeft from './components/SetLeft.vue'
   justify-content: center;
   align-content: center;
 }
+</style>
 
-.admin {
-  width: 90vw;
-  height: 90vh;
-  background-color: #eef7ff;
-  border-radius: 10px;
-  display: grid;
-  grid-template-columns: 1fr 4fr;
-
-  .tool {
-    // width: 400px;
-    height: 100%;
-    background-color: #fff;
-    border-radius: 10px 0 0 10px;
-    // box-shadow: 0 0 4px 3px rgba(0, 0, 0, 0.1);
-    margin-right: 30px;
-  }
-
-  .content {
-    height: 100%;
-    background-color: #fff;
-    border-radius: 0 10px 10px 0;
-
-    &::after {
-      content: '';
-      display: block;
-      height: 170px;
-      width: 120px;
-      position: absolute;
-      top: -10px;
-      right: 36px;
-      transform: translateX(-50%);
-      background: url('@/assets/image/没有更多笔记.svg') no-repeat;
-      z-index: 1;
-      opacity: 1;
-    }
-  }
-}
+<style lang="less">
+@import url('@/assets/css/admin.less');
 </style>

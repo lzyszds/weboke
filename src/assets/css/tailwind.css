@@ -36,3 +36,7 @@ ui {
 .dark {
     transition: .3s;
 }
+
+svg {
+    display: initial;
+}

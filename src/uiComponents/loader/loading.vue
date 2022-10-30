@@ -4,7 +4,8 @@ import { ref, getCurrentInstance } from 'vue';
 import { useDateFormat } from '@vueuse/core'
 const data = ref<any>([])
 const { proxy } = getCurrentInstance() as any
-const { data: datas, cid } = await proxy.$common.getIpWeather()
+const datas = await proxy.$common.getIpWeather()
+
 data.value = datas
 // 高德地图api
 function getWeather() {
@@ -12,14 +13,14 @@ function getWeather() {
     避免当前使用的ip为国外ip 导致的获取不到ip 
     sougou的查询ip方法不支持国外ip
   */
-  if (!cid) {
-    console.warn('当前网络环境不支持获取天气信息(把梯子关了才行)')
-    return `/src/assets/icon/weather/undefind.svg`
-  }
-  const { weather, reporttime } = data.value.lives[0]
-  const formatted: any = useDateFormat(reporttime, 'HH')
+  // if (!cid) {
+  //   console.warn('当前网络环境不支持获取天气信息(把梯子关了才行)')
+  //   return `/src/assets/icon/weather/undefind.svg`
+  // }
+  const { weatherData, beijingTime } = data.value
+  const formatted: any = useDateFormat(beijingTime, 'HH')
   const isdark = formatted >= 19 || formatted <= 6
-  switch (weather) {
+  switch (weatherData.weather) {
     case '晴':
       return isdark ? img.NightSunny : img.Sunny
     case '多云': case '少云':

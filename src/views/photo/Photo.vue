@@ -1,11 +1,9 @@
-<script setup >
-
+<script setup lang='ts'>
+import Markdown from '@/uiComponents/markdown/index.vue'
 </script>
 
 <template>
-    <div>
-        相册，还没想好怎么开发
-    </div>
+    <Markdown></Markdown>
 </template>
 
 <style scoped>

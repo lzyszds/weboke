@@ -1,5 +1,4 @@
 <script setup lang='ts'>
-import Icon from '@/components/icon.vue'
 import { ref, getCurrentInstance } from 'vue';
 // import { useNow, useDateFormat } from '@vueuse/core'
 import { useRouter } from 'vue-router'
@@ -9,23 +8,25 @@ import dayjs from 'dayjs'
 const router = useRouter()
 const { proxy } = getCurrentInstance() as any
 interface IWeather {
-  adcode: String
-  city: String
-  humidity: String
-  province: String
-  reporttime: String
-  temperature: String
+  humidity: Number | String
+  pm25: Number | String
+  rainfall: Number | String
+  region: String
+  temperature: Number | String
+  updateTime: String
+  visibility: String
   weather: String
-  winddirection: String
-  windpower: String
+  windDirection: String
+  windPower: Number | String
 }
 const datalist = ref<IWeather>()
 const cip = ref<string>()
 // data:天气数据   cid:城市id 
 const promiseion = proxy.$common.getIpWeather()
 promiseion.then(res => {
-  datalist.value = res.data.lives[0]
-  cip.value = res.cip
+  datalist.value = res.weatherData
+  datalist.value!.region = res.region
+  cip.value = res.ip
 })
 
 const items = [
@@ -67,6 +68,11 @@ const items = [
     name: '退出登陆',
     uicon: '<i class="iconfont">&#xe60b;</i>',
     path: '/login'
+  },
+  {
+    name: '返回首页',
+    uicon: '<i class="iconfont">&#xe60b;</i>',
+    path: '/'
   },
 ]
 
@@ -111,7 +117,7 @@ infoData.value = data
       <p>「{{ infoData.perSign[0] }}」</p>
       <p>{{ infoData.perSign[1] }}</p>
       <p class="essCount">
-        <Icon :name="`icon-youxiang`" :fill="`#5161ce`"></Icon>
+        <lzyIcon :name="`icon-youxiang`" :fill="`#5161ce`"></lzyIcon>
         <span>17</span>
       </p><!-- 消息数量-->
     </div>
@@ -125,9 +131,13 @@ infoData.value = data
     <div class="footer">
       <div class="time">
         <p class="weacher">
-          <span>{{ datalist?.city }} {{ datalist?.weather }} </span>
-          <span>室外温度：{{ datalist?.temperature }}℃</span>
-          <span>湿度：{{ datalist?.humidity }}%RH</span>
+          <el-tooltip class="box-item" effect="lzy_dark"
+            :content="`湿度：${datalist?.humidity}%RH 风向：${datalist?.windDirection} 降水量：${datalist?.rainfall}mm`"
+            placement="top">
+            <span>{{ datalist?.region }} {{ datalist?.weather }} 室外温度：{{ datalist?.temperature }}℃ </span>
+          </el-tooltip>
+
+          <!-- <span>湿度：{{ datalist?.humidity }}%RH</span> -->
         </p>
         <p>{{ formatted }}</p>
         <a :href="cip">IP: {{ cip }}</a>

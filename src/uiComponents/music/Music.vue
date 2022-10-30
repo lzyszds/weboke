@@ -131,6 +131,29 @@ let data = reactive({
   musicId: [],
   hasClick: false, //是否点击过歌单列表
 });
+
+http('get', "/music/register/anonimous").then((res) => {
+  // console.log(`lzy ~ res`, res)
+});
+http('get', "/music/login/refresh").then((res) => {
+  // console.log(`lzy ~ res`, res)
+});
+
+http('get', "/music/login/status").then((res) => {
+  // console.log(`lzy ~ res`, res)
+}).catch(err => {
+  if (err.response.status == '400') {
+    http('get', "/music/login/cellphone?phone=15077415810&password=a395878870").then((res) => {
+      console.log(`lzy ~ res`, res)
+    });
+  }
+})
+// http('get', "/music/logout").then((res) => {
+//   console.log(`lzy ~ res`, res)
+// })
+// http('get', "/admin/musicLogin").then((res) => {
+//   console.log(`lzy ~ res`, res)
+// })
 http('get', "/music/playlist/detail?id=7480206477").then((res) => {
   data.musicId.push(...res.privileges);
 });

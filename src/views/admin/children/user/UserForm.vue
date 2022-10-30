@@ -23,6 +23,7 @@ const randomAvatar = () => {
     'http://localhost:1027/public/img/updataImg/put5.jpg',
     'http://localhost:1027/public/img/updataImg/put6.jpg',
     'http://localhost:1027/public/img/updataImg/put7.jpg',
+    'http://localhost:1027/public/img/updataImg/put8.jpg',
   ]
   const random = Math.floor(Math.random() * arr.length) as any
   if (localStorage.getItem('randomAvatar') == random) {
@@ -172,8 +173,8 @@ const submitUpload = () => {
           </div>
           <el-button class="recommended" @click="handleExceed"> 系统推荐 </el-button>
         </div>
-        <div class="el-upload__tip text-red" :class="{grey:messagetxt.indexOf('limit')!=-1}">
-          {{messagetxt}}
+        <div class="el-upload__tip text-red" :class="{ grey: messagetxt.indexOf('limit') != -1 }">
+          {{ messagetxt }}
         </div>
       </div>
     </div>

@@ -1,266 +1,189 @@
 <script setup lang='ts'>
-import { reactive, ref, getCurrentInstance, defineProps, defineEmits } from 'vue'
-import { FormInstance, FormRules } from 'element-plus'
-import http from '@/http/http';
-const emit = defineEmits(['switchAdd', 'switchMod'])
+import { ref, defineProps, getCurrentInstance, defineEmits, h } from 'vue'
+import { ElMessageBox, } from 'element-plus'
+import http from '@/http/http'
+import toolbar from './toolbar'
+const { proxy } = getCurrentInstance() as any
+const emit = defineEmits(['switchMod'])
+const orderTool = `emoji undo redo clear |h bold italic strikethrough quote addTag test |left center right ul ol table hr | link image  code tip | save tips`
 const props = defineProps({
   type: String,
   data: Object,
 })
-const { proxy } = getCurrentInstance() as any
-const formSize = ref('default')
-const ruleFormRef = ref<FormInstance>()
-const rangeDate = () => {
-  return (Math.random() * 1e-4).toString(36).slice(-8)
+interface storageType {
+  text: string,
+  html: string,
 }
-//随机推荐头像
-const randomAvatar = () => {
-  const arr: string[] = [
-    'http://localhost:1027/public/img/updataImg/put1.jpg',
-    'http://localhost:1027/public/img/updataImg/put2.jpg',
-    'http://localhost:1027/public/img/updataImg/put3.jpg',
-    'http://localhost:1027/public/img/updataImg/put4.jpg',
-    'http://localhost:1027/public/img/updataImg/put5.jpg',
-    'http://localhost:1027/public/img/updataImg/put6.jpg',
-    'http://localhost:1027/public/img/updataImg/put7.jpg',
-  ]
-  const random = Math.floor(Math.random() * arr.length) as any
-  if (localStorage.getItem('randomAvatar') == random) {
-    return randomAvatar()
+const storage = ref<storageType>({ text: '', html: '' })
+const text = ref<any>(props.data?.content)
+const html = ref<any>(props.data?.html)
+const title = ref<string>(props.data?.title || '')
+
+//确认提交
+const submitForm = () => {
+  const data = {
+    author: 'lzy',
+    title: title.value,
+    content: storage.value.text,
+    main: storage.value.html,
+    coverImg: 'http://localhost:1027/public/img/bg.jpg',
+    aid: props.type === 'modify' ? props.data?.aid : null,
+  }
+  const url = props.type === 'modify' ? 'updateArticle' : 'addArticle'
+  //当前是否保存
+  if (storage.value.text === text.value || storage.value.html === html.value) {
+    http('post', `/admin/${url}`, data).then((res: any) => {
+      if (res.code === 200) {
+        emit('switchMod', false)
+      }
+    })
   } else {
-    localStorage.setItem('randomAvatar', random)
-    return arr[random]
+    ElMessageBox({
+      title: '提示',
+      message: h('p', null, [
+        h('span', null, '输入内容还未保存，是否需要保存 '),
+      ]),
+      showCancelButton: true,
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+    })
+      .then(() => {
+        const save = document.querySelector('.v-md-icon-save') as HTMLLIElement
+        save.click()
+        submitForm()
+      })
   }
+  // http('post', '/admin/' + url, data).then((res: any) => {
+  //   if (res.code === 200) {
+  //     emit('switchMod', false)
+  //   } else {
+  //     emit('switchMod', true)
+  //   }
+  // })
 }
-const ruleForm: any = ref()
-if (props.type == 'modify') {
-  ruleForm.value = {
-    headImg: 'http://localhost:1027' + props.data?.headImg,
-    setHeadImg: 'http://localhost:1027' + props.data?.headImg,
-    name: props.data?.uname,
-    username: props.data?.username,
-    password: props.data?.pwd,
-    power: props.data?.power,
-    date: props.data?.date,
-    token: props.data?.token,
-    uid: props.data?.uid,
-  }
-} else {
-  const random = randomAvatar()
-  ruleForm.value = {
-    headImg: random,
-    setHeadImg: random,
-    name: '',
-    username: '',
-    password: '',
-    power: 'user',
-    date: Date.now(),
-    token: rangeDate() + rangeDate(), // 生成随机token
-  }
-}
-const rules = reactive<FormRules>({
-  name: [
-    { required: true, message: '名称不能为空,请输入名称', trigger: 'blur' },
-    { min: 3, max: 16, message: '名称要求不符合(3-16位)', trigger: 'blur' },
-  ],
-  username: [
-    { required: true, message: '账号名不能为空,请输入账号名', trigger: 'blur' },
-    { min: 3, max: 16, message: '账号名要求不符合(3-16位)', trigger: 'blur' },
-  ],
-  password: [
-    { required: true, message: '密码不能为空,请输入密码', trigger: 'blur' },
-    { min: 6, max: 16, message: '密码要求不符合(6-16位)', trigger: 'blur' },
-  ],
-})
+//暂存按钮
+const resetForm = () => {
 
-const onAddUser = () => {
-  ruleForm.value.setHeadImg = ruleForm.value.headImg.replace('http://localhost:1027', '');
-  http('POST', '/admin/addUserLzy', ruleForm.value)
-    .then(() => {
-      emit('switchAdd', false)
-    })
-    .catch((err) => {
-      console.log(err)
-    })
 }
-const onmodifyUser = () => {
-  ruleForm.value.setHeadImg = ruleForm.value.headImg.replace('http://localhost:1027', '');
-  http('POST', '/admin/updateUserLzy', ruleForm.value)
-    .then(() => {
-      emit('switchMod', false)
-    })
-    .catch((err) => {
-      console.log(err)
-    })
-}
-
-//提交表单入后台
-const submitForm = async (formEl: FormInstance | undefined) => {
-  if (!formEl) return
-  await formEl.validate((valid, fields) => {
-    if (valid) {
-      if (props.type === 'modify') onmodifyUser() //修改用户数据
-      else onAddUser()  //新增用户
-    } else {
-      console.log('error submit!', fields)
-    }
-  })
-}
-
-const resetForm = (formEl: FormInstance | undefined) => {
-  if (!formEl) return
-  formEl.resetFields()
-}
-
-const handleExceed = () => {
-  const random = randomAvatar()
-  ruleForm.value.headImg = random;
-  ruleForm.value.setHeadImg = random?.replace('http://localhost:1027', '');
-}
-const messagetxt = ref('limit 1 file, new file will cover the old file')
-const upClick = () => {
-  const file = document.getElementById('xFile') as HTMLInputElement
-  file.click()
-}
-
-//头像上传按钮 逻辑块
-const submitUpload = () => {
-  const xFile: any = document.getElementById('xFile') as HTMLInputElement
-  let reader = new FileReader();
-  reader.readAsDataURL(xFile.files[0]);
-  reader.onload = function (e) {
-    //e代表事件,可以通过e.target获取FileReader对象然后在获取readAsDataURL读取的base64字符
-    const base64 = e.target?.result as string
-    const blob = proxy.$common.base64toBlob(base64)
-    //下面是将blob转换为file 用于上传
+//本地图片上传到线上，并返回当前文件在线上的path
+const handleUploadImage = (event, insertImage, files) => {
+  console.log(`lzy ~ event`, event)
+  proxy.$common.compressPic(files[0], 0.5).then(({ fileCompress }) => {
+    // 拿到 files 之后上传到文件服务器，然后向编辑框中插入对应的内容
     let formData = new FormData();
-    formData.append('headImg', xFile.files[0]);
+
+    formData.append('upload-image', fileCompress);
+
     let headers = {
       'Content-Type': 'multipart/form-data',
     }
-    //给后台上传头像图片，并获取后台返回新的图片地址
-    http('post', '/admin/uploadHead', formData, headers)
+    // 此处即为向编辑框中插入的内容，url即为图片上传后返回的链接
+    http('post', '/admin/uploadArticleImg', formData, headers)
       .then((res: { code: Number, message }) => {
         if (res.code === 200) {
-          const objectURL = URL.createObjectURL(blob);
-          ruleForm.value.headImg = objectURL;//显示的头像blob转化为可图片显示的src
-          ruleForm.value.setHeadImg = res.message; //放入数据库中的图片路径
-          messagetxt.value = 'limit 1 file, new file will cover the old file'
+          insertImage({
+            url: 'http://localhost:1027' + res.message,
+            desc: '点击放大',
+          });
         } else {
-          messagetxt.value = res.message
         }
       })
-  }
+  })
 }
+const clicks = (text, html) => {
+  storage.value = { text, html, }
+  console.log(text, html)
+}
+
 </script>
 
 <template>
-  <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="140px" class="demo-ruleForm" :size="formSize"
-    status-icon>
-    <div class="headelement">
-      <el-avatar :size="100" :src="ruleForm.headImg" />
-      <div class="upload-demo">
-        <div class="fileBtn">
-          <div class="fileUpload">
-            <label class="ui_button ui_button_primary" for="xFile">
-              <el-button type="primary" @click="upClick">上传本地</el-button>
-            </label>
-            <form action="" method="post">
-              <input class="fileInput" name="headImg" type="file" @change="submitUpload" id="xFile" />
-            </form>
 
-          </div>
-          <el-button class="recommended" @click="handleExceed"> 系统推荐 </el-button>
-        </div>
-        <div class="el-upload__tip text-red" :class="{ grey: messagetxt.indexOf('limit') != -1 }">
-          {{ messagetxt }}
-        </div>
+  <div>
+    <div class="headelement">
+      <div class="markDowmInput">
+        <span>文章标题：</span>
+        <input type="text" v-model="title" />
       </div>
+      <v-md-editor class="markDowmLzy" v-model="text" :disabled-menus="[]" :left-toolbar="orderTool" @save="clicks"
+        @upload-image="handleUploadImage" height="650px" :toolbar="toolbar">
+      </v-md-editor>
     </div>
-    <el-form-item label="Name(名称)" prop="name">
-      <el-input v-model="ruleForm.name" />
-    </el-form-item>
-    <el-form-item label="power(权限)" prop="power">
-      <el-select v-model="ruleForm.power" placeholder="Activity power">
-        <el-option label="admin" value="admin" />
-        <el-option label="user" value="user" />
-      </el-select>
-    </el-form-item>
-    <el-form-item label="create(创建)" prop="date">
-      <el-date-picker v-model="ruleForm.date" type="date" placeholder="Pick a day" disabled />
-    </el-form-item>
-    <el-form-item label="token(凭借)" prop="delivery">
-      <el-input v-model="ruleForm.token" disabled />
-    </el-form-item>
-    <el-form-item label="UserName(账号)" prop="username">
-      <el-input v-model="ruleForm.username" />
-    </el-form-item>
-    <el-form-item label="PassWord(密码)" prop="password">
-      <el-input v-model="ruleForm.password" type="password" show-password />
-    </el-form-item>
-    <el-form-item>
-      <el-button class="card-button" type="primary" @click="submitForm(ruleFormRef)">Create</el-button>
-      <el-button class="card-button" @click="resetForm(ruleFormRef)">Reset</el-button>
-    </el-form-item>
-  </el-form>
+    <div class="btnTool">
+      <el-button class="card-button" type="primary" @click="submitForm()">发布内容</el-button>
+      <el-button class="card-button" @click="resetForm()">暂存内容</el-button>
+    </div>
+  </div>
+
 </template>
 
 <style lang="less" scoped>
 .headelement {
-  text-align: center;
+  box-shadow: 0 0px 10px 1px rgb(0 0 0 / 10%);
 
-  :deep(.el-form-item__content) {
-    display: block;
-  }
-
-  .text-red {
-    margin-bottom: 20px;
-    color: #f56c6c;
-
-    &.grey {
-      color: #606266;
+  &.markDowmLzy {
+    & .v-md-editor {
+      box-shadow: none;
     }
   }
 
-  .fileBtn {
+  .markDowmInput {
+    width: 100%;
+    height: 40px;
     display: flex;
-    justify-content: center;
+    font-size: 20px;
     align-items: center;
+    background-color: #fff;
+    color: #000;
+    // border-radius: 5px;
+    font-family: 'almama';
+    // border: 1px solid var(--themeColor);
+    padding: 0 0 0 20px;
+    border-bottom: 2px solid #000;
 
-    button {
-      height: 27px;
-    }
 
-    .fileUpload {
-      width: 85px;
-      position: relative;
-      overflow: hidden;
-      background-color: #f56c6c;
-      border-radius: 5px;
-
-      button {
-        background: transparent;
-        border: none;
-      }
-
-      .ui_button {
-        cursor: pointer !important;
-      }
-
-      .fileInput {
-        position: absolute;
-        top: 0;
-        left: 0;
-        cursor: pointer !important;
-        display: none;
-      }
-    }
-
-    :deep(.recommended) {
-      margin-left: 10px;
-      background-color: var(--themeColor);
+    input {
+      width: calc(100% - 100px);
       border: none;
-      color: #fff;
+      outline: none;
+      font-size: 20px;
+      // border-left: 3px solid #000;
+      // margin-left: 30px;
+    }
+  }
+
+  :deep(.v-md-editor__menu)::-webkit-scrollbar {
+    background-color: #fff !important;
+  }
+
+  ::-webkit-scrollbar {
+    background-color: rgb(40, 44, 52, ) !important;
+  }
+}
+
+.btnTool {
+  display: flex;
+  justify-content: flex-end;
+
+  .card-button {
+    transform: translate(-50%, 100%);
+    width: 100px;
+    border-radius: 1rem;
+    border: none;
+    background-color: var(--themeColor);
+    color: #fff;
+    font-size: 1rem;
+    padding: .5rem 1rem;
+    transition: 0.3s ease-out;
+
+    &:nth-child(2) {
+      background-color: #fff;
+      color: var(--themeColor);
+      border: 2px solid var(--themeColor);
+    }
+
+    &:hover {
+      transform: translate(-50%, 100%) scale(1.1);
     }
   }
 }

@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import index from '@/views/home/index.vue'
-import Home from '@/views/home/Home.vue'
 import undefind404 from '@/views/404.vue'
 //引入 nprogress
 import NProgress from 'nprogress' // 进度条
@@ -72,12 +71,15 @@ const router = createRouter({
         return { top: 0 }
     },
 })
-router.beforeEach(async to => {
-    if (to.hash === '' && to.hash.includes('userAdmin')) {
+//前置钩子
+router.beforeEach(async (to: any) => {
+    if (to.hash === '') {
+        if (to.href.indexOf('userAdmin') != -1) return
         document.querySelector('.navbarContent')?.classList.remove('navbarContent100')
-        document.querySelector('body').classList.add('loading')
+        document.querySelector('body')!.classList.add('loading')
     }
 })
+
 // 简单配置
 NProgress.inc(0.4)
 NProgress.configure({ easing: 'ease', speed: 1000, showSpinner: false })
@@ -92,7 +94,7 @@ router.beforeEach((to, from, next) => {
 router.afterEach(() => {
     NProgress.done()
     setTimeout(() => {
-        document.querySelector('body').classList.remove('loading')
+        document.querySelector('body')!.classList.remove('loading')
     }, 1000)
 })
 export default router

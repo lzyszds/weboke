@@ -1,0 +1,283 @@
+pre {
+  position: relative;
+}
+
+.pre-numbering {
+  position: absolute;
+  top: 0;
+  left: -30px;
+  width: 30px;
+  border-right: 1px solid #C3CCD0;
+  background-color: #1C1D21;
+  text-align: center;
+  padding: 0.5em 0;
+}
+
+.pre-numbering li {
+  list-style: none;
+  color: #AAA;
+  font-size: 1em;
+}
+
+.hljs-ln-line.hljs-ln-n {
+  margin-right: 30px;
+}
+
+.v-md-prism-language-ln-numbers {
+  user-select: none;
+}
+
+.v-md-prism-language::-webkit-scrollbar-track {
+  background-color: #21252b;
+}
+
+.v-md-prism-language::-webkit-scrollbar {
+  height: 15px;
+  background-color: var(--themeColor);
+}
+
+.v-md-prism-language::-webkit-scrollbar-thumb {
+  background-color: var(--themeColor);
+  border-radius: 300px;
+  border: 4px solid #21252b;
+}
+
+code {
+  color: #fff;
+}
+
+.v-md-prism-language {
+  color: #fff;
+  position: relative;
+  background: #21252b;
+  border-radius: 5px;
+  line-height: 1.6;
+  margin-bottom: 3.6em;
+  max-width: 100%;
+  overflow: auto;
+  text-shadow: none;
+  color: #000;
+  padding-top: 30px;
+  box-shadow: 0 10px 30px 0 rgb(0 0 0 / 40%);
+  font-size: 17px;
+}
+
+.v-md-prism-language:before {
+  content: " ";
+  position: absolute;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+  background: var(--themeColor);
+  width: 12px;
+  height: 12px;
+  left: 12px;
+  margin-top: -18px;
+  -webkit-box-shadow: 20px 0 #fdbc40, 40px 0 #35cd4b;
+  box-shadow: 20px 0 #fdbc40, 40px 0 #35cd4b;
+  z-index: 2;
+}
+
+.v-md-prism-language {
+  font-family: 'firaCode' !important;
+}
+
+.vuepress-markdown-body h1 {
+  padding-bottom: 0.3em;
+  font-size: 1.3em;
+  color: #000;
+  font-weight: 600;
+  font-family: 'almama';
+}
+
+.vuepress-markdown-body h2 {
+  padding-bottom: 8px;
+  background: #fff;
+  border-bottom: 1px dashed #ddd;
+  color: #000;
+  position: sticky;
+  top: 0;
+  padding-left: 20px;
+  font-size: 21px;
+  font-weight: 600;
+  font-family: 'almama';
+}
+
+.vuepress-markdown-body h2:after {
+  content: "#";
+  position: absolute;
+  left: 0;
+  color: #FF6D6D;
+}
+
+.vuepress-markdown-body h3 {
+  color: #222;
+  position: relative;
+  padding-left: 20px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.vuepress-markdown-body h3:after {
+  content: "~";
+  position: absolute;
+  left: 0;
+  color: var(--themeColor);
+}
+
+.vuepress-markdown-body h4 {
+  color: #222;
+  position: relative;
+  padding-left: 20px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.vuepress-markdown-body h4:after {
+  content: "~";
+  position: absolute;
+  left: 0;
+  color: var(--themeColor);
+}
+
+.vuepress-markdown-body a {
+  color: var(--themeColor);
+  // border-bottom: 1px solid var(--themeColor);
+}
+
+.vuepress-markdown-body table {
+  border-collapse: collapse;
+  width: 100%;
+  border-radius: 5px;
+  margin: 0 0 1.5em;
+  font-size: 15px;
+}
+
+.vuepress-markdown-body th {
+  color: #fff;
+}
+
+.vuepress-markdown-body th,
+.vuepress-markdown-body td {
+  padding: 0 8px;
+  text-align: left;
+}
+
+.vuepress-markdown-body th {
+  background-color: #FE9600;
+}
+
+.vuepress-markdown-body tr:nth-child(even) {
+  background-color: none;
+}
+
+.vuepress-markdown-body details.details {
+  border-radius: 5px;
+  padding: 10px 20px;
+  background: #21252b;
+  color: #ffff;
+}
+
+/* .dark .vuepress-markdown-body tr:nth-child(even) {
+  background-color: #000;
+} */
+
+.dark .vuepress-markdown-body a {
+  color: var(--textcolor);
+  border-color: var(--textcolor);
+}
+
+.dark .vuepress-markdown-body {
+  text-shadow: #21252b;
+}
+
+.dark .vuepress-markdown-body h2,
+.dark .vuepress-markdown-body h3,
+.dark .vuepress-markdown-body h4 {
+  color: #fff;
+}
+
+.v-md-editor__toolbar-item--active,
+.v-md-editor__toolbar-item--active:hover,
+.v-md-editor__toolbar-item:hover {
+  background-color: var(--themeColor);
+  color: #fff;
+}
+
+.v-md-plugin-tip {
+  border-radius: 10px;
+  display: flex;
+
+  &>p:nth-child(1) {
+    width: 60px;
+  }
+
+  &>p,
+  summary {
+    color: #222 !important;
+    font-family: 'almama';
+  }
+}
+
+.v-md-plugin-tip.tip {
+  background-color: rgb(200, 255, 230);
+  border-color: rgb(200, 255, 230);
+  color: #fff;
+}
+
+.v-md-plugin-tip.warning {
+  background-color: #fffbe6;
+  border-color: #fffbe6;
+}
+
+.v-md-plugin-tip.danger {
+  background-color: #fff1f0;
+  border-color: #fff1f0;
+}
+
+.v-md-plugin-tip.details {
+  background-color: #fff;
+  border: 1px solid #000;
+  border-radius: 5px;
+  padding: 10px;
+  box-shadow: 0 0px 10px 1px rgb(0 0 0 / 10%);
+  transition: 1s;
+  max-height: 100px;
+  overflow: hidden;
+
+  &[open] {
+    max-height: 1000px;
+  }
+}
+
+.vuepress-markdown-body a,
+.vuepress-markdown-body p a code {
+  color: var(--themeColor);
+}
+
+.vuepress-markdown-body a>.v-md-svg-outbound {
+  color: var(--themeColor);
+  vertical-align: text-bottom;
+  display: initial;
+}
+
+.vuepress-markdown-body:not(.custom) a:hover {
+  text-decoration: none;
+}
+
+.vuepress-markdown-body div[class*=v-md-pre-wrapper-].line-numbers-mode pre {
+  padding-left: 1rem;
+  margin-left: 3.5rem;
+}
+
+.scrollbar__thumb {
+  background-color: var(--themeColor) !important;
+}
+
+.vuepress-markdown-body blockquote {
+  margin: 1rem 0;
+  padding: 0.25rem rem 0 0.25rem 1rem;
+  color: #999;
+  font-size: 1rem;
+  border-left: 0.2rem solid var(--themeColor);
+  background: aliceblue;
+}

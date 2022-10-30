@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import path from 'path'
+import prismjs from 'vite-plugin-prismjs';
 
 const baseUrl = {
   development: './',
@@ -12,6 +13,9 @@ const baseUrl = {
 export default ({ mode }) => defineConfig({
   plugins: [
     vue(),
+    prismjs({
+      languages: ['json', 'javascript', 'css', 'html', 'markdown', 'sql', 'typescript',],
+    }),
   ],
   base: baseUrl[mode],
   resolve: {
@@ -40,18 +44,16 @@ export default ({ mode }) => defineConfig({
         changeOrigin: true,
         rewrite: path => path.replace(/^\/mapApi/, '')
       },
-      '/getIp': {
-        target: 'http://pv.sohu.com',//这里是域名，不是完整地址
-        changeOrigin: true,//是否跨域
-        pathRewrite: {
-          '^/getIp': ''
-        }
-      },
       '/admin': {
         target: 'http://localhost:1027/admin/',//这里是域名，不是完整地址
         changeOrigin: true,//是否跨域
         rewrite: path => path.replace(/^\/admin/, '')
       },
+      '/getIp': {
+        target: 'https://v2.jinrishici.com/info',//这里是域名，不是完整地址
+        changeOrigin: true,//是否跨域
+        rewrite: path => path.replace(/^\/getIp/, '')
+      }
       // '/live2d': {
       //   target: 'https://oss.amogu.cn/blog/live2d/api/model/girls-frontline',
       //   changeOrigin: true,

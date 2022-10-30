@@ -203,10 +203,10 @@ const searchData = (val) => {
   </div>
   <div class="toolfooter">
     <el-button class="add" type="primary" @click="addUser">新增用户</el-button>
-    <el-dialog v-model="centVisible" :before-close="handleClose" title="新增用户" width="26%" left>
+    <el-dialog class="userDialog" v-model="centVisible" :before-close="handleClose" title="新增用户" width="26%" left>
       <UserForm v-if="centVisible" type="add" @switchAdd="switchAdd" />
     </el-dialog>
-    <el-dialog v-model="modifyTheVis" :before-close="handleClose" title="修改用户" width="26%" left>
+    <el-dialog class="userDialog" v-model="modifyTheVis" :before-close="handleClose" title="修改用户" width="26%" left>
       <UserForm v-if="modifyTheVis" type="modify" :data="modifyData" @switchMod="switchMod" />
     </el-dialog>
     <div class="example-pagination-block lzyColor" v-if="!tableSearchData">
@@ -218,226 +218,63 @@ const searchData = (val) => {
 </template>
 
 <style lang="less" scoped>
-.tableuser {
-  height: calc(100vh - 200px);
-
-  :deep(.lzyCell) {
-    color: #000 !important;
-  }
-
-  .svgTem {
-    display: flex;
-    align-items: center;
-
-    svg {
-      width: 3rem !important;
-      height: 3rem;
-      margin-left: -5px;
-      margin-right: 3px;
-    }
-
-    .iconfont {
-      margin-right: 5px;
-    }
-  }
-
-  .headImg {
-    display: grid;
-    grid-template: 1fr / 2fr 5fr;
-    line-height: 50px;
-    font-weight: 600;
-    font-size: 1.5rem;
-    font-family: 'alimama';
-
-    img {
-      width: 45px;
-      height: 45px;
-      border-radius: 50%;
-      -o-object-fit: cover;
-      padding: 2px;
-      margin-top: 2px;
-      object-fit: cover;
-      border: 1px solid var(--themeColor);
-      overflow: hidden;
-      box-shadow: 0px 0px 3px 1px #888;
-    }
-  }
-
-  .power {
-    display: flex;
-    justify-content: center;
-
-    span {
-      padding: 5px 10px;
-      border-radius: 5px;
-      background-color: var(--themeColor);
-      color: #fff;
-    }
-
-    span:nth-child(2) {
-      background-color: eef7ff;
-      color: #000;
-    }
-  }
-
-  .token {
-    display: flex;
-    align-items: center;
-
-    .iconfont {
-      margin-right: 30px;
-      font-size: 35px;
-    }
-  }
-
-  .tool {
-    button {
-      color: var(--themeColor);
-    }
-  }
-}
-
-/* From uiverse.io by @varoonrao */
-.checkbox-con {
-  margin: 10px;
-  display: flex;
-  align-items: center;
-  color: white;
-  cursor: pointer !important;
-}
-
-.checkbox-con input[type="checkbox"] {
-  appearance: none;
-  width: 48px;
-  height: 27px;
-  border: 2px solid rgb(255, 91, 91);
+:deep(.el-dialog).userDialog {
   border-radius: 20px;
-  // background: #f1e1e1;
+  background: #f5f5f5;
   position: relative;
-  box-sizing: border-box;
-  cursor: pointer !important;
-}
+  padding: 1.8rem;
+  padding-left: 0px;
+  padding-bottom: 50px;
+  border: 2px solid #c3c6ce;
+  transition: 0.5s ease-out;
+  overflow: visible;
 
-.checkbox-con input[type="checkbox"]::before {
-  content: "";
-  width: 18px;
-  height: 18px;
-  background: rgb(255, 91, 91);
-  // border: 2px solid #ea0707;
-  border-radius: 50%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  transform: translate(13%, 15%);
-  transition: all 0.3s ease-in-out;
-}
+  .el-dialog__header {
+    font-family: 'douyu';
 
-.checkbox-con input[type="checkbox"]::after {
-  content: url("data:image/svg+xml,%3Csvg xmlns='://www.w3.org/2000/svg' width='23' height='23' viewBox='0 0 23 23' fill='none'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M6.55021 5.84315L17.1568 16.4498L16.4497 17.1569L5.84311 6.55026L6.55021 5.84315Z' fill='%23EA0707' fill-opacity='0.89'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M17.1567 6.55021L6.55012 17.1568L5.84302 16.4497L16.4496 5.84311L17.1567 6.55021Z' fill='%23EA0707' fill-opacity='0.89'/%3E%3C/svg%3E");
-  position: absolute;
-  top: 0;
-  left: 20px;
-}
+    button {
+      // display: none;
+      margin-top: 15px;
+      font-size: 20px;
 
-.checkbox-con input[type="checkbox"]:checked {
-  border: 2px solid var(--themeColor);
-  background: #fff;
-}
-
-.checkbox-con input[type="checkbox"]:checked::before {
-  background: var(--themeColor);
-  border: 2px solid var(--themeColor);
-  transform: translate(125%, 13%);
-  transition: all 0.3s ease-in-out;
-}
-
-
-.checkbox-con label {
-  margin-left: 10px;
-  cursor: pointer;
-  user-select: none;
-}
-
-.toolfooter {
-  position: relative;
-  padding: 10px 10px;
-
-  button.add,
-  button.el-button--primary {
-    background-color: var(--themeColor);
-  }
-
-  .lzyColor {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 20px;
-
-    :deep(li).active {
-      color: var(--themeColor);
+      &:hover .el-icon {
+        color: var(--themeColor);
+      }
     }
   }
 
-  :deep(.el-dialog) {
-    border-radius: 20px;
-    background: #f5f5f5;
-    position: relative;
-    padding: 1.8rem;
-    padding-left: 0px;
-    padding-bottom: 50px;
-    border: 2px solid #c3c6ce;
-    transition: 0.5s ease-out;
-    overflow: visible;
-
-    .el-dialog__header {
-      font-family: 'douyu';
-
-      button {
-        // display: none;
-        margin-top: 15px;
-        font-size: 20px;
-
-        &:hover .el-icon {
-          color: var(--themeColor);
-        }
-      }
-    }
-
-    &:hover {
-      border-color: var(--themeColor);
-      box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.25);
-
-      .card-button {
-        transform: translate(-50%, 50%);
-        opacity: 1;
-      }
-    }
+  &:hover {
+    border-color: var(--themeColor);
+    box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.25);
 
     .card-button {
-      transform: translate(-50%, 100%);
-      width: 100px;
-      border-radius: 1rem;
-      border: none;
-      background-color: var(--themeColor);
-      color: #fff;
-      font-size: 1rem;
-      padding: .5rem 1rem;
-      position: absolute;
-      left: 0%;
-      bottom: -50px;
-      opacity: 0;
-      transition: 0.3s ease-out;
-
-      &:nth-child(2) {
-        background-color: #fff;
-        left: 50%;
-        bottom: -50px;
-        color: var(--themeColor);
-        border: 2px solid var(--themeColor);
-      }
+      transform: translate(-50%, 50%);
+      opacity: 1;
     }
+  }
 
+  .card-button {
+    transform: translate(-50%, 100%);
+    width: 100px;
+    border-radius: 1rem;
+    border: none;
+    background-color: var(--themeColor);
+    color: #fff;
+    font-size: 1rem;
+    padding: .5rem 1rem;
+    position: absolute;
+    left: 0%;
+    bottom: -50px;
+    opacity: 0;
+    transition: 0.3s ease-out;
+
+    &:nth-child(2) {
+      background-color: #fff;
+      left: 50%;
+      bottom: -50px;
+      color: var(--themeColor);
+      border: 2px solid var(--themeColor);
+    }
   }
 }
 </style>

@@ -12,12 +12,6 @@ onMounted(() => {
       elimg.querySelectorAll('img').forEach((element: any) => {
         element.setAttribute('data-fancybox', 'gallery')
         proxy.$fancyapps.Fancybox.bind('[data-fancybox="gallery"]', {
-          caption: function (fancybox: any, carousel: any, slide: any) {
-            console.log(fancybox)
-            return (
-              `${slide.index + 1} / ${carousel.slides.length} <br />` + slide.caption
-            );
-          },
         })
       })
     }
@@ -26,21 +20,18 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="main entry-content center">
+  <div class="main vuepress-markdown-body center">
     <div v-html="props.main"></div>
   </div>
 </template>
 
-<style>
-@import '../assets/css/essay.css';
-</style>
 <style scoped>
 p {
   margin: 10px 0;
   text-indent: 2em
 }
 
-.entry-content {
+.vuepress-markdown-body {
   margin-top: 60px !important;
   background-color: #fff;
   box-shadow: 0px 0px 8px 4px rgba(0, 0, 0, .2);
@@ -51,7 +42,7 @@ p {
   line-height: 40px;
 }
 
-.entry-content :deep(img) {
+.vuepress-markdown-body :deep(img) {
   box-shadow: 0px 0px 4px 1px #888;
   border: 1px solid #000;
   padding: 2px;

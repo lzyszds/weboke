@@ -8,6 +8,10 @@ const props = defineProps({
     type: String,
     default: 'default'
   },
+  url: {
+    type: String,
+    default: 'searchUser'
+  }
 })
 //搜索框内容
 const searchInput = ref('')
@@ -15,10 +19,9 @@ const searchInput = ref('')
 const search = () => {
   switch (props.type) {
     case 'user':
-      const pagePara = '/admin/searchUser?search=' + searchInput.value
+      const pagePara = `/admin/${props.url}?search=` + searchInput.value
       http('get', pagePara).then((res: httpData) => {
         emit('searchData', { data: res.data, searchInput: searchInput.value })
-
       })
       break;
   }

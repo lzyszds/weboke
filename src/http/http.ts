@@ -8,7 +8,7 @@ const now = ref(3)
 // document.cookie = 'admin=' + localStorage.getItem('lzy_token') as string
 const instance = axios.create({
   baseURL: window.location.origin,
-  timeout: 5000,
+  // timeout: 5000,
   withCredentials: true,//表示跨域请求时是否需要使用凭证
 })
 // // 请求拦截器，设置token
