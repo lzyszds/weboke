@@ -113,16 +113,18 @@ const toUp = () => {
     <Maincontent :main="dataDet.main"></Maincontent>
     <div class="affix-container" ref="affixElm" v-if="tocList.length != 0">
       <div class="affix">
-        <div class="affix-title" @click="toUp">
-          <lzyIcon :name="`icon-icon-taikong17`"></lzyIcon>
-          <span>目录</span>
+        <div class="affix_item">
+          <div class="affix-title" @click="toUp">
+            <lzyIcon :name="`icon-icon-taikong17`"></lzyIcon>
+            <span>目录</span>
+          </div>
+          <ul class="affix-list">
+            <li v-for="item in tocList" :class="tocACindex == item.id ? 'active ' + item.nodeName : '' + item.nodeName"
+              :key="item.id">
+              <a :href="item.id">{{ item.title }}</a>
+            </li>
+          </ul>
         </div>
-        <ul class="affix-list">
-          <li v-for="item in tocList" :class="tocACindex == item.id ? 'active ' + item.nodeName : '' + item.nodeName"
-            :key="item.id">
-            <a :href="item.id">{{ item.title }}</a>
-          </li>
-        </ul>
       </div>
     </div>
     <footer class="post-footer center ">
@@ -408,78 +410,98 @@ const toUp = () => {
 
 .affix-container {
   position: absolute;
-  top: 500px;
-  right: 0px;
+  top: 510px;
+  left: calc(50% + 520px);
   background-color: #fff;
   font-size: 16px;
   z-index: 1;
-  width: 200px;
-  height: 100%;
+  // width: 200px;
+  height: calc(100% - 20px);
   background-color: transparent;
-  right: 240px;
-  padding-top: 10px;
+  // padding-top: 10px;
   padding-bottom: 10px;
   transition: 1s;
 
   .affix {
     position: sticky;
     top: 60px;
+    border: 3px solid #000;
+    border-radius: 20px;
+    background-color: var(--themeColor);
+    padding: 6px;
+    font-family: 'tahoma';
 
-    .affix-title {
-      margin-bottom: 10px;
-      font-size: 20px;
-      font-weight: 600;
-      color: #555;
-      display: flex;
+    .affix_item {
+      border-radius: 10px;
+      background-color: #fff;
+      padding: 10px;
+      border: 3px solid #000;
 
-      svg {
-        fill: #000;
-        width: 50px !important;
-        height: 30px;
+      .affix-title {
+        margin-bottom: 5px;
+        font-size: 20px;
+        font-weight: 600;
+        color: #555;
+        display: flex;
+        justify-content: center;
+        background-color: #ffe14d;
+        border-radius: 10px;
+
+        svg {
+          fill: #000;
+          width: 30px !important;
+          height: 30px;
+        }
+
+        span {
+          line-height: 28px;
+        }
       }
 
-      span {
-        line-height: 28px;
-      }
-    }
+      .affix-list {
+        padding: 0 10px;
+        list-style: none;
+        margin: 0;
 
-    .affix-list {
-      padding: 0 10px;
+        &>li.active {
+          color: var(--themeColor);
+        }
 
+        &>li.H2 {
+          font-weight: 600;
+        }
 
-      &>li.active {
-        color: var(--themeColor);
-      }
+        &>li.H3 {
+          margin-left: 10px;
+        }
 
-      &>li.H3 {
-        margin-left: 10px;
-      }
+        &>li.H4 {
+          margin-left: 20px;
+        }
 
-      &>li.H4 {
-        margin-left: 20px;
-      }
+        &>li:before {
+          background-color: #ddd;
+          content: ' ';
+          display: inline-block;
+          height: 25px;
+          left: 15px;
+          margin-top: -1px;
+          position: absolute;
+          width: 4px;
+        }
 
-      &>li:before {
-        background-color: #ddd;
-        content: ' ';
-        display: inline-block;
-        height: 25px;
-        left: 0;
-        margin-top: -1px;
-        position: absolute;
-        width: 2px;
-      }
+        &>li:hover {
+          color: var(--themeColor);
 
-      &>li:hover {
-        color: var(--themeColor);
-      }
+        }
 
-      &>li:hover:before {
-        background-color: var(--themeColor);
-      }
+        &>li:hover:before {
+          background-color: var(--themeColor);
+        }
 
-      &>li.active:before {
-        background-color: var(--themeColor);
+        &>li.active:before {
+          background-color: var(--themeColor);
+        }
       }
     }
   }

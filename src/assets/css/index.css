@@ -4,6 +4,7 @@
   --darkBgcolor: rgb(40, 38, 41);
   --darkColor: rgb(255, 255, 255, .8);
   --textcolor: #fe9600;
+  --borderColor: #ffe14d;
   --normalCup: url('../icon/Normal.png'), auto;
   --linkCup: url('../icon/Link.png'), auto;
   --verticalCup: url('../icon/Vertical.png'), auto;
@@ -150,6 +151,7 @@ body::-webkit-scrollbar-track {
 html,
 body {
   scroll-behavior: smooth;
+  font-family: 'tahoma' !important;
 }
 
 html.dark {

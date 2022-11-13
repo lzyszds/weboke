@@ -9,9 +9,15 @@
 }
 
 @font-face {
+  font-family: 'tahoma';
+  src: url('./tahomabd.ttf');
+}
+
+@font-face {
   font-family: 'firaCode';
   src: url('./FiraCode.ttf');
 }
+
 @font-face {
   font-family: 'black-Magic';
   src: url('./Black-Magic/Black-Magic-2.ttf');

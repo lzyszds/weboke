@@ -53,7 +53,13 @@ export default ({ mode }) => defineConfig({
         target: 'https://v2.jinrishici.com',//这里是域名，不是完整地址
         changeOrigin: true,//是否跨域
         rewrite: path => path.replace(/^\/getIp/, '')
+      },
+      '/github': {
+        target: 'https://api.github.com/graphql',//这里是域名，不是完整地址
+        changeOrigin: true,//是否跨域
+        rewrite: path => path.replace(/^\/github/, '')
       }
+
       // '/live2d': {
       //   target: 'https://oss.amogu.cn/blog/live2d/api/model/girls-frontline',
       //   changeOrigin: true,

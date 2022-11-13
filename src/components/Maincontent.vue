@@ -2,6 +2,8 @@
 
 <script setup lang='ts'>
 import { onMounted, defineProps, getCurrentInstance } from 'vue'
+import { ElMessage, ElNotification } from 'element-plus'
+import { useEventListener } from '@vueuse/core';
 const { proxy } = getCurrentInstance() as any
 const props = defineProps({
   main: String
@@ -17,12 +19,39 @@ onMounted(() => {
         })
       })
     }
+    const copys = document.querySelectorAll('button.v-md-copy-code-btn') as any
+    copys.forEach((element: any) => {
+      useEventListener(element, 'click', (e: any) => {
+        const text = e.target.parentElement.firstChild.innerText
+        //将text复制到剪切板
+        navigator.clipboard.writeText(text).then(() => {
+          ElNotification.closeAll()
+          if (!text) return ElMessage({ type: 'error', grouping: true, message: '复制失败：' })
+          ElNotification({
+            dangerouslyUseHTMLString: true,
+            message: `<i class="fa fa-copy"></i> 复制成功,转载请声明一下`,
+            position: 'bottom-right',
+            duration: 2000,
+            // icon: 'fa-copy',
+            customClass: 'copy-success',
+          })
+          /* clipboard successfully set */
+        }, function (res) {
+          console.log("lzy ~ res", res)
+          /* clipboard write failed */
+        });
+
+
+
+      })
+      // element.style.display = 'none'
+    })
   }, 1000)
 })
 </script>
 
 <template>
-  <div class="main vuepress-markdown-body center">
+  <div class="main vuepress-markdown-body v-md-editor-preview center">
     <div v-html="props.main"></div>
   </div>
 </template>

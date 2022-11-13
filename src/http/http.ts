@@ -63,6 +63,7 @@ instance.interceptors.response.use(response => {
 // @param data(可选)  携带参数
 // @param headers(可选) 请求头可以自己设置，也可以使用默认的（不传）
 export default function (method = 'get', url = '', data = {}, headers?) {
+  const Authorization = headers?.Authorization ? headers?.Authorization : ''
   const isHeadPara = headers ? true : false
   headers = {
     'access-control-allow-origin': '*',
@@ -70,6 +71,7 @@ export default function (method = 'get', url = '', data = {}, headers?) {
     'Access-Control-Allow-Origin-Type': '*',
     'Authorization': localStorage.getItem('lzy_token') as string
   }
+  if (Authorization) headers['Authorization'] = Authorization
   if (isHeadPara) headers['Content-Type'] = 'multipart/form-data'
   return new Promise((resolve, reject) => {
     instance({ method, url, data, headers })
