@@ -1,12 +1,12 @@
 <script setup lang='ts'>
-import { ref, getCurrentInstance } from 'vue';
-// import { useNow, useDateFormat } from '@vueuse/core'
+import { ref } from 'vue';
+import { useStore } from '@/store/index'
 import { useRouter } from 'vue-router'
 import http from '@/http/http';
 import dayjs from 'dayjs'
 
 const router = useRouter()
-const { proxy } = getCurrentInstance() as any
+const { $state: state } = useStore()
 interface IWeather {
   humidity: Number | String
   pm25: Number | String
@@ -22,7 +22,7 @@ interface IWeather {
 const datalist = ref<IWeather>()
 const cip = ref<string>()
 // data:天气数据   cid:城市id 
-const promiseion = proxy.$common.getIpWeather()
+const promiseion: any = state.nowWeatherData
 promiseion.then(res => {
   datalist.value = res.weatherData
   datalist.value!.region = res.region
@@ -105,7 +105,6 @@ if (data.perSign) {
 }
 
 infoData.value = data
-
 </script>
 
 <template>
@@ -152,11 +151,11 @@ infoData.value = data
 
 <style lang="less" scoped>
 .setleft {
-  padding: 30px 0;
   position: relative;
   height: 100%;
 
   .logo {
+    padding-top: 30px;
     color: #000;
     font-family: 'douyu';
     font-size: 40px;
@@ -190,8 +189,8 @@ infoData.value = data
         height: 100px;
         border: 3px solid transparent;
         border-top: 3px solid var(--themeColor);
-        // border-right: 1px solid var(--themeColor);
-        // border-left: 1px solid var(--themeColor);
+        margin: 20px auto;
+        padding: 7px;
         border-bottom: 3px solid var(--themeColor);
         border-radius: 50%;
         animation: rotate 8s linear infinite;

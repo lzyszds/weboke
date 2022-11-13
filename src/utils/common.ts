@@ -57,7 +57,7 @@ function getIpWeather() {
     'X-User-Token': 'iwKIaV2WP/9pLVldKr7qSFoeqAvBCO/n'
   }
   return new Promise((resolve, reject) => {
-    http('get', '/getIp', headers).then((res: ipGetType) => {
+    http('get', '/getIp/info', headers).then((res: ipGetType) => {
       if (res.status = 'success') {
         resolve(res.data)
       } else {

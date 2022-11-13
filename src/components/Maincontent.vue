@@ -1,3 +1,5 @@
+<!-- 详情页主要内容 -->
+
 <script setup lang='ts'>
 import { onMounted, defineProps, getCurrentInstance } from 'vue'
 const { proxy } = getCurrentInstance() as any
@@ -32,14 +34,22 @@ p {
 }
 
 .vuepress-markdown-body {
-  margin-top: 60px !important;
-  background-color: #fff;
-  box-shadow: 0px 0px 8px 4px rgba(0, 0, 0, .2);
-  padding: 20px;
-  padding-top: 10px;
+  margin-top: 20px !important;
+  background-color: var(--themeColor);
+  padding: 10px;
   font-size: 18px;
-  border-radius: 10px;
+  border-radius: 20px;
   line-height: 40px;
+  border: 4px solid #000;
+  /* padding: 0; */
+}
+
+.vuepress-markdown-body>div {
+  background-color: #fff;
+  border-radius: 30px;
+  padding: 10px 20px;
+  border: 4px solid #000;
+  position: relative;
 }
 
 .vuepress-markdown-body :deep(img) {
@@ -83,12 +93,12 @@ ol :deep(li) p:nth-child(1) {
 }
 
 /* 解决问题，让a标签跳转至id时，可以迁出顶部状态栏的位置 */
-h1[id*=toc-head]:before,
-h2[id*=toc-head]:before,
-h3[id*=toc-head]:before,
-h4[id*=toc-head]:before,
-h5[id*=toc-head]:before,
-h6[id*=toc-head]:before {
+.main :deep(h1)[id*=toc-head]:before,
+.main :deep(h2)[id*=toc-head]:before,
+.main :deep(h3)[id*=toc-head]:before,
+.main :deep(h4)[id*=toc-head]:before,
+.main :deep(h5)[id*=toc-head]:before,
+.main :deep(h6)[id*=toc-head]:before {
   display: block;
   content: " ";
   height: 60px;

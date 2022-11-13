@@ -14,4 +14,5 @@ export interface Article {
   content: string,
   modified: string,
   guid: string,
+  wtype: string
 }

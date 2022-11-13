@@ -1,9 +1,11 @@
 <script setup lang='ts'>
-import Markdown from '@/uiComponents/markdown/index.vue'
+
 </script>
 
 <template>
-    <Markdown></Markdown>
+    <div>
+
+    </div>
 </template>
 
 <style scoped>

@@ -16,9 +16,25 @@ const toolbar = {
     },
 
   },
+  music: {
+    title: '音乐',
+    icon: 'fa fa-yc-square',
+    action(editor) {
+      editor.insert(function (selected) {
+        const prefix = '(((:';
+        const suffix = ':)))';
+        const placeholder = '//m701.music.126.net/20221030170951/44e47b6cca6b689a455ff3bd0bdabcfc/jdymusic/obj/wo3DlMOGwrbDjj7DisKw/14096479954/d772/334b/dd34/08377580c7f76289955a97a48e5c0ca1.mp3';
+        const content = selected || placeholder;
+        return {
+          text: `${prefix}${content}${suffix}`,
+          selected: content,
+        };
+      });
+    },
+  },
   test: {
-    title: '测试标记',
-    icon: 'fa fa-terminal on fa-square',
+    title: '音乐',
+    icon: 'fa fa-yc-square',
     action(editor) {
       editor.insert(function (selected) {
         const prefix = '(((:';

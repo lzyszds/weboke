@@ -1,3 +1,9 @@
+.el-table .el-table__cell.lzyCell {
+  color: #000 !important;
+  padding: 7.4px 0 !important;
+}
+
+
 .admin {
   width: 90vw;
   height: 90vh;
@@ -39,10 +45,6 @@
 .tableuser {
   height: calc(100vh - 200px);
 
-  :deep(.lzyCell) {
-    color: #000 !important;
-  }
-
   .svgTem {
     display: flex;
     align-items: center;
@@ -74,6 +76,7 @@
       -o-object-fit: cover;
       padding: 2px;
       margin-top: 2px;
+      margin-right: 10px;
       object-fit: cover;
       border: 1px solid var(--themeColor);
       overflow: hidden;
@@ -164,8 +167,7 @@
 
 .checkbox-con input[type="checkbox"]:checked::before {
   background: var(--themeColor);
-  border: 2px solid var(--themeColor);
-  transform: translate(125%, 13%);
+  transform: translate(132%, 14%);
   transition: all 0.3s ease-in-out;
 }
 

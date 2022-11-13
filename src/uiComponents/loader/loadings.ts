@@ -1,23 +1,19 @@
 import './loading.css';
 //移除loading效果
 const hide = (id) => {
-  if (!id) document.getElementById("loadingDiv")!.style.display = "none";
-  else {
-    var childs = document.querySelector(id).childNodes
-    Array.prototype.forEach.call(childs, function (child) {
-      if (child.id == "loadingDiv") {
-        child.style.display = "none"
-      }
-    });
+  const _id = document.querySelector(id || 'body')
+  const loadingDiv = document.querySelector('#loadingDiv')
+  if (loadingDiv) {
+    _id!.removeChild(loadingDiv)
   }
 };
 //展示loading效果
 const show = (id, text?) => {
   //在页面未加载完毕之前显示的loading Html自定义内容
   var _LoadingHtml = `
-  <div id="over" style="position:absolute;position: fixed;top: 0;left: 0; width: 100%;height: 100%; background-color: #fff;opacity:1;z-index: 999999;">
+  <div id="over" style="position:absolute;position: fixed;top: 0;left: 0; width: 100%;height: 100%; background-color: #fff;opacity:1;z-index: 2;">
   </div>
-  <div id="layout" style="position:absolute;position: fixed;top: 50%;left: 50%;z-index: 9999999;text-align: center;transform: translate(-50%, -50%);}">
+  <div id="layout" style="position:absolute;position: fixed;top: 50%;left: 50%;z-index: 2;text-align: center;transform: translate(-50%, -50%);}">
   ${html4}
   <div style="margin: 40px;text-align: center;color: #fff;">${text == null ? text = "加载中..." : text = text}</div>
   </div>
@@ -28,7 +24,6 @@ const show = (id, text?) => {
   //呈现loading效果
   div.innerHTML = _LoadingHtml
   let _id = document.querySelector(id || 'body')
-
   //如果当前所选元素大于等于页面可视高度，则loading界面设置全屏效果
   if (!_id) {
     _id = document.querySelector('body')

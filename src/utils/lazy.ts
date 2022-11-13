@@ -7,8 +7,10 @@ export default {
     const observe = new IntersectionObserver((entries) => {
       const { isIntersecting } = entries[0]
       if (isIntersecting == true) {
-        el.src = elImg
-        observe.unobserve(el)
+        setTimeout(() => {
+          el.src = elImg
+          observe.unobserve(el)
+        }, 1000)
       }
     })
     observe.observe(el)

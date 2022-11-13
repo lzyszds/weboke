@@ -50,7 +50,7 @@ export default ({ mode }) => defineConfig({
         rewrite: path => path.replace(/^\/admin/, '')
       },
       '/getIp': {
-        target: 'https://v2.jinrishici.com/info',//这里是域名，不是完整地址
+        target: 'https://v2.jinrishici.com',//这里是域名，不是完整地址
         changeOrigin: true,//是否跨域
         rewrite: path => path.replace(/^\/getIp/, '')
       }

@@ -4,7 +4,7 @@ import { ElTable, ElMessageBox, ElNotification } from 'element-plus'
 import http from '@/http/http'
 import dayjs from 'dayjs'
 import UserForm from './UserForm.vue'
-import load from '@/utils/loadings'
+import load from '@/uiComponents/loader/loadings'
 import { httpData, User } from './type'
 import Search from '@/views/admin/components/Search.vue'
 
@@ -131,8 +131,7 @@ const searchData = (val) => {
   <Search type='user' @searchData="searchData" />
   <div class="tableuser" id="loadings">
 
-    <el-table border :data="tableSearchData || tableData" cell-class-name="lzyCell" height="729" style="width: 100%"
-      stripe>
+    <el-table :data="tableSearchData || tableData" cell-class-name="lzyCell" height="729" style="width: 100%" stripe>
       <template #empty>
         <div class="empty">
           <img src="@/assets/image/暂无文档.svg" alt="">

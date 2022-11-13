@@ -88,7 +88,7 @@ const back = () => {
           </el-form-item>
 
           <el-form-item>
-            <el-button :class="{'loadBtn':load}" type="primary" @click="submitForm(ruleFormRef)">
+            <el-button :class="{ 'loadBtn': load }" type="primary" @click="submitForm(ruleFormRef)">
               <span class="loadingtext">登陆中...</span>
               <span class="sunb">
                 <el-icon>
@@ -105,7 +105,7 @@ const back = () => {
           </el-form-item>
         </el-form>
       </div>
-      <p class="pwdTips" :class="{'error':tipsText.length}">{{tipsText}}</p>
+      <p class="pwdTips" :class="{ 'error': tipsText.length }">{{ tipsText }}</p>
     </div>
   </div>
 </template>
@@ -135,7 +135,6 @@ const back = () => {
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 10px;
     font-family: 'almama';
 
     &:focus-within {
@@ -176,6 +175,10 @@ const back = () => {
         width: 300px;
 
         & :deep(.el-form-item) {
+          & .el-form-item__content {
+            justify-content: center;
+          }
+
           .loadBtn {
 
             &>span {
@@ -248,8 +251,8 @@ const back = () => {
             }
 
             i {
-              font-size: 25px;
-              margin-right: 12px;
+              font-size: 12px;
+              margin-right: 6px;
               background-color: rgba(255, 255, 255, 0.2);
               backdrop-filter: blur(10px);
               border-radius: 50%;

@@ -3,13 +3,13 @@ import { ref, h } from 'vue'
 import { ElTable, ElMessageBox, ElNotification } from 'element-plus'
 import http from '@/http/http'
 import dayjs from 'dayjs'
-import load from '@/utils/loadings'
+import load from '@/uiComponents/loader/loadings'
 import { httpData, Article } from './type'
 import ArticleForm from './ArticleForm.vue'
 import Search from '@/views/admin/components/Search.vue'
 
 const total = ref(1) //分页页数
-const pageSize = ref(10) //分页大小
+const pageSize = ref(7) //分页大小
 
 
 //表格数据（前页数据展示进表格中）
@@ -98,7 +98,6 @@ const switchMod = (boolean: boolean) => {
 
 //删除文章
 const deleteArticle = (event) => {
-  console.log(`lzy ~ event.aid`, event.aid)
   http('post', '/admin/deleteArticle', { id: event.aid }).then((res: httpData) => {
     ElNotification({
       title: res.code == 200 ? '成功' : '失败',
@@ -137,10 +136,10 @@ const searchData = (val) => {
       <el-table-column type="selection" width="55" />
       <el-table-column property="aid" label="Id" sortable width="70"> </el-table-column>
       <el-table-column property="author" label="作者" width="80" show-overflow-tooltip> </el-table-column>
-      <el-table-column label="文章封面" sortable width="160" show-overflow-tooltip>
+      <el-table-column label="文章封面" sortable width="180" align="center">
         <template #default="scopre">
           <div>
-            <img data-fancybox="gallery" :src="scopre.row.coverImg" alt="">
+            <img v-lazy data-fancybox="gallery" :src="scopre.row.coverImg" alt="">
           </div>
         </template>
       </el-table-column>
@@ -153,7 +152,7 @@ const searchData = (val) => {
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="上一次登陆时间" sortable :sort-method="formatter" width="160">
+      <el-table-column label="最近修改时间" sortable :sort-method="formatter" width="160">
         <template #default="scope">
           <div class="svgTem">
             <i class="iconfont">&#x100d9;</i>
@@ -195,8 +194,19 @@ const searchData = (val) => {
     </div>
   </div>
 </template>
+<style>
+
+</style>
 
 <style lang="less" scoped>
+div :deep(img[data-fancybox="gallery"]) {
+  width: 150px;
+  height: 76.5px;
+  object-fit: cover;
+}
+
+
+
 :deep(.el-dialog).articleDialog {
   border-radius: 20px;
   background: #f5f5f5;

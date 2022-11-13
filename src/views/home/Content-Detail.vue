@@ -2,12 +2,16 @@
 import { onMounted, ref, getCurrentInstance } from 'vue'
 import Maincontent from '../../components/Maincontent.vue';
 import { useEventListener } from '@vueuse/core'
+import { ArrowRight } from '@element-plus/icons-vue'
 import { useRoute } from 'vue-router';
+import icon from '@/components/icon.vue'
 import http from '@/http/http';
+
 const route = useRoute()
-const aid = route.path.replace('/home/detail/', '')
+const aid = route.path.replace('/home/detail/', '') //获取当前文章id
 const dataDet = ref<any>(await http('get', '/admin/articleDetail?aid=' + aid))
-dataDet.value = dataDet.value.data
+dataDet.value = dataDet.value.data //获取当前页面的文章内容
+
 const { proxy } = getCurrentInstance() as any
 const tocList = ref<any>([]);
 const tocACindex = ref<string>('#toc-head-1');
@@ -25,7 +29,9 @@ const listComment = ref([
 ])
 // const articleList = await http('get', '/articleList')
 
-
+const textbefore = ref('寻找中...')
+const result = await http('get', '/getIp/sentence') as any
+textbefore.value = result.data.content
 onMounted(() => {
   //处理代码高亮行数显示
   let blocks = document.querySelectorAll('pre code');
@@ -45,6 +51,7 @@ onMounted(() => {
         top: element.offsetTop,
         nodeName: element.nodeName
       })
+      // element.setAttribute('tabindex', "-1")
     })
     //监听滚动事件
     handleScroll();
@@ -63,7 +70,7 @@ function handleScroll() {
   useEventListener(window, 'scroll', () => {
     scrollTop.value = window.scrollY;
     tocList.value.forEach((element: any) => {
-      if (scrollTop.value >= element.top - 100) {
+      if (scrollTop.value - 400 >= element.top) {
         tocACindex.value = element.id;
         document.querySelector('.affix-list li.H4')
       }
@@ -71,23 +78,42 @@ function handleScroll() {
 
   })
 }
-
+//处理目录小火箭点击事件 升到最顶部
+const toUp = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  })
+}
 
 </script>
 
 <template>
   <div class="detail">
     <div class="imgtop">
-      <img src="http://localhost:1027/public/img/bg.jpg" alt="">
+      <img :src="dataDet.coverImg" alt="">
       <div class="topTitle center">
         <h1>{{ dataDet.title }}</h1>
         <p>{{ dataDet.author }} {{ setTimestamp(dataDet.createTime) }} {{ dataDet.comNumber }}条评论</p>
       </div>
     </div>
+    <div class="center detBreadcrumb ">
+      <el-breadcrumb :separator-icon="ArrowRight">
+        <el-breadcrumb-item :to="{ path: '/' }">home</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/home/index' }">detail </el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/home/detail/' + aid }">{{ aid }}.html </el-breadcrumb-item>
+      </el-breadcrumb>
+      <div class="boxType">
+        <el-tag class="ml-1" type="info" v-for="(item, index) in dataDet.wtype ? dataDet.wtype.split(',') : []"
+          :key="index">{{ item }}
+        </el-tag>
+      </div>
+    </div>
+
     <Maincontent :main="dataDet.main"></Maincontent>
-    <div class="affix-container" ref="affixElm">
+    <div class="affix-container" ref="affixElm" v-if="tocList.length != 0">
       <div class="affix">
-        <div class="affix-title">
+        <div class="affix-title" @click="toUp">
           <lzyIcon :name="`icon-icon-taikong17`"></lzyIcon>
           <span>目录</span>
         </div>
@@ -105,42 +131,26 @@ function handleScroll() {
         <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享署名-非商业性使用-相同方式共享 4.0
           国际许可协议</a>
       </div>
-      <div class="footer-flex">
-        <div class="footer-sort">
-          <a href="https://wp.gxnas.com/11358.html" rel="nofollow">NAS</a>
-          <a href="https://wp.gxnas.com/11358.html#comments" rel="nofollow">折腾</a>
-          <a href="https://wp.gxnas.com/11358.html#respond" rel="nofollow">日常</a>
-        </div>
-        <div class="footer-share">
-          <lzyIcon :name="`icon-icon-taikong1`" :fill="`#000`"></lzyIcon>
-          <span>分享</span>
-        </div>
-      </div>
     </footer>
-    <div class="post-footer center turn">
-      <div class="turnItem">
-        <p>◀️上一篇</p>
-        <p>欢迎访问！！！</p>
-      </div>
-      <div class="turnItem">
-        <p>下一篇▶️</p>
-        <p>国庆5日游</p>
-      </div>
-    </div>
-    <div class="center comment">
-      <h5>Comments | 3 条评论</h5>
-      <div class="comContent">
-        <div class="comment-item" v-for="(item, index) in listComment" :key="index">
-          <div class="comment-item-left">
-            <img src="http://localhost:1027/public/img/lzy.jpg" alt="">
-          </div>
-          <div class="comment-item-right">
-            <div class="comment-item-right-top">
-              <span class="comment-item-right-top-name">{{ item.name }}</span>
-              <span class="comment-item-right-top-time">{{ setTimestamp(item.time) }}</span>
+    <div class="borderw center">
+      <div class="before">{{ textbefore }}</div>
+      <div class=" comment">
+        <h5>
+          <icon name="icon-icon-taikong13"></icon>评论
+        </h5>
+        <div class="comContent">
+          <div class="comment-item" v-for="(item, index) in listComment" :key="index">
+            <div class="comment-item-left">
+              <img src="http://localhost:1027/public/img/lzy.jpg" alt="">
             </div>
-            <div class="comment-item-right-bottom">
-              {{ item.content }}
+            <div class="comment-item-right">
+              <div class="comment-item-right-top">
+                <span class="comment-item-right-top-name">{{ item.name }}</span>
+                <span class="comment-item-right-top-time">{{ setTimestamp(item.time) }}</span>
+              </div>
+              <div class="comment-item-right-bottom">
+                {{ item.content }}
+              </div>
             </div>
           </div>
         </div>
@@ -150,7 +160,7 @@ function handleScroll() {
 
 </template>
 
-<style scoped>
+<style lang="less" scoped>
 .detail {
   width: 100%;
   overflow-x: hidden;
@@ -159,12 +169,61 @@ function handleScroll() {
   background-image: linear-gradient(#eee 1px, transparent 0), linear-gradient(90deg, #eee 1px, transparent 0);
   background-size: 28px 28px;
   background-repeat: repeat;
+
+  .detBreadcrumb {
+    padding: 10px;
+    margin-top: 20px;
+    border: none;
+    // background: var(--themeColor); 
+    overflow: hidden;
+    border-radius: 10px;
+    // border: 3px solid #000;
+    font-family: 'almama';
+
+    & .boxType {
+      // flex: 1;
+      width: 300px;
+      height: 100%;
+      overflow-y: hidden;
+      overflow-x: auto;
+      text-overflow: inherit;
+      border: none;
+      outline: none;
+      font-size: 20px;
+      white-space: nowrap;
+      margin: 0 30px 0 0;
+      line-height: 35px;
+
+      &:deep(.el-tag.el-tag--info) {
+        background-color: crimson;
+        color: #fff;
+        border: 2px solid #000;
+
+        &:nth-child(1) {
+          margin-left: 0;
+        }
+      }
+    }
+  }
 }
+
 
 .center {
   margin: 0 auto;
   width: 980px;
   overflow-x: hidden;
+
+  h5 {
+    display: flex;
+    font-size: 30px;
+    line-height: 50px;
+
+    svg {
+      width: 50px !important;
+      font-size: 50px;
+      fill: #000 !important;
+    }
+  }
 }
 
 .imgtop {
@@ -210,257 +269,260 @@ function handleScroll() {
 
 .post-footer {
   margin-top: 10px;
-  padding: 10px;
-  background-color: #fff;
-  box-shadow: 0px 0px 8px 4px rgba(0, 0, 0, .2);
-  border-radius: 10px;
+  padding: 5px;
+  border-radius: 15px;
   font-size: 16px;
+  background-color: var(--themeColor);
+  border: 4px solid #000;
+
+  svg {
+    width: 30px !important;
+    height: 30px;
+    margin-right: 5px;
+    display: inline-block;
+    vertical-align: bottom;
+  }
+
+  .tool {
+    border: 3px solid #000;
+    padding: 10px;
+    text-align: center;
+    border-radius: 15px;
+    line-height: 30px;
+    cursor: var(--linkCup);
+    background-color: #fff;
+
+    :hover {
+      color: var(--themeColor);
+      text-decoration: underline var(--themeColor);
+
+      svg {
+        fill: var(--themeColor) !important;
+      }
+    }
+  }
 }
 
-.post-footer .tool {
-  padding: 10px 0 0;
-  text-align: center;
-  line-height: 30px;
-  cursor: var(--linkCup);
-}
-
-.post-footer .tool:hover {
-  color: var(--themeColor);
-  text-decoration: underline var(--themeColor);
-}
-
-.post-footer .tool:hover svg {
-  fill: var(--themeColor) !important;
-}
-
-.post-footer svg {
-  width: 26px !important;
-  margin-right: 5px;
-  display: inline-block;
-  vertical-align: bottom;
-}
-
-.post-footer .footer-sort a {
-  margin-right: 5px;
-  font-size: 15px;
-}
-
-.footer-sort::before {
-  content: '📒';
-  margin-right: 10px
-}
-
-.footer-flex {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: #5161ce;
-  line-height: 30px;
-  cursor: var(--linkCup);
-  padding: 0 10px
-}
-
-.footer-flex svg {
-  fill: #5161ce !important;
-  vertical-align: bottom;
-}
-
-.footer-share {
-  user-select: none;
-}
-
-.turn {
-  padding: 0 !important;
-  /* overflow: hidden; */
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.borderw {
+  border-radius: 20px;
+  border: 4px solid #000;
   margin-top: 20px;
-  background-color: #fff;
-  box-shadow: 0px 0px 8px 4px rgba(0, 0, 0, .2);
-  border-radius: 10px;
-  font-size: 16px;
+  padding: 10px;
+  background-color: var(--themeColor);
+  position: relative;
 
-}
+  & .before {
+    user-select: none;
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 80px;
+    border-radius: 50%;
+    border: 4px solid #000;
+    z-index: 2;
+    background-color: #ffe14d;
+    box-shadow: -1px 3px 1px 0px #fff,
+      -1px 3px 3px 5px #000;
+    color: #000;
+    text-align: center;
+    line-height: 100px;
+    font-size: 15px;
+    font-family: 'almama';
+    /* 超出部分显示省略号 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 
-.turnItem {
-  flex: 1;
-  cursor: var(--linkCup);
-  padding: 10px 0;
-  line-height: 30px;
-  transition: .3s;
-}
-
-.turnItem:hover {
-  background-color: rgb(115, 115, 115, .3);
-}
-
-.turnItem p {
-  margin: 0;
-}
-
-
-
-.turnItem:nth-child(2) p {
-  text-align: right;
-  padding-right: 30px
-}
-
-.turnItem:nth-child(1) p {
-  text-align: left;
-  padding-left: 30px
+  }
 }
 
 .comment {
   font-size: 18px;
+  background: #fff;
+  border: 3px solid #000;
+  border-radius: 30px;
+  padding: 0 20px;
+  position: relative;
+
+  h5 {
+    margin: 30px 0;
+  }
+
+  .comment-item {
+    margin: 20px 0;
+    display: flex;
+
+    img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-right: 20px;
+    }
+  }
+
+  .comment-item-right-top {
+    margin-bottom: 7px;
+    letter-spacing: 3px;
+  }
+
+  .comment-item-right-top-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: #555;
+  }
+
+  .comment-item-right-top-time {
+    font-size: 17px;
+    color: #999;
+    margin: 0 10px;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    border: 3px solid #000;
+    background-color: #7588ff;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    border: 3px solid #000;
+    background-color: #7588ff;
+  }
 }
 
-.comment h5 {
-  margin: 30px 0;
-}
 
-.comment .comment-item {
-  margin: 20px 0;
-  display: flex;
-}
-
-.comment .comment-item img {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  margin-right: 20px;
-}
-
-.comment-item-right-top {
-  margin-bottom: 7px;
-  letter-spacing: 3px;
-}
-
-.comment-item-right-top-name {
-  font-size: 18px;
-  font-weight: 600;
-  color: #555;
-}
-
-.comment-item-right-top-time {
-  font-size: 17px;
-  color: #999;
-  margin: 0 10px;
-}
 
 .affix-container {
   position: absolute;
-  top: 480px;
+  top: 500px;
   right: 0px;
   background-color: #fff;
   font-size: 16px;
   z-index: 1;
-  /* width: 200px; */
+  width: 200px;
   height: 100%;
   background-color: transparent;
-  right: calc(40% - 520px);
+  right: 240px;
   padding-top: 10px;
   padding-bottom: 10px;
   transition: 1s;
+
+  .affix {
+    position: sticky;
+    top: 60px;
+
+    .affix-title {
+      margin-bottom: 10px;
+      font-size: 20px;
+      font-weight: 600;
+      color: #555;
+      display: flex;
+
+      svg {
+        fill: #000;
+        width: 50px !important;
+        height: 30px;
+      }
+
+      span {
+        line-height: 28px;
+      }
+    }
+
+    .affix-list {
+      padding: 0 10px;
+
+
+      &>li.active {
+        color: var(--themeColor);
+      }
+
+      &>li.H3 {
+        margin-left: 10px;
+      }
+
+      &>li.H4 {
+        margin-left: 20px;
+      }
+
+      &>li:before {
+        background-color: #ddd;
+        content: ' ';
+        display: inline-block;
+        height: 25px;
+        left: 0;
+        margin-top: -1px;
+        position: absolute;
+        width: 2px;
+      }
+
+      &>li:hover {
+        color: var(--themeColor);
+      }
+
+      &>li:hover:before {
+        background-color: var(--themeColor);
+      }
+
+      &>li.active:before {
+        background-color: var(--themeColor);
+      }
+    }
+  }
 }
 
-.affix {
-  position: sticky;
-  top: 60px;
-}
+.dark {
+  .detail {
+    background: var(--darkBgcolor);
+    color: #ffff;
 
-.affix-title {
-  margin-bottom: 10px;
-  font-size: 20px;
-  font-weight: 600;
-  color: #555;
-  display: flex;
-}
+  }
 
-.affix-title svg {
-  width: 30px !important;
-  fill: #000 !important;
-}
+  .post-footer {
 
-.affix-title span {
-  line-height: 28px;
-}
+    .tool {
+      background-color: var(--darkBgcolor);
 
-.affix-list {
-  padding: 0 10px;
-}
+      svg {
+        fill: #fff !important;
+      }
+    }
+  }
 
-.affix-list .active {
-  color: var(--themeColor);
-}
+  .comment-item-right-top-name {
+    color: #fff;
+  }
 
-.affix-list li.H3 {
-  margin-left: 10px;
-}
+  .affix-title {
+    color: #fff;
 
-.affix-list li.H4 {
-  margin-left: 20px;
-}
+    &>svg {
+      fill: #fff !important;
+    }
+  }
 
-.affix-list li:before {
-  background-color: #ddd;
-  content: ' ';
-  display: inline-block;
-  height: 25px;
-  left: 0;
-  margin-top: -1px;
-  position: absolute;
-  width: 2px;
-}
+  .comment {
+    background: var(--darkBgcolor);
+    color: #fff;
 
-.affix-list li:hover {
-  color: var(--themeColor);
-}
-
-.affix-list li:hover:before {
-  background-color: var(--themeColor);
-}
-
-.affix-list li.active:before {
-  background-color: var(--themeColor);
-}
-
-.dark .detail {
-  background: var(--darkBgcolor);
-  color: #ffff;
-}
-
-.dark .detail .main {
-  background: var(--darkBgcolor);
-  box-shadow: 0px 0px 8px4px rgba(255, 255, 255, 0.2);
-}
-
-.dark .post-footer {
-  background-color: var(--darkBgcolor);
-}
-
-.dark .post-footer .tool svg {
-  fill: #fff !important;
-}
-
-.dark .comment-item-right-top-name {
-  color: #fff;
-}
-
-.dark .affix-list .active {
-  color: var(--textcolor);
-}
-
-.dark .affix-list li.active:before {
-  background-color: var(--textcolor);
-}
-
-.dark .affix-title {
-  color: #fff;
-}
-
-.dark .affix-title svg {
-  fill: #fff !important;
+    h5 svg {
+      fill: #fff !important;
+    }
+  }
 }
 </style>
 

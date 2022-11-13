@@ -3,7 +3,7 @@ import { defineProps } from 'vue'
 const props = defineProps({
   fill: {
     type: String,
-    default: '#fff'
+    default: ''
   },
   name: {
     type: String,

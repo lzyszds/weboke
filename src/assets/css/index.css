@@ -1,7 +1,7 @@
 :root {
   --themeColor: #5161ce;
   --bgcolor: #fff !important;
-  --darkBgcolor: #31363b;
+  --darkBgcolor: rgb(40, 38, 41);
   --darkColor: rgb(255, 255, 255, .8);
   --textcolor: #fe9600;
   --normalCup: url('../icon/Normal.png'), auto;
@@ -30,14 +30,14 @@
   cursor: var(--linkCup);
   text-shadow: 1px 3px 3px #000;
   transition: .6s;
-  background: linear-gradient(#5161ce, #5161ce) no-repeat left 100%/0 1px;
+  background: linear-gradient(#fff, #fff) no-repeat left 100%/0 2px;
 }
 
 .decoration:hover {
   color: #5161ce;
   fill: #5161ce !important;
   text-shadow: 1px -1px 3px #fff;
-  background: linear-gradient(#5161ce, #5161ce) no-repeat left 100% / 100% 1px;
+  background: linear-gradient(#fff, #fff) no-repeat left 100% / 100% 2px;
 }
 
 .lzy-center {

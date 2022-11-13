@@ -1,6 +1,6 @@
 <template>
-  <div class=" head h-48 b-white p-14 pl-9  magics">
-    <p class="magic py-3 text-gray-500 text-2xl tracking-widest magic-text">
+  <div class="head  magics">
+    <p class="magic  magic-text">
       <span class="text-5xl leading-none ">项目开始</span>
       <br />
       <span class="magic-star">
@@ -47,7 +47,6 @@ onMounted(() => {
   for (const star of document.getElementsByClassName("magic-star")) {
     setTimeout(() => {
       animate(star);
-
       setInterval(() => animate(star), 3000);
     }, index++ * (interval / 3))
   }
@@ -123,6 +122,8 @@ onMounted(() => {
 
 .magics {
   text-align: center;
+  height: 68px;
+  font-size: 20px;
 }
 
 

@@ -1,17 +1,20 @@
 <script setup lang='ts'>
-import { ref, nextTick, onMounted, onBeforeUnmount } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 import ContentHead from '@/components/Content-head.vue'
 import ContentDiv from '@/components/Content-div.vue'
 import { useEventListener } from '@vueuse/core'
 import http from '@/http/http';
-
-const list = ref(await http('get', '/admin/articleList?page=1&limit=5')) as any
-const indexList = ref(0)
+const limit = 5
+const indexList = ref(1)
+const { total, data } = await http('get', '/admin/articleList?pages=' + indexList.value + '&limit=' + limit) as any
+const list: any = ref(data)
+const totals = ref(total)
 const isload = ref(true)
 const currentChange = (e: number) => {
   isload.value = false
-  indexList.value = e - 1
-  nextTick(() => {
+  indexList.value = e
+  http('get', '/admin/articleList?pages=' + indexList.value + '&limit=' + limit).then((res: any) => {
+    list.value = res.data
     isload.value = true
   })
 }
@@ -21,13 +24,16 @@ onMounted(() => {
     const example = document.querySelector('#example') as HTMLElement
     if (!example) return
     if (window.scrollY >= 820) {
-      example.style.opacity = '1'
-      listSum.style.transform = 'translateY(200px)'
+      listSum.style.transform = 'translateY(154px)'
       listSum.style.position = 'fixed'
     } else {
-      example.style.opacity = '0'
-      listSum.style.transform = 'translateY(1012px)'
+      listSum.style.transform = 'translateY(974px)'
       listSum.style.position = 'absolute'
+    }
+    if (window.scrollY >= 300) {
+      example.style.opacity = '1'
+    } else {
+      example.style.opacity = '0'
     }
   })
 })
@@ -40,27 +46,28 @@ onBeforeUnmount(() => {
     listSum.style.position = 'absolute'
   }
 })
+
 </script>
 
 <template>
   <div class="content">
-    <div class="home" id="eleme">
-
-    </div>
+    <div class="home" id="eleme"> </div>
     <ContentHead></ContentHead>
     <div class="listSum">
       <!-- 文章内容 -->
-      <div class="listCom" v-if="isload">
+      <div class="listCom">
         <img v-lazy class="listImg" id="listSum" src="http://localhost:1027/public/img/leftbg2.jpg" alt="">
-        <router-link v-for="(item, index) in list.data" :key="index" :to="'/home/detail/' + item.aid">
-          <ContentDiv :data="item">
-          </ContentDiv>
-        </router-link>
+        <div :id="'list' + item.aid" v-for="(item, index) in list" :key="index" v-if="isload">
+          <router-link :to="'/home/detail/' + item.aid">
+            <ContentDiv :data="item"></ContentDiv>
+          </router-link>
+        </div>
+
       </div>
       <!-- 文章分页 -->
       <div class="example-pagination-block lzy-center" id="example">
         <div class="example-demonstration">When the content ends, turn the page to see the new content</div>
-        <el-pagination layout="prev, pager, next" :total="list.total" @current-change="currentChange" />
+        <el-pagination :page-size="limit" layout="prev, pager, next" :total="totals" @current-change="currentChange" />
       </div>
     </div>
 
@@ -68,6 +75,11 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
+.dark .home {
+  background: url('http://localhost:1027/public/img/12.jpg') no-repeat center center;
+  background-size: cover;
+}
+
 .home {
   width: 100%;
   height: 100vh;
@@ -107,7 +119,7 @@ onBeforeUnmount(() => {
 }
 
 .listImg {
-  width: 100vw;
+  width: 100%;
   object-fit: cover;
   position: fixed;
   top: 0;
@@ -149,13 +161,13 @@ onBeforeUnmount(() => {
 }
 
 .listSum :deep(.example-pagination-block) {
-  transition: .3s;
+  transition: .22s;
   opacity: 0;
-  width: 50%;
+  width: 100%;
   position: fixed;
-  left: 50%;
+  left: 0;
   bottom: 0;
-  transform: translateX(-50%);
+  /* transform: translateX(-50%); */
   background-color: #fff;
 }
 
@@ -179,5 +191,17 @@ onBeforeUnmount(() => {
 .dark .listSum {
   background: var(--darkBgcolor) !important;
   color: var(--bgcolor);
+}
+
+@keyframes lzy {
+  0% {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>

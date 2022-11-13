@@ -59,25 +59,29 @@ VueMarkdownEditor.use(vuepressTheme, {
         // token.map 即所在的行数
         if (token.map && (token.tag === 'h2' || token.tag === 'h3')) {
           // 起始行
-          const start = ["id", 'toc-head-' + token.map[0].toString()]
+          const id = ["id", 'toc-head-' + token.map[0].toString()]
           // 初始化属性
           token.attrs = token.attrs || []
           // 添加属性
-          token.attrs.push(start)
+          token.attrs.push(id)
         }
       })
       return true;
     });
-    md.core.ruler.push('my_rule', function replace(state) {
+
+
+    md.core.ruler.push('music', function replace(state) {
+
       //实现了导入音乐播放器(((:路径不要带https:)))
+      return '出了点问题，暂时停用'
       if (state.tokens) {
         state.tokens.forEach(token => {
-          console.log(`lzy ~ token`, token)
           if (token.children) {
-            console.log(`lzy ~ token.children`, token.children)
             token.children.forEach((child, index) => {
-              const lent = child.content.split(':')
-              console.log(`lzy ~ token`, lent)
+              const lent = child.content//.split(':')
+              const pat = /^[(]{1}/
+              console.log(pat.test(lent[0]))
+              if (lent.length <= 1) return
               token.children.splice(0, 1)
               token.children.push({
                 attrs: [['src', lent[1]], ['controls', true]],

@@ -1,33 +1,43 @@
 <script setup lang='ts'>
-import { ref, defineProps, getCurrentInstance, defineEmits, h } from 'vue'
-import { ElMessageBox, } from 'element-plus'
+import { ref, defineProps, getCurrentInstance, defineEmits, h, onMounted } from 'vue'
+import { dayjs, ElMessageBox, } from 'element-plus'
+import { useEventListener } from '@vueuse/core'
 import http from '@/http/http'
 import toolbar from './toolbar'
+
 const { proxy } = getCurrentInstance() as any
-const emit = defineEmits(['switchMod'])
-const orderTool = `emoji undo redo clear |h bold italic strikethrough quote addTag test |left center right ul ol table hr | link image  code tip | save tips`
+const compressPic = proxy.$common.compressPic
+const emit = defineEmits(['switchMod', 'switchAdd'])
+const orderTool = `emoji undo redo clear |h bold italic strikethrough quote addTag  test |left center right ul ol table hr | link image code tip music| save tips`
 const props = defineProps({
   type: String,
   data: Object,
 })
+
+
 interface storageType {
   text: string,
   html: string,
 }
+
 const storage = ref<storageType>({ text: '', html: '' })
 const text = ref<any>(props.data?.content)
 const html = ref<any>(props.data?.html)
 const title = ref<string>(props.data?.title || '')
-
+const cover = ref<string>(props.data?.coverImg || 'http://localhost:1027/public/img/articleImages/upload-image1667660540602.jpeg')
 //确认提交
 const submitForm = () => {
   const data = {
     author: 'lzy',
     title: title.value,
+    //文章开头第一段话
+    coverContent: document.querySelector('.vuepress-markdown-body p[data-v-md-line="1"]')?.innerHTML,
     content: storage.value.text,
     main: storage.value.html,
-    coverImg: 'http://localhost:1027/public/img/bg.jpg',
+    coverImg: cover.value || props.data!.coverImg,
     aid: props.type === 'modify' ? props.data?.aid : null,
+    modified: dayjs().unix(),
+    wtype: tagData.value,
   }
   const url = props.type === 'modify' ? 'updateArticle' : 'addArticle'
   //当前是否保存
@@ -35,6 +45,7 @@ const submitForm = () => {
     http('post', `/admin/${url}`, data).then((res: any) => {
       if (res.code === 200) {
         emit('switchMod', false)
+        emit('switchAdd', false)
       }
     })
   } else {
@@ -53,13 +64,6 @@ const submitForm = () => {
         submitForm()
       })
   }
-  // http('post', '/admin/' + url, data).then((res: any) => {
-  //   if (res.code === 200) {
-  //     emit('switchMod', false)
-  //   } else {
-  //     emit('switchMod', true)
-  //   }
-  // })
 }
 //暂存按钮
 const resetForm = () => {
@@ -68,10 +72,10 @@ const resetForm = () => {
 //本地图片上传到线上，并返回当前文件在线上的path
 const handleUploadImage = (event, insertImage, files) => {
   console.log(`lzy ~ event`, event)
-  proxy.$common.compressPic(files[0], 0.5).then(({ fileCompress }) => {
+  //对图片进行压缩
+  compressPic(files[0], 0.5).then(({ fileCompress }) => {
     // 拿到 files 之后上传到文件服务器，然后向编辑框中插入对应的内容
     let formData = new FormData();
-
     formData.append('upload-image', fileCompress);
 
     let headers = {
@@ -92,9 +96,90 @@ const handleUploadImage = (event, insertImage, files) => {
 }
 const clicks = (text, html) => {
   storage.value = { text, html, }
-  console.log(text, html)
 }
 
+//异步执行，等待dom渲染完成 
+onMounted(() => {
+  //通过点击图片 ，获取图片的src 以及将图片存入线上服务器 
+  const coverFile = document.querySelector('#coverFile') as HTMLInputElement
+  useEventListener(coverFile, 'change', () => {
+    const files = coverFile.files as FileList;
+    //对图片进行压缩
+    compressPic(files[0], 0.5).then(({ fileCompress }) => {
+      // 拿到 files 之后上传到文件服务器，然后向编辑框中插入对应的内容
+      let formData = new FormData();
+      formData.append('upload-image', fileCompress);
+
+      let headers = {
+        'Content-Type': 'multipart/form-data',
+      }
+      // 此处即为向编辑框中插入的内容，url即为图片上传后返回的链接
+      http('post', '/admin/uploadArticleImg', formData, headers)
+        .then((res: { code: Number, message }) => {
+          if (res.code === 200) {
+            cover.value = 'http://localhost:1027' + res.message
+          }
+        })
+    })
+  })
+})
+//更新封面
+const coverUpdate = () => {
+  //将input type=file 作用触发 从而触发change事件
+  const coverFile = document.querySelector('#coverFile') as HTMLInputElement
+  coverFile.click()
+}
+
+interface TagType {
+  code?: string,
+  data?: [
+    {
+      isUse: string,
+      name: string,
+      tId: number
+    }
+  ]
+}
+const visible = ref<boolean>(false)
+const tagData: any = ref([])
+tagData.value = props.data?.wtype ? props.data?.wtype.split(',') : []
+const tagDataTem: any = ref(tagData.value)
+const tagList = ref<TagType>({})
+
+tagList.value = await http('get', '/admin/articleType') as TagType
+
+const tagActive = (tag) => {
+  if (tagDataTem.value.includes(tag)) {
+    tagDataTem.value = tagDataTem.value.filter(item => item !== tag) as any
+  } else {
+    tagDataTem.value.push(tag)
+  }
+}
+const tagActiveClass = (tag) => {
+  return tagDataTem.value.includes(tag) ? 'tag-active' : ''
+}
+const addTag = (flag: boolean) => {
+  if (flag == true) tagData.value = tagDataTem.value
+  else tagDataTem.value = tagData.value
+  visible.value = false
+
+}
+const typeInput = ref('')
+const addArticleType = () => {
+  const data = tagList.value.data?.map(res => {
+    return res.name
+  })
+  if (data?.includes(typeInput.value as any)) {
+    return tagDataTem.value.push(typeInput.value)
+  }
+  if (!typeInput.value) return
+  const result = http('post', '/admin/addArticleType', { name: typeInput.value })
+  result.then(async (res: any) => {
+    if (res.code == 200) {
+      tagList.value = await http('get', '/admin/articleType') as TagType
+    }
+  })
+}
 </script>
 
 <template>
@@ -102,8 +187,46 @@ const clicks = (text, html) => {
   <div>
     <div class="headelement">
       <div class="markDowmInput">
+        <span>封面图片：</span>
+        <div @click="coverUpdate" class="coverImg">
+          <img :src="cover" alt="">
+          <input type="file" id="coverFile">
+        </div>
         <span>文章标题：</span>
-        <input type="text" v-model="title" />
+        <input class="title" type="text" v-model="title" />
+        <span>类别：</span>
+        <div class="boxType">
+          <el-tag class="ml-1" type="info" v-for="(item, index) in tagData" :key="index">{{ item }}</el-tag>
+        </div>
+
+        <el-popover :width="380" placement="left" :visible="visible" trigger="click">
+          <template #reference>
+            <div @click="visible = true">
+              <el-tooltip class="box-item" effect="dark" content="分类选择" placement="top">
+                <i class="fa fa-folder-open"></i>
+              </el-tooltip>
+            </div>
+          </template>
+          <template #default>
+            <div class="typePopover">
+              <div class="item-search">
+                <input v-model="typeInput" @keydown.enter="addArticleType" type="text" placeholder="自定义标签">
+                <button @click="addArticleType">添加</button>
+              </div>
+              <div class="item-box">
+                <el-tag type="info" v-for="(item, index) in tagList?.data" :key="index" @click="tagActive(item.name)"
+                  :class="tagActiveClass(item.name)">{{
+                      item.name
+                  }}
+                </el-tag>
+              </div>
+              <div class="item-tool">
+                <button @click="addTag(false)">取消</button>
+                <button @click="addTag(true)">确定</button>
+              </div>
+            </div>
+          </template>
+        </el-popover>
       </div>
       <v-md-editor class="markDowmLzy" v-model="text" :disabled-menus="[]" :left-toolbar="orderTool" @save="clicks"
         @upload-image="handleUploadImage" height="650px" :toolbar="toolbar">
@@ -128,7 +251,6 @@ const clicks = (text, html) => {
   }
 
   .markDowmInput {
-    width: 100%;
     height: 40px;
     display: flex;
     font-size: 20px;
@@ -141,23 +263,75 @@ const clicks = (text, html) => {
     padding: 0 0 0 20px;
     border-bottom: 2px solid #000;
 
+    .coverImg {
+      position: relative;
+      height: 85%;
+      margin-right: 30px;
+      cursor: var(--linkCup);
 
-    input {
-      width: calc(100% - 100px);
+      #coverFile {
+        display: none;
+      }
+
+      &:after {
+        content: '+';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: #fff;
+        border-radius: 50%;
+        border: 1px solid #fff;
+        width: 20px;
+        height: 20px;
+        line-height: 16px;
+        text-align: center;
+
+      }
+
+      img {
+        width: 100px;
+        height: 100%;
+      }
+    }
+
+    .title {
+      flex: 3;
       border: none;
       outline: none;
       font-size: 20px;
-      // border-left: 3px solid #000;
-      // margin-left: 30px;
+
+    }
+
+    .boxType {
+      // flex: 1;
+      width: 300px;
+      height: 100%;
+      overflow-y: hidden;
+      overflow-x: auto;
+      text-overflow: inherit;
+      border: none;
+      outline: none;
+      font-size: 20px;
+      white-space: nowrap;
+      margin: 0 30px 0 0;
+      line-height: 35px;
+
+      &:deep(.el-tag.el-tag--info) {
+        background-color: var(--themeColor);
+        color: #fff;
+        border: 2px solid #000;
+        margin-right: 5px;
+      }
     }
   }
 
   :deep(.v-md-editor__menu)::-webkit-scrollbar {
-    background-color: #fff !important;
+    height: 0;
   }
 
   ::-webkit-scrollbar {
-    background-color: rgb(40, 44, 52, ) !important;
+    height: 0;
   }
 }
 
@@ -187,4 +361,67 @@ const clicks = (text, html) => {
     }
   }
 }
+
+.el-popper.is-light>.typePopover {
+  .item-search {
+    display: flex;
+    border-bottom: 2px solid var(--themeColor);
+
+    input {
+      width: 100%;
+      border: none;
+      padding-bottom: 5px;
+
+      &:focus {
+        outline: none;
+      }
+    }
+
+    button {
+      border: none;
+      background-color: var(--themeColor);
+      color: #fff;
+      width: 60px;
+      border-radius: 5px;
+      margin-left: 10px;
+      margin-bottom: 3px;
+    }
+  }
+
+
+  &:deep(.el-tag.el-tag--info) {
+    margin-top: 10px;
+    margin-left: 4px;
+    background-color: #fff;
+    color: #000;
+    user-select: none;
+    cursor: var(--linkCup);
+    border: 2px solid #000;
+
+    &.tag-active {
+      background-color: var(--themeColor);
+      color: #fff;
+    }
+  }
+
+  .item-tool {
+    text-align: right;
+    margin-top: 10px;
+    padding-top: 10px;
+
+    button {
+      border: none;
+      background-color: var(--themeColor);
+      color: #fff;
+      width: 60px;
+      border-radius: 5px;
+      margin-left: 10px;
+      margin-bottom: 3px;
+
+
+    }
+
+  }
+}
 </style>
+

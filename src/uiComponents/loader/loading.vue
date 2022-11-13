@@ -1,10 +1,11 @@
 <script setup lang="ts" >
 import img from '@/assets/icon/weather/import'
-import { ref, getCurrentInstance } from 'vue';
+import { ref, } from 'vue';
 import { useDateFormat } from '@vueuse/core'
+import { useStore } from '@/store/index'
+const { $state: state } = useStore()
 const data = ref<any>([])
-const { proxy } = getCurrentInstance() as any
-const datas = await proxy.$common.getIpWeather()
+const datas = await state.nowWeatherData
 
 data.value = datas
 // 高德地图api
