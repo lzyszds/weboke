@@ -1,5 +1,5 @@
 const user = {
-  token: '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',
+  token: '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',
   name: 'lzyszds',
 }
 export const headers = {
