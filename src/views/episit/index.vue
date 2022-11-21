@@ -1,12 +1,14 @@
 <template>
-  <div class="p-9">
-    <div class="mb-12 ">
+  <div class="contents">
+    <div class="back" @click="back">back</div>
+    <div class="items">
       <lzyButton v-for="item in reactData.forData" :key="item.index" @click="mapHandle(item.index)"
         :class="reactData.index == item.index ? 'bg-blue-400' : null">{{ item.title }}</lzyButton>
     </div>
-    <div class="wrapper">
+    <div>
       <div class="map-container" ref="myEchart"></div>
     </div>
+    <p>数据获取来源：<a href="https://c.m.163.com/ug/api/wuhan/app/data/list-total" target="_blank ">网易疫情数据api</a> </p>
   </div>
 </template>
 
@@ -19,6 +21,11 @@ import _ from "lodash";
 import { } from "vue";
 import * as echarts from "echarts";
 import china from "/public/china.json";
+import { useRouter } from 'vue-router'
+const router = useRouter()
+const back = () => {
+  router.go(-1)
+}
 //使用异步组件的方式来加载疫情地图组件
 let reactData = reactive({
   title: "现有确证",
@@ -26,30 +33,12 @@ let reactData = reactive({
   index: 1,
   count: 0,
   forData: [
-    {
-      title: "现有确诊",
-      index: 1,
-    },
-    {
-      title: "累计确诊",
-      index: 2,
-    },
-    {
-      title: "新增确诊",
-      index: 3,
-    },
-    {
-      title: "累计治疗",
-      index: 4,
-    },
-    {
-      title: "累计死亡",
-      index: 5,
-    },
-    {
-      title: "疫情趋势",
-      index: 6,
-    },
+    { title: "现有确诊", index: 1, },
+    { title: "累计确诊", index: 2, },
+    { title: "新增确诊", index: 3, },
+    { title: "累计治疗", index: 4, },
+    { title: "累计死亡", index: 5, },
+    { title: "疫情趋势", index: 6, },
   ],
 });
 let myEchart = ref(null);
@@ -62,23 +51,25 @@ onMounted(() => {
     if (myChart) myChart.dispose();
     myChart = echarts.init(myEchart.value);
     let option = {
-      backgroundColor: "#eee",
+      backgroundColor: "#555",
       title: {
         text: "全国新冠疫情" + reactData.title,
         subtext: "",
         x: "center",
         y: 30,
         textStyle: {
-          color: "#333",
+          color: "#fff",
           fontSize: 25,
         },
       },
       tooltip: {
         trigger: "item",
       },
-
       //左侧小导航图标
       visualMap: {
+        textStyle: {
+          color: "#fff",
+        },
         show: true,
         x: "left",
         y: "bottom",
@@ -106,7 +97,7 @@ onMounted(() => {
         {
           name: "数据",
           type: "map",
-          mapType: "china",
+          map: "china",
           roam: true,
           zoom: 1.2,
           scaleLimit: {
@@ -116,6 +107,7 @@ onMounted(() => {
           label: {
             normal: {
               show: true, //省份名称
+              color: "#fff",
             },
             emphasis: {
               show: false,
@@ -140,8 +132,18 @@ onMounted(() => {
       console.log("数据不对", error, data);
     }
     option = {
+      backgroundColor: "#333",
+      textStyle: {
+        color: "#fff",
+      },
       title: {
         text: "全国新冠疫情" + reactData.title,
+        textStyle: {
+          color: "#fff",
+          fontSize: 25,
+        },
+        x: "center",
+        y: 30,
       },
       tooltip: {
         trigger: "axis",
@@ -152,7 +154,8 @@ onMounted(() => {
       grid: {
         left: "3%",
         right: "4%",
-        bottom: "3%",
+        bottom: "10%",
+        top: "20%",
         containLabel: true,
       },
       toolbox: {
@@ -253,9 +256,56 @@ watch(
   }
 );
 </script>
-<style scoped>
+<style lang="less" scoped>
 .map-container {
   width: 100%;
-  height: 700px;
+  height: 100vh;
+  background-color: #000;
+}
+
+
+.contents {
+  overflow: hidden;
+  width: 100%;
+  height: 100vh;
+  background-color: var(--themeColor);
+  // padding-top: 100px;
+  position: relative;
+
+  .back {
+    width: auto;
+    font-size: 20px;
+    color: #fff;
+    position: absolute;
+    top: 10px;
+    z-index: 1;
+    border: 2px solid #fff;
+    border-left: none;
+    cursor: var(--linkCup);
+    background-color: var(--themeColor);
+    padding: 0px 10px;
+    border-radius: 0 20px 20px 0;
+    box-shadow: 0 2px 5px 1px #222;
+  }
+
+  .items {
+    position: absolute;
+    top: 10px;
+    right: 0%;
+    transform: translate(0%, 0);
+    z-index: 1;
+  }
+
+  p {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    color: #fff;
+
+    a {
+      color: #fff;
+      cursor: var(--linkCup);
+    }
+  }
 }
 </style>

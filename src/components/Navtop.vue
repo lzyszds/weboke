@@ -66,7 +66,7 @@ const data = reactive({
     { name: "首页", path: '/home/index' },
     { name: "关于", path: '/about' },
     { name: "相册", path: '/photo' },
-    { name: "疫情", path: '/home/episit' },
+    { name: "疫情", path: '/episit' },
     { name: "登陆", path: '/login' },
   ],
   opencount: 0,

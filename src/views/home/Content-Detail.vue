@@ -2,7 +2,6 @@
 import { onMounted, ref, getCurrentInstance } from 'vue'
 import Maincontent from '../../components/Maincontent.vue';
 import { useEventListener } from '@vueuse/core'
-import { ArrowRight } from '@element-plus/icons-vue'
 import { useRoute } from 'vue-router';
 import icon from '@/components/icon.vue'
 import http from '@/http/http';
@@ -11,6 +10,8 @@ const route = useRoute()
 const aid = route.path.replace('/home/detail/', '') //获取当前文章id
 const dataDet = ref<any>(await http('get', '/admin/articleDetail?aid=' + aid))
 dataDet.value = dataDet.value.data //获取当前页面的文章内容
+const affixElm = ref<HTMLElement | null>(null)
+
 
 const { proxy } = getCurrentInstance() as any
 const tocList = ref<any>([]);
@@ -30,8 +31,16 @@ const listComment = ref([
 // const articleList = await http('get', '/articleList')
 
 const textbefore = ref('寻找中...')
-const result = await http('get', '/getIp/sentence') as any
-textbefore.value = result.data.content
+try {
+  const result = await http('get', '/getIp/sentence') as any
+  textbefore.value = result.data.content
+} catch (e) {
+  console.log("请求频率上限：" + e + "两秒后重新请求")
+  setTimeout(async () => {
+    const result = await http('get', '/getIp/sentence') as any
+    textbefore.value = result.data.content
+  }, 2000)
+}
 onMounted(() => {
   //处理代码高亮行数显示
   let blocks = document.querySelectorAll('pre code');
@@ -41,6 +50,7 @@ onMounted(() => {
       element.innerHTML = element.getAttribute('data-line-number')
     });
   })
+
   setTimeout(() => {
     //获取当前文章的索引目录
     let toc = document.querySelectorAll('h2,h3,h4') as any;
@@ -56,15 +66,15 @@ onMounted(() => {
     //监听滚动事件
     handleScroll();
     setTimeout(() => {
+      console.log(`lzy ~ affixElm.value`, affixElm.value)
       affixElm.value!.style.height = document.querySelector('.main')?.getBoundingClientRect().height + 'px';
     }, 500);
-  }, 1000)
+  }, 50)
 })
 //处理时间戳转换成距离当前日期的时间（一天前，两天前）
 function setTimestamp(time: string) {
   return proxy.$common.timeAgo(time)
 }
-const affixElm = ref<HTMLElement | null>(null)
 const scrollTop = ref<number>(0); // 记录当前的滚动距离
 function handleScroll() {
   useEventListener(window, 'scroll', () => {
@@ -98,11 +108,6 @@ const toUp = () => {
       </div>
     </div>
     <div class="center detBreadcrumb ">
-      <el-breadcrumb :separator-icon="ArrowRight">
-        <el-breadcrumb-item :to="{ path: '/' }">home</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/home/index' }">detail </el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/home/detail/' + aid }">{{ aid }}.html </el-breadcrumb-item>
-      </el-breadcrumb>
       <div class="boxType">
         <el-tag class="ml-1" type="info" v-for="(item, index) in dataDet.wtype ? dataDet.wtype.split(',') : []"
           :key="index">{{ item }}
@@ -195,6 +200,10 @@ const toUp = () => {
       white-space: nowrap;
       margin: 0 30px 0 0;
       line-height: 35px;
+
+      .ml-1 {
+        margin-left: 10px;
+      }
 
       &:deep(.el-tag.el-tag--info) {
         background-color: crimson;

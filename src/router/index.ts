@@ -17,15 +17,11 @@ const routes = [
         name: 'home',
         component: index,
         children: [{
-            path: '/home/index',
+            path: 'index',
             name: 'Content',
             component: () => import('@/views/home/Home.vue'),
         }, {
-            path: '/home/episit',
-            name: 'homeEpisit',
-            component: () => import('@/views/episit/index.vue')
-        }, {
-            path: '/home/detail/:id',
+            path: 'detail/:id',
             name: 'detail',
             component: () => import('@/views/home/Content-Detail.vue')
         }]
@@ -49,25 +45,29 @@ const routes = [
         component: () =>
             import('@/views/admin/Admin.vue'),
         children: [{
-            path: '/userAdmin/User',
+            path: 'User',
             name: 'user',
             component: () =>
                 import('@/views/admin/children/user/User.vue')
         }, {
-            path: '/userAdmin/Article',
-            name: 'episit',
+            path: 'Article',
+            name: 'article',
             component: () =>
                 import('@/views/admin/children/article/Article.vue')
         }]
-
-
-    }]
-
+    }, {
+        path: '/episit',
+        name: 'Episit',
+        component: () => import('@/views/episit/index.vue')
+    },]
 const router = createRouter({
     history: createWebHistory(),
     routes,
     scrollBehavior(to, from, savedPosition) {
         // 始终滚动到顶部
+        setTimeout(() => {
+            document.querySelector('body')!.classList.remove('loading')
+        }, 1000)
         return { top: 0 }
     },
 })
@@ -79,6 +79,7 @@ router.beforeEach(async (to: any) => {
         document.querySelector('body')!.classList.add('loading')
     }
 })
+
 
 // 简单配置
 NProgress.inc(0.4)
@@ -93,8 +94,5 @@ router.beforeEach((to, from, next) => {
 // 进度条结束
 router.afterEach(() => {
     NProgress.done()
-    setTimeout(() => {
-        document.querySelector('body')!.classList.remove('loading')
-    }, 1000)
 })
 export default router

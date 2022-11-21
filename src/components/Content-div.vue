@@ -2,6 +2,7 @@
 <script setup lang='ts'>
 import { defineProps, ref } from 'vue';
 import dayjs from 'dayjs';
+
 const list = [
     { name: 'icon-icon-taikong13', fill: '#888', },
     { name: 'icon-icon-taikong9', fill: '#888', },
@@ -16,7 +17,8 @@ interface Props {
         authorId: string,
         comNumber: string,
         coverImg: string,
-    }
+    },
+    index: number,
 }
 const props = defineProps<Props>();
 const data: any = ref(props.data)
@@ -28,8 +30,8 @@ const selectHandle = (index: number) => {
 </script>
 
 <template>
-    <div v-transition="'animate'" class="conDiv">
-        <img v-lazy :src="data.coverImg" alt="">
+    <div v-transition="'tosiTion'" class="conDiv">
+        <img v-lazy="props.index" :src="data.coverImg" alt="">
         <div class="conDiv_text">
             <div class="title">{{ data.title }}</div>
             <div class="synopsis" v-html="data.coverContent"></div>
@@ -40,7 +42,6 @@ const selectHandle = (index: number) => {
                 </span>
             </div>
         </div>
-
     </div>
 </template>
 
@@ -53,57 +54,15 @@ const selectHandle = (index: number) => {
     margin-bottom: 30px;
     margin-top: 3px;
     background-color: #fff;
-    /* transition: 0.5s all; */
+    opacity: .5;
+    transition: all .5s cubic-bezier(0.68, -0.55, 0.68, 1.55);
+    transform: translateY(200px);
+
+}
+
+.tosiTion {
     opacity: 1;
-    /* display: none; */
-}
-
-.conDiv.animate {
-    animation: slide-in-blurred-bottom 0.6s cubic-bezier(0.230, 1.000, 0.320, 1.000) both;
-}
-
-@-webkit-keyframes slide-in-blurred-bottom {
-    0% {
-        -webkit-transform: translateY(1000px) scaleY(2.5) scaleX(0.2);
-        transform: translateY(1000px) scaleY(2.5) scaleX(0.2);
-        -webkit-transform-origin: 50% 100%;
-        transform-origin: 50% 100%;
-        -webkit-filter: blur(40px);
-        filter: blur(40px);
-        opacity: 0;
-    }
-
-    100% {
-        -webkit-transform: translateY(0) scaleY(1) scaleX(1);
-        transform: translateY(0) scaleY(1) scaleX(1);
-        -webkit-transform-origin: 50% 50%;
-        transform-origin: 50% 50%;
-        -webkit-filter: blur(0);
-        filter: blur(0);
-        opacity: 1;
-    }
-}
-
-@keyframes slide-in-blurred-bottom {
-    0% {
-        -webkit-transform: translateY(1000px) scaleY(2.5) scaleX(0.2);
-        transform: translateY(1000px) scaleY(2.5) scaleX(0.2);
-        -webkit-transform-origin: 50% 100%;
-        transform-origin: 50% 100%;
-        -webkit-filter: blur(40px);
-        filter: blur(40px);
-        opacity: 0;
-    }
-
-    100% {
-        -webkit-transform: translateY(0) scaleY(1) scaleX(1);
-        transform: translateY(0) scaleY(1) scaleX(1);
-        -webkit-transform-origin: 50% 50%;
-        transform-origin: 50% 50%;
-        -webkit-filter: blur(0);
-        filter: blur(0);
-        opacity: 1;
-    }
+    transform: translate(0) !important;
 }
 
 .conDiv:hover .title {

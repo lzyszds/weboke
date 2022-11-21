@@ -1,6 +1,11 @@
-@font-face {
+/* @font-face {
   font-family: 'douyu';
   src: url('./douyu2.0.ttf');
+} */
+
+@font-face {
+  font-family: 'douyu';
+  src: url('./douyu2.0.woff2');
 }
 
 @font-face {

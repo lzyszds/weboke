@@ -15,9 +15,16 @@ const svgTip = reactive({
   date: '',
   count: 0,
 })
-
+const toTion = ref<boolean[]>([false, false, false, false])
 const data = ref(<any>[])
 const month = ref(<any>[])
+// const toTionList: [] = toTion.value.keys()
+toTion.value.forEach((_item, index) => {
+  setTimeout(() => {
+    toTion.value[index] = true
+  }, index * 500 + 500)
+})
+
 onMounted(() => {
   http('post', '/github', parps, headers).then((res: any) => {
     const { name, contributionsCollection } = res.data.user
@@ -109,10 +116,18 @@ const onBack = () => {
             </el-descriptions>
             <p class="describe"><i class="fa fa-bookmark-o"></i> 相关经历：</p>
             <ul>
-              <li>2019.9 - 2022.7 广西职业技术学院 专科 计算机应用技术专业</li>
-              <li>2021.7 - 2022.8 成都云天为民(小公司主要负责气象数据) 实习</li>
-              <li>2022.9 - 至今 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;南宁学院 本科 计算机科学与技术专业</li>
-              <li>至今还在努力学习中哦...</li>
+              <transition name="toTion">
+                <li v-if="toTion[0]">2019.9 - 2022.7 广西职业技术学院 专科 计算机应用技术专业</li>
+              </transition>
+              <transition name="toTion">
+                <li v-if="toTion[1]">2021.7 - 2022.8 成都云天为民(小公司主要负责气象数据) 实习</li>
+              </transition>
+              <transition name="toTion">
+                <li v-if="toTion[2]">2022.9 - 至今 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;南宁学院 本科 计算机科学与技术专业</li>
+              </transition>
+              <transition name="toTion">
+                <li v-if="toTion[3]">至今还在努力学习中哦...</li>
+              </transition>
             </ul>
           </el-page-header>
         </div>
@@ -288,5 +303,17 @@ const onBack = () => {
     -webkit-transform: translateY(0) rotate(2.4deg);
     transform: translateY(0) rotate(2.4deg);
   }
+}
+
+.toTion-enter-active,
+.toTion-leave-active {
+  transition: all 1s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+}
+
+.toTion-enter-from,
+.toTion-leave-to {
+  opacity: 0;
+  transform: translateX(-30px);
+
 }
 </style>

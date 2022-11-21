@@ -1,5 +1,5 @@
 <template>
-  <button class="zybutton w-40 h-10 cursor-pointer rounded-xl m-1">
+  <button class="zybutton ">
     <slot />
   </button>
 </template>
@@ -17,6 +17,9 @@
   border: none;
   font-family: inherit;
   color: #000;
+  background-color: #fff;
+  padding: 5px 10px;
+  margin-left: 10px;
 }
 
 .zybutton:hover {

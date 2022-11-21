@@ -32,19 +32,12 @@ onMounted(() => {
             message: `<i class="fa fa-copy"></i> 复制成功,转载请声明一下`,
             position: 'bottom-right',
             duration: 2000,
-            // icon: 'fa-copy',
             customClass: 'copy-success',
           })
-          /* clipboard successfully set */
         }, function (res) {
           console.log("lzy ~ res", res)
-          /* clipboard write failed */
         });
-
-
-
       })
-      // element.style.display = 'none'
     })
   }, 1000)
 })
@@ -56,7 +49,7 @@ onMounted(() => {
   </div>
 </template>
 
-<style scoped>
+<style lang="less" scoped>
 p {
   margin: 10px 0;
   text-indent: 2em
@@ -70,50 +63,58 @@ p {
   border-radius: 20px;
   line-height: 40px;
   border: 4px solid #000;
+
   /* padding: 0; */
+  &>div {
+    background-color: #fff;
+    border-radius: 30px;
+    padding: 10px 20px;
+    border: 4px solid #000;
+    position: relative;
+  }
+
+  & :deep(img) {
+    box-shadow: 0px 0px 4px 1px #888;
+    border: 1px solid #000;
+    padding: 2px;
+    border-radius: 8px;
+    cursor: var(--linkCup);
+  }
+
+  ol {
+    list-style: decimal !important;
+    border: 1px dashed #949494;
+    padding: 15px 10px 15px 50px;
+    color: #616161;
+    margin-left: 0;
+    border-radius: 10px;
+
+    li {
+      list-style: decimal !important;
+    }
+
+    p {
+      text-indent: 0em;
+      margin: 0
+    }
+
+    ol :deep(li) p:nth-child(1) {
+      font-size: 19px;
+      font-weight: 600;
+      color: #555
+    }
+
+    ul {
+      li {
+        list-style: none
+      }
+    }
+  }
+
 }
 
-.vuepress-markdown-body>div {
-  background-color: #fff;
-  border-radius: 30px;
-  padding: 10px 20px;
-  border: 4px solid #000;
-  position: relative;
-}
 
-.vuepress-markdown-body :deep(img) {
-  box-shadow: 0px 0px 4px 1px #888;
-  border: 1px solid #000;
-  padding: 2px;
-  border-radius: 8px;
-  cursor: var(--linkCup);
-}
-
-ol {
-  list-style: decimal !important;
-  border: 1px dashed #949494;
-  padding: 15px 10px 15px 50px;
-  color: #616161;
-  margin-left: 0;
-  border-radius: 10px;
-}
-
-li {
-  list-style: decimal !important;
-}
-
-ol p {
-  text-indent: 0em;
-  margin: 0
-}
-
-ol :deep(li) p:nth-child(1) {
-  font-size: 19px;
-  font-weight: 600;
-  color: #555
-}
-
-.dark ol {
+ol .dark ol {
   color: #fff;
 }
 

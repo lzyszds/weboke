@@ -22,8 +22,11 @@ import { useStore } from '@/store/index';
 const { proxy } = getCurrentInstance() as any;
 
 const { $state: state } = useStore();
-state.nowWeatherData = proxy.$common.getIpWeather();
-console.log(state.nowWeatherData)
+const weather = proxy.$common.getIpWeather()
+weather.then(res => {
+  localStorage.setItem('nowWeatherData', JSON.stringify(res))
+})
+state.nowWeatherData = weather;
 </script>
 <style lang="less">
 

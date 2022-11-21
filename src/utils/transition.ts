@@ -3,7 +3,6 @@ export default {
     const observe = new IntersectionObserver((entries) => {
       const { isIntersecting } = entries[0]
       if (isIntersecting == true) {
-        console.log(`lzy ~ isIntersecting`, isIntersecting)
         //设置动画
         el.classList.add(binding.value)
         observe.unobserve(el)

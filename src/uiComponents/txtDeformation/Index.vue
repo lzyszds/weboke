@@ -18,6 +18,7 @@ onMounted(() => {
 
   // 要在其中变形的字符串。您可以将这些更改为您想要的任何内容！
   const texts = [
+    ["set", "sun", "down", "for", "orange", "sea", "evening", "wind", "down", "hoest", "love"],//落日沉溺于橘色的海，晚风沦陷于赤诚的爱
     ["Green", "Son", "Jin", "long", "my", "heart."],//青青子衿，悠悠我心。
     ["Take", "my", "hand", "and", "close", "your.", "You", "won't", "get", "lost."],//牵着我的手，闭着眼睛走你也不会迷路。
     ["There", "is", "no", "failure", "in", "life", "only", "smashing!"],//人生没有失败，只有粉碎！

@@ -10,15 +10,33 @@ const { total, data } = await http('get', '/admin/articleList?pages=' + indexLis
 const list: any = ref(data)
 const totals = ref(total)
 const isload = ref(true)
+const maskShow = ref(true)
+//此处为分页器的回调函数 
 const currentChange = (e: number) => {
+  /*
+    这三行代码解决了分页器,每次执行时会让dom抖动的问题 
+    具体逻辑是，每次切换有页数时页数内容变化，会导致页面高度变化，从而导致页面抖动
+    所以在切换页数时，先把页面高度固定，然后再去请求数据，请求完数据后再把页面高度变回来
+  */
+  const listCom = document.querySelector('.listCom') as HTMLDivElement
+  const listComHeight = listCom.offsetTop
+  listCom.style.height = listComHeight + 'px'
+  //将当前页重新渲染，vue才能监听到数据的变化
   isload.value = false
+  //当前页数
   indexList.value = e
   http('get', '/admin/articleList?pages=' + indexList.value + '&limit=' + limit).then((res: any) => {
+    //跳转路径
     list.value = res.data
     isload.value = true
+    //将页面高度变回来
+    listCom.style.height = 'auto'
   })
 }
 onMounted(() => {
+  setTimeout(() => {
+    maskShow.value = false
+  }, 1000)
   useEventListener(window, 'scroll', () => {
     const listSum = document.querySelector('#listSum') as HTMLElement
     const example = document.querySelector('#example') as HTMLElement
@@ -31,9 +49,9 @@ onMounted(() => {
       listSum.style.position = 'absolute'
     }
     if (window.scrollY >= 300) {
-      example.style.opacity = '1'
+      example.style.bottom = '0'
     } else {
-      example.style.opacity = '0'
+      example.style.bottom = '-100px'
     }
   })
 })
@@ -41,7 +59,7 @@ onBeforeUnmount(() => {
   const listSum = document.querySelector('#listSum') as HTMLElement
   const example = document.querySelector('#example') as HTMLElement
   if (document.querySelector('.navbarContent')) {
-    example.style.opacity = '0'
+    example.style.opacity = '1'
     listSum.style.transform = 'translateY(1012px)'
     listSum.style.position = 'absolute'
   }
@@ -51,15 +69,20 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="content">
-    <div class="home" id="eleme"> </div>
+    <div class="home" id="eleme">
+      <!-- 遮罩 -->
+      <transition name="mask">
+        <div v-if="maskShow" class="mask"></div>
+      </transition>
+    </div>
     <ContentHead></ContentHead>
     <div class="listSum">
       <!-- 文章内容 -->
       <div class="listCom">
-        <img v-lazy class="listImg" id="listSum" src="http://localhost:1027/public/img/leftbg2.jpg" alt="">
+        <img class="listImg" id="listSum" src="http://localhost:1027/public/img/leftbg2.jpg" alt="">
         <div :id="'list' + item.aid" v-for="(item, index) in list" :key="index" v-if="isload">
           <router-link :to="'/home/detail/' + item.aid">
-            <ContentDiv :data="item"></ContentDiv>
+            <ContentDiv :data="item" :index="index"></ContentDiv>
           </router-link>
         </div>
 
@@ -74,7 +97,7 @@ onBeforeUnmount(() => {
   </div>
 </template>
 
-<style scoped>
+<style  lang="less" scoped>
 .dark .home {
   background: url('http://localhost:1027/public/img/12.jpg') no-repeat center center;
   background-size: cover;
@@ -84,8 +107,30 @@ onBeforeUnmount(() => {
   width: 100%;
   height: 100vh;
   background: url('http://localhost:1027/public/img/101608761_p0.png') no-repeat center center;
+  backdrop-filter: blur(50px);
   background-size: cover;
+  position: relative;
+
+  .mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 1);
+  }
+
+  .mask-enter-active,
+  .mask-leave-active {
+    transition: 1s;
+  }
+
+  .mask-leave-to,
+  .mask-enter-from {
+    background: rgba(0, 0, 0, 0);
+  }
 }
+
 
 .content {
   width: 100%;
@@ -133,7 +178,7 @@ onBeforeUnmount(() => {
   padding: 40px;
   width: 960px;
   height: 100%;
-  overflow: hidden scroll;
+  overflow: hidden;
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
@@ -161,12 +206,13 @@ onBeforeUnmount(() => {
 }
 
 .listSum :deep(.example-pagination-block) {
-  transition: .22s;
-  opacity: 0;
+  transition: .22s cubic-bezier(0.645, 0.045, 0.355, 1);
+  opacity: 1;
+  height: 50px;
   width: 100%;
   position: fixed;
   left: 0;
-  bottom: 0;
+  bottom: -100px;
   /* transform: translateX(-50%); */
   background-color: #fff;
 }
