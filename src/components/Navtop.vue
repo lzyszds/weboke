@@ -4,7 +4,7 @@
   <div class="navbarContent">
     <div class="">
       <a class="navbar-brand navbar-logo" href="/">
-        <img width="80" src="http://localhost:1027/public/img/lzjyWhite.png" alt="" />
+        <img width="80" src="/adminApi/public/img/lzjyWhite.png" alt="" />
         <svg class="logoSvg logoSvg1" viewBox="0 0 400 200">
           <text x="0" y="70%" id="timelinetext"> Jz=> </text>
         </svg>
@@ -29,7 +29,7 @@
   </div>
   <nav class="navbar">
     <a class="navbar-brand navbar-logo" href="/">
-      <img width="80" src="http://localhost:1027/public/img/lzjyWhite.png" alt="" />
+      <img width="80" src="/adminApi/public/img/lzjyWhite.png" alt="" />
       <svg class="logoSvg logoSvg2" viewBox="0 0 400 200">
         <text x="0" y="70%" id="timelinetext"> Jz </text>
       </svg>

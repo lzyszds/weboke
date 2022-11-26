@@ -19,7 +19,7 @@ const searchInput = ref('')
 const search = () => {
   switch (props.type) {
     case 'user':
-      const pagePara = `/admin/${props.url}?search=` + searchInput.value
+      const pagePara = `/adminApi/admin/${props.url}?search=` + searchInput.value
       http('get', pagePara).then((res: httpData) => {
         emit('searchData', { data: res.data, searchInput: searchInput.value })
       })

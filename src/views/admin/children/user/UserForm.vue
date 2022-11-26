@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import { reactive, ref, getCurrentInstance, defineProps, defineEmits } from 'vue'
+import { reactive, ref, defineProps, defineEmits } from 'vue'
 import { FormInstance, FormRules } from 'element-plus'
 import http from '@/http/http';
 const emit = defineEmits(['switchAdd', 'switchMod'])
@@ -7,7 +7,6 @@ const props = defineProps({
   type: String,
   data: Object,
 })
-const { proxy } = getCurrentInstance() as any
 const formSize = ref('default')
 const ruleFormRef = ref<FormInstance>()
 const rangeDate = () => {
@@ -16,14 +15,14 @@ const rangeDate = () => {
 //随机推荐头像
 const randomAvatar = () => {
   const arr: string[] = [
-    'http://localhost:1027/public/img/updataImg/put1.jpg',
-    'http://localhost:1027/public/img/updataImg/put2.jpg',
-    'http://localhost:1027/public/img/updataImg/put3.jpg',
-    'http://localhost:1027/public/img/updataImg/put4.jpg',
-    'http://localhost:1027/public/img/updataImg/put5.jpg',
-    'http://localhost:1027/public/img/updataImg/put6.jpg',
-    'http://localhost:1027/public/img/updataImg/put7.jpg',
-    'http://localhost:1027/public/img/updataImg/put8.jpg',
+    '/adminApi/public/img/updataImg/put1.jpg',
+    '/adminApi/public/img/updataImg/put2.jpg',
+    '/adminApi/public/img/updataImg/put3.jpg',
+    '/adminApi/public/img/updataImg/put4.jpg',
+    '/adminApi/public/img/updataImg/put5.jpg',
+    '/adminApi/public/img/updataImg/put6.jpg',
+    '/adminApi/public/img/updataImg/put7.jpg',
+    '/adminApi/public/img/updataImg/put8.jpg',
   ]
   const random = Math.floor(Math.random() * arr.length) as any
   if (localStorage.getItem('randomAvatar') == random) {
@@ -35,9 +34,10 @@ const randomAvatar = () => {
 }
 const ruleForm: any = ref()
 if (props.type == 'modify') {
+  console.log(props.data);
   ruleForm.value = {
-    headImg: 'http://localhost:1027' + props.data?.headImg,
-    setHeadImg: 'http://localhost:1027' + props.data?.headImg,
+    headImg: '/adminApi' + props.data?.headImg,
+    // setHeadImg: '/adminApi' + props.data?.headImg,
     name: props.data?.uname,
     username: props.data?.username,
     password: props.data?.pwd,
@@ -50,7 +50,7 @@ if (props.type == 'modify') {
   const random = randomAvatar()
   ruleForm.value = {
     headImg: random,
-    setHeadImg: random,
+    // setHeadImg: random,
     name: '',
     username: '',
     password: '',
@@ -75,8 +75,8 @@ const rules = reactive<FormRules>({
 })
 
 const onAddUser = () => {
-  ruleForm.value.setHeadImg = ruleForm.value.headImg.replace('http://localhost:1027', '');
-  http('POST', '/admin/addUserLzy', ruleForm.value)
+  // ruleForm.value.setHeadImg = ruleForm.value.headImg.replace('http://localhost:1027', '');
+  http('POST', '/adminApi/admin/addUserLzy', ruleForm.value)
     .then(() => {
       emit('switchAdd', false)
     })
@@ -85,8 +85,9 @@ const onAddUser = () => {
     })
 }
 const onmodifyUser = () => {
-  ruleForm.value.setHeadImg = ruleForm.value.headImg.replace('http://localhost:1027', '');
-  http('POST', '/admin/updateUserLzy', ruleForm.value)
+  console.log(ruleForm.value);
+  // ruleForm.value.setHeadImg = ruleForm.value.headImg.replace('http://localhost:1027', '');
+  http('POST', '/adminApi/admin/updateUserLzy', ruleForm.value)
     .then(() => {
       emit('switchMod', false)
     })
@@ -116,7 +117,6 @@ const resetForm = (formEl: FormInstance | undefined) => {
 const handleExceed = () => {
   const random = randomAvatar()
   ruleForm.value.headImg = random;
-  ruleForm.value.setHeadImg = random?.replace('http://localhost:1027', '');
 }
 const messagetxt = ref('limit 1 file, new file will cover the old file')
 const upClick = () => {
@@ -129,10 +129,8 @@ const submitUpload = () => {
   const xFile: any = document.getElementById('xFile') as HTMLInputElement
   let reader = new FileReader();
   reader.readAsDataURL(xFile.files[0]);
-  reader.onload = function (e) {
+  reader.onload = function () {
     //e代表事件,可以通过e.target获取FileReader对象然后在获取readAsDataURL读取的base64字符
-    const base64 = e.target?.result as string
-    const blob = proxy.$common.base64toBlob(base64)
     //下面是将blob转换为file 用于上传
     let formData = new FormData();
     formData.append('headImg', xFile.files[0]);
@@ -140,12 +138,12 @@ const submitUpload = () => {
       'Content-Type': 'multipart/form-data',
     }
     //给后台上传头像图片，并获取后台返回新的图片地址
-    http('post', '/admin/uploadHead', formData, headers)
+    http('post', '/adminApi/admin/uploadHead', formData, headers)
       .then((res: { code: Number, message }) => {
         if (res.code === 200) {
-          const objectURL = URL.createObjectURL(blob);
-          ruleForm.value.headImg = objectURL;//显示的头像blob转化为可图片显示的src
-          ruleForm.value.setHeadImg = res.message; //放入数据库中的图片路径
+          // const objectURL = URL.createObjectURL(blob);
+          ruleForm.value.headImg = res.message;//显示的头像blob转化为可图片显示的src
+          // ruleForm.value.setHeadImg = res.message; //放入数据库中的图片路径
           messagetxt.value = 'limit 1 file, new file will cover the old file'
         } else {
           messagetxt.value = res.message
@@ -159,7 +157,7 @@ const submitUpload = () => {
   <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="140px" class="demo-ruleForm" :size="formSize"
     status-icon>
     <div class="headelement">
-      <el-avatar :size="100" :src="ruleForm.headImg" />
+      <el-avatar :size="100" :src="'/adminApi' + ruleForm.headImg" />
       <div class="upload-demo">
         <div class="fileBtn">
           <div class="fileUpload">

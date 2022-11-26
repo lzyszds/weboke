@@ -31,7 +31,7 @@ const selectHandle = (index: number) => {
 
 <template>
     <div v-transition="'tosiTion'" class="conDiv">
-        <img v-lazy="props.index" :src="data.coverImg" alt="">
+        <img v-lazy="props.index" :src="'/adminApi/' + data.coverImg" alt="">
         <div class="conDiv_text">
             <div class="title">{{ data.title }}</div>
             <div class="synopsis" v-html="data.coverContent"></div>

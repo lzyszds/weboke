@@ -12,6 +12,7 @@ const orderTool = `emoji undo redo clear |h bold italic strikethrough quote addT
 const props = defineProps({
   type: String,
   data: Object,
+  tableheight: Number,
 })
 
 
@@ -24,7 +25,7 @@ const storage = ref<storageType>({ text: '', html: '' })
 const text = ref<any>(props.data?.content)
 const html = ref<any>(props.data?.html)
 const title = ref<string>(props.data?.title || '')
-const cover = ref<string>(props.data?.coverImg || 'http://localhost:1027/public/img/articleImages/upload-image1667660540602.jpeg')
+const cover = ref<string>(props.data?.coverImg || '/adminApi/public/img/articleImages/upload-image1667660540602.jpeg')
 //确认提交
 const submitForm = () => {
   const data = {
@@ -42,7 +43,7 @@ const submitForm = () => {
   const url = props.type === 'modify' ? 'updateArticle' : 'addArticle'
   //当前是否保存
   if (storage.value.text === text.value || storage.value.html === html.value) {
-    http('post', `/admin/${url}`, data).then((res: any) => {
+    http('post', `/adminApi/admin/${url}`, data).then((res: any) => {
       if (res.code === 200) {
         emit('switchMod', false)
         emit('switchAdd', false)
@@ -71,7 +72,6 @@ const resetForm = () => {
 }
 //本地图片上传到线上，并返回当前文件在线上的path
 const handleUploadImage = (event, insertImage, files) => {
-  console.log(`lzy ~ event`, event)
   //对图片进行压缩
   compressPic(files[0], 0.5).then(({ fileCompress }) => {
     // 拿到 files 之后上传到文件服务器，然后向编辑框中插入对应的内容
@@ -82,14 +82,13 @@ const handleUploadImage = (event, insertImage, files) => {
       'Content-Type': 'multipart/form-data',
     }
     // 此处即为向编辑框中插入的内容，url即为图片上传后返回的链接
-    http('post', '/admin/uploadArticleImg', formData, headers)
+    http('post', '/adminApi/admin/uploadArticleImg', formData, headers)
       .then((res: { code: Number, message }) => {
         if (res.code === 200) {
           insertImage({
-            url: 'http://localhost:1027' + res.message,
+            url: '/adminApi' + res.message,
             desc: '点击放大',
           });
-        } else {
         }
       })
   })
@@ -114,10 +113,10 @@ onMounted(() => {
         'Content-Type': 'multipart/form-data',
       }
       // 此处即为向编辑框中插入的内容，url即为图片上传后返回的链接
-      http('post', '/admin/uploadArticleImg', formData, headers)
+      http('post', '/adminApi/admin/uploadArticleImg', formData, headers)
         .then((res: { code: Number, message }) => {
           if (res.code === 200) {
-            cover.value = 'http://localhost:1027' + res.message
+            cover.value = res.message
           }
         })
     })
@@ -146,7 +145,7 @@ tagData.value = props.data?.wtype ? props.data?.wtype.split(',') : []
 const tagDataTem: any = ref(tagData.value)
 const tagList = ref<TagType>({})
 
-tagList.value = await http('get', '/admin/articleType') as TagType
+tagList.value = await http('get', '/adminApi/admin/articleType') as TagType
 
 const tagActive = (tag) => {
   if (tagDataTem.value.includes(tag)) {
@@ -173,10 +172,10 @@ const addArticleType = () => {
     return tagDataTem.value.push(typeInput.value)
   }
   if (!typeInput.value) return
-  const result = http('post', '/admin/addArticleType', { name: typeInput.value })
+  const result = http('post', '/adminApi/admin/addArticleType', { name: typeInput.value })
   result.then(async (res: any) => {
     if (res.code == 200) {
-      tagList.value = await http('get', '/admin/articleType') as TagType
+      tagList.value = await http('get', '/adminApi/admin/articleType') as TagType
     }
   })
 }
@@ -189,7 +188,7 @@ const addArticleType = () => {
       <div class="markDowmInput">
         <span>封面图片：</span>
         <div @click="coverUpdate" class="coverImg">
-          <img :src="cover" alt="">
+          <img :src="'/adminApi' + cover" alt="">
           <input type="file" id="coverFile">
         </div>
         <span>文章标题：</span>
@@ -229,7 +228,7 @@ const addArticleType = () => {
         </el-popover>
       </div>
       <v-md-editor class="markDowmLzy" v-model="text" :disabled-menus="[]" :left-toolbar="orderTool" @save="clicks"
-        @upload-image="handleUploadImage" height="650px" :toolbar="toolbar">
+        @upload-image="handleUploadImage" :height="(tableheight! * 0.9) + 'px'" :toolbar="toolbar">
       </v-md-editor>
     </div>
     <div class="btnTool">

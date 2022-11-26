@@ -96,7 +96,7 @@ setInterval(() => {
 }, 1000)
 //处理用户详情数据
 const infoData: any = ref()
-const { data } = await http('get', '/admin/getUserInfo') as any
+const { data } = await http('get', '/adminApi/admin/getUserInfo') as any
 if (data.perSign) {
   data.perSign = data.perSign.replace(',', '#,~').split('#,~')
   data.perSign = data.perSign ? data.perSign : '这个人很懒，什么都没留下'
@@ -111,7 +111,7 @@ infoData.value = data
   <div class="setleft">
     <div class="logo"> Lzyszds </div>
     <div class="userinfo">
-      <div class="headPortrait"><img :src="'http://localhost:1027' + infoData.headImg" alt=""> </div>
+      <div class="headPortrait"><img :src="'/adminApi' + infoData.headImg" alt=""> </div>
       <h3>{{ infoData.uname }}</h3>
       <p>「{{ infoData.perSign[0] }}」</p>
       <p>{{ infoData.perSign[1] }}</p>
@@ -202,6 +202,7 @@ infoData.value = data
       color: #000;
       font-weight: 600;
       font-family: 'almama';
+      margin: 0px 0;
     }
 
     p {

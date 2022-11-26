@@ -46,7 +46,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   formEl.validate((valid, fields) => {
     if (valid) {
-      http('post', '/admin/login', ruleForm).then((res: getLoginData) => {
+      http('post', '/adminApi/admin/login', ruleForm).then((res: getLoginData) => {
         setTimeout(() => {
           if (res.error === 0 || res.code === 200) {
             localStorage.setItem('lzy_token', res.token)
@@ -70,7 +70,7 @@ const back = () => {
   <div class="login">
     <div class="card">
       <!-- <div class="item top">
-        <img src="http://localhost:1027/public/img/lzjyBlack.png" alt="">
+        <img src="/adminApi/public/img/lzjyBlack.png" alt="">
         <p>Sign In</p>
       </div> -->
       <div class="item center">

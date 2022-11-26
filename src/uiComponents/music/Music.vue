@@ -151,7 +151,7 @@ http('get', "/music/login/status").then((res) => {
 // http('get', "/music/logout").then((res) => {
 //   console.log(`lzy ~ res`, res)
 // })
-// http('get', "/admin/musicLogin").then((res) => {
+// http('get', "/adminApi/admin/musicLogin").then((res) => {
 //   console.log(`lzy ~ res`, res)
 // })
 http('get', "/music/playlist/detail?id=7480206477").then((res) => {

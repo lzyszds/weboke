@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import { ref, h } from 'vue'
+import { ref, h, watch } from 'vue'
 import { ElTable, ElMessageBox, ElNotification } from 'element-plus'
 import http from '@/http/http'
 import dayjs from 'dayjs'
@@ -7,10 +7,13 @@ import load from '@/uiComponents/loader/loadings'
 import { httpData, Article } from './type'
 import ArticleForm from './ArticleForm.vue'
 import Search from '@/views/admin/components/Search.vue'
+import { useWindowSize } from '@vueuse/core'
+const { height } = useWindowSize()
 
 const total = ref(1) //分页页数
 const pageSize = ref(7) //分页大小
-
+const tableheight = ref<number>(729) //表格高度
+tableheight.value = height.value * 0.75
 
 //表格数据（前页数据展示进表格中）
 const tableData = ref<Article[]>()
@@ -29,7 +32,7 @@ const handleCurrentChange = async (val: number, number?) => {
   if (number != 0) load.show('#loadings')
   total.value = val
 
-  const pagePara = '/admin/articleList?pages=' + total.value + '&limit=' + pageSize.value
+  const pagePara = '/adminApi/admin/articleList?pages=' + total.value + '&limit=' + pageSize.value
   data.value = await http('get', pagePara) as httpData
 
 
@@ -98,7 +101,7 @@ const switchMod = (boolean: boolean) => {
 
 //删除文章
 const deleteArticle = (event) => {
-  http('post', '/admin/deleteArticle', { id: event.aid }).then((res: httpData) => {
+  http('post', '/adminApi/admin/deleteArticle', { id: event.aid }).then((res: httpData) => {
     ElNotification({
       title: res.code == 200 ? '成功' : '失败',
       message: '用户' + res.message,
@@ -120,13 +123,18 @@ const searchData = (val) => {
     tableSearchData.value = val.data
   }
 }
+//监听窗口大小变化
+watch(height, (val) => {
+  tableheight.value = val * 0.75
+})
 </script>
 
 <template>
   <Search type='user' @searchData="searchData" url="searchArticle" />
   <div class="tableuser" id="loadings">
 
-    <el-table border :data="tableSearchData || tableData" cell-class-name="lzyCell" height="729" style="width: 100%">
+    <el-table border :data="tableSearchData || tableData" cell-class-name="lzyCell" :height="tableheight"
+      style="width: 100%">
       <template #empty>
         <div class="empty">
           <img src="@/assets/image/暂无文档.svg" alt="">
@@ -139,7 +147,7 @@ const searchData = (val) => {
       <el-table-column label="文章封面" sortable width="180" align="center">
         <template #default="scopre">
           <div>
-            <img v-lazy data-fancybox="gallery" :src="scopre.row.coverImg" alt="">
+            <img v-lazy data-fancybox="gallery" :src="'/adminApi' + scopre.row.coverImg" alt="">
           </div>
         </template>
       </el-table-column>
@@ -181,11 +189,12 @@ const searchData = (val) => {
     <el-button class="add" type="primary" @click="addUser">新增文章</el-button>
     <el-dialog class="articleDialog" :close-on-press-escape="false" v-model="centVisible" top="0px"
       :before-close="handleClose" title="新增文章" width="90%" left>
-      <ArticleForm v-if="centVisible" type="add" @switchAdd="switchAdd" />
+      <ArticleForm v-if="centVisible" type="add" :tableheight="tableheight" @switchAdd="switchAdd" />
     </el-dialog>
     <el-dialog class="articleDialog" :close-on-press-escape="false" v-model="modifyTheVis" :before-close="handleClose"
       title="修改文章" width="90%" left>
-      <ArticleForm v-if="modifyTheVis" type="modify" :data="modifyData" @switchMod="switchMod" />
+      <ArticleForm v-if="modifyTheVis" type="modify" :data="modifyData" :tableheight="tableheight"
+        @switchMod="switchMod" />
     </el-dialog>
     <div class="example-pagination-block lzyColor" v-if="!tableSearchData">
       <!-- <div class="example-demonstration">When you have more than 7 pages</div> -->

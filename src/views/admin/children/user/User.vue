@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import { ref, h } from 'vue'
+import { ref, h, watch } from 'vue'
 import { ElTable, ElMessageBox, ElNotification } from 'element-plus'
 import http from '@/http/http'
 import dayjs from 'dayjs'
@@ -7,9 +7,13 @@ import UserForm from './UserForm.vue'
 import load from '@/uiComponents/loader/loadings'
 import { httpData, User } from './type'
 import Search from '@/views/admin/components/Search.vue'
+import { useWindowSize } from '@vueuse/core'
+const { height } = useWindowSize()
 
 const total = ref(1) //分页页数
 const pageSize = ref(10) //分页大小
+const tableheight = ref<number>(729) //表格高度
+tableheight.value = height.value * 0.75
 
 
 //表格数据（前页数据展示进表格中）
@@ -29,7 +33,7 @@ const handleCurrentChange = async (val: number, number?) => {
   if (number != 0) load.show('#loadings')
   total.value = val
 
-  const pagePara = '/admin/userList?pages=' + total.value + '&limit=' + pageSize.value
+  const pagePara = '/adminApi/admin/userList?pages=' + total.value + '&limit=' + pageSize.value
   data.value = await http('get', pagePara) as httpData
 
 
@@ -46,7 +50,7 @@ const handleCurrentChange = async (val: number, number?) => {
 handleCurrentChange(1, 0)
 //设置所有图片的地址 
 const setheadImg = (headImg: User) => {
-  return 'http://localhost:1027' + headImg
+  return '/adminApi' + headImg
 }
 //屁用没有，但是必须写，不然排序不了 使用模板的table列
 const formatter = () => { }
@@ -102,7 +106,7 @@ const switchMod = (boolean: boolean) => {
 
 //删除用户
 const deleteUser = (event) => {
-  http('post', '/admin/deleteUserLzy', { id: event.uid }).then((res: httpData) => {
+  http('post', '/adminApi/admin/deleteUserLzy', { id: event.uid }).then((res: httpData) => {
     ElNotification({
       title: res.code == 200 ? '成功' : '失败',
       message: '用户' + res.message,
@@ -125,13 +129,17 @@ const searchData = (val) => {
     tableSearchData.value = val.data
   }
 }
+//监听窗口大小变化
+watch(height, (val) => {
+  tableheight.value = val * 0.75
+})
 </script>
 
 <template>
   <Search type='user' @searchData="searchData" />
   <div class="tableuser" id="loadings">
-
-    <el-table :data="tableSearchData || tableData" cell-class-name="lzyCell" height="729" style="width: 100%" stripe>
+    <el-table :data="tableSearchData || tableData" cell-class-name="lzyCell" :height="tableheight" style="width: 100%"
+      stripe>
       <template #empty>
         <div class="empty">
           <img src="@/assets/image/暂无文档.svg" alt="">

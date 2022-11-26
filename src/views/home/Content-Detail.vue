@@ -8,7 +8,7 @@ import http from '@/http/http';
 
 const route = useRoute()
 const aid = route.path.replace('/home/detail/', '') //获取当前文章id
-const dataDet = ref<any>(await http('get', '/admin/articleDetail?aid=' + aid))
+const dataDet = ref<any>(await http('get', '/adminApi/admin/articleDetail?aid=' + aid))
 dataDet.value = dataDet.value.data //获取当前页面的文章内容
 const affixElm = ref<HTMLElement | null>(null)
 
@@ -101,7 +101,7 @@ const toUp = () => {
 <template>
   <div class="detail">
     <div class="imgtop">
-      <img :src="dataDet.coverImg" alt="">
+      <img :src="'/adminApi' + dataDet.coverImg" alt="">
       <div class="topTitle center">
         <h1>{{ dataDet.title }}</h1>
         <p>{{ dataDet.author }} {{ setTimestamp(dataDet.createTime) }} {{ dataDet.comNumber }}条评论</p>
@@ -148,7 +148,7 @@ const toUp = () => {
         <div class="comContent">
           <div class="comment-item" v-for="(item, index) in listComment" :key="index">
             <div class="comment-item-left">
-              <img src="http://localhost:1027/public/img/lzy.jpg" alt="">
+              <img src="/adminApi/public/img/lzy.jpg" alt="">
             </div>
             <div class="comment-item-right">
               <div class="comment-item-right-top">
