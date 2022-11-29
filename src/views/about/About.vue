@@ -9,22 +9,26 @@ import { useEventListener } from '@vueuse/core';
 const router = useRouter();
 //实现github贡献图参考
 //https://stackoverflow.com/questions/18262288/finding-total-contributions-of-a-user-from-github-api
+
+//svg参数设置
 const svgTip = reactive({
-  x: 0,
-  y: 0,
-  date: '',
-  count: 0,
+  x: 0,  //鼠标x坐标
+  y: 0, //鼠标y坐标
+  date: '', //当前格子的日期
+  count: 0, //当前格子的提交次数
 })
+
+//相关经历的初始动画
 const toTion = ref<boolean[]>([false, false, false, false])
-const data = ref(<any>[])
-const month = ref(<any>[])
-// const toTionList: [] = toTion.value.keys()
 toTion.value.forEach((_item, index) => {
   setTimeout(() => {
     toTion.value[index] = true
   }, index * 500 + 500)
 })
 
+//github贡献图 获取逻辑、数据处理，具体实现svg绘制在template中循环绘制
+const data = ref(<any>[])
+const month = ref(<any>[])
 onMounted(() => {
   http('post', '/github', parps, headers).then((res: any) => {
     const { name, contributionsCollection } = res.data.user
@@ -33,8 +37,8 @@ onMounted(() => {
     // handleData(weeks)
     data.value = weeks
     const months = [
-      "Jan", "Feb", "Mar", "Apr", "May", "June", "July",
-      "Aug", "Sept", "Oct", "Nov", "Dec"
+      "Jan", "Feb", "Mar", "Apr", "May", "June",
+      "July", "Aug", "Sept", "Oct", "Nov", "Dec"
     ]
     const now = <any>[]
     weeks.forEach((item, index) => {
@@ -48,6 +52,7 @@ onMounted(() => {
       const rect = document.querySelectorAll('.rectangle')
       const svgTipDom = document.querySelector('#svgTip') as HTMLDivElement
       rect.forEach((item) => {
+        //鼠标移入事件 显示tip
         useEventListener(item, 'mouseenter', (event: any) => {
           svgTipDom.style.opacity = '1'
           const { x, y } = event.target.getBoundingClientRect()
@@ -64,10 +69,13 @@ onMounted(() => {
     })
   })
 })
+//判断当前日期标题是否显示
 const isShow = (value, index) => {
   const value2 = month.value[index - 1] ? month.value[index - 1].text : null
   if (value2 != null) {
     if (value == value2) return false
+  } else if (index == 0) {
+    return false
   }
   return true
 }
@@ -107,7 +115,7 @@ const onBack = () => {
               </div>
             </template>
 
-            <el-descriptions :column="3" class="mt-4">
+            <el-descriptions :column="2" class="mt-4">
               <el-descriptions-item label="Username">lzyszds</el-descriptions-item>
               <el-descriptions-item label="Place">南宁</el-descriptions-item>
               <el-descriptions-item label="Occupation"> 学生 </el-descriptions-item>
@@ -149,8 +157,8 @@ const onBack = () => {
           </g>
           <g v-for="(item, indexG) in data" :key="indexG">
             <rect class="rectangle" v-for="(res, indexR) in item.contributionDays" :key="indexR" :x="indexG * 17 + 30"
-              :y="indexR * 16 + 30" rx="0" ry="0" :fill="res.color" width="12" height="12" :data-date="res.date"
-              :data-count="res.contributionCount" />
+              :y="indexR * 16 + 30" rx="3" ry="3" stroke="#999" :fill="res.color" width="12" height="12"
+              :data-date="res.date" :data-count="res.contributionCount" />
           </g>
         </svg>
       </div>
@@ -182,7 +190,7 @@ const onBack = () => {
     width: 61%;
     margin: 0 auto;
     padding: 0 30px;
-    height: 300px;
+    height: 320px;
     font-size: 2rem;
     font-weight: 600;
     color: var(--themeColor);
@@ -206,12 +214,13 @@ const onBack = () => {
       font-size: 1.7rem;
       font-weight: 600;
       color: #000;
+      margin: 0;
     }
 
     ul {
       padding-left: 25px;
       color: #000;
-      font-size: 1.5rem;
+      font-size: clamp(0.5rem, 1vw, 1.9rem)
     }
   }
 
@@ -227,7 +236,7 @@ const onBack = () => {
     user-select: none;
 
     rect {
-      outline: 1px solid #000;
+      // outline: 1px solid #000;
     }
   }
 }
@@ -315,5 +324,44 @@ const onBack = () => {
   opacity: 0;
   transform: translateX(-30px);
 
+}
+
+@media screen and (max-width: 768px) {
+  .about {
+    .content {
+      height: 95%;
+      width: 95%;
+    }
+
+    .formInfo {
+      height: auto;
+    }
+
+    .purple {
+      padding: 5px;
+    }
+  }
+}
+
+@media screen and (max-width:1280px) {
+  .about {
+    .content {
+      height: 90%;
+      width: 90%;
+    }
+
+    .formInfo {
+      width: 80%;
+      height: auto;
+    }
+
+    .wave {
+      width: 80%;
+    }
+
+    .purple {
+      padding: 5px;
+    }
+  }
 }
 </style>

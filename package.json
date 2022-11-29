@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "serve": "vite",
+    "dev": "vite --mode lzym",
     "build": "vite build"
   },
   "dependencies": {
@@ -23,9 +24,7 @@
     "echarts": "^5.3.2",
     "element-plus": "^2.2.21",
     "font-awesome": "^4.7.0",
-    "gsap": "^3.10.4",
     "highlight.js": "^11.6.0",
-    "less": "^4.1.3",
     "live2d-widget": "^3.1.4",
     "lodash": "^4.17.21",
     "markdown-it": "^13.0.1",
@@ -34,12 +33,8 @@
     "markdown-it-mark": "^3.0.1",
     "markdown-it-ruby": "^0.1.1",
     "mime": "^3.0.0",
-    "moment": "^2.29.3",
-    "momentjs": "^2.0.0",
     "nprogress": "^0.2.0",
     "pinia": "^2.0.14",
-    "postcss": "^8.3.11",
-    "scss": "^0.2.4",
     "stylelint": "^14.9.1",
     "stylelint-config-standard": "^26.0.0",
     "stylus": "^0.59.0",
@@ -53,6 +48,7 @@
     "@types/node": "^18.11.7",
     "@vitejs/plugin-vue": "^1.9.3",
     "@vue/cli-plugin-typescript": "^5.0.4",
+    "less": "^4.1.3",
     "typescript": "^4.7.3",
     "vfonts": "^0.1.0",
     "vite": "^2.9.8",
