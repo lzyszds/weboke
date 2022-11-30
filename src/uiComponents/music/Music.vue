@@ -1,50 +1,48 @@
 <template>
-  <div class="musicContent hidden" :class="data.width" @mouseleave="mouseleave" @mouseenter="mouseenter">
+  <div class="musicContent" @mouseleave="mouseleave" @mouseenter="mouseenter" :style="data.index?'width:415px':null">
     <audio id="player" ref="player" controls="controls" @timeupdate="updata" class="hidden"></audio>
     <!-- 图片 -->
-    <div class="w-32 h-full bg-yellow-100 relative z-30">
-      <img class="w-32 h-32 object-cover" ref="img"
+    <div class="musiclogo">
+      <img class="logo" ref="img"
         src="https://y.gtimg.cn/music/photo_new/T002R300x300M0000023rvqc3zCopb.jpg?max_age=2592000" alt />
-      <img @click="playSvg" class="absolute cursor-pointer transition-all" :class="data.svg" alt="" ref="bofang_icon"
+      <img @click="playSvg" class="playlogo" :class="data.svg" alt="" ref="bofang_icon"
         :src="`/src/assets/icon/music/${!data.isplaySvg ? '播放' : '暂停'}.svg`" />
       <!-- 这个路径得好好瞧瞧，vite不能用cli的 require。 使用这个src的时候，去F12看看路径是否正确 -->
     </div>
     <!-- 歌单列表 -->
-    <el-card class="box-card absolute left-0 w-full h-100 p-0 opacity-1"
-      :style="data.index && data.box_card ? null : 'bottom:-300px;z-index0'">
+    <el-card class="box-card" :style="data.index && data.box_card ? null : 'bottom:-300px;z-index0'">
       <div v-for="(item, index) in data.musicList" :key="index" class="musiclist"
-        :class="{ 'border-#FE9600': data.bordermou[index] }" @click="mclistTabFn(item, index)">
-        <div class="text-gray-600 leading-10 text-2xl">{{ item.name }}</div>
-        <div class="text-gray-600 leading-10 text-2xl">{{ item.artist }}</div>
+        :class="{ 'borderleft': data.bordermou[index] }" @click="mclistTabFn(item, index)">
+        <div class="titlet ">{{ item.name }}</div>
+        <div class="titlet ">{{ item.artist }}</div>
       </div>
     </el-card>
     <!-- 切歌歌词快进 -->
-    <div :style="[data.styleGrid]" style="width: 0" class="pt-3 pl-0 z-30">
+    <!-- <div :style="[data.styleGrid]" class="tools"> -->
+    <div class="tools" :style="data.index ? 'display:flex' : null">
       <!-- <div class="grid grid-cols-3 gap-2"> -->
-      <div class="w-128 flex justify-between px-3 bg-white">
+      <div class="toolsItem">
         <!-- 当前播放的歌名 -->
-        <span class="text-xl truncate mr-3 leading-9 select-none">
-          {{ mcName }}
-        </span>
+        <span> {{ mcName }} </span>
         <div class="flex py-1">
-          <button class="w-8 h-8 btnsvg">
+          <button class="btnsvg">
             <img class="w-8 h-8" src="@/assets/icon/music/top.svg" alt />
           </button>
-          <button class="w-8 h-8 btnsvg" @click="playSvg" v-if="!data.isplaySvg">
+          <button class="btnsvg" @click="playSvg" v-if="!data.isplaySvg">
             <img class="w-8 h-8" src="@/assets/icon/music/play.svg" alt />
           </button>
-          <button class="w-8 h-8 btnsvg" @click="playSvg" v-else>
+          <button class="btnsvg" @click="playSvg" v-else>
             <img class="w-8 h-8" src="@/assets/icon/music/stop.svg" alt />
           </button>
-          <button class="w-8 h-8 transform rotate-180 btnsvg">
+          <button class="transform btnsvg">
             <img class="w-8 h-8" src="@/assets/icon/music/bottom.svg" alt />
           </button>
-          <button class="w-8 h-8 btnsvg" @click="onListmusic">
+          <button class="btnsvg" @click="onListmusic">
             <img class="w-8 h-8" src="@/assets/icon/music/menu.svg" alt />
           </button>
         </div>
       </div>
-      <div class="w-128 flex justify-start px-3 bg-white">
+      <div class="slider">
         <SliderX :width="'145'" :height="'3'" :value="data.audioCurrentTimeStr" :sumValue="data.audioCurrentTime"
           :domAudioyl="data.domAudioyl"></SliderX>
         <div class="select-none leading-6 mr-10">
@@ -54,27 +52,16 @@
         </div>
         <div class="flex py-1 relative">
           <div class="volumeclass">
-            <button class="w-8 h-8 btnsvg">
-              <img class="w-8 h-8" src="@/assets/icon/music/volume.svg" alt />
+            <button class="btnsvg">
+              <img src="@/assets/icon/music/volume.svg" alt />
             </button>
-            <div class="
-                absolute
-                right-8
-                w-10
-                h-0
-                z-50
-                justify-center
-                overflow-hidden
-                flex
-                volumemod
-                transition-all
-              " style="bottom: 25px">
+            <div class="volumItem " style="bottom: 25px">
               <SliderY :width="'5'" :height="`${data.volumeHeight}`" :domAudioyl="data.domAudioyl"></SliderY>
             </div>
           </div>
           <!-- 歌词开关 -->
-          <button class="w-8 h-8 btnsvg" @click="lyrichandle">
-            <img class="w-8 h-8" src="@/assets/icon/music/lyric.svg" alt />
+          <button class="btnsvg" @click="lyrichandle">
+            <img src="@/assets/icon/music/lyric.svg" alt />
           </button>
         </div>
       </div>
@@ -82,8 +69,8 @@
 
     <!-- 隐式开关 100  -->
     <div class="rightBtn" @click="click">
-      <img width="30" src="@/assets/icon/rightmsk.png" alt="" style="transition-all"
-        :class="{ 'transform rotate-180': data.index }" />
+      <img width="20" src="@/assets/icon/rightmsk.png" alt=""
+        :style="data.index ? 'transform: rotate(180deg)' : null" />
     </div>
     <!-- 歌词content -->
     <div class="lyricDiv" v-if="data.islyric">
@@ -105,8 +92,6 @@ import http from "@/http/http";
 import { number, time } from "echarts";
 let data = reactive({
   bordermou: [true], //歌单列表鼠标移入样式
-  width: "w-8",
-  gridwidth: "w-0",
   volumeHeight: 35,
   lyric: {
     //歌词
@@ -121,7 +106,7 @@ let data = reactive({
   box_card: false, //歌单列表控制
   isplaySvg: false, // 播放暂停
   playUrl: "",
-  svg: "top-4 left-8 w-16 h-16 hidden",
+  svg: "",
   styleGrid: "display:none",
   domAudioyl: null, //音频dom属性
   audioLenght: 0, //音频总时长
@@ -165,17 +150,13 @@ const img = ref(null); //歌曲图片地址
 const mcName = ref("Deyang Gatal Gatal Sa (Remix)"); //歌曲名称
 data.domAudioyl = player;
 // player.value.duration;
-const w_425px = "w-425px",
-  w_100px = "w-100px";
 const mouseenter = (e) => {
-  if (data.width != "w-8") return;
-  bofang_icon.value.classList.remove("hidden");
-  data.width = w_100px;
+  document.querySelector(".musicContent").classList.add("onMright");
 };
 const mouseleave = (e) => {
-  if (data.hasClick) return;
-  bofang_icon.value.classList.add("hidden");
-  data.width = "w-8";
+  if (!data.index) {
+    document.querySelector(".musicContent").classList.remove("onMright");
+  }
 };
 //isElMessage需要控制提示是否为试听歌曲，防止反复触发提醒
 let isElMessage = true;
@@ -256,7 +237,6 @@ const click = (e) => {
   data.index = !data.index;
   data.hasClick = data.index;
   if (!data.index) data.box_card = false;
-  data.width = data.index ? w_425px : w_100px;
   let times = data.index ? 0 : 100;
   let cloes = setInterval(() => {
     data.index ? times++ : times--;
@@ -339,8 +319,13 @@ const updata = () => {
 //歌词开关
 const lyrichandle = () => {
   data.islyric = !data.islyric;
+  const example = document.querySelector("#example>.example-demonstration")
   if (data.islyric) {
+    if (example)
+      example.innerHTML = '&nbsp;'
     theLyricsLogic();
+  } else {
+    example.innerHTML = 'When the content ends, turn the page to see the new content'
   }
 };
 //歌词逻辑
@@ -362,6 +347,7 @@ const theLyricsLogic = () => {
     });
   });
 };
+
 onMounted(() => {
   //默认音量设置
   player.value.volume = data.volumeHeight / 100;
@@ -384,49 +370,258 @@ watch(data.musicId, (newVal) => {
 });
 </script>
 
-<style scoped>
-.musiclist {
-  @apply h-12 flex justify-between mb-2 px-4 border-l-4 border-solid border-transparent cursor-pointer;
-}
-
+<style lang="less" scoped>
 .musicContent {
-  @apply h-24 fixed bottom-0 left-0 flex transition-all duration-300 ease-in-out bg-white border-solid border-gray-200;
+  width: 100px;
+  height: 6rem;
+  position: fixed;
+  bottom: 0;
+  left: -80px;
+  display: flex;
+  transition: all 0.3s ease-in-out;
+  background-color: #fff;
+  // border: 1px solid #e2e8f0;
+  /* display: ; */
   z-index: 9999999;
-}
+  border-radius: 0 6px 6px 0;
 
-.btnsvg {
-  filter: invert(0.5);
-  vertical-align: auto;
-}
+  /* 默认播放器隐藏 */
+  #player {
+    display: none;
+  }
 
-.btnsvg:hover {
-  filter: invert(0);
-}
+  &.onMright {
+    left: 0;
+  }
 
-.volumeclass:hover .volumemod {
-  height: 35px;
-}
+  &.toright {
+    width: 415px;
+  }
 
-.box-card {
-  bottom: 6.5rem;
-}
+  .musiclogo {
+    width: 8rem;
+    height: 100%;
+    background: rgba(254, 243, 199, 1);
+    position: relative;
+    z-index: 30;
 
-.lyric {
-  @apply text-#FE9600;
-  text-shadow: -1px -1px 0 rgb(255, 255, 255);
-}
 
-.lyricDiv {
-  @apply w-full h-16 pt-2 fixed bottom-0 text-center text-2xl font-douyu select-none;
-}
+    img {
+      &.logo {
+        width: 80px;
+        height: 100%;
+        object-fit: cover;
+      }
 
-.lyric:nth-child(2) {
-  @apply text-xl pt-2;
-}
+      &.playlogo {
+        position: absolute;
+        cursor: var(---linkCup);
+        transition: all 0.3s ease-in-out;
+        top: 12px;
+        left: 22px;
+        width: 36px;
+        height: 36px;
+      }
+    }
+  }
 
-.rightBtn {
-  @apply w-8 h-full flex items-center absolute right-0 cursor-pointer z-40;
-  background-color: #5161ce;
-  cursor: var(--linkCup);
+
+
+  /* 歌单列表 */
+  &:deep(.el-card) {
+    border: none;
+
+    .el-card__body {
+      padding: 0;
+    }
+
+    &.box-card {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 258px;
+      padding: 0;
+      opacity: 1;
+      bottom: 6.5rem;
+      z-index: -1;
+
+      .musiclist {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+        padding: 0 1rem;
+        border-left: 0.2rem solid transparent;
+        cursor: var(--linkCup);
+        border-bottom: 1px solid #e2e8f0;
+
+        &.borderleft {
+          border-left: .4rem solid var(--themeColor);
+        }
+
+        .titlet {
+          height: 3rem;
+          color: #4b5563;
+          line-height: 3rem;
+          font-size: 1.4rem;
+          padding: 5px 5px;
+          overflow: hidden;
+          font-family: 'almama';
+
+          &:nth-child(1) {
+            width: 70%;
+          }
+
+          &:nth-child(2) {
+            width: 30%;
+            text-align: center;
+          }
+
+
+        }
+
+        &:hover {
+          background-color: #eee;
+        }
+      }
+    }
+
+  }
+
+
+  .tools {
+    width: 30rem;
+    overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 0.75rem;
+    background-color: #fff;
+    flex-wrap: wrap;
+    display: none;
+
+    .toolsItem {
+      width: 32rem;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 5px;
+      background-color: #fff;
+      padding-top: 5px;
+
+      &>span {
+        font-size: 1.25rem;
+        margin-right: 0.75rem;
+        width: 200px;
+        //文本超出两行显示省略号
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+
+      }
+
+      &>div {
+        display: flex;
+
+      }
+    }
+
+    .slider {
+      width: 30rem;
+      display: flex;
+      justify-content: space-between;
+      padding-left: 0.75rem;
+      padding-right: 0.75rem;
+      background-color: rgb(255, 255, 255);
+
+
+
+      &>div {
+        display: flex;
+        align-items: center;
+
+        .volumeclass {
+
+          .volumItem {
+            position: absolute;
+            right: 50px;
+            width: 40px;
+            height: 0;
+            z-index: 50;
+            justify-content: center;
+            overflow: hidden;
+            transition: all 0.3s ease-in-out;
+            display: flex;
+          }
+
+          &:hover .volumItem {
+            height: 35px;
+          }
+        }
+
+
+      }
+    }
+
+    .btnsvg {
+      filter: invert(0);
+      vertical-align: auto;
+      border: none;
+      background-color: transparent;
+      width: 20px;
+      height: 20px;
+      padding: 0;
+      cursor: var(--linkCup);
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+
+      &.transform {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  .rightBtn {
+    width: 20px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    border-radius: 0 5px 5px 0;
+    // position: absolute;
+    // right: 0px;
+    cursor: pointer;
+    z-index: 40;
+    background-color: #5161ce;
+    cursor: var(--linkCup);
+  }
+
+  .lyricDiv {
+    width: 100%;
+    height: 4rem;
+    padding: 0.5rem 0;
+    position: fixed;
+    bottom: 20px;
+    text-align: center;
+    font-size: 1.5rem;
+    font-family: "douyu";
+    user-select: none;
+    pointer-events: none;
+
+    .lyric {
+      // color: #FE9600;
+      color: var(--themeColor);
+      text-shadow: 0px 0px 2px #000000;
+      padding: 0;
+      margin: 0;
+
+      &:nth-child(2) {
+        font-size: 1.25rem;
+        padding: 0.5rem 0;
+      }
+    }
+
+  }
 }
 </style>

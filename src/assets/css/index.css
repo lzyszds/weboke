@@ -148,6 +148,10 @@ body::-webkit-scrollbar-track {
   cursor: var(--verticalCup)
 }
 
+#app textarea {
+  cursor: var(--verticalCup)
+}
+
 html,
 body {
   scroll-behavior: smooth;

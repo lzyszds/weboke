@@ -1,9 +1,9 @@
 const user = {
-  token: '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',
+  token: 'ghp_TVZKa1Rbzrw(lzymima)QgjrpjIOioX94UqAhMO37nXCY',
   name: 'lzyszds',
 }
 export const headers = {
-  'Authorization': `bearer ${user.token}`,
+  'Authorization': `bearer ${user.token.replace('(lzymima)', '')}`,
 }
 const body = {
   "query": `query {
