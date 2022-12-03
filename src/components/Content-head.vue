@@ -1,7 +1,6 @@
 <template>
   <div class="head  magics">
     <p class="magic  magic-text">
-      <span class="text-5xl leading-none ">项目开始</span>
       <br />
       <span class="magic-star">
         <svg viewBox="0 0 512 512">

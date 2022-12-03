@@ -235,9 +235,7 @@ const onBack = () => {
     margin: 0 auto;
     user-select: none;
 
-    rect {
-      // outline: 1px solid #000;
-    }
+
   }
 }
 

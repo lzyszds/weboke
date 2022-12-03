@@ -90,10 +90,6 @@ const activefn = (index) => {
   activeIndex.value = index
   router.push(items[index].path)
 }
-const formatted = ref(dayjs()?.format('YYYY-MM-DD HH:mm:ss'))
-setInterval(() => {
-  formatted.value = dayjs()?.format('YYYY-MM-DD HH:mm:ss')
-}, 1000)
 //处理用户详情数据
 const infoData: any = ref()
 const { data } = await http('get', '/adminApi/admin/getUserInfo') as any
@@ -138,7 +134,6 @@ infoData.value = data
 
           <!-- <span>湿度：{{ datalist?.humidity }}%RH</span> -->
         </p>
-        <p>{{ formatted }}</p>
         <a :href="cip">IP: {{ cip }}</a>
       </div>
       <div>
