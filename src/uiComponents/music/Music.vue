@@ -1,6 +1,6 @@
 <template>
   <div class="musicContent" @mouseleave="mouseleave" @mouseenter="mouseenter" :style="data.index?'width:415px':null">
-    <audio id="player" ref="player" controls="controls" @timeupdate="updata" class="hidden"></audio>
+    <audio id="player" ref="player" controls="controls" @timeupdate="update" class="hidden"></audio>
     <!-- 图片 -->
     <div class="musiclogo">
       <img class="logo" ref="img"
@@ -25,20 +25,20 @@
         <!-- 当前播放的歌名 -->
         <span> {{ mcName }} </span>
         <div class="flex py-1">
-          <button class="btnsvg">
-            <img class="w-8 h-8" src="@/assets/icon/music/top.svg" alt />
+          <button class="btnsvg" @click="prev">
+            <img src="@/assets/icon/music/top.svg" alt />
           </button>
           <button class="btnsvg" @click="playSvg" v-if="!data.isplaySvg">
-            <img class="w-8 h-8" src="@/assets/icon/music/play.svg" alt />
+            <img src="@/assets/icon/music/play.svg" alt />
           </button>
           <button class="btnsvg" @click="playSvg" v-else>
-            <img class="w-8 h-8" src="@/assets/icon/music/stop.svg" alt />
+            <img src="@/assets/icon/music/stop.svg" alt />
           </button>
-          <button class="transform btnsvg">
-            <img class="w-8 h-8" src="@/assets/icon/music/bottom.svg" alt />
+          <button class="transform btnsvg" @click="next">
+            <img src="@/assets/icon/music/bottom.svg" alt />
           </button>
           <button class="btnsvg" @click="onListmusic">
-            <img class="w-8 h-8" src="@/assets/icon/music/menu.svg" alt />
+            <img src="@/assets/icon/music/menu.svg" alt />
           </button>
         </div>
       </div>
@@ -90,6 +90,8 @@ import { useStore } from "@/store/index";
 import { ElMessage, ElNotification } from "element-plus";
 import http from "@/http/http";
 import { number, time } from "echarts";
+import { useRoute } from "vue-router";
+const route = useRoute();
 let data = reactive({
   bordermou: [true], //歌单列表鼠标移入样式
   volumeHeight: 35,
@@ -204,32 +206,33 @@ function eventList() {
 }
 
 const timeToMinute = (times) => {
-  var t;
+  var timeFormat;
   if (times > -1) {
     var hour = Math.floor(times / 3600);
     var min = Math.floor(times / 60) % 60;
     var sec = times % 60;
     if (hour < 10) {
-      t = "0" + hour + ":";
+      timeFormat = "0" + hour + ":";
     } else {
-      t = hour + ":";
+      timeFormat = hour + ":";
     }
     if (min < 10) {
-      t += "0";
+      timeFormat += "0";
     }
-    t += min + ":";
+    timeFormat += min + ":";
     if (sec < 10) {
-      t += "0";
+      timeFormat += "0";
     }
-    t += sec.toFixed(2);
+    timeFormat += sec.toFixed(2);
   }
-  t = t.substring(0, t.length - 3);
+  if (!timeFormat) return timeFormat = '00:00'
+  timeFormat = timeFormat.substring(0, timeFormat.length - 3);
   if (min == 0) {
-    t = t.substring(4, t.length);
+    timeFormat = timeFormat.substring(4, timeFormat.length);
   } else {
-    t = t.substring(3, t.length);
+    timeFormat = timeFormat.substring(3, timeFormat.length);
   }
-  return t;
+  return timeFormat;
 };
 
 //弹出或关闭 音乐播放器
@@ -258,25 +261,48 @@ const playSvg = (e) => {
   if (!data.isplaySvg) data.svg = "top-4 left-8 w-16 h-16";
   else data.svg = "top-12 left-18 w-12 h-12";
 };
+//上一首
+const prev = (e) => {
+  const index = data.bordermou.indexOf(true); //获取当前播放的歌单列表索引
+  console.log(`lzy  index`, data.musicList.length - 1)
+  const key = index - 1 == 0 ? data.musicList.length - 1 : index - 1; //判断是否为最后一首
+  player.value.src = data.musicList[key].url;
+  img.value.src = data.musicList[key].picUrl;
+  mcName.value = data.musicList[key].name;
+  data.bordermou[key] = true;
+  data.bordermou[index] = false;
+  getMusicPlay();
+};
+//下一首
+const next = (e) => {
+  const index = data.bordermou.indexOf(true); //获取当前播放的歌单列表索引
+  const key = index + 1 == data.musicList.length ? 0 : index + 1; //判断是否为最后一首
+  player.value.src = data.musicList[key].url;
+  img.value.src = data.musicList[key].picUrl;
+  mcName.value = data.musicList[key].name;
+  data.bordermou[key] = true;
+  data.bordermou[index] = false;
+  getMusicPlay();
+};
+
 //打开歌单列表
 const onListmusic = () => {
   data.box_card = !data.box_card;
 };
 //获取歌单列表，实现渲染
-const onListmc = () => {
+const onListmc = async () => {
   let urls = [];
   data.musicId.forEach((item, index) => {
     urls.push(item.id);
   });
-  store.getMusicDetails(urls, false).then((_data) => {
-    _data.res.forEach((res, index) => {
-      data.musicList.push({
-        id: res.id,
-        url: res.url,
-        name: _data.item[index].name,
-        artist: _data.item[index].ar[0].name, //作者
-        picUrl: _data.item[index].al.picUrl, //封面图片
-      });
+  const _data = await store.getMusicDetails(urls, false)
+  _data.res.forEach((res, index) => {
+    data.musicList.push({
+      id: res.id,
+      url: res.url,
+      name: _data.item[index].name,
+      artist: _data.item[index].ar[0].name, //作者
+      picUrl: _data.item[index].al.picUrl, //封面图片
     });
   });
 };
@@ -302,7 +328,7 @@ const getMusicPlay = (value) => {
   //需要控制提示是否为试听歌曲，防止反复触发提醒
   isElMessage = true;
 };
-const updata = () => {
+const update = () => {
   //音乐每播放一帧执行一次以下方法
   eventList();
   data.lyric.minutes.forEach((res, index) => {
@@ -312,6 +338,7 @@ const updata = () => {
   });
   const lyricconten = data.lyric.data[data.lyric.index];
   const lyricconten1 = data.lyric.data[data.lyric.index + 1];
+  if (!lyricconten || !lyricconten1) return
   data.lyric.content[0] = lyricconten.substring(lyricconten.indexOf("]") + 1); //当前歌词
   data.lyric.content[1] = lyricconten1.substring(lyricconten1.indexOf("]") + 1); //下一句歌词
   // console.log(lyricconten.indexOf("]") + 1);
@@ -360,13 +387,20 @@ watch(
   }
 );
 watch(data.musicId, (newVal) => {
-  onListmc();
-  //页面初始的时候播放器默认加入歌单第一首歌曲的数据进入播放器
-  setTimeout(() => {
+  onListmc().then(() => {
+    //页面初始的时候播放器默认加入歌单第一首歌曲的数据进入播放器
     player.value.src = data.musicList[0].url;
     img.value.src = data.musicList[0].picUrl;
     mcName.value = data.musicList[0].name;
-  }, 500);
+  });
+});
+const routerPath = route.path;
+watch(route, (newVal) => {
+  console.log(`lzy  newVal`, newVal)
+  if (newVal.path != routerPath) {
+    data.index = false;
+    document.querySelector('.musicContent').classList.remove('onMright')
+  }
 });
 </script>
 
@@ -448,9 +482,8 @@ watch(data.musicId, (newVal) => {
       .musiclist {
         display: flex;
         justify-content: space-between;
-        margin-bottom: 0.5rem;
         padding: 0 1rem;
-        border-left: 0.2rem solid transparent;
+        border-left: .4rem solid transparent;
         cursor: var(--linkCup);
         border-bottom: 1px solid #e2e8f0;
 
@@ -588,7 +621,7 @@ watch(data.musicId, (newVal) => {
     height: 100%;
     display: flex;
     align-items: center;
-    border-radius: 0 5px 5px 0;
+    border-radius: 0 3px 3px 0;
     // position: absolute;
     // right: 0px;
     cursor: pointer;
@@ -605,14 +638,15 @@ watch(data.musicId, (newVal) => {
     bottom: 20px;
     text-align: center;
     font-size: 1.5rem;
-    font-family: "douyu";
+    font-family: "almama";
     user-select: none;
     pointer-events: none;
 
     .lyric {
       // color: #FE9600;
       color: var(--themeColor);
-      text-shadow: 0px 0px 2px #000000;
+      text-shadow: 0px 0px 1px #000,
+        0px 0px 1px #000;
       padding: 0;
       margin: 0;
 

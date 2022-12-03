@@ -182,6 +182,10 @@ onBeforeUnmount(() => {
   overflow: hidden;
   scrollbar-width: none;
   -ms-overflow-style: none;
+
+  &>div {
+    margin-bottom: 30px;
+  }
 }
 
 .listCom::-webkit-scrollbar {

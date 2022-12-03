@@ -51,8 +51,6 @@ const selectHandle = (index: number) => {
     display: flex;
     box-shadow: -1px 1px 6px 2px rgb(233, 233, 233);
     border-radius: 8px;
-    margin-bottom: 30px;
-    margin-top: 3px;
     background-color: #fff;
     opacity: .5;
     transition: all .5s cubic-bezier(0.68, -0.55, 0.68, 1.55);

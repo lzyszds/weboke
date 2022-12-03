@@ -246,6 +246,7 @@ const toUp = () => {
 }
 
 .imgtop img {
+  filter: brightness(.5);
   width: 100%;
   height: 400px;
   object-fit: cover;
