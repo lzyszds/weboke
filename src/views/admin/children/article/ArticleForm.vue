@@ -1,6 +1,6 @@
 <script setup lang='ts'>
 import { ref, defineProps, getCurrentInstance, defineEmits, h, onMounted } from 'vue'
-import { dayjs, ElMessageBox, } from 'element-plus'
+import { dayjs, ElMessageBox, ElTag } from 'element-plus'
 import { useEventListener } from '@vueuse/core'
 import http from '@/http/http'
 import toolbar from './toolbar'

@@ -1,6 +1,7 @@
 <script setup lang='ts'>
 import { onMounted, ref, getCurrentInstance } from 'vue'
 import Maincontent from '../../components/Maincontent.vue';
+import { ElTag } from 'element-plus'
 import { useEventListener } from '@vueuse/core'
 import { useRoute } from 'vue-router';
 import icon from '@/components/icon.vue'
@@ -51,25 +52,25 @@ onMounted(() => {
     });
   })
 
-  setTimeout(() => {
-    //获取当前文章的索引目录
-    let toc = document.querySelectorAll('h2,h3,h4') as any;
-    toc.forEach((element: any) => {
-      tocList.value.push({
-        title: element.innerText,
-        id: "#" + element.id,
-        top: element.offsetTop,
-        nodeName: element.nodeName
-      })
-      // element.setAttribute('tabindex', "-1")
+  //获取当前文章的索引目录
+  let toc = document.querySelectorAll('h2,h3,h4') as any;
+  toc.forEach((element: any) => {
+    tocList.value.push({
+      title: element.innerText,
+      id: "#" + element.id,
+      top: element.offsetTop,
+      nodeName: element.nodeName
     })
-    //监听滚动事件
-    handleScroll();
-    setTimeout(() => {
-      console.log(`lzy ~ affixElm.value`, affixElm.value)
-      affixElm.value!.style.height = document.querySelector('.main')?.getBoundingClientRect().height + 'px';
-    }, 500);
-  }, 50)
+    // element.setAttribute('tabindex', "-1")
+  })
+  //监听滚动事件
+  handleScroll();
+  let timeout = setTimeout(() => {
+    console.log(`lzy ~ affixElm.value`, affixElm.value)
+    affixElm.value!.style.height = document.querySelector('.main')?.getBoundingClientRect().height + 'px';
+    clearTimeout(timeout)
+  }, 500);
+  //结束定时器
 })
 //处理时间戳转换成距离当前日期的时间（一天前，两天前）
 function setTimestamp(time: string) {
@@ -85,7 +86,6 @@ function handleScroll() {
         document.querySelector('.affix-list li.H4')
       }
     })
-
   })
 }
 //处理目录小火箭点击事件 升到最顶部

@@ -82,15 +82,18 @@
 </template>
 
 <script setup >
-import { reactive, ref, onMounted, watch, nextTick } from "vue";
+import { reactive, ref, onMounted, watch, nextTick, getCurrentInstance } from "vue";
 import SliderX from "./SliderX.vue";
 import SliderY from "./SliderY.vue";
 import { storeToRefs } from "pinia";
 import { useStore } from "@/store/index";
-import { ElMessage, ElNotification } from "element-plus";
+import { ElMessage, ElNotification, ElCard } from "element-plus";
 import http from "@/http/http";
-import { number, time } from "echarts";
 import { useRoute } from "vue-router";
+
+const { proxy } = getCurrentInstance()
+const compressPic = proxy.$common.compressPic
+
 const route = useRoute();
 let data = reactive({
   bordermou: [true], //歌单列表鼠标移入样式
@@ -390,13 +393,12 @@ watch(data.musicId, (newVal) => {
   onListmc().then(() => {
     //页面初始的时候播放器默认加入歌单第一首歌曲的数据进入播放器
     player.value.src = data.musicList[0].url;
-    img.value.src = data.musicList[0].picUrl;
+    img.value.src = proxy.$common.compressImgUrl(data.musicList[0].picUrl, 0.1);
     mcName.value = data.musicList[0].name;
   });
 });
 const routerPath = route.path;
 watch(route, (newVal) => {
-  console.log(`lzy  newVal`, newVal)
   if (newVal.path != routerPath) {
     data.index = false;
     document.querySelector('.musicContent').classList.remove('onMright')

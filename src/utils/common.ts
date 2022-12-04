@@ -116,6 +116,25 @@ function compressPic(file, quality) {
   })
 }
 
+//url图片压缩,网络图片压缩。任意图片
+function compressImgUrl(url, quality) {
+  if (typeof url !== 'string') return console.error('The parameter of the compressImgUrl method is not a string')
+  let reg = url.search(/\.(png|jpe?g|webp?|svg)$/)
+  let type = url.substring(reg + 1, url.length) ?? 'png'
+  // 这里quality的范围是（0-1）
+  const canvas = document.createElement("canvas") as HTMLCanvasElement;
+  const ctx: any = canvas.getContext("2d");
+  const img: any = new Image();
+  img.src = url;
+  img.onload = function () {
+    canvas.width = img.width;
+    canvas.height = img.height;
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    // 转换成base64格式 quality为图片压缩质量 0-1之间  值越小压缩的越大 图片质量越差
+    const base64 = canvas.toDataURL(`image/${type}`, quality);
+    return base64
+  }
+}
 
 export default {
   debounce,// 防抖
@@ -125,6 +144,7 @@ export default {
   base64toBlob,//base64转二进制流
   getBase64,//二进制流转换为base64 格式。
   compressPic,//上传图片，图片太大，如何在前端实现图片压缩后上传
+  compressImgUrl,//url图片压缩,网络图片压缩。任意图片
 }
 
 
