@@ -1,5 +1,6 @@
 <script setup lang='ts'>
 import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ElPagination } from 'element-plus'
 import ContentHead from '@/components/Content-head.vue'
 import ContentDiv from '@/components/Content-div.vue'
 import { useEventListener } from '@vueuse/core'

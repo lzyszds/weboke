@@ -4,7 +4,7 @@
   </Suspense>
   <router-view> </router-view>
   <div class="w-full relative">
-    <Music></Music>
+    <Music v-if="false"></Music>
   </div>
   <div class="w-full absolute bottom-20">
     <!-- <Live2d></Live2d> -->

@@ -91,9 +91,6 @@ import { ElMessage, ElNotification, ElCard } from "element-plus";
 import http from "@/http/http";
 import { useRoute } from "vue-router";
 
-const { proxy } = getCurrentInstance()
-const compressPic = proxy.$common.compressPic
-
 const route = useRoute();
 let data = reactive({
   bordermou: [true], //歌单列表鼠标移入样式
@@ -393,7 +390,7 @@ watch(data.musicId, (newVal) => {
   onListmc().then(() => {
     //页面初始的时候播放器默认加入歌单第一首歌曲的数据进入播放器
     player.value.src = data.musicList[0].url;
-    img.value.src = proxy.$common.compressImgUrl(data.musicList[0].picUrl, 0.1);
+    img.value.src = data.musicList[0].picUrl
     mcName.value = data.musicList[0].name;
   });
 });

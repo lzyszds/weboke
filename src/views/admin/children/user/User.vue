@@ -1,6 +1,6 @@
 <script setup lang='ts'>
 import { ref, h, watch } from 'vue'
-import { ElTable, ElMessageBox, ElNotification } from 'element-plus'
+import { ElTable, ElMessageBox, ElNotification, ElPagination } from 'element-plus'
 import http from '@/http/http'
 import dayjs from 'dayjs'
 import UserForm from './UserForm.vue'
