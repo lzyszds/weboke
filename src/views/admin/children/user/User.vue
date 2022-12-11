@@ -239,7 +239,7 @@ watch(height, (val) => {
   overflow: visible;
 
   .el-dialog__header {
-    font-family: 'douyu';
+    font-family: 'almama';
 
     button {
       // display: none;

@@ -229,7 +229,7 @@ div :deep(img[data-fancybox="gallery"]) {
   margin: 25px auto;
 
   .el-dialog__header {
-    font-family: 'douyu';
+    font-family: 'almama';
     text-align: center;
     margin-bottom: 30px;
 

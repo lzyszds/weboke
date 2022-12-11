@@ -152,7 +152,7 @@ infoData.value = data
   .logo {
     padding-top: 30px;
     color: #000;
-    font-family: 'douyu';
+    font-family: 'almama';
     font-size: 40px;
     text-align: center;
   }

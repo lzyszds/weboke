@@ -268,7 +268,7 @@ const toUp = () => {
 .topTitle h1 {
   font-size: 40px;
   margin-bottom: 20px;
-  font-family: 'douyu';
+  font-family: 'almama';
 }
 
 .topTitle p {

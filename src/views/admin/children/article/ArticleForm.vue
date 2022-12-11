@@ -32,7 +32,7 @@ const submitForm = () => {
     author: 'lzy',
     title: title.value,
     //文章开头第一段话
-    coverContent: document.querySelector('.vuepress-markdown-body p[data-v-md-line="1"]')?.innerHTML,
+    coverContent: document.querySelector('.vuepress-markdown-body')?.firstElementChild?.innerHTML,
     content: storage.value.text,
     main: storage.value.html,
     coverImg: cover.value || props.data!.coverImg,

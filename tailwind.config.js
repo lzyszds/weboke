@@ -54,7 +54,7 @@ module.exports = {
             },
             // 自定义字体
             fontFamily: {
-                'douyu': ['douyu', 'douyu'],
+                'almama': ['almama', 'almama'],
             },
             //自定义字体颜色
             textColor: {

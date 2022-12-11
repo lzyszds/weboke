@@ -1,16 +1,13 @@
 /* @font-face {
-  font-family: 'douyu';
-  src: url('./douyu2.0.ttf');
+  font-family: 'almama';
+  src: url('./almama2.0.ttf');
 } */
 
-@font-face {
-  font-family: 'douyu';
-  src: url('./douyu2.0.woff2');
-}
+
 
 @font-face {
   font-family: 'almama';
-  src: url('./alibaba/Alimama_ShuHeiTi_Bold.ttf');
+  src: url('./alibaba/almama_ShuHeiTi_Bold.ttf');
 }
 
 @font-face {
