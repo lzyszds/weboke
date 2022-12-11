@@ -5,8 +5,8 @@ import 'element-plus/dist/index.css'
 import 'element-plus/theme-chalk/base.css'
 
 import { createApp } from 'vue'
-// import ElementPlus from 'element-plus'
-// import { ElCollapseTransition } from 'element-plus'
+import ElementPlus from 'element-plus'
+import { ElCollapseTransition } from 'element-plus'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 import App from './App.vue'
@@ -31,8 +31,8 @@ app.directive('transition', transition)
 app.directive('lazy', lazy)
 app.component('lzyIcon', lzyIcon)
 app.component('FontAwesomeIcon', FontAwesomeIcon)
-// app.component(ElCollapseTransition.name, ElCollapseTransition)
-// app.use(ElementPlus)
+app.component(ElCollapseTransition.name, ElCollapseTransition)
+app.use(ElementPlus)
 app.use(hljsVuePlugin)
 app.use(router)
 app.use(pinia)

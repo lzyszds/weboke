@@ -22,7 +22,7 @@ export default defineConfig(({ command, mode }): any => {
     plugins: [
       vue(),
       prismjs({
-        languages: ['json', 'javascript', 'css', 'html', 'markdown', 'sql', 'typescript',],
+        languages: 'all'// ['json', 'javascript', 'css', 'html', 'markdown', 'sql', 'typescript',],
       }),
     ],
     base: baseUrl[mode],

@@ -1,7 +1,6 @@
 <script setup lang='ts'>
 import { onMounted, ref, getCurrentInstance } from 'vue'
 import Maincontent from '../../components/Maincontent.vue';
-import { ElTag } from 'element-plus'
 import { useEventListener } from '@vueuse/core'
 import { useRoute } from 'vue-router';
 import icon from '@/components/icon.vue'

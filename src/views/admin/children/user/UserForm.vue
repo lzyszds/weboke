@@ -7,7 +7,7 @@ const props = defineProps({
   type: String,
   data: Object,
 })
-const formSize = ref('default')
+// const formSize = ref('default')
 const ruleFormRef = ref<FormInstance>()
 const rangeDate = () => {
   return (Math.random() * 1e-4).toString(36).slice(-8)
@@ -15,14 +15,14 @@ const rangeDate = () => {
 //随机推荐头像
 const randomAvatar = () => {
   const arr: string[] = [
-    '/adminApi/public/img/updataImg/put1.jpg',
-    '/adminApi/public/img/updataImg/put2.jpg',
-    '/adminApi/public/img/updataImg/put3.jpg',
-    '/adminApi/public/img/updataImg/put4.jpg',
-    '/adminApi/public/img/updataImg/put5.jpg',
-    '/adminApi/public/img/updataImg/put6.jpg',
-    '/adminApi/public/img/updataImg/put7.jpg',
-    '/adminApi/public/img/updataImg/put8.jpg',
+    '/public/img/updataImg/put1.jpg',
+    '/public/img/updataImg/put2.jpg',
+    '/public/img/updataImg/put3.jpg',
+    '/public/img/updataImg/put4.jpg',
+    '/public/img/updataImg/put5.jpg',
+    '/public/img/updataImg/put6.jpg',
+    '/public/img/updataImg/put7.jpg',
+    '/public/img/updataImg/put8.jpg',
   ]
   const random = Math.floor(Math.random() * arr.length) as any
   if (localStorage.getItem('randomAvatar') == random) {
@@ -154,7 +154,7 @@ const submitUpload = () => {
 </script>
 
 <template>
-  <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="140px" class="demo-ruleForm" :size="formSize"
+  <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="140px" class="demo-ruleForm" size="default"
     status-icon>
     <div class="headelement">
       <el-avatar :size="100" :src="'/adminApi' + ruleForm.headImg" />

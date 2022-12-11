@@ -1,6 +1,6 @@
 <script setup lang='ts'>
 import { ref, h, watch } from 'vue'
-import { ElTable, ElMessageBox, ElNotification, ElPagination } from 'element-plus'
+import { ElMessageBox, ElNotification, ElPagination } from 'element-plus'
 import http from '@/http/http'
 import dayjs from 'dayjs'
 import UserForm from './UserForm.vue'
@@ -53,7 +53,9 @@ const setheadImg = (headImg: User) => {
   return '/adminApi' + headImg
 }
 //屁用没有，但是必须写，不然排序不了 使用模板的table列
-const formatter = () => { }
+const formatter = () => {
+  return 0
+}
 
 //新增用户按钮，点击后弹出form表单
 const centVisible = ref(false)
