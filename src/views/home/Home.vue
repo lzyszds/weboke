@@ -58,6 +58,7 @@ onMounted(() => {
   })
 })
 onBeforeUnmount(() => {
+  list.value = []
   const listSum = document.querySelector('#listSum') as HTMLElement
   const example = document.querySelector('#example') as HTMLElement
   if (document.querySelector('.navbarContent')) {
@@ -81,7 +82,7 @@ onBeforeUnmount(() => {
     <div class="listSum">
       <!-- 文章内容 -->
       <div class="listCom">
-        <img class="listImg" id="listSum" src="/adminApi/public/img/leftbg2.jpg" alt="">
+        <img class="listImg" id="listSum" src="http://localhost:1027/public/img/leftbg2.jpg" alt="">
         <div :id="'list' + item.aid" v-for="(item, index) in list" :key="index" v-if="isload">
           <router-link :to="'/home/detail/' + item.aid">
             <ContentDiv :data="item" :index="index"></ContentDiv>
@@ -101,14 +102,14 @@ onBeforeUnmount(() => {
 
 <style  lang="less" scoped>
 .dark .home {
-  background: url('/adminApi/public/img/12.jpg') no-repeat center center;
+  background: url('http://localhost:1027/public/img/12.jpg') no-repeat center center;
   background-size: cover;
 }
 
 .home {
   width: 100%;
   height: 100vh;
-  background: url('/adminApi/public/img/101608761_p0.png') no-repeat center center;
+  background: url('http://localhost:1027/public/img/101608761_p0.png') no-repeat center center;
   backdrop-filter: blur(50px);
   background-size: cover;
   position: relative;

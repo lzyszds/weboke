@@ -70,7 +70,7 @@ const back = () => {
   <div class="login">
     <div class="card">
       <!-- <div class="item top">
-        <img src="/adminApi/public/img/lzjyBlack.png" alt="">
+        <img src="http://localhost:1027/public/img/lzjyBlack.png" alt="">
         <p>Sign In</p>
       </div> -->
       <div class="item center">

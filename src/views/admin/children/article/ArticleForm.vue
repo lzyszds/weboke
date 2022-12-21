@@ -25,7 +25,7 @@ const storage = ref<storageType>({ text: '', html: '' })
 const text = ref<any>(props.data?.content)
 const html = ref<any>(props.data?.html)
 const title = ref<string>(props.data?.title || '')
-const cover = ref<string>(props.data?.coverImg || '/adminApi/public/img/articleImages/upload-image1667660540602.jpeg')
+const cover = ref<string>(props.data?.coverImg || 'http://localhost:1027/public/img/articleImages/upload-image1667660540602.jpeg')
 //确认提交
 const submitForm = () => {
   const data = {

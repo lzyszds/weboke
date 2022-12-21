@@ -32,6 +32,17 @@ export default defineConfig(({ command, mode }): any => {
         '@': path.resolve(__dirname, 'src')
       }
     },
+    build: {
+      minify: 'terser',
+      terserOptions: {
+        compress: {
+          //打包时移除console
+          drop_console: true,
+          drop_debugger: true,
+          pure_funcs: ['console.log']
+        }
+      }
+    },
     server: {
       hmr: true,
       usePolling: true,

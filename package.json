@@ -2,9 +2,10 @@
   "name": "lzymis",
   "version": "0.0.0",
   "scripts": {
-    "serve": "vite",
+    "serve": "vite --open",
     "dev": "vite --mode lzym",
-    "build": "vite build"
+    "build": "vite build",
+    "preview": "vite preview --port 1111 "
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.0.10",

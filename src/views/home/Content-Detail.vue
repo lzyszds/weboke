@@ -147,7 +147,7 @@ const toUp = () => {
         <div class="comContent">
           <div class="comment-item" v-for="(item, index) in listComment" :key="index">
             <div class="comment-item-left">
-              <img src="/adminApi/public/img/lzy.jpg" alt="">
+              <img src="http://localhost:1027/public/img/lzy.jpg" alt="">
             </div>
             <div class="comment-item-right">
               <div class="comment-item-right-top">

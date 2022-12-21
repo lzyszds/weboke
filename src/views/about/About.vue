@@ -2,7 +2,7 @@
 import TxtDeformation from '@/uiComponents/txtDeformation/Index.vue'
 import http from '@/http/http'
 import { parps, headers } from './config_Github'
-import { onMounted, ref, nextTick, reactive } from 'vue';
+import { onMounted, ref, nextTick, reactive, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router';
 import dayjs from 'dayjs';
 import { useEventListener } from '@vueuse/core';
@@ -31,9 +31,8 @@ const data = ref(<any>[])
 const month = ref(<any>[])
 onMounted(() => {
   http('post', '/github', parps, headers).then((res: any) => {
-    const { name, contributionsCollection } = res.data.user
-    const { colors, totalContributions, weeks } = contributionsCollection.contributionCalendar
-    console.log(name, colors, totalContributions, weeks)
+    const { contributionsCollection } = res.data.user
+    const { weeks } = contributionsCollection.contributionCalendar
     // handleData(weeks)
     data.value = weeks
     const months = [
@@ -83,6 +82,9 @@ const isShow = (value, index) => {
 const onBack = () => {
   router.back()
 }
+onBeforeUnmount(() => {
+  data.value = []
+})
 </script>
 
 <template>
