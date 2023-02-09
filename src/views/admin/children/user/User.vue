@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import { ref, h, watch } from 'vue'
+import { ref, h } from 'vue'
 import { ElMessageBox, ElNotification, ElPagination } from 'element-plus'
 import http from '@/http/http'
 import dayjs from 'dayjs'
@@ -7,13 +7,13 @@ import UserForm from './UserForm.vue'
 import load from '@/uiComponents/loader/loadings'
 import { httpData, User } from './type'
 import Search from '@/views/admin/components/Search.vue'
-import { useWindowSize } from '@vueuse/core'
-const { height } = useWindowSize()
+// import { useWindowSize } from '@vueuse/core'
+// const { height } = useWindowSize()
 
 const total = ref(1) //分页页数
 const pageSize = ref(10) //分页大小
 const tableheight = ref<number>(729) //表格高度
-tableheight.value = height.value * 0.75
+// tableheight.value = height.value * 0.75
 
 
 //表格数据（前页数据展示进表格中）
@@ -132,9 +132,9 @@ const searchData = (val) => {
   }
 }
 //监听窗口大小变化
-watch(height, (val) => {
-  tableheight.value = val * 0.75
-})
+// watch(height, (val) => {
+//   tableheight.value = val * 0.75
+// })
 </script>
 
 <template>
@@ -166,7 +166,7 @@ watch(height, (val) => {
           </div>
         </template>
       </el-table-column>
-      <el-table-column property="username" label="登陆账号" align="center" show-overflow-tooltip />
+      <el-table-column property="username" label="登陆账号" align="center" width="180" />
       <el-table-column label="权限" width="100px" align="center">
         <template #default="scope">
           <div class="power">
@@ -200,7 +200,7 @@ watch(height, (val) => {
           </div>
         </template>
       </el-table-column>
-      <el-table-column fixed="right" label="Operations" width="120">
+      <el-table-column fixed="right" label="Operations">
         <template #default="scope">
           <div class="tool">
             <el-button link type="primary" size="small" @click="modifyThe(scope.row)">修改</el-button>
@@ -220,7 +220,7 @@ watch(height, (val) => {
     </el-dialog>
     <div class="example-pagination-block lzyColor" v-if="!tableSearchData">
       <!-- <div class="example-demonstration">When you have more than 7 pages</div> -->
-      <el-pagination v-model="total" :currentPage="total" v-model:page-size="pageSize" background
+      <el-pagination small v-model="total" :currentPage="total" v-model:page-size="pageSize" background
         layout="prev, pager, next" :total="data.total" @current-change="handleCurrentChange" />
     </div>
   </div>

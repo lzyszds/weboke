@@ -438,7 +438,7 @@ const toUp = () => {
     border-radius: 20px;
     background-color: var(--themeColor);
     padding: 6px;
-    font-family: 'tahoma';
+    font-family: 'firaCode';
 
     .affix_item {
       border-radius: 10px;

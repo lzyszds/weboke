@@ -38,7 +38,7 @@ const search = () => {
 <style lang="less" scoped>
 .search {
   height: 50px;
-  width: 100%;
+  width: 1300px;
 
   :deep(.searchInput) {
     width: 200px;

@@ -156,6 +156,7 @@ const submitUpload = () => {
 <template>
   <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" label-width="140px" class="demo-ruleForm" size="default"
     status-icon>
+    <!-- 修改用户信息标签 -->
     <div class="headelement">
       <el-avatar :size="100" :src="'/adminApi' + ruleForm.headImg" />
       <div class="upload-demo">

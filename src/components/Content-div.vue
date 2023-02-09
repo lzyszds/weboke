@@ -115,6 +115,7 @@ const selectHandle = (index: number) => {
     display: flex;
     height: 20px;
     line-height: 25px;
+    flex: 1;
 }
 
 .time span:nth-child(1) {

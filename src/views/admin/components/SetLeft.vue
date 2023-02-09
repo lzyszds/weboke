@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import { useStore } from '@/store/index'
 import { useRouter } from 'vue-router'
 import http from '@/http/http';
-import dayjs from 'dayjs'
+// import dayjs from 'dayjs'
 
 const router = useRouter()
 const { $state: state } = useStore()
@@ -159,6 +159,7 @@ infoData.value = data
 
   .userinfo {
     text-align: center;
+    width: 330px;
 
     .headPortrait {
       border-radius: 50%;
@@ -203,7 +204,7 @@ infoData.value = data
     p {
       font-size: 9px;
       color: #999;
-      font-weight: 100;
+      font-weight: 600;
       font-family: 'almama';
     }
 
@@ -281,8 +282,8 @@ infoData.value = data
       span {
         font-size: 14px;
         color: #000;
-        font-weight: 100;
-        font-family: 'almama';
+        font-weight: 600;
+        font-family: 'tahoma';
       }
 
       span:nth-child(1) {

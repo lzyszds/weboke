@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import { ref, h, watch } from 'vue'
+import { ref, h } from 'vue'
 import { ElMessageBox, ElNotification } from 'element-plus'
 import http from '@/http/http'
 import dayjs from 'dayjs'
@@ -7,13 +7,11 @@ import load from '@/uiComponents/loader/loadings'
 import { httpData, Article } from './type'
 import ArticleForm from './ArticleForm.vue'
 import Search from '@/views/admin/components/Search.vue'
-import { useWindowSize } from '@vueuse/core'
-const { height } = useWindowSize()
 
 const total = ref(1) //分页页数
 const pageSize = ref(7) //分页大小
-const tableheight = ref<number>(729) //表格高度
-tableheight.value = height.value * 0.75
+const tableheight = ref<number>(740) //表格高度
+// tableheight.value = height.value * 0.75
 
 //表格数据（前页数据展示进表格中）
 const tableData = ref<Article[]>()
@@ -126,9 +124,9 @@ const searchData = (val) => {
   }
 }
 //监听窗口大小变化
-watch(height, (val) => {
-  tableheight.value = val * 0.75
-})
+// watch(height, (val) => {
+//   tableheight.value = val * 0.75
+// })
 </script>
 
 <template>

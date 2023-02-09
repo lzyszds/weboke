@@ -6,14 +6,15 @@
 
 
 @font-face {
-  font-family: 'almama';
-  src: url('./alibaba/almama_ShuHeiTi_Bold.ttf');
+  font-family: 'dindin';
+  src: url('./dindinjinbuti/HDMAelvtXQvWYFaJR3JCd.woff');
 }
 
 @font-face {
-  font-family: 'tahoma';
-  src: url('./tahomabd.ttf');
+  font-family: 'almama';
+  src: url('./alibaba/Alimama_ShuHeiTi_Bold.woff');
 }
+
 
 @font-face {
   font-family: 'firaCode';
