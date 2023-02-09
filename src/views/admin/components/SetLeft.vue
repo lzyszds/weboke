@@ -280,10 +280,10 @@ infoData.value = data
       }
 
       span {
-        font-size: 14px;
+        font-size: 16px;
         color: #000;
-        font-weight: 600;
-        font-family: 'tahoma';
+        font-weight: 500;
+        font-family: 'dindin';
       }
 
       span:nth-child(1) {
