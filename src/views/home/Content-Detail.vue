@@ -41,6 +41,33 @@ try {
     textbefore.value = result.data.content
   }, 2000)
 }
+
+
+const updateCop = (val: number) => {
+  console.log(val);
+  //获取当前文章的索引目录
+  let toc = document.querySelectorAll('h2,h3,h4') as any;
+  console.log(`lzy  toc`, toc)
+  toc.forEach((element: any) => {
+    tocList.value.push({
+      title: element.innerText,
+      id: "#" + element.id,
+      top: element.offsetTop,
+      nodeName: element.nodeName
+    })
+    // element.setAttribute('tabindex', "-1")
+  })
+
+  //监听滚动事件
+  handleScroll();
+  let timeout = setTimeout(() => {
+    console.log(`lzy ~ affixElm.value`, affixElm.value)
+    affixElm.value!.style.height = document.querySelector('.main')?.getBoundingClientRect().height + 'px';
+    clearTimeout(timeout)
+  }, 500);
+  //结束定时器
+
+}
 onMounted(() => {
   //处理代码高亮行数显示
   let blocks = document.querySelectorAll('pre code');
@@ -51,25 +78,7 @@ onMounted(() => {
     });
   })
 
-  //获取当前文章的索引目录
-  let toc = document.querySelectorAll('h2,h3,h4') as any;
-  toc.forEach((element: any) => {
-    tocList.value.push({
-      title: element.innerText,
-      id: "#" + element.id,
-      top: element.offsetTop,
-      nodeName: element.nodeName
-    })
-    // element.setAttribute('tabindex', "-1")
-  })
-  //监听滚动事件
-  handleScroll();
-  let timeout = setTimeout(() => {
-    console.log(`lzy ~ affixElm.value`, affixElm.value)
-    affixElm.value!.style.height = document.querySelector('.main')?.getBoundingClientRect().height + 'px';
-    clearTimeout(timeout)
-  }, 500);
-  //结束定时器
+
 })
 //处理时间戳转换成距离当前日期的时间（一天前，两天前）
 function setTimestamp(time: string) {
@@ -114,7 +123,8 @@ const toUp = () => {
       </div>
     </div>
 
-    <Maincontent :main="dataDet.main"></Maincontent>
+    <Maincontent :main="dataDet.main" @update="updateCop"></Maincontent>
+
     <div class="affix-container" ref="affixElm" v-if="tocList.length != 0">
       <div class="affix">
         <div class="affix_item">

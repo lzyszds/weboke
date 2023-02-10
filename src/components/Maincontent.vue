@@ -1,7 +1,7 @@
 <!-- 详情页主要内容 -->
 
 <script setup lang='ts'>
-import { onMounted, defineProps, getCurrentInstance } from 'vue'
+import { onMounted, defineProps, getCurrentInstance, onBeforeMount, defineEmits } from 'vue'
 import { ElMessage, ElNotification } from 'element-plus'
 import { useEventListener } from '@vueuse/core';
 const { proxy } = getCurrentInstance() as any
@@ -9,27 +9,32 @@ const props = defineProps({
   main: String
 });
 
+const emit = defineEmits(['update'])
+
 onMounted(() => {
   setTimeout(() => {
     const elimg = document.querySelector('.main') as HTMLDivElement
     if (elimg) {
+      //给当前页面所有图片添加data-fancybox属性，让其可以点击放大
       elimg.querySelectorAll('img').forEach((element: any) => {
         element.setAttribute('data-fancybox', 'gallery')
         proxy.$fancyapps.Fancybox.bind('[data-fancybox="gallery"]', {
         })
       })
     }
+    //给当前页面所有代码块复制按钮添加复制声明
     const copys = document.querySelectorAll('button.v-md-copy-code-btn') as any
     copys.forEach((element: any) => {
       useEventListener(element, 'click', (e: any) => {
         const text = e.target.parentElement.firstChild.innerText
+        console.log(`lzy  text`, text)
         //将text复制到剪切板
         navigator.clipboard.writeText(text).then(() => {
           ElNotification.closeAll()
           if (!text) return ElMessage({ type: 'error', grouping: true, message: '复制失败：' })
           ElNotification({
             dangerouslyUseHTMLString: true,
-            message: `<i class="fa fa-copy"></i> 复制成功,转载请声明一下`,
+            message: `<i class="fa fa-copy"></i> 复制成功,转载请声明来源！`,
             position: 'bottom-right',
             duration: 2000,
             customClass: 'copy-success',
@@ -39,6 +44,8 @@ onMounted(() => {
         });
       })
     })
+    emit('update', 1)
+
   }, 1000)
 })
 </script>
