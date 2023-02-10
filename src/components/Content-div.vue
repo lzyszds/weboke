@@ -86,7 +86,7 @@ const selectHandle = (index: number) => {
 
 /* 超出数量显示省略号 */
 .synopsis {
-    /* width: 500px; */
+    width: 600px;
     height: 60px;
     font-size: 14px;
     color: #888;
