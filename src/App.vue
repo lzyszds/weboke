@@ -23,9 +23,11 @@ const { proxy } = getCurrentInstance() as any;
 const { $state: state } = useStore();
 const weather = proxy.$common.getIpWeather()
 weather.then(res => {
+  //将个人信息存入localStorage，避免每次刷新都要请求接口
   localStorage.setItem('nowWeatherData', JSON.stringify(res))
 })
 state.nowWeatherData = weather;
+// proxy.$common.copyTip()
 </script>
 <style lang="less">
 

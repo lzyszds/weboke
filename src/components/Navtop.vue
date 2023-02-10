@@ -2,11 +2,11 @@
 
 <template>
   <div class="navbarContent">
-    <div class="">
+    <div class="navConChild">
       <a class="navbar-brand navbar-logo" href="/">
         <img width="80" src="http://localhost:1027/public/img/lzjyWhite.png" alt="" />
         <svg class="logoSvg logoSvg1" viewBox="0 0 400 200">
-          <text x="0" y="70%" id="timelinetext"> Jz=> </text>
+          <text x="0" y="70%" id="timelinetext"> Jz </text>
         </svg>
       </a>
       <div class="navbar-toggler">
@@ -168,7 +168,7 @@ svg.logoSvg {
 
 svg.logoSvg1 {
   top: 0;
-  left: 22.8%;
+  left: 9%;
 }
 
 svg.logoSvg2 {
@@ -218,6 +218,7 @@ svg.logoSvg text {
   display: flex;
   align-items: center;
   margin: 0;
+  height: 100%;
 }
 
 .hori-selector {
@@ -447,12 +448,15 @@ svg.logoSvg text {
   z-index: 99;
 }
 
-.navbarContent :deep(div):nth-child(1) {
+.navbarContent .navConChild {
   margin: 0 auto;
   width: 1280px;
   height: 60px;
   display: flex;
   justify-content: space-between;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .navbarContent100 {

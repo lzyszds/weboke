@@ -1,7 +1,7 @@
 <!-- 详情页主要内容 -->
 
 <script setup lang='ts'>
-import { onMounted, defineProps, getCurrentInstance, onBeforeMount, defineEmits } from 'vue'
+import { onMounted, defineProps, getCurrentInstance, defineEmits } from 'vue'
 import { ElMessage, ElNotification } from 'element-plus'
 import { useEventListener } from '@vueuse/core';
 const { proxy } = getCurrentInstance() as any

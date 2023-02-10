@@ -198,7 +198,7 @@ const toUp = () => {
 
     & .boxType {
       // flex: 1;
-      width: 300px;
+      width: 100%;
       height: 100%;
       overflow-y: hidden;
       overflow-x: auto;
@@ -295,6 +295,7 @@ const toUp = () => {
   font-size: 16px;
   background-color: var(--themeColor);
   border: 4px solid #000;
+  font-family: 'dindin';
 
   svg {
     width: 30px !important;
@@ -448,7 +449,7 @@ const toUp = () => {
     border-radius: 20px;
     background-color: var(--themeColor);
     padding: 6px;
-    font-family: 'firaCode';
+    font-family: 'dindin';
 
     .affix_item {
       border-radius: 10px;
@@ -465,6 +466,7 @@ const toUp = () => {
         justify-content: center;
         background-color: #ffe14d;
         border-radius: 10px;
+        user-select: none;
 
         svg {
           fill: #000;
@@ -484,6 +486,10 @@ const toUp = () => {
 
         &>li.active {
           color: var(--themeColor);
+
+          &::before {
+            z-index: 10;
+          }
         }
 
         &>li.H2 {
@@ -499,14 +505,15 @@ const toUp = () => {
         }
 
         &>li:before {
-          background-color: #ddd;
+          background-color: transparent;
           content: ' ';
           display: inline-block;
           height: 25px;
           left: 15px;
           margin-top: -1px;
           position: absolute;
-          width: 4px;
+          width: 3px;
+          border-radius: 30px;
         }
 
         &>li:hover {
@@ -516,6 +523,7 @@ const toUp = () => {
 
         &>li:hover:before {
           background-color: var(--themeColor);
+          z-index: 10;
         }
 
         &>li.active:before {
@@ -527,6 +535,10 @@ const toUp = () => {
 }
 
 .dark {
+  .imgtop {
+    box-shadow: none;
+  }
+
   .detail {
     background: var(--darkBgcolor);
     color: #ffff;

@@ -115,8 +115,24 @@ function compressPic(file, quality) {
     })
   })
 }
+// 复制内容提示版权信息
+import { ElNotification } from 'element-plus'
+import { useEventListener } from "@vueuse/core";
 
-
+const copyTip = () => {
+  useEventListener(window, 'keydown', e => {
+    if (e.ctrlKey && e.key === 'c') {
+      ElNotification.closeAll()
+      ElNotification({
+        dangerouslyUseHTMLString: true,
+        message: `<i class="fa fa-copy"></i> 复制成功,转载请声明来源！`,
+        position: 'bottom-right',
+        duration: 2000,
+        customClass: 'copy-success',
+      })
+    }
+  })
+}
 
 export default {
   debounce,// 防抖
@@ -126,6 +142,7 @@ export default {
   base64toBlob,//base64转二进制流
   getBase64,//二进制流转换为base64 格式。
   compressPic,//上传图片，图片太大，如何在前端实现图片压缩后上传
+  copyTip,//复制内容提示版权信息
 }
 
 

@@ -13,7 +13,7 @@ import App from './App.vue'
 import router from './router'
 import hljsVuePlugin from '@highlightjs/vue-plugin'
 import { Fancybox, Carousel, Panzoom } from "@fancyapps/ui";//图片放大
-import common from '@/utils/common.js'; //全局按钮防抖事件
+import common from '@/utils/common'; //全局按钮防抖事件
 import lazy from '@/utils/lazy';
 import transition from '@/utils/transition'
 import { createPinia } from 'pinia'
