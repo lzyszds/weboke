@@ -9,7 +9,7 @@ import { useEventListener } from '@vueuse/core';
 const router = useRouter();
 //实现github贡献图参考
 //https://stackoverflow.com/questions/18262288/finding-total-contributions-of-a-user-from-github-api
-
+const totalCont = ref(0)
 //svg参数设置
 const svgTip = reactive({
   x: 0,  //鼠标x坐标
@@ -32,8 +32,9 @@ const month = ref(<any>[])
 onMounted(() => {
   http('post', '/github', parps, headers).then((res: any) => {
     const { contributionsCollection } = res.data.user
-    const { weeks } = contributionsCollection.contributionCalendar
+    const { weeks, totalContributions } = contributionsCollection.contributionCalendar
     // handleData(weeks)
+    totalCont.value = totalContributions
     data.value = weeks
     const months = [
       "Jan", "Feb", "Mar", "Apr", "May", "June",
@@ -145,7 +146,7 @@ onBeforeUnmount(() => {
 
       </div>
       <div class="wave">
-        <text>104 contributions in the last year</text>
+        <text>{{ totalCont }} contributions in the last year</text>
         <svg id="calendar" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
           <g>
             <text v-for="(item, index) in ['日', '一', '二', '三', '四', '五', '六']" :key="index" fill="#000" font-size="13"
