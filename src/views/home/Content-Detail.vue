@@ -172,6 +172,40 @@ const toUp = () => {
         </div>
       </div>
     </div>
+    <!-- <div class=" center">
+      <div class="comment publish">
+        <h4>
+          <icon name="icon-icon-taikong8"></icon>发表评论
+        </h4>
+      </div>
+    </div> -->
+    <div class="center publish">
+      <div class=" borderw">
+        <div class="comment ">
+          <h4>
+            <icon name="icon-icon-taikong8"></icon>发表评论
+          </h4>
+        </div>
+        <div class="comment textareas">
+          <textarea></textarea>
+        </div>
+      </div>
+      <div class="borderw nameQQ">
+        <div class="comment">
+          <p>昵称：
+            <input type="text" placeholder="昵称或者QQ号">
+          </p>
+          <p>邮箱：
+            <input type="text" placeholder="昵称或者QQ号">
+          </p>
+          <p>网站：
+            <input type="text" placeholder="昵称或者QQ号">
+          </p>
+          <p class="btn"><button> 发布评论 </button></p>
+          <p class="btn del"><button> 取消评论 </button></p>
+        </div>
+      </div>
+    </div>
   </div>
 
 </template>
@@ -426,6 +460,115 @@ const toUp = () => {
   }
 }
 
+.publish {
+  height: 300px;
+  display: flex;
+  justify-content: space-between;
+
+  &>.borderw {
+    width: 49%;
+    box-sizing: border-box;
+
+    h4 {
+      display: flex;
+      margin: 5px 10px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .icon {
+      width: 30px !important;
+      height: 30px;
+    }
+
+    .textareas {
+      height: 77%;
+      margin-top: 10px;
+      padding: 0;
+      border-radius: 0;
+
+      &:before,
+      &:after {
+        display: none;
+      }
+
+      &>textarea {
+        width: 91% !important;
+        height: 154px !important;
+        padding: 20px;
+        font-family: 'dindin';
+        font-size: 18px;
+        border: none;
+        resize: none;
+        // border-radius: 30px;
+
+        &:focus-visible {
+          border: none;
+          outline: none;
+        }
+      }
+
+    }
+  }
+
+  &>.nameQQ {
+    .comment {
+      font-family: 'dindin';
+      padding: 30px 10px 0px;
+
+      &::before,
+      &::after {
+        display: none;
+      }
+
+      p {
+        margin: 10px 15px;
+        font-size: 18px;
+
+        input {
+          width: 70%;
+          font-size: 16px;
+          border: 2px solid var(--themeColor);
+          border-radius: 10px;
+          padding: 5px;
+
+          &:focus-visible {
+            outline: none;
+          }
+        }
+
+        &.btn {
+          text-align: center;
+
+          &.del {
+            button {
+              background-color: var(--delColor);
+              color: #fff;
+
+            }
+          }
+
+          button {
+            background-color: var(--borderColor);
+            width: 70%;
+            border-radius: 30px;
+            margin: 4px;
+            font-family: 'dindin';
+          }
+        }
+
+      }
+
+
+    }
+  }
+
+  &::before {
+    display: none;
+  }
+
+
+}
 
 
 .affix-container {
