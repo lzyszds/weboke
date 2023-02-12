@@ -461,6 +461,7 @@ const toUp = () => {
 }
 
 .publish {
+  width: 1008px;
   height: 300px;
   display: flex;
   justify-content: space-between;
