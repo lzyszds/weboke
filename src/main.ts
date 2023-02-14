@@ -16,10 +16,10 @@ import { Fancybox, Carousel, Panzoom } from "@fancyapps/ui";//图片放大
 import common from '@/utils/common'; //全局按钮防抖事件
 import lazy from '@/utils/lazy'; // 图片懒加载
 import transition from '@/utils/transition'
-import { createPinia } from 'pinia'
-import lzyIcon from '@/components/icon.vue';
-import FontAwesomeIcon from '@/assets/IconFont/fortawesome';
-import VueMarkdownEditor from '@/utils/markDownCreate';
+import { createPinia } from 'pinia' //状态管理
+import lzyIcon from '@/components/icon.vue'; //图标组件
+import FontAwesomeIcon from '@/assets/IconFont/fortawesome';//字体图标
+import VueMarkdownEditor from '@/utils/markDownCreate'; //markdown配置
 
 
 const pinia = createPinia()
