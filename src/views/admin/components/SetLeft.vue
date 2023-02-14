@@ -23,6 +23,7 @@ const datalist = ref<IWeather>()
 const cip = ref<string>()
 // data:天气数据   cid:城市id 
 const promiseion: any = state.nowWeatherData
+//获取请求天气的数据
 promiseion.then(res => {
   datalist.value = res.weatherData
   datalist.value!.region = res.region

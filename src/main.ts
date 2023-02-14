@@ -11,10 +11,10 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 import App from './App.vue'
 import router from './router'
-import hljsVuePlugin from '@highlightjs/vue-plugin'
+import hljsVuePlugin from '@highlightjs/vue-plugin'//代码展示高亮
 import { Fancybox, Carousel, Panzoom } from "@fancyapps/ui";//图片放大
 import common from '@/utils/common'; //全局按钮防抖事件
-import lazy from '@/utils/lazy';
+import lazy from '@/utils/lazy'; // 图片懒加载
 import transition from '@/utils/transition'
 import { createPinia } from 'pinia'
 import lzyIcon from '@/components/icon.vue';

@@ -39,6 +39,7 @@ onMounted(() => {
   setTimeout(() => {
     maskShow.value = false
   }, 1000)
+  //控制滚动到指定位置，固定背景人物
   useEventListener(window, 'scroll', () => {
     const listSum = document.querySelector('#listSum') as HTMLElement
     const example = document.querySelector('#example') as HTMLElement

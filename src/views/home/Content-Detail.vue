@@ -28,9 +28,9 @@ const listComment = ref([
     content: '这是一条评论'
   },
 ])
-// const articleList = await http('get', '/articleList')
 
-const textbefore = ref('寻找中...')
+//评论上方的诗句请求
+const textbefore = ref<String>('寻找中...')
 try {
   const result = await http('get', '/getIp/sentence') as any
   textbefore.value = result.data.content
@@ -42,8 +42,10 @@ try {
   }, 2000)
 }
 
-
+/* 组件内部设定组件加载完成返回
+返回后执行此方法来获取当前文章的目录 */
 const updateCop = (val: number) => {
+
   console.log(val);
   //获取当前文章的索引目录
   let toc = document.querySelectorAll('h2,h3,h4') as any;
