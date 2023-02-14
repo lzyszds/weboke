@@ -20,7 +20,7 @@ const listComment = ref([
   {
     name: '小红',
     time: '2022-10-03 12:00:00',
-    content: '我入职时做过性格测试，我属于蓝色的！'
+    content: '我入职时做过性格测试，我属于蓝色的啊！'
   },
   {
     name: '小明',
