@@ -26,6 +26,11 @@
   text-shadow: none;
 }
 
+button,
+a {
+  cursor: var(--linkCup);
+}
+
 .decoration {
   font-family: 'almama';
   color: #fff;

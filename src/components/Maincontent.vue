@@ -27,7 +27,6 @@ onMounted(() => {
     copys.forEach((element: any) => {
       useEventListener(element, 'click', (e: any) => {
         const text = e.target.parentElement.firstChild.innerText
-        console.log(`lzy  text`, text)
         //将text复制到剪切板
         navigator.clipboard.writeText(text).then(() => {
           ElNotification.closeAll()

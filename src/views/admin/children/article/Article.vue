@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import { ref, h } from 'vue'
+import { ref, h, onBeforeUnmount } from 'vue'
 import { ElMessageBox, ElNotification } from 'element-plus'
 import http from '@/http/http'
 import dayjs from 'dayjs'
@@ -127,6 +127,11 @@ const searchData = (val) => {
 // watch(height, (val) => {
 //   tableheight.value = val * 0.75
 // })
+onBeforeUnmount(() => {
+  data.value = { code: 0, data: [], total: 0, }
+  tableData.value = []
+  tableSearchData.value = []
+})
 </script>
 
 <template>
@@ -188,13 +193,12 @@ const searchData = (val) => {
   <div class="toolfooter">
     <el-button class="add" type="primary" @click="addUser">新增文章</el-button>
     <el-dialog class="articleDialog" :close-on-press-escape="false" v-model="centVisible" top="0px"
-      :before-close="handleClose" title="新增文章" width="90%" left>
-      <ArticleForm v-if="centVisible" type="add" :tableheight="tableheight" @switchAdd="switchAdd" />
+      :before-close="handleClose" title="新增文章" width="90%" left v-if="centVisible">
+      <ArticleForm type="add" :tableheight="tableheight" @switchAdd="switchAdd" />
     </el-dialog>
     <el-dialog class="articleDialog" :close-on-press-escape="false" v-model="modifyTheVis" :before-close="handleClose"
-      title="修改文章" width="90%" left>
-      <ArticleForm v-if="modifyTheVis" type="modify" :data="modifyData" :tableheight="tableheight"
-        @switchMod="switchMod" />
+      title="修改文章" width="90%" left v-if="modifyTheVis">
+      <ArticleForm type="modify" :data="modifyData" :tableheight="tableheight" @switchMod="switchMod" />
     </el-dialog>
     <div class="example-pagination-block lzyColor" v-if="!tableSearchData">
       <!-- <div class="example-demonstration">When you have more than 7 pages</div> -->

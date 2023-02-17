@@ -110,7 +110,7 @@ onBeforeUnmount(() => {
 .home {
   width: 100%;
   height: 100vh;
-  background: url('http://localhost:1027/public/img/101608761_p0.png') no-repeat center center;
+  background: url('http://localhost:1027/public/img/101608761_p0.jpg') no-repeat center center;
   backdrop-filter: blur(50px);
   background-size: cover;
   position: relative;

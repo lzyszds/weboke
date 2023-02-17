@@ -46,10 +46,8 @@ try {
 返回后执行此方法来获取当前文章的目录 */
 const updateCop = (val: number) => {
 
-  console.log(val);
   //获取当前文章的索引目录
   let toc = document.querySelectorAll('h2,h3,h4') as any;
-  console.log(`lzy  toc`, toc)
   toc.forEach((element: any) => {
     tocList.value.push({
       title: element.innerText,
@@ -63,7 +61,6 @@ const updateCop = (val: number) => {
   //监听滚动事件
   handleScroll();
   let timeout = setTimeout(() => {
-    console.log(`lzy ~ affixElm.value`, affixElm.value)
     affixElm.value!.style.height = document.querySelector('.main')?.getBoundingClientRect().height + 'px';
     clearTimeout(timeout)
   }, 500);
@@ -184,9 +181,7 @@ const toUp = () => {
     <div class="center publish">
       <div class=" borderw">
         <div class="comment ">
-          <h4>
-            <icon name="icon-icon-taikong8"></icon>发表评论
-          </h4>
+          <span> 发表评论 </span>
         </div>
         <div class="comment textareas">
           <textarea></textarea>
@@ -472,10 +467,11 @@ const toUp = () => {
     width: 49%;
     box-sizing: border-box;
 
-    h4 {
+    span {
       display: flex;
-      margin: 5px 10px;
-      place-content: center;
+      margin: 10px 20px;
+      place-content: left;
+      font-family: 'dindin';
     }
 
     .icon {
@@ -484,8 +480,8 @@ const toUp = () => {
     }
 
     .textareas {
-      height: 77%;
-      margin-top: 10px;
+      height: 76%;
+      margin-top: 5px;
       padding: 0;
       border-radius: 0;
 
@@ -495,19 +491,27 @@ const toUp = () => {
       }
 
       &>textarea {
-        width: 91% !important;
-        height: 154px !important;
-        padding: 20px;
+        width: 91.4% !important;
+        height: 172px !important;
+        padding: 10px 20px;
         font-family: 'dindin';
         font-size: 18px;
         border: none;
         resize: none;
         // border-radius: 30px;
+        word-break: break-all; //在合适的点自动换行
+        background-color: transparent;
+        transition: background 0.1s, color 0.3s;
 
         &:focus-visible {
           border: none;
           outline: none;
         }
+
+        &::-webkit-scrollbar {
+          background-color: transparent;
+        }
+
       }
 
     }

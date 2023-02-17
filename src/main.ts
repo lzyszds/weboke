@@ -18,7 +18,7 @@ import lazy from '@/utils/lazy'; // 图片懒加载
 import transition from '@/utils/transition'
 import { createPinia } from 'pinia' //状态管理
 import lzyIcon from '@/components/icon.vue'; //图标组件
-import FontAwesomeIcon from '@/assets/IconFont/fortawesome';//字体图标
+// import FontAwesomeIcon from '@/assets/IconFont/fortawesome';//字体图标
 import VueMarkdownEditor from '@/utils/markDownCreate'; //markdown配置
 
 
@@ -30,7 +30,7 @@ app.config.globalProperties.$fancyapps = { Fancybox, }
 app.directive('transition', transition)
 app.directive('lazy', lazy)
 app.component('lzyIcon', lzyIcon)
-app.component('FontAwesomeIcon', FontAwesomeIcon)
+// app.component('FontAwesomeIcon', FontAwesomeIcon)
 app.component(ElCollapseTransition.name, ElCollapseTransition)
 app.use(ElementPlus)
 app.use(hljsVuePlugin)

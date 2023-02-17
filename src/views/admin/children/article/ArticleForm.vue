@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import { ref, defineProps, getCurrentInstance, defineEmits, h, onMounted } from 'vue'
+import { ref, reactive, defineProps, getCurrentInstance, defineEmits, h, onMounted, onBeforeUnmount } from 'vue'
 import { dayjs, ElMessageBox } from 'element-plus'
 import { useEventListener } from '@vueuse/core'
 import http from '@/http/http'
@@ -20,29 +20,38 @@ interface storageType {
   text: string,
   html: string,
 }
+interface informationTypes {
+  storage: storageType,
+  text: any,
+  html: any,
+  title: string,
+  cover: string,
+}
 
-const storage = ref<storageType>({ text: '', html: '' })
-const text = ref<any>(props.data?.content)
-const html = ref<any>(props.data?.html)
-const title = ref<string>(props.data?.title || '')
-const cover = ref<string>(props.data?.coverImg || 'http://localhost:1027/public/img/articleImages/upload-image1667660540602.jpeg')
+const information = reactive<informationTypes>({
+  storage: { text: '', html: '' },
+  text: props.data?.content,
+  html: props.data?.html,
+  title: props.data?.title || '',
+  cover: props.data?.coverImg || 'http://localhost:1027/public/img/articleImages/upload-image1667660540602.jpeg',
+})
 //确认提交
 const submitForm = () => {
   const data = {
     author: 'lzy',
-    title: title.value,
+    title: information.title,
     //文章开头第一段话
     coverContent: document.querySelector('.vuepress-markdown-body')?.firstElementChild?.innerHTML,
-    content: storage.value.text,
-    main: storage.value.html,
-    coverImg: cover.value || props.data!.coverImg,
+    content: information.storage.text,
+    main: information.storage.html,
+    coverImg: information.cover || props.data!.coverImg,
     aid: props.type === 'modify' ? props.data?.aid : null,
     modified: dayjs().unix(),
     wtype: tagData.value,
   }
   const url = props.type === 'modify' ? 'updateArticle' : 'addArticle'
   //当前是否保存
-  if (storage.value.text === text.value || storage.value.html === html.value) {
+  if (information.storage.text === information.text || information.storage.html === information.html) {
     http('post', `/adminApi/admin/${url}`, data).then((res: any) => {
       if (res.code === 200) {
         emit('switchMod', false)
@@ -72,6 +81,7 @@ const resetForm = () => {
 }
 //本地图片上传到线上，并返回当前文件在线上的path
 const handleUploadImage = (event, insertImage, files) => {
+  console.log(event);
   //对图片进行压缩
   compressPic(files[0], 0.5).then(({ fileCompress }) => {
     // 拿到 files 之后上传到文件服务器，然后向编辑框中插入对应的内容
@@ -94,7 +104,7 @@ const handleUploadImage = (event, insertImage, files) => {
   })
 }
 const clicks = (text, html) => {
-  storage.value = { text, html, }
+  information.storage = { text, html, }
 }
 
 //异步执行，等待dom渲染完成 
@@ -116,7 +126,7 @@ onMounted(() => {
       http('post', '/adminApi/admin/uploadArticleImg', formData, headers)
         .then((res: { code: Number, message }) => {
           if (res.code === 200) {
-            cover.value = res.message
+            information.cover = res.message
           }
         })
     })
@@ -179,6 +189,17 @@ const addArticleType = () => {
     }
   })
 }
+onBeforeUnmount(() => {
+  Object.keys(information).map(item => {
+    information[item] = ''
+  })
+  tagList.value = {}
+  tagData.value = []
+  tagDataTem.value = []
+  typeInput.value = ''
+  console.log(information);
+
+})
 </script>
 
 <template>
@@ -188,11 +209,11 @@ const addArticleType = () => {
       <div class="markDowmInput">
         <span>封面图片：</span>
         <div @click="coverUpdate" class="coverImg">
-          <img :src="'/adminApi' + cover" alt="">
+          <img :src="'/adminApi' + information.cover" alt="">
           <input type="file" id="coverFile">
         </div>
         <span>文章标题：</span>
-        <input class="title" type="text" v-model="title" />
+        <input class="title" type="text" v-model="information.title" />
         <span>类别：</span>
         <div class="boxType">
           <el-tag class="ml-1" type="info" v-for="(item, index) in tagData" :key="index">{{ item }}</el-tag>
@@ -215,7 +236,7 @@ const addArticleType = () => {
               <div class="item-box">
                 <el-tag type="info" v-for="(item, index) in tagList?.data" :key="index" @click="tagActive(item.name)"
                   :class="tagActiveClass(item.name)">{{
-                      item.name
+                    item.name
                   }}
                 </el-tag>
               </div>
@@ -227,8 +248,8 @@ const addArticleType = () => {
           </template>
         </el-popover>
       </div>
-      <v-md-editor class="markDowmLzy" v-model="text" :disabled-menus="[]" :left-toolbar="orderTool" @save="clicks"
-        @upload-image="handleUploadImage" :height="(tableheight! * 0.9) + 'px'" :toolbar="toolbar">
+      <v-md-editor class="markDowmLzy" v-model="information.text" :disabled-menus="[]" :left-toolbar="orderTool"
+        @save="clicks" @upload-image="handleUploadImage" :height="(tableheight! * 0.9) + 'px'" :toolbar="toolbar">
       </v-md-editor>
     </div>
     <div class="btnTool">
