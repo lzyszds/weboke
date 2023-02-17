@@ -475,8 +475,7 @@ const toUp = () => {
     h4 {
       display: flex;
       margin: 5px 10px;
-      align-items: center;
-      justify-content: center;
+      place-content: center;
     }
 
     .icon {

@@ -177,8 +177,7 @@ onBeforeUnmount(() => {
   overflow: hidden;
   position: relative;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  place-content: center;
 }
 
 .content {
