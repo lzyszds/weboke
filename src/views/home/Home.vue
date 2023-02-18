@@ -217,7 +217,7 @@ onBeforeUnmount(() => {
   transition: .22s cubic-bezier(0.645, 0.045, 0.355, 1);
   opacity: 1;
   height: 50px;
-  width: 100%;
+  width: 100vw;
   position: fixed;
   left: 0;
   bottom: -100px;
@@ -229,7 +229,7 @@ onBeforeUnmount(() => {
   padding: 2px !important;
 }
 </style>
-<style scoped>
+<style  scoped>
 .dark .conDiv {
   background: var(--darkBgcolor);
   box-shadow: 0px 0px 0px 1px #fff;
@@ -258,4 +258,7 @@ onBeforeUnmount(() => {
     transform: translateY(0);
   }
 }
+</style>
+<style lang="less">
+@import url('@/assets/css/mobile/homeMobile.less');
 </style>

@@ -9,7 +9,6 @@
   <div class="w-full absolute bottom-20">
     <!-- <Live2d></Live2d> -->
   </div>
-
 </template>
 <script setup lang="ts">
 import Music from "./uiComponents/music/Music.vue";
@@ -30,5 +29,4 @@ state.nowWeatherData = weather;
 // proxy.$common.copyTip()
 </script>
 <style lang="less">
-
 </style>

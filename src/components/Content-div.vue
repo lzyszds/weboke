@@ -31,7 +31,9 @@ const selectHandle = (index: number) => {
 
 <template>
     <div v-transition="'tosiTion'" class="conDiv">
-        <img v-lazy="props.index" :src="'/adminApi/' + data.coverImg" alt="">
+        <div class="conDiv_img">
+            <img v-lazy="props.index" :src="'/adminApi/' + data.coverImg" alt="">
+        </div>
         <div class="conDiv_text">
             <div class="title">{{ data.title }}</div>
             <div class="synopsis" v-html="data.coverContent"></div>
@@ -68,7 +70,7 @@ const selectHandle = (index: number) => {
     color: var(--themeColor);
 }
 
-.conDiv img {
+.conDiv .conDiv_img img {
     width: 280px;
     height: 200px;
     object-fit: cover;
@@ -76,18 +78,20 @@ const selectHandle = (index: number) => {
 }
 
 .conDiv_text {
+    width: 99%;
     padding: 20px 40px 0;
+    display: grid;
+    grid-template-rows: 1fr 2.5fr 1fr;
 }
 
 .title {
     font-size: 25px;
     color: #000;
+    font-family: 'dindin';
 }
 
 /* 超出数量显示省略号 */
 .synopsis {
-    width: 600px;
-    height: 60px;
     font-size: 14px;
     color: #888;
     text-overflow: -o-ellipsis-lastline;
@@ -106,7 +110,7 @@ const selectHandle = (index: number) => {
     border-top: 1px solid #eee;
     font-size: 14px;
     color: #888;
-    padding-top: 7px;
+    padding: 7px;
     display: flex;
 
 }
@@ -116,17 +120,14 @@ const selectHandle = (index: number) => {
     height: 20px;
     line-height: 25px;
     flex: 1;
+    margin-right: 10px;
+    width: 125px;
 }
 
 .time span:nth-child(1) {
     width: 80px;
     white-space: nowrap;
     overflow: hidden;
-}
-
-.time span {
-    margin-right: 30px;
-    width: 125px;
 }
 
 .time span svg {

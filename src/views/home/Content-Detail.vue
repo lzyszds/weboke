@@ -61,7 +61,9 @@ const updateCop = (val: number) => {
   //监听滚动事件
   handleScroll();
   let timeout = setTimeout(() => {
-    affixElm.value!.style.height = document.querySelector('.main')?.getBoundingClientRect().height + 'px';
+    if (affixElm.value) {
+      affixElm.value!.style.height = document.querySelector('.main')?.getBoundingClientRect().height + 'px';
+    }
     clearTimeout(timeout)
   }, 500);
   //结束定时器
@@ -76,8 +78,6 @@ onMounted(() => {
       element.innerHTML = element.getAttribute('data-line-number')
     });
   })
-
-
 })
 //处理时间戳转换成距离当前日期的时间（一天前，两天前）
 function setTimestamp(time: string) {
@@ -172,12 +172,12 @@ const toUp = () => {
       </div>
     </div>
     <!-- <div class=" center">
-      <div class="comment publish">
-        <h4>
-          <icon name="icon-icon-taikong8"></icon>发表评论
-        </h4>
-      </div>
-    </div> -->
+                    <div class="comment publish">
+                      <h4>
+                        <icon name="icon-icon-taikong8"></icon>发表评论
+                      </h4>
+                    </div>
+                  </div> -->
     <div class="center publish">
       <div class=" borderw">
         <div class="comment ">
@@ -204,7 +204,6 @@ const toUp = () => {
       </div>
     </div>
   </div>
-
 </template>
 
 <style lang="less" scoped>
