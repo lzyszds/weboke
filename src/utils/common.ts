@@ -1,5 +1,5 @@
-import dayjs from "dayjs";
 import http from '@/http/http'
+import { ElNotification, dayjs } from 'element-plus'
 
 function debounce(fn, delay) {
   let timer: any = 0;
@@ -115,25 +115,29 @@ function compressPic(file, quality) {
     })
   })
 }
+
+//提示弹窗
+const LNotification = (val: string, time: number = 2000, postion: any = 'bottom-right') => {
+  ElNotification.closeAll()
+  ElNotification({
+    dangerouslyUseHTMLString: true,
+    message: val,
+    position: postion,
+    duration: time,
+    customClass: 'copy-success',
+  })
+}
+
 // 复制内容提示版权信息
-import { ElNotification } from 'element-plus'
 import { useEventListener } from "@vueuse/core";
 
 const copyTip = () => {
   useEventListener(window, 'keydown', e => {
     if (e.ctrlKey && e.key === 'c') {
-      ElNotification.closeAll()
-      ElNotification({
-        dangerouslyUseHTMLString: true,
-        message: `<i class="fa fa-copy"></i> 复制成功,转载请声明来源！`,
-        position: 'bottom-right',
-        duration: 2000,
-        customClass: 'copy-success',
-      })
+      LNotification(`<i class="fa fa-copy"></i> 复制成功,转载请声明来源！`)
     }
   })
 }
-
 export default {
   debounce,// 防抖
   splitArray,//把一个数组拆分成几个数组
@@ -143,6 +147,7 @@ export default {
   getBase64,//二进制流转换为base64 格式。
   compressPic,//上传图片，图片太大，如何在前端实现图片压缩后上传
   copyTip,//复制内容提示版权信息
+  LNotification,//提示弹窗
 }
 
 

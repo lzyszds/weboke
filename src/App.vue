@@ -26,7 +26,7 @@ weather.then(res => {
   localStorage.setItem('nowWeatherData', JSON.stringify(res))
 })
 state.nowWeatherData = weather;
-// proxy.$common.copyTip()
+proxy.$common.copyTip()
 </script>
 <style lang="less">
 </style>

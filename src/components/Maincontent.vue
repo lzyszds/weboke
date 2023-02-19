@@ -30,7 +30,6 @@ onMounted(() => {
         //将text复制到剪切板
         navigator.clipboard.writeText(text).then(() => {
           ElNotification.closeAll()
-          if (!text) return ElMessage({ type: 'error', grouping: true, message: '复制失败：' })
           ElNotification({
             dangerouslyUseHTMLString: true,
             message: `<i class="fa fa-copy"></i> 复制成功,转载请声明来源！`,
