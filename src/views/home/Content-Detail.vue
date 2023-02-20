@@ -2,7 +2,7 @@
 import { onMounted, ref, getCurrentInstance, nextTick } from 'vue'
 import { ElNotification } from 'element-plus'
 import Maincontent from '../../components/Maincontent.vue';
-import { useEventListener } from '@vueuse/core'
+// import { useEventListener } from '@vueuse/core'
 import { useRoute } from 'vue-router';
 import icon from '@/components/icon.vue'
 import http from '@/http/http';
@@ -17,7 +17,7 @@ const affixElm = ref<HTMLElement | null>(null)
 const { proxy } = getCurrentInstance() as any
 const tocList = ref<any>([]);
 const tocACindex = ref<string>('#toc-head-1');
-const listComment = await http('get', '/adminApi/admin/getComment?aid=' + aid) as any
+const { data: listComment } = await http('get', '/adminApi/admin/getComment?aid=' + aid) as any
 console.log(`lzy  listComment`, listComment)
 
 //评论上方的诗句请求
@@ -50,7 +50,7 @@ const updateCop = async (val: number) => {
   })
 
   //监听滚动事件
-  handleScroll();
+  // handleScroll();
 
   await nextTick();
   if (affixElm.value) {
@@ -66,37 +66,29 @@ onMounted(async () => {
       element.innerHTML = element.getAttribute('data-line-number')
     });
   })
-  await nextTick()
-  console.log(123);
-
-  //销毁方法，防止它一直莫名调用
-  // setTimestamp = () => false
 })
 //处理时间戳转换成距离当前日期的时间（一天前，两天前）
 let setTimestamp = (time: string) => {
-  console.log(`lzy  time:`, time)
   //他妈的这里巨奇怪，不知道为什么这个方法会被下面handleScroll方法一直调用真的迷
   return proxy.$common.timeAgo(time)
 }
 
-const scrollTop = ref<number>(0); // 记录当前的滚动距离
-function handleScroll() {
-  useEventListener(window, 'scroll', () => {
-    scrollTop.value = window.scrollY;
-    tocList.value.forEach((element: any) => {
-      if (scrollTop.value - 400 >= element.top) {
-        tocACindex.value = element.id;
-        document.querySelector('.affix-list li.H4')
-      }
-    })
-  })
-}
+//当前内容的滚动距离，用于判断目录的高亮   但是好像有点问题先不用了
+// const scrollTop = ref<number>(0); // 记录当前的滚动距离
+// function handleScroll() {
+//   useEventListener(window, 'scroll', () => {
+//     scrollTop.value = window.scrollY;
+//     tocList.value.forEach((element: any) => {
+//       if (scrollTop.value - 400 >= element.top) {
+//         tocACindex.value = element.id;
+//       }
+//     })
+//   })
+// }
+
 //处理目录小火箭点击事件 升到最顶部
 const toUp = () => {
-  window.scrollTo({
-    top: 0,
-    behavior: 'smooth'
-  })
+  window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 //评论内容
 const comContent = ref<string>('')
@@ -113,7 +105,8 @@ const comSubmit = () => {
     email: '1024327189@qq.com',
     webSite: '',
     content: comContent.value,
-    userIp: ''
+    userIp: '',
+    imgIndex: rangeIndex
   }
   http('post', '/adminApi/admin/addComment', commentData).then((res: any) => {
     if (res.code == 200) {
@@ -126,11 +119,6 @@ const comSubmit = () => {
         customClass: 'copy-success',
       })
       comContent.value = ''
-      listComment.value.push({
-        name: '我',
-        time: new Date().toLocaleString(),
-        content: comContent.value
-      })
     } else {
       proxy.$message({
         message: '评论失败',
@@ -141,7 +129,7 @@ const comSubmit = () => {
 }
 
 //当前图片的索引
-let rangeIndex = 0
+var rangeIndex = 0
 
 //评论头像更换事件
 function setRange(direction: string) {
@@ -151,19 +139,16 @@ function setRange(direction: string) {
   const parent = selcetRound.parentElement as HTMLDivElement;
 
   direction == 'left' ? rangeIndex-- : rangeIndex++;
-  console.log(`lzy  rangeIndex`, rangeIndex)
   if (rangeIndex >= 0 && rangeIndex < 2) {
     selcetRound.style.transform = `translateX(${defaultval * rangeIndex}px)`
-    // parent.scrollTo(defaultval * rangeIndex, 0)
   } else if (rangeIndex >= 2 && rangeIndex < 9) {
     selcetRound.style.transform = `translateX(${defaultval * rangeIndex}px)`
     parent.scrollTo(defaultval * (rangeIndex - 2), 0)
   } else if (rangeIndex >= 9 && rangeIndex < 12) {
     selcetRound.style.transform = `translateX(${defaultval * rangeIndex}px)`
-    // parent.scrollTo(defaultval * rangeIndex, 0)
   } else {
-    rangeIndex <= 0 ? rangeIndex = 0 : rangeIndex;
-    rangeIndex >= 11 ? rangeIndex = 11 : rangeIndex;
+    if (rangeIndex <= 0) rangeIndex = 0;
+    if (rangeIndex >= 11) rangeIndex = 11;
   }
 }
 
@@ -222,13 +207,13 @@ function setRange(direction: string) {
           <icon name="icon-icon-taikong13"></icon>评论
         </h5>
         <div class="comContent">
-          <div class="comment-item" v-for="(item, index) in listComment.data" :key="index">
+          <div class="comment-item" v-for="(item, index) in listComment" :key="index">
             <div class="comment-item-left">
-              <img src="http://localhost:1027/public/img/lzy.jpg" alt="">
+              <img :src="item.head_img" alt="">
             </div>
             <div class="comment-item-right">
               <div class="comment-item-right-top">
-                <span class="comment-item-right-top-name">{{ item.name }}</span>
+                <span class="comment-item-right-top-name">{{ item.user_name }}</span>
                 <span class="comment-item-right-top-time">{{ setTimestamp(item.time) }}</span>
               </div>
               <div class="comment-item-right-bottom">

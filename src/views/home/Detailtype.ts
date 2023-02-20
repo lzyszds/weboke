@@ -6,4 +6,5 @@ export interface commentsType {
   name: string,
   userIp: string,
   webSite?: string,
+  imgIndex: number
 }
