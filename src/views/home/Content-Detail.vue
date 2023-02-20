@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import { onMounted, ref, getCurrentInstance, nextTick } from 'vue'
+import { onMounted, ref, reactive, getCurrentInstance, nextTick } from 'vue'
 import { ElNotification } from 'element-plus'
 import Maincontent from '../../components/Maincontent.vue';
 // import { useEventListener } from '@vueuse/core'
@@ -8,6 +8,7 @@ import icon from '@/components/icon.vue'
 import http from '@/http/http';
 import ComImg from '@/assets/icon/comments/import'
 import { commentsType } from './Detailtype'
+import { number } from 'echarts';
 
 const route = useRoute()
 const aid = route.path.replace('/home/detail/', '') //获取当前文章id
@@ -17,8 +18,7 @@ const affixElm = ref<HTMLElement | null>(null)
 const { proxy } = getCurrentInstance() as any
 const tocList = ref<any>([]);
 const tocACindex = ref<string>('#toc-head-1');
-const { data: listComment } = await http('get', '/adminApi/admin/getComment?aid=' + aid) as any
-console.log(`lzy  listComment`, listComment)
+const listComment = ref<any>(await http('get', '/adminApi/admin/getComment?aid=' + aid) as any)
 
 //评论上方的诗句请求
 const textbefore = ref<String>('寻找中...')
@@ -90,35 +90,68 @@ let setTimestamp = (time: string) => {
 const toUp = () => {
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
+
+//评论人个人信息
+const information = reactive({
+  name: '',
+  email: '',
+  webSite: '',
+  comContent: '',
+  nameError: false,
+  emailError: false,
+})
+
+//回复评论初始变量
+const replyId = ref<any>([])
+listComment.value.data.forEach(() => {
+  replyId.value.push(-1)
+});
 //评论内容
-const comContent = ref<string>('')
 //评论提交
 const comSubmit = () => {
   ElNotification.closeAll()
-  if (comContent.value == '') {
-    return proxy.$common.LNotification('评论内容不能为空')
+  const cation = proxy.$common.LNotification
+  if (information.comContent.length == 0) {
+    return cation('评论内容不能为空')
+  } else if (information.name == '') {
+    information.nameError = true
+    setTimeout(() => {
+      information.nameError = false
+    }, 820);
+    return cation('昵称不能为空')
+
+  } else if (information.email == '') {
+    information.emailError = true
+    setTimeout(() => {
+      information.emailError = false
+    }, 820);
+    return cation('邮箱不能为空')
+  }
+  //处理回复评论的id 判断其否为二级评论，-1为一级评论，否则为二级评论
+  const replyIdval = () => {
+    let value = -1
+    replyId.value.forEach(element => {
+      if (element != -1) return value = element
+    });
+    return value
   }
   const commentData: commentsType = {
-    aid: Number(aid),
-    replayId: 1,
-    name: '嘤嘤嘤',
-    email: '1024327189@qq.com',
-    webSite: '',
-    content: comContent.value,
-    userIp: '',
-    imgIndex: rangeIndex
+    aid: Number(aid), //文章id
+    replyId: replyIdval(), //回复评论的id
+    name: information.name, //评论人昵称
+    email: information.email, //评论人邮箱
+    webSite: information.webSite, //评论人网站
+    content: information.comContent, //评论内容
+    imgIndex: rangeIndex, //评论人头像
+    userIp: '', //用户ip
   }
-  http('post', '/adminApi/admin/addComment', commentData).then((res: any) => {
+  http('post', '/adminApi/admin/addComment', commentData).then(async (res: any) => {
     if (res.code == 200) {
-
-      ElNotification({
-        dangerouslyUseHTMLString: true,
-        message: `评论成功,感谢你的评论！`,
-        position: 'bottom-right',
-        duration: 2000,
-        customClass: 'copy-success',
+      cation(`评论成功,感谢你的评论！`)
+      listComment.value = await http('get', '/adminApi/admin/getComment?aid=' + aid) as any
+      Object.keys(information).map(key => {
+        information[key] = ''
       })
-      comContent.value = ''
     } else {
       proxy.$message({
         message: '评论失败',
@@ -128,9 +161,31 @@ const comSubmit = () => {
   })
 }
 
+//回复评论初始变量
+const replyName = ref<string>('发表评论')
+//回复评论
+const replyComment = (item, index) => {
+  //每次选择回复都要将其他的回复id置为-1
+  Object.keys(replyId.value).forEach((key: any) => {
+    replyId.value[key] = -1
+  })
+  replyId.value[index] = item.comId
+  replyName.value = '@' + item.user_name
+  //给textarea获取焦点
+  const textarea = document.querySelector('#textarea') as any
+  textarea?.focus()
+}
+//取消回复
+const remReplyComment = (index) => {
+  replyId.value[index] = -1
+  replyName.value = '发表评论'
+}
+// function handleReplyLevel() {
+
+// }
+
 //当前图片的索引
 var rangeIndex = 0
-
 //评论头像更换事件
 function setRange(direction: string) {
   const defaultval = 60 //每个图片距离的宽度
@@ -151,6 +206,8 @@ function setRange(direction: string) {
     if (rangeIndex >= 11) rangeIndex = 11;
   }
 }
+
+
 
 </script>
 
@@ -207,7 +264,7 @@ function setRange(direction: string) {
           <icon name="icon-icon-taikong13"></icon>评论
         </h5>
         <div class="comContent">
-          <div class="comment-item" v-for="(item, index) in listComment" :key="index">
+          <div class="comment-item" v-for="(item, index) in listComment.data" :key="index">
             <div class="comment-item-left">
               <img :src="item.head_img" alt="">
             </div>
@@ -215,9 +272,32 @@ function setRange(direction: string) {
               <div class="comment-item-right-top">
                 <span class="comment-item-right-top-name">{{ item.user_name }}</span>
                 <span class="comment-item-right-top-time">{{ setTimestamp(item.time) }}</span>
+                <button v-if="replyId[index] == -1" class="comment-item-right-top-reply"
+                  @click="replyComment(item, index)">回复</button>
+                <button v-else class="comment-item-right-top-reply" @click="remReplyComment(index)">取消回复</button>
               </div>
               <div class="comment-item-right-bottom">
                 {{ item.content }}
+              </div>
+            </div>
+            <div class="comment-reply">
+              <div class="comment-item" v-for="(res, i) in item.reply" :key="i">
+                <div class="comment-item-left">
+                  <img :src="res.head_img" alt="">
+                </div>
+                <div class="comment-item-right">
+                  <div class="comment-item-right-top">
+                    <span class="comment-item-right-top-name">{{ res.user_name }}</span>
+                    <span class="comment-item-right-top-time">{{ setTimestamp(res.time) }}</span>
+                    <button v-if="replyId[i] == -1" class="comment-item-right-top-reply"
+                      @click="replyComment(res, i)">回复</button>
+                    <button v-else class="comment-item-right-top-reply" @click="remReplyComment(i)">取消回复</button>
+                  </div>
+                  <div class="comment-item-right-bottom">
+                    <span>{{ res.replyPeople }}</span>
+                    {{ res.content }}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -228,10 +308,10 @@ function setRange(direction: string) {
     <div class="publish center">
       <div class=" borderw">
         <div class="comment ">
-          <span> 发表评论 </span>
+          <span> {{ replyName }} </span>
         </div>
         <div class="comment textareas">
-          <textarea v-model="comContent"></textarea>
+          <textarea id="textarea" v-model="information.comContent"></textarea>
         </div>
       </div>
       <div class="borderw nameqq">
@@ -245,13 +325,15 @@ function setRange(direction: string) {
             <button @click="setRange('right')"><i class="fa fa-caret-right"></i> </button>
           </div>
           <p>昵称：
-            <input type="text" placeholder="昵称或者QQ号">
+            <input type="text" :class="{ 'apply-shake': information.nameError }" v-model="information.name"
+              placeholder="昵称或者QQ号">
           </p>
           <p>邮箱：
-            <input type="text" placeholder="xxx@xxx.xxx">
+            <input type="text" :class="{ 'apply-shake': information.emailError }" v-model="information.email"
+              placeholder="xxx@xxx.xxx">
           </p>
           <p>网站：
-            <input type="text" placeholder="你的网站(选填)">
+            <input type="text" v-model="information.webSite" placeholder="你的网站(选填)">
           </p>
           <p class="btn"><button @click="comSubmit"> 发布评论 </button></p>
           <!-- <p class="btn del"><button> 取消评论 </button></p> -->
