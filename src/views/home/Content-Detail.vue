@@ -1,35 +1,24 @@
 <script setup lang='ts'>
-import { onMounted, ref, getCurrentInstance } from 'vue'
+import { onMounted, ref, getCurrentInstance, nextTick } from 'vue'
 import { ElNotification } from 'element-plus'
 import Maincontent from '../../components/Maincontent.vue';
 import { useEventListener } from '@vueuse/core'
 import { useRoute } from 'vue-router';
 import icon from '@/components/icon.vue'
 import http from '@/http/http';
+import ComImg from '@/assets/icon/comments/import'
 import { commentsType } from './Detailtype'
 
 const route = useRoute()
 const aid = route.path.replace('/home/detail/', '') //获取当前文章id
-const dataDet = ref<any>(await http('get', '/adminApi/admin/articleDetail?aid=' + aid))
-dataDet.value = dataDet.value.data //获取当前页面的文章内容
+const { data: dataDet } = await http('get', '/adminApi/admin/articleDetail?aid=' + aid) as any
 const affixElm = ref<HTMLElement | null>(null)
-
 
 const { proxy } = getCurrentInstance() as any
 const tocList = ref<any>([]);
 const tocACindex = ref<string>('#toc-head-1');
-const listComment = ref([
-  {
-    name: '小红',
-    time: '2022-10-03 12:00:00',
-    content: '我入职时做过性格测试，我属于蓝色的！'
-  },
-  {
-    name: '小明',
-    time: '2022-10-01 12:00:00',
-    content: '这是一条评论'
-  },
-])
+const listComment = await http('get', '/adminApi/admin/getComment?aid=' + aid) as any
+console.log(`lzy  listComment`, listComment)
 
 //评论上方的诗句请求
 const textbefore = ref<String>('寻找中...')
@@ -46,7 +35,7 @@ try {
 
 /* 组件内部设定组件加载完成返回
 返回后执行此方法来获取当前文章的目录 */
-const updateCop = (val: number) => {
+const updateCop = async (val: number) => {
 
   //获取当前文章的索引目录
   let toc = document.querySelectorAll('h2,h3,h4') as any;
@@ -62,16 +51,13 @@ const updateCop = (val: number) => {
 
   //监听滚动事件
   handleScroll();
-  let timeout = setTimeout(() => {
-    if (affixElm.value) {
-      affixElm.value!.style.height = document.querySelector('.main')?.getBoundingClientRect().height + 'px';
-    }
-    clearTimeout(timeout)
-  }, 500);
-  //结束定时器
 
+  await nextTick();
+  if (affixElm.value) {
+    affixElm.value!.style.height = document.querySelector('.main')?.getBoundingClientRect().height + 'px';
+  }
 }
-onMounted(() => {
+onMounted(async () => {
   //处理代码高亮行数显示
   let blocks = document.querySelectorAll('pre code');
   blocks.forEach((block: any) => {
@@ -80,11 +66,19 @@ onMounted(() => {
       element.innerHTML = element.getAttribute('data-line-number')
     });
   })
+  await nextTick()
+  console.log(123);
+
+  //销毁方法，防止它一直莫名调用
+  // setTimestamp = () => false
 })
 //处理时间戳转换成距离当前日期的时间（一天前，两天前）
-function setTimestamp(time: string) {
+let setTimestamp = (time: string) => {
+  console.log(`lzy  time:`, time)
+  //他妈的这里巨奇怪，不知道为什么这个方法会被下面handleScroll方法一直调用真的迷
   return proxy.$common.timeAgo(time)
 }
+
 const scrollTop = ref<number>(0); // 记录当前的滚动距离
 function handleScroll() {
   useEventListener(window, 'scroll', () => {
@@ -122,11 +116,11 @@ const comSubmit = () => {
     userIp: ''
   }
   http('post', '/adminApi/admin/addComment', commentData).then((res: any) => {
-    if (res.data.code == 200) {
+    if (res.code == 200) {
 
       ElNotification({
         dangerouslyUseHTMLString: true,
-        message: `<i class="fa fa-copy"></i> 复制成功,转载请声明来源！`,
+        message: `评论成功,感谢你的评论！`,
         position: 'bottom-right',
         duration: 2000,
         customClass: 'copy-success',
@@ -144,12 +138,40 @@ const comSubmit = () => {
       })
     }
   })
-
 }
+
+//当前图片的索引
+let rangeIndex = 0
+
+//评论头像更换事件
+function setRange(direction: string) {
+  const defaultval = 60 //每个图片距离的宽度
+  const selcetRound = document.querySelector('#selcetRound') as HTMLSpanElement;
+  //获取父元素
+  const parent = selcetRound.parentElement as HTMLDivElement;
+
+  direction == 'left' ? rangeIndex-- : rangeIndex++;
+  console.log(`lzy  rangeIndex`, rangeIndex)
+  if (rangeIndex >= 0 && rangeIndex < 2) {
+    selcetRound.style.transform = `translateX(${defaultval * rangeIndex}px)`
+    // parent.scrollTo(defaultval * rangeIndex, 0)
+  } else if (rangeIndex >= 2 && rangeIndex < 9) {
+    selcetRound.style.transform = `translateX(${defaultval * rangeIndex}px)`
+    parent.scrollTo(defaultval * (rangeIndex - 2), 0)
+  } else if (rangeIndex >= 9 && rangeIndex < 12) {
+    selcetRound.style.transform = `translateX(${defaultval * rangeIndex}px)`
+    // parent.scrollTo(defaultval * rangeIndex, 0)
+  } else {
+    rangeIndex <= 0 ? rangeIndex = 0 : rangeIndex;
+    rangeIndex >= 11 ? rangeIndex = 11 : rangeIndex;
+  }
+}
+
 </script>
 
 <template>
   <div class="detail">
+    <!-- 文章封面 -->
     <div class="imgtop">
       <img :src="'/adminApi' + dataDet.coverImg" alt="">
       <div class="topTitle center">
@@ -157,6 +179,7 @@ const comSubmit = () => {
         <p>{{ dataDet.author }} {{ setTimestamp(dataDet.createTime) }} {{ dataDet.comNumber }}条评论</p>
       </div>
     </div>
+    <!-- 文章类型 -->
     <div class="detBreadcrumb center">
       <div class="boxType">
         <el-tag class="ml-1" type="info" v-for="(item, index) in dataDet.wtype ? dataDet.wtype.split(',') : []"
@@ -164,9 +187,9 @@ const comSubmit = () => {
         </el-tag>
       </div>
     </div>
-
+    <!-- 文章内容 -->
     <Maincontent :main="dataDet.main" @update="updateCop"></Maincontent>
-
+    <!-- 文章目录 -->
     <div class="affix-container" ref="affixElm" v-if="tocList.length != 0">
       <div class="affix">
         <div class="affix_item">
@@ -183,6 +206,7 @@ const comSubmit = () => {
         </div>
       </div>
     </div>
+    <!-- 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议 -->
     <footer class="post-footer center ">
       <div class="tool">
         <lzyIcon :name="`icon-icon-taikong20`" :fill="`#000`"></lzyIcon>
@@ -190,6 +214,7 @@ const comSubmit = () => {
           国际许可协议</a>
       </div>
     </footer>
+    <!-- 评论界面 -->
     <div class="borderw center">
       <div class="before">{{ textbefore }}</div>
       <div class=" comment">
@@ -197,7 +222,7 @@ const comSubmit = () => {
           <icon name="icon-icon-taikong13"></icon>评论
         </h5>
         <div class="comContent">
-          <div class="comment-item" v-for="(item, index) in listComment" :key="index">
+          <div class="comment-item" v-for="(item, index) in listComment.data" :key="index">
             <div class="comment-item-left">
               <img src="http://localhost:1027/public/img/lzy.jpg" alt="">
             </div>
@@ -214,6 +239,7 @@ const comSubmit = () => {
         </div>
       </div>
     </div>
+    <!-- 发布评论 -->
     <div class="publish center">
       <div class=" borderw">
         <div class="comment ">
@@ -223,8 +249,16 @@ const comSubmit = () => {
           <textarea v-model="comContent"></textarea>
         </div>
       </div>
-      <div class="borderw nameQQ">
+      <div class="borderw nameqq">
         <div class="comment">
+          <div>
+            <button @click="setRange('left')"><i class="fa fa-caret-left"></i> </button>
+            <p>
+              <span id="selcetRound"></span>
+              <img v-for="(item, index) in ComImg" :key="index" :src="item" alt="">
+            </p>
+            <button @click="setRange('right')"><i class="fa fa-caret-right"></i> </button>
+          </div>
           <p>昵称：
             <input type="text" placeholder="昵称或者QQ号">
           </p>
@@ -235,7 +269,7 @@ const comSubmit = () => {
             <input type="text" placeholder="你的网站(选填)">
           </p>
           <p class="btn"><button @click="comSubmit"> 发布评论 </button></p>
-          <p class="btn del"><button> 取消评论 </button></p>
+          <!-- <p class="btn del"><button> 取消评论 </button></p> -->
         </div>
       </div>
     </div>

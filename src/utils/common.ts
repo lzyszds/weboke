@@ -35,7 +35,8 @@ function timeAgo(time) {
   let m = d * 30
   let y = m * 12
   const mp: any = new Map([
-    [n => n < i, n => (n >> 0) + '秒'],
+    //n是时间戳（key），t是当前时间戳 ,>>0 是向下取整
+    [n => n < i, () => '一分钟'],
     [n => n < h, n => (n / i >> 0) + '分钟'],
     [n => n < d, n => (n / h >> 0) + '小时'],
     [n => n < m, n => (n / d >> 0) + '天'],
