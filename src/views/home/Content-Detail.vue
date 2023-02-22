@@ -8,7 +8,7 @@ import icon from '@/components/icon.vue'
 import http from '@/http/http';
 import ComImg from '@/assets/icon/comments/import'
 import { commentsType } from './Detailtype'
-import { number } from 'echarts';
+import Reply from '@/components/Reply.vue'
 
 const route = useRoute()
 const aid = route.path.replace('/home/detail/', '') //获取当前文章id
@@ -101,12 +101,20 @@ const information = reactive({
   emailError: false,
 })
 
-//回复评论初始变量
-const replyId = ref<any>([])
-listComment.value.data.forEach(() => {
-  replyId.value.push(-1)
+const replyArr = reactive({
+  replyId: <number[][]>[],//回复评论初始变量
+  replyName: '发表评论',//回复评论初始变量
+})
+listComment.value.data.forEach((res, index) => {
+  const replyId = replyArr.replyId
+  replyId.push([0])
+  res.reply && res.reply.forEach(() => {
+    replyId[index].push(0)
+  })
+
 });
-//评论内容
+console.log(`lzy  replyArr.replyId:`, replyArr.replyId)
+
 //评论提交
 const comSubmit = () => {
   ElNotification.closeAll()
@@ -129,9 +137,9 @@ const comSubmit = () => {
   }
   //处理回复评论的id 判断其否为二级评论，-1为一级评论，否则为二级评论
   const replyIdval = () => {
-    let value = -1
-    replyId.value.forEach(element => {
-      if (element != -1) return value = element
+    let value = 0
+    replyArr.replyId.forEach(element => {
+      if (element != 0) return value = element
     });
     return value
   }
@@ -161,24 +169,27 @@ const comSubmit = () => {
   })
 }
 
-//回复评论初始变量
-const replyName = ref<string>('发表评论')
+
 //回复评论
 const replyComment = (item, index) => {
+  const replyId = replyArr.replyId
   //每次选择回复都要将其他的回复id置为-1
-  Object.keys(replyId.value).forEach((key: any) => {
-    replyId.value[key] = -1
-  })
-  replyId.value[index] = item.comId
-  replyName.value = '@' + item.user_name
+  Object.keys(replyId).forEach((key: any) => {
+    Object.keys(replyId[key]).forEach((keys: any) => {
+      replyId[key][keys] = 0
+    })
+  });
+  replyId[index][replyId[index].indexOf(item.reply_id)] = item.comId;
+  replyArr.replyName = '@' + item.user_name
   //给textarea获取焦点
   const textarea = document.querySelector('#textarea') as any
-  textarea?.focus()
+  textarea?.focus();
+
 }
 //取消回复
-const remReplyComment = (index) => {
-  replyId.value[index] = -1
-  replyName.value = '发表评论'
+const remReplyComment = (item, index) => {
+  replyArr.replyId[index][replyArr.replyId[index].indexOf(item.reply_id)] = 0
+  replyArr.replyName = '发表评论'
 }
 // function handleReplyLevel() {
 
@@ -264,43 +275,8 @@ function setRange(direction: string) {
           <icon name="icon-icon-taikong13"></icon>评论
         </h5>
         <div class="comContent">
-          <div class="comment-item" v-for="(item, index) in listComment.data" :key="index">
-            <div class="comment-item-left">
-              <img :src="item.head_img" alt="">
-            </div>
-            <div class="comment-item-right">
-              <div class="comment-item-right-top">
-                <span class="comment-item-right-top-name">{{ item.user_name }}</span>
-                <span class="comment-item-right-top-time">{{ setTimestamp(item.time) }}</span>
-                <button v-if="replyId[index] == -1" class="comment-item-right-top-reply"
-                  @click="replyComment(item, index)">回复</button>
-                <button v-else class="comment-item-right-top-reply" @click="remReplyComment(index)">取消回复</button>
-              </div>
-              <div class="comment-item-right-bottom">
-                {{ item.content }}
-              </div>
-            </div>
-            <div class="comment-reply">
-              <div class="comment-item" v-for="(res, i) in item.reply" :key="i">
-                <div class="comment-item-left">
-                  <img :src="res.head_img" alt="">
-                </div>
-                <div class="comment-item-right">
-                  <div class="comment-item-right-top">
-                    <span class="comment-item-right-top-name">{{ res.user_name }}</span>
-                    <span class="comment-item-right-top-time">{{ setTimestamp(res.time) }}</span>
-                    <button v-if="replyId[i] == -1" class="comment-item-right-top-reply"
-                      @click="replyComment(res, i)">回复</button>
-                    <button v-else class="comment-item-right-top-reply" @click="remReplyComment(i)">取消回复</button>
-                  </div>
-                  <div class="comment-item-right-bottom">
-                    <span>{{ res.replyPeople }}</span>
-                    {{ res.content }}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <Reply :data="listComment.data" :replyId="replyArr.replyId" @replycl="replyComment"
+            @remReplycl="remReplyComment" />
         </div>
       </div>
     </div>
@@ -308,7 +284,7 @@ function setRange(direction: string) {
     <div class="publish center">
       <div class=" borderw">
         <div class="comment ">
-          <span> {{ replyName }} </span>
+          <span> {{ replyArr.replyName }} </span>
         </div>
         <div class="comment textareas">
           <textarea id="textarea" v-model="information.comContent"></textarea>
