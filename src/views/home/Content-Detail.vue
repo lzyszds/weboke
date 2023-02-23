@@ -10,12 +10,15 @@ import ComImg from '@/assets/icon/comments/import'
 import { commentsType } from './Detailtype'
 import Reply from '@/components/Reply.vue'
 
+const overloading = ref(false) //重载评论组件，解决评论后评论组件不刷新的问题
+
 const route = useRoute()
 const aid = route.path.replace('/home/detail/', '') //获取当前文章id
 const { data: dataDet } = await http('get', '/adminApi/admin/articleDetail?aid=' + aid) as any
 const affixElm = ref<HTMLElement | null>(null)
 
 const { proxy } = getCurrentInstance() as any
+const tip = proxy.$common.LNotification // 右下角提示
 const tocList = ref<any>([]);
 const tocACindex = ref<string>('#toc-head-1');
 const listComment = ref<any>(await http('get', '/adminApi/admin/getComment?aid=' + aid) as any)
@@ -105,47 +108,69 @@ const replyArr = reactive({
   replyId: <number[][]>[],//回复评论初始变量
   replyName: '发表评论',//回复评论初始变量
 })
-listComment.value.data.forEach((res, index) => {
-  const replyId = replyArr.replyId
-  replyId.push([0])
-  res.reply && res.reply.forEach(() => {
-    replyId[index].push(0)
-  })
 
-});
-console.log(`lzy  replyArr.replyId:`, replyArr.replyId)
-
-//评论提交
-const comSubmit = () => {
+// 存储所有评论的状态
+function setReplyStatus() {
+  listComment.value.data.forEach((res, index) => {
+    const replyId = replyArr.replyId
+    replyId.push([0])
+    res.reply && res.reply.forEach(() => {
+      replyId[index].push(0)
+    })
+  });
+}
+setReplyStatus()
+//评论人个人信息验证
+const comInfo = () => {
   ElNotification.closeAll()
-  const cation = proxy.$common.LNotification
   if (information.comContent.length == 0) {
-    return cation('评论内容不能为空')
+    return tip('评论内容不能为空')
   } else if (information.name == '') {
     information.nameError = true
     setTimeout(() => {
       information.nameError = false
     }, 820);
-    return cation('昵称不能为空')
+    return tip('昵称不能为空')
 
   } else if (information.email == '') {
     information.emailError = true
     setTimeout(() => {
       information.emailError = false
     }, 820);
-    return cation('邮箱不能为空')
+    return tip('邮箱不能为空')
   }
+  return true
+}
+//评论提交
+const comSubmit = () => {
+  //验证信息
+  if (!comInfo()) return
   //处理回复评论的id 判断其否为二级评论，-1为一级评论，否则为二级评论
   const replyIdval = () => {
     let value = 0
     replyArr.replyId.forEach(element => {
-      if (element != 0) return value = element
+      element.forEach((res) => res != 0 && (value = res))
     });
     return value
   }
+  //处理一级评论的id
+  const groundVal = () => {
+    let value = 0
+    replyArr.replyId.forEach(element => {
+      element.forEach((res) => res != 0 && (value = res))
+    });
+    listComment.value.data.forEach((element) => {
+      element.reply && element.reply.forEach(res => {
+        if (res.comId == value) value = res.ground_id
+      });
+    })
+    return value
+  }
+
   const commentData: commentsType = {
     aid: Number(aid), //文章id
     replyId: replyIdval(), //回复评论的id
+    groundId: groundVal(), //一级评论的id
     name: information.name, //评论人昵称
     email: information.email, //评论人邮箱
     webSite: information.webSite, //评论人网站
@@ -155,11 +180,15 @@ const comSubmit = () => {
   }
   http('post', '/adminApi/admin/addComment', commentData).then(async (res: any) => {
     if (res.code == 200) {
-      cation(`评论成功,感谢你的评论！`)
+      tip(`评论成功,感谢你的评论！`)
+      overloading.value = true
       listComment.value = await http('get', '/adminApi/admin/getComment?aid=' + aid) as any
+      overloading.value = false
       Object.keys(information).map(key => {
         information[key] = ''
-      })
+      })//清空评论人信息
+      handleReplyData(replyArr.replyId)//清空回复评论的id
+      setReplyStatus() // 重新设置回复评论的状态
     } else {
       proxy.$message({
         message: '评论失败',
@@ -170,30 +199,42 @@ const comSubmit = () => {
 }
 
 
-//回复评论
+//回复一级评论
 const replyComment = (item, index) => {
   const replyId = replyArr.replyId
+  //每次选择回复都要将其他的回复id置为0
+  handleReplyData(replyId)
+  if (item.reply_id == 0) {
+    replyId[index][0] = item.comId;
+  } else {
+    const data = listComment.value.data
+    for (let key in data) {
+      if (data[key].comId == item.ground_id) {
+        replyId[key][index + 1] = item.comId;
+      }
+    }
+  }
+  replyArr.replyName = '@' + item.user_name
+  //给textarea获取焦点
+  const textarea = document.querySelector('#textarea') as any
+  textarea?.focus();
+}
+
+
+//取消回复
+const remReplyComment = () => {
+  const replyId = replyArr.replyId
+  handleReplyData(replyId)
+  replyArr.replyName = '发表评论'
+}
+function handleReplyData(replyId) {
   //每次选择回复都要将其他的回复id置为-1
   Object.keys(replyId).forEach((key: any) => {
     Object.keys(replyId[key]).forEach((keys: any) => {
       replyId[key][keys] = 0
     })
   });
-  replyId[index][replyId[index].indexOf(item.reply_id)] = item.comId;
-  replyArr.replyName = '@' + item.user_name
-  //给textarea获取焦点
-  const textarea = document.querySelector('#textarea') as any
-  textarea?.focus();
-
 }
-//取消回复
-const remReplyComment = (item, index) => {
-  replyArr.replyId[index][replyArr.replyId[index].indexOf(item.reply_id)] = 0
-  replyArr.replyName = '发表评论'
-}
-// function handleReplyLevel() {
-
-// }
 
 //当前图片的索引
 var rangeIndex = 0
@@ -275,8 +316,9 @@ function setRange(direction: string) {
           <icon name="icon-icon-taikong13"></icon>评论
         </h5>
         <div class="comContent">
-          <Reply :data="listComment.data" :replyId="replyArr.replyId" @replycl="replyComment"
-            @remReplycl="remReplyComment" />
+          <Reply v-if="!overloading" :oldReplydata="listComment.data" :replydata="listComment.data"
+            :replyId="replyArr.replyId" @replycl="replyComment" @replyclLevelTwo="replyComment"
+            @remReplycl="remReplyComment" @remReplyclLevelTwo="remReplyComment" />
         </div>
       </div>
     </div>

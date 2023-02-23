@@ -1,49 +1,67 @@
 <script setup lang='ts'>
 import { defineProps, ref, getCurrentInstance, defineEmits } from 'vue';
 interface Replydata {
+  comId: number,
   head_img: string,
   user_name: string,
   time: string,
   content: string,
   replyPeople: string,
   reply_id: number,
+  ground_id: number,
   reply: Replydata[]
 }
 interface Props {
-  data: Replydata[],
+  oldReplydata: Replydata[]
+  replydata: Replydata[],
   replyId: number[][],
 }
 const props = defineProps<Props>()
-const data = ref<Replydata[]>(props.data)
+console.log(`lzy  props:`, props)
+const replydata = ref<Replydata[]>(props.replydata)
+const oldReplydata = ref<Replydata[]>(props.oldReplydata)
 const replyId = ref<number[][]>(props.replyId)
 const proxy = getCurrentInstance()?.proxy as any
 let setTimestamp = (time: string) => {
   //他妈的这里巨奇怪，不知道为什么这个方法会被下面handleScroll方法一直调用真的迷
   return proxy.$common.timeAgo(time)
 }
-const emit = defineEmits(['replycl', 'remReplycl'])
+const emit = defineEmits(['replycl', 'remReplycl', 'replyclLevelTwo', 'remReplyclLevelTwo'])
 const replyComment = (item: Replydata, index: number) => {
   //判断是否是回复评论
   if (item.reply_id == 0) {
     emit('replycl', item, index)
   } else {
-    emit('replycl', item, item.reply_id)
+    emit('replyclLevelTwo', item, index)
   }
-
 }
 const remReplyComment = (item, index) => {
   //判断是否是回复评论
   if (item.reply_id == 0) {
-    emit('replycl', item, index)
+    emit('remReplycl', item, index)
   } else {
-    emit('replycl', item, item.reply_id)
+    emit('remReplyclLevelTwo', item, index)
+  }
+}
+
+//判断当前是否选中当前评论进行回复
+const isReply = (item: Replydata, index: number) => {
+  console.log(`lzy  replyId:`, replyId)
+  if (item.reply_id == 0) {
+    if (replyId.value[index]) return replyId.value[index][0] == 0
+  } else {
+    for (let key in oldReplydata.value) {
+      if (oldReplydata.value[key].comId == item.ground_id) {
+        return replyId.value[key][index + 1] == 0
+      }
+    }
   }
 }
 </script>
 
 <template>
   <div class="reply">
-    <div class="item" v-for="(item, index) in data" :key="index">
+    <div class="item" v-for="(item, index) in replydata" :key="index">
       <div class="item-left">
         <img :src="item.head_img" alt="">
       </div>
@@ -51,16 +69,15 @@ const remReplyComment = (item, index) => {
         <div class="item-right-top">
           <span class="item-right-top-name">{{ item.user_name }}</span>
           <span class="item-right-top-time">{{ setTimestamp(item.time) }}</span>
-          <button
-            v-if="item.reply_id == 0 ? replyId[index][0] == 0 : replyId[index][replyId[index].indexOf(item.reply_id)] != 0"
-            class="item-right-top-reply" @click="replyComment(item, index)">回复</button>
+          <button v-if="isReply(item, index)" class="item-right-top-reply" @click="replyComment(item, index)">回复</button>
           <button v-else class="item-right-top-reply" @click="remReplyComment(item, index)">取消回复</button>
         </div>
         <div class="item-right-bottom">
           <span>{{ item.replyPeople ? '@' + item.replyPeople : '' }}</span>
           {{ item.content }}
         </div>
-        <Reply v-if="item.reply" :data="item.reply" :replyId="replyId" @replycli="replyComment" />
+        <Reply v-if="item.reply" :oldReplydata="oldReplydata" :replydata="item.reply" :replyId="replyId"
+          @replyclLevelTwo="replyComment" @remReplyclLevelTwo="remReplyComment" />
       </div>
     </div>
   </div>
