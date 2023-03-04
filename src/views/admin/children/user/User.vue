@@ -153,7 +153,7 @@ const searchData = (val) => {
       <el-table-column label="uname" width="200" show-overflow-tooltip>
         <template #default="scope">
           <div class="headImg">
-            <img :src="setheadImg(scope.row.headImg)" alt="">
+            <el-avatar :src="setheadImg(scope.row.headImg)" alt=""></el-avatar>
             {{ scope.row.uname }}
           </div>
         </template>

@@ -9,3 +9,4 @@ export interface commentsType {
   webSite?: string,
   imgIndex: number,
 }
+

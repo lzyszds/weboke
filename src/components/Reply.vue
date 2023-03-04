@@ -46,7 +46,6 @@ const remReplyComment = (item, index) => {
 
 //判断当前是否选中当前评论进行回复
 const isReply = (item: Replydata, index: number) => {
-  console.log(`lzy  replyId:`, replyId)
   if (item.reply_id == 0) {
     if (replyId.value[index]) return replyId.value[index][0] == 0
   } else {

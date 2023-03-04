@@ -44,7 +44,7 @@ const items = [
   {
     name: '评论管理',
     uicon: '<i class="iconfont">&#xe607;</i>',
-    path: '/commentAdmin'
+    path: '/userAdmin/Comments'
   },
   {
     name: '分类管理',

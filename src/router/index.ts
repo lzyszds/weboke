@@ -54,6 +54,11 @@ const routes = [
             name: 'article',
             component: () =>
                 import('@/views/admin/children/article/Article.vue')
+        }, {
+            path: 'Comments',
+            name: 'comments',
+            component: () =>
+                import('@/views/admin/children/comments/index.vue')
         }]
     }, {
         path: '/episit',

@@ -35,32 +35,34 @@ const rules = reactive<FormRules>({
     { min: 6, max: 16, message: '密码长度应该是6到16', trigger: 'blur' },
   ]
 })
-const submitForm = (formEl: FormInstance | undefined) => {
-  tipsText.value = ''
-  load.value = true
-  setTimeout(() => {
-    load.value = false
-
-  }, 2000)
-  // fromtool 防止重复提交 以及 按钮提交之后样式
-  if (!formEl) return
-  formEl.validate((valid, fields) => {
-    if (valid) {
-      http('post', '/adminApi/admin/login', ruleForm).then((res: getLoginData) => {
+const submitForm = async (formEl: FormInstance | undefined) => {
+  try {
+    tipsText.value = '';
+    load.value = true;
+    setTimeout(() => {
+      load.value = false;
+    }, 2000);
+    // fromtool 防止重复提交 以及 按钮提交之后样式
+    if (!formEl) return;
+    formEl.validate(async (valid, fields) => {
+      if (valid) {
+        const res = await http('post', '/adminApi/admin/login', ruleForm) as getLoginData;
         setTimeout(() => {
           if (res.error === 0 || res.code === 200) {
-            localStorage.setItem('lzy_token', res.token)
-            router.push('/userAdmin/User')
+            localStorage.setItem('lzy_token', res.token);
+            router.push('/userAdmin/User');
           } else {
-            tipsText.value = '账号或密码错误'
+            tipsText.value = '账号或密码错误';
           }
-        }, 2000)
-      })
-    } else {
-      console.log('error submit!', fields)
-    }
-  })
-}
+        }, 2000);
+      } else {
+        console.log('error submit!', fields);
+      }
+    });
+  } catch (e) {
+    console.error(e);
+  }
+};
 const back = () => {
   router.push('/')
 }
@@ -70,9 +72,9 @@ const back = () => {
   <div class="login">
     <div class="card">
       <!-- <div class="item top">
-        <img src="http://localhost:1027/public/img/lzjyBlack.png" alt="">
-        <p>Sign In</p>
-      </div> -->
+                  <img src="http://localhost:1027/public/img/lzjyBlack.png" alt="">
+                  <p>Sign In</p>
+                </div> -->
       <div class="item center">
         <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" class="demo-ruleForm" status-icon>
           <el-form-item prop="username">
@@ -270,6 +272,8 @@ const back = () => {
       font-size: 14px;
       font-weight: 600;
       user-select: none;
+      position: absolute;
+      bottom: 0;
 
       &.error {
         animation: shake 0.82s cubic-bezier(.36, .07, .19, .97) both;
