@@ -1,12 +1,11 @@
 <script setup lang='ts'>
-import { ref, reactive, defineProps, getCurrentInstance, defineEmits, h, onMounted, onBeforeUnmount } from 'vue'
+import { ref, reactive, defineProps, defineEmits, h, onMounted, onBeforeUnmount } from 'vue'
 import { dayjs, ElMessageBox } from 'element-plus'
 import { useEventListener } from '@vueuse/core'
 import http from '@/http/http'
 import toolbar from './toolbar'
+import { compressPic } from '@/utils/common'
 
-const { proxy } = getCurrentInstance() as any
-const compressPic = proxy.$common.compressPic
 const emit = defineEmits(['switchMod', 'switchAdd'])
 const orderTool = `emoji undo redo clear |h bold italic strikethrough quote addTag  test |left center right ul ol table hr | link image code tip music| save tips`
 const props = defineProps({
@@ -203,7 +202,6 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-
   <div>
     <div class="headelement">
       <div class="markDowmInput">
@@ -257,7 +255,6 @@ onBeforeUnmount(() => {
       <el-button class="card-button" @click="resetForm()">暂存内容</el-button>
     </div>
   </div>
-
 </template>
 
 <style lang="less" scoped>

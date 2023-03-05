@@ -1,6 +1,9 @@
 <script setup lang='ts'>
 import { reactive, ref } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
+import { useThrottleFn } from '@vueuse/core'
+
+import { dayjs } from 'element-plus'
 import http from '@/http/http'
 import { useRouter } from 'vue-router'
 const router = useRouter()
@@ -35,7 +38,7 @@ const rules = reactive<FormRules>({
     { min: 6, max: 16, message: '密码长度应该是6到16', trigger: 'blur' },
   ]
 })
-const submitForm = async (formEl: FormInstance | undefined) => {
+const submitForm = useThrottleFn(async (formEl: FormInstance | undefined) => {
   try {
     tipsText.value = '';
     load.value = true;
@@ -50,7 +53,12 @@ const submitForm = async (formEl: FormInstance | undefined) => {
         setTimeout(() => {
           if (res.error === 0 || res.code === 200) {
             localStorage.setItem('lzy_token', res.token);
+            //设置cookie，cookie过期时间为14天，如果过期则需要重新登陆，销毁localStorage中token
+            const date14: any = dayjs().add(7, 'day');
+            const date = date14.diff(dayjs(), 'day');
+            document.cookie = `token_remderDay=${date};expires=${date14};path=/`;
             router.push('/userAdmin/User');
+            window.location.reload();//刷新页面
           } else {
             tipsText.value = '账号或密码错误';
           }
@@ -62,7 +70,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   } catch (e) {
     console.error(e);
   }
-};
+}, 10000);
 const back = () => {
   router.push('/')
 }
@@ -71,10 +79,7 @@ const back = () => {
 <template>
   <div class="login">
     <div class="card">
-      <!-- <div class="item top">
-                  <img src="http://localhost:1027/public/img/lzjyBlack.png" alt="">
-                  <p>Sign In</p>
-                </div> -->
+
       <div class="item center">
         <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" class="demo-ruleForm" status-icon>
           <el-form-item prop="username">

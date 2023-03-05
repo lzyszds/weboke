@@ -203,8 +203,8 @@ const searchData = (val) => {
       <el-table-column fixed="right" label="Operations">
         <template #default="scope">
           <div class="tool">
-            <el-button link type="primary" size="small" @click="modifyThe(scope.row)">修改</el-button>
-            <el-button link type="primary" size="small" @click="deleteUser(scope.row)">删除</el-button>
+            <el-button type="primary" size="small" @click="modifyThe(scope.row)">修改</el-button>
+            <el-button type="danger" size="small" @click="deleteUser(scope.row)">删除</el-button>
           </div>
         </template>
       </el-table-column>

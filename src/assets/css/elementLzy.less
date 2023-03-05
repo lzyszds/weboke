@@ -90,15 +90,63 @@
   color: #fff;
 }
 
-button.el-button--primary.purple {
-  background-color: var(--themeColor);
-  border-color: var(--themeColor);
-  box-shadow: none;
+button {
+  &.el-button {
+    &.is-disabled {
+      background-color: #5161ce99;
 
-  &:hover {
-    background-color: #000;
-    border-color: #000;
-    box-shadow: none;
+      :hover {
+        background-color: #5161ce99 !important;
+      }
+
+      :active {
+        background-color: #5161ce99 !important;
+      }
+    }
+
+    &.el-button--primary {
+      &.purple {
+        background-color: var(--themeColor);
+        border-color: var(--themeColor);
+        box-shadow: none;
+
+        &:hover {
+          background-color: #000;
+          border-color: #000;
+          box-shadow: none;
+        }
+      }
+
+      background-color: var(--themeColor);
+      border-color: #000;
+
+      &:hover {
+        background-color: #5161ce99;
+        border-color: #000;
+      }
+
+      &.is-disabled {
+        background-color: #5161ce99;
+
+        :hover {
+          background-color: #5161ce99 !important;
+        }
+
+        :active {
+          background-color: #5161ce99 !important;
+        }
+      }
+    }
+
+    &.el-button--danger {
+      background-color: var(--delColor);
+      border-color: #000;
+
+      &:hover {
+        background-color: #dc143c99;
+        border-color: #000;
+      }
+    }
   }
 }
 

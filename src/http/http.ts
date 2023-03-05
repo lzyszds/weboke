@@ -1,6 +1,7 @@
 // 一、配置axios
 import axios from 'axios'
 import { ElMessageBox } from 'element-plus'
+import { getCookie } from '@/utils/common'
 const instance = axios.create({
   baseURL: window.location.origin,
   // timeout: 5000,
@@ -8,14 +9,17 @@ const instance = axios.create({
 })
 // 响应拦截器
 instance.interceptors.response.use(response => {
+  if (!getCookie('token_remderDay')) {
+    localStorage.clear()
+  }
   if (response.status === 200) {
     // 993登录过期
     if (response.data.code != '10011') {
       return Promise.resolve(response)
-    } else if (response.data.code == '10011') {
+    } else {
       let timer: any = setTimeout(() => {
         window.location.href = '/login'
-      }, 2000)
+      }, 1000 * 1000)
       localStorage.clear() // 清空本地存储
       ElMessageBox.alert('登陆验证失败，请重新登陆！！(2秒后自动退出)', '提示', {
         // 如果要禁用其自动对焦
@@ -26,7 +30,6 @@ instance.interceptors.response.use(response => {
           clearTimeout(timer)
         },
       })
-
     }
   } else {
     return Promise.reject(response)

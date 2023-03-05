@@ -9,6 +9,7 @@ import http from '@/http/http';
 import ComImg from '@/assets/icon/comments/import'
 import { commentsType } from './Detailtype'
 import Reply from '@/components/Reply.vue'
+import { allFunction } from '@/utils/common'
 
 const overloading = ref(false) //重载评论组件，解决评论后评论组件不刷新的问题
 
@@ -18,7 +19,7 @@ const { data: dataDet } = await http('get', '/adminApi/admin/articleDetail?aid='
 const affixElm = ref<HTMLElement | null>(null)
 
 const { proxy } = getCurrentInstance() as any
-const tip = proxy.$common.LNotification // 右下角提示
+const tip = allFunction.LNotification // 右下角提示
 const tocList = ref<any>([]);
 const tocACindex = ref<string>('#toc-head-1');
 const listComment = ref<any>(await http('get', '/adminApi/admin/getComment?aid=' + aid) as any)
@@ -73,7 +74,7 @@ onMounted(async () => {
 //处理时间戳转换成距离当前日期的时间（一天前，两天前）
 let setTimestamp = (time: string) => {
   //他妈的这里巨奇怪，不知道为什么这个方法会被下面handleScroll方法一直调用真的迷
-  return proxy.$common.timeAgo(time)
+  return allFunction.timeAgo(time)
 }
 
 //当前内容的滚动距离，用于判断目录的高亮   但是好像有点问题先不用了

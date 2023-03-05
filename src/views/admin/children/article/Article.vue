@@ -180,11 +180,11 @@ onBeforeUnmount(() => {
           </div>
         </template>
       </el-table-column>
-      <el-table-column fixed="right" label="Operations" width="120">
+      <el-table-column fixed="right" label="Operations" width="200">
         <template #default="scope">
           <div class="tool">
-            <el-button link type="primary" size="small" @click="modifyThe(scope.row)">修改</el-button>
-            <el-button link type="primary" size="small" @click="deleteArticle(scope.row)">删除</el-button>
+            <el-button type="primary" size="small" @click="modifyThe(scope.row)">修改</el-button>
+            <el-button type="danger" size="small" @click="deleteArticle(scope.row)">删除</el-button>
           </div>
         </template>
       </el-table-column>
@@ -208,7 +208,6 @@ onBeforeUnmount(() => {
   </div>
 </template>
 <style>
-
 </style>
 
 <style lang="less" scoped>

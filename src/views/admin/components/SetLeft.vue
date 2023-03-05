@@ -88,8 +88,12 @@ const activefn = (index) => {
   if (items[index].name == '退出登陆') {
     localStorage.removeItem('lzy_token')
   }
+
   activeIndex.value = index
   router.push(items[index].path)
+  if (items[index].name == '返回首页' || items[index].name == '退出登陆') {
+    window.location.reload()
+  }
 }
 //处理用户详情数据
 const infoData: any = ref()

@@ -8,19 +8,7 @@
 import { defineStore } from "pinia";
 import http from "@/http/http";
 import _ from "lodash";
-
-export interface NowWeatherData {
-  data: {
-    token: string,
-    ip: string,
-    region: string,
-    tags: [],
-    beijingTime: Date,
-    weatherData: object
-  }
-  status: string
-}
-
+import { NowWeatherData } from './type'
 /**
  * 1. 定义容器并导出.
  * 参数一: 容器ID, 唯一, 将来 Pinia 会把所有的容器挂载到根容器
@@ -79,9 +67,6 @@ export const useStore = defineStore('main', {
         })
       })
     },
-
-
-
   }
 })
 

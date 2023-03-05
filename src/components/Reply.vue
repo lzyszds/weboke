@@ -1,5 +1,7 @@
 <script setup lang='ts'>
-import { defineProps, ref, getCurrentInstance, defineEmits } from 'vue';
+import { defineProps, ref, defineEmits } from 'vue';
+import { timeAgo } from '@/utils/common'
+
 interface Replydata {
   comId: number,
   head_img: string,
@@ -21,11 +23,6 @@ console.log(`lzy  props:`, props)
 const replydata = ref<Replydata[]>(props.replydata)
 const oldReplydata = ref<Replydata[]>(props.oldReplydata)
 const replyId = ref<number[][]>(props.replyId)
-const proxy = getCurrentInstance()?.proxy as any
-let setTimestamp = (time: string) => {
-  //他妈的这里巨奇怪，不知道为什么这个方法会被下面handleScroll方法一直调用真的迷
-  return proxy.$common.timeAgo(time)
-}
 const emit = defineEmits(['replycl', 'remReplycl', 'replyclLevelTwo', 'remReplyclLevelTwo'])
 const replyComment = (item: Replydata, index: number) => {
   //判断是否是回复评论
@@ -67,7 +64,7 @@ const isReply = (item: Replydata, index: number) => {
       <div class="item-right">
         <div class="item-right-top">
           <span class="item-right-top-name">{{ item.user_name }}</span>
-          <span class="item-right-top-time">{{ setTimestamp(item.time) }}</span>
+          <span class="item-right-top-time">{{ timeAgo(item.time) }}</span>
           <button v-if="isReply(item, index)" class="item-right-top-reply" @click="replyComment(item, index)">回复</button>
           <button v-else class="item-right-top-reply" @click="remReplyComment(item, index)">取消回复</button>
         </div>

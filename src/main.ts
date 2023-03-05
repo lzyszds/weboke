@@ -13,7 +13,6 @@ import App from './App.vue'
 import router from './router'
 import hljsVuePlugin from '@highlightjs/vue-plugin'//代码展示高亮
 import { Fancybox, Carousel, Panzoom } from "@fancyapps/ui";//图片放大
-import common from '@/utils/common'; //全局按钮防抖事件
 import lazy from '@/utils/lazy'; // 图片懒加载
 import transition from '@/utils/transition'
 import { createPinia } from 'pinia' //状态管理
@@ -24,7 +23,6 @@ import VueMarkdownEditor from '@/utils/markDownCreate'; //markdown配置
 
 const pinia = createPinia()
 const app = createApp(App)
-app.config.globalProperties.$common = common
 
 app.config.globalProperties.$fancyapps = { Fancybox, }
 app.directive('transition', transition)
