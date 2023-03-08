@@ -73,7 +73,7 @@ const items = [
   {
     name: '返回首页',
     uicon: '<i class="iconfont">&#xe60b;</i>',
-    path: '/'
+    path: '/home/index'
   },
 ]
 
@@ -88,12 +88,13 @@ const activefn = (index) => {
   if (items[index].name == '退出登陆') {
     localStorage.removeItem('lzy_token')
   }
-
   activeIndex.value = index
-  router.push(items[index].path)
-  if (items[index].name == '返回首页' || items[index].name == '退出登陆') {
-    window.location.reload()
-  }
+  //避免返回首页时，页面只刷新，却不跳转 push返回的是一个promise
+  router.push(items[index].path).then(() => {
+    if (items[index].name == '返回首页' || items[index].name == '退出登陆') {
+      window.location.reload()
+    }
+  })
 }
 //处理用户详情数据
 const infoData: any = ref()
