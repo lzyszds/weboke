@@ -74,7 +74,7 @@ const selectHandle = (index: number) => {
 
 .conDiv .conDiv_img img {
     width: 280px;
-    height: 200px;
+    height: 100%;
     object-fit: cover;
     border-radius: 8px 0 0 8px;
 }

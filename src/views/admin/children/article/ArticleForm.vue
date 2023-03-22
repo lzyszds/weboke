@@ -32,7 +32,7 @@ const information = reactive<informationTypes>({
   text: props.data?.content,
   html: props.data?.html,
   title: props.data?.title || '',
-  cover: props.data?.coverImg || 'http://localhost:1027/public/img/articleImages/upload-image1667660540602.jpeg',
+  cover: props.data?.coverImg || '/public/img/articleImages/upload-image1667660540602.jpeg',
 })
 //确认提交
 const submitForm = () => {

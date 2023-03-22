@@ -176,7 +176,7 @@ onBeforeUnmount(() => {
       <el-table-column property="guid" label="文章路径" sortable>
         <template #default="scope">
           <div class="guidCup">
-            <a :href="'/home/detail/' + scope.row.aid">{{ '/home/detail/' + scope.row.aid }}</a>
+            <a target="_blank" :href="'/home/detail/' + scope.row.aid">{{ '/home/detail/' + scope.row.aid }}</a>
           </div>
         </template>
       </el-table-column>
