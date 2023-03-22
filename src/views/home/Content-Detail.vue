@@ -8,7 +8,7 @@ import icon from '@/components/icon.vue'
 import http from '@/http/http';
 import ComImg from '@/assets/icon/comments/import'
 import { commentsType } from './Detailtype'
-import Reply from '@/components/Reply.vue'
+import Reply from '@/views/home/Reply.vue'
 import { allFunction } from '@/utils/common'
 
 const overloading = ref(false) //重载评论组件，解决评论后评论组件不刷新的问题

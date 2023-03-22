@@ -13,7 +13,7 @@ interface Data {
     content: string,
     time: string,
     createTime: string,
-    authorId: string,
+    author: string,
     comNumber: string,
     coverImg: string,
     coverContent: string,
@@ -25,7 +25,7 @@ interface Props {
 const props = defineProps<Props>();
 const data = ref<Data>(props.data)
 const selectHandle = (index: number) => {
-    if (index == 0) return data.value.authorId
+    if (index == 0) return data.value.author
     if (index == 1) return dayjs(Number(data.value.createTime) * 1000).format('YYYY-MM-DD')
     if (index == 2) return (data.value.comNumber || 0) + '条评论'
 }

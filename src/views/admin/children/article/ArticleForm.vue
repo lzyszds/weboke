@@ -196,8 +196,6 @@ onBeforeUnmount(() => {
   tagData.value = []
   tagDataTem.value = []
   typeInput.value = ''
-  console.log(information);
-
 })
 </script>
 

@@ -10,3 +10,14 @@ export interface commentsType {
   imgIndex: number,
 }
 
+export interface Replydata {
+  comId: number,
+  head_img: string,
+  user_name: string,
+  time: string,
+  content: string,
+  replyPeople: string,
+  reply_id: number,
+  ground_id: number,
+  reply: Replydata[]
+}
