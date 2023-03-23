@@ -258,4 +258,12 @@ div :deep(img[data-fancybox="gallery"]) {
     box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.25);
   }
 }
+
+.toolfooter {
+  & :deep(.el-overlay-dialog) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
 </style>

@@ -257,12 +257,10 @@ onBeforeUnmount(() => {
 
 <style lang="less" scoped>
 .headelement {
-  box-shadow: 0 0px 10px 1px rgb(0 0 0 / 10%);
 
-  &.markDowmLzy {
-    & .v-md-editor {
-      box-shadow: none;
-    }
+  & .v-md-editor {
+
+    box-shadow: 1px 1px 5px 1px #0000001a;
   }
 
   .markDowmInput {
@@ -277,6 +275,11 @@ onBeforeUnmount(() => {
     // border: 1px solid var(--themeColor);
     padding: 0 0 0 20px;
     border-bottom: 2px solid #000;
+    border-radius: 10px 10px 0 0;
+
+    span {
+      font-size: 1vmax;
+    }
 
     .coverImg {
       position: relative;
@@ -341,6 +344,11 @@ onBeforeUnmount(() => {
     }
   }
 
+  .fa-folder-open {
+    cursor: var(--linkCup);
+
+  }
+
   :deep(.v-md-editor__menu)::-webkit-scrollbar {
     height: 0;
   }
@@ -351,11 +359,12 @@ onBeforeUnmount(() => {
 }
 
 .btnTool {
+  margin-top: 20px;
   display: flex;
   justify-content: flex-end;
 
   .card-button {
-    transform: translate(-50%, 100%);
+    // transform: translate(-50%, 100%);
     width: 100px;
     border-radius: 1rem;
     border: none;
@@ -372,7 +381,7 @@ onBeforeUnmount(() => {
     }
 
     &:hover {
-      transform: translate(-50%, 100%) scale(1.1);
+      transform: scale(1.1);
     }
   }
 }
