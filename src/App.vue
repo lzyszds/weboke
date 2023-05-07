@@ -26,6 +26,7 @@ weather.then(res => {
   localStorage.setItem('nowWeatherData', JSON.stringify(res))
 })
 state.nowWeatherData = weather;
+
 copyTip()
 
 </script>

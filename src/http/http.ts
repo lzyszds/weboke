@@ -32,7 +32,7 @@ instance.interceptors.response.use(response => {
       })
     }
   } else {
-    return Promise.reject(response)
+    return Promise.reject(identifyCode(response.status, response))
   }
 })
 
@@ -61,4 +61,19 @@ export default function (method = 'get', url = '', data = {}, headers?) {
         reject(err)
       })
   })
+}
+
+function identifyCode(code, err) {
+  code == 400 && (code = '请求错误')
+  code == 401 && (code = '未授权，请登录')
+  code == 403 && (code = '拒绝访问')
+  code == 404 && (code = `请求地址出错: ${err.response.config.url}`)
+  code == 408 && (code = '请求超时')
+  code == 500 && (code = '服务器内部错误')
+  code == 501 && (code = '服务未实现')
+  code == 502 && (code = '网关错误')
+  code == 503 && (code = '服务不可用')
+  code == 504 && (code = '网关超时')
+  code == 505 && (code = 'HTTP版本不受支持')
+  return code
 }
