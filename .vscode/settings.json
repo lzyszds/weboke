@@ -68,10 +68,10 @@
     "editor.defaultFormatter": "vscode.html-language-features"
   },
   "[css]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "aeschli.vscode-css-formatter"
   },
   "[less]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "mblode.pretty-formatter"
   },
   "[scss]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -141,5 +141,6 @@
     "windi",
     "windicss",
     "zxcvbn"
-  ]
+  ],
+  "vue.codeActions.enabled": false
 }

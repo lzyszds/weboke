@@ -4,14 +4,15 @@
   </Suspense>
   <router-view> </router-view>
   <div class="w-full relative">
-    <Music v-if="false"></Music>
+    <!-- <Music v-if="false"></Music> -->
   </div>
   <div class="w-full absolute bottom-20">
     <!-- <Live2d></Live2d> -->
   </div>
+  <!-- <div class="maskBg" v-if="!state.dark"> </div> -->
 </template>
 <script setup lang="ts">
-import Music from "./uiComponents/music/Music.vue";
+// import Music from "./uiComponents/music/Music.vue";
 // import { defineAsyncComponent } from 'vue'
 import Loadinge from '@/uiComponents/loader/loading.vue'
 import { useStore } from '@/store/index';

@@ -1,7 +1,8 @@
 :root {
   --themeColor: #5161ce;
   --bgcolor: #fff !important;
-  --darkBgcolor: rgb(27, 28, 37);
+  --darkBgcolor: rgb(24, 23, 29);
+  --darkContentBgcolor: #1E1E1E;
   --darkColor: rgb(255, 255, 255, .8);
   --textcolor: #fe9600;
   --borderColor: #ffe14d;
@@ -25,6 +26,50 @@
   background: #344449;
   color: #fff;
   text-shadow: none;
+}
+
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities; */
+
+* {
+  -webkit-user-drag: none;
+}
+
+.Cannotbeobtained {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+img {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+body,
+html,
+#app {
+  font-size: 10px;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  list-style: none;
+  text-decoration: none;
+  color: var(--themeColor);
+}
+
+.dark {
+  transition: .3s;
+}
+
+svg {
+  display: initial;
 }
 
 button,
@@ -118,7 +163,7 @@ input:-webkit-autofill::selection {
 
 body::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgb(245, 245, 245);
-  background-color: #F5F5F5;
+  background-color: #eee;
 }
 
 ::-webkit-scrollbar {
@@ -144,7 +189,8 @@ body::-webkit-scrollbar-track {
 }
 
 #app {
-  cursor: var(--normalCup)
+  cursor: var(--normalCup);
+  position: relative;
 }
 
 #app a {
@@ -157,6 +203,18 @@ body::-webkit-scrollbar-track {
 
 #app textarea {
   cursor: var(--verticalCup)
+}
+
+.maskBg {
+  width: 25px;
+  height: 25px;
+  position: fixed;
+  right: 345px;
+  top: 18px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #00000030;
+  animation: slide-out-fwd-bl_lzy 2s 1;
 }
 
 html,

@@ -1,5 +1,6 @@
 import http from '@/http/http'
-import { ElNotification, dayjs } from 'element-plus'
+import { ElNotification } from 'element-plus'
+import dayjs from "dayjs";
 // 此函数获取一个数组并将其拆分为更小的块
 export function splitArray(array: any, size) {
   // 创建一个空数组以容纳较小的块
@@ -144,6 +145,21 @@ export const setCookie = (name: string, value: string, time: number) => {
   document.cookie = `${name}=${value};expires=${date}`
 }
 
+/* 数组去重 arr: 要处理数组, key: 去重的key值 单一数组不需要key */
+export const unique = (arr: any[], key?: string) => {
+  const res = new Map();
+  return arr.filter((a) => {
+    const arrKey = key ? a[key] : a
+    // has判断当前值是否在map对象中存在 ,如果不存在则将当前值添加进map对象中
+    return !res.has(arrKey) && res.set(arrKey, 1)
+  })
+}
+
+/* 页面滚动到指定位置XY轴 */
+export const scrollTo = (x: number, y: number) => {
+  window.scrollTo(x, y)
+}
+
 
 export const allFunction = {
   splitArray,//把一个数组拆分成几个数组
@@ -156,4 +172,6 @@ export const allFunction = {
   LNotification,//提示弹窗
   getCookie,//获取cookie
   setCookie,//设置cookie
+  unique,//数组对象去重（区别单数组以及数组中嵌套一层对象）
+  scrollTo,//页面滚动到指定位置XY轴
 }

@@ -1,8 +1,7 @@
 <!-- 文章列表中的长方形组件 -->
 <script setup lang='ts'>
-import { defineProps, ref } from 'vue';
+import { ref } from 'vue';
 import dayjs from 'dayjs';
-
 const list = [
     { name: 'icon-icon-taikong13', fill: '#888', },
     { name: 'icon-icon-taikong9', fill: '#888', },
@@ -24,6 +23,7 @@ interface Props {
 }
 const props = defineProps<Props>();
 const data = ref<Data>(props.data)
+
 const selectHandle = (index: number) => {
     if (index == 0) return data.value.author
     if (index == 1) return dayjs(Number(data.value.createTime) * 1000).format('YYYY-MM-DD')
@@ -34,7 +34,8 @@ const selectHandle = (index: number) => {
 <template>
     <div v-transition="'tosiTion'" class="conDiv">
         <div class="conDiv_img">
-            <img v-lazy="props.index" :src="'/adminApi/' + data.coverImg" alt="">
+            <img v-lazy="props.index" :src="'/adminStatic/' + data.coverImg"
+                onerror="this.src='/src/assets/image/imgError.png'" alt="">
         </div>
         <div class="conDiv_text">
             <div class="title">{{ data.title }}</div>
@@ -53,11 +54,12 @@ const selectHandle = (index: number) => {
 .conDiv {
     cursor: var(--linkCup);
     display: flex;
-    box-shadow: -1px 1px 6px 2px rgb(233, 233, 233);
+    box-shadow: 0 0px 5px rgb(0 0 0 / 33%);
     border-radius: 8px;
+    overflow: hidden;
     background-color: #fff;
     opacity: .5;
-    transition: all .5s cubic-bezier(0.68, -0.55, 0.68, 1.55);
+    transition: transform .5s cubic-bezier(0.68, -0.55, 0.68, 1.55), opacity .5s cubic-bezier(0.68, -0.55, 0.68, 1.55);
     transform: translateY(200px);
 
 }
@@ -70,6 +72,11 @@ const selectHandle = (index: number) => {
 .conDiv:hover .title {
     /* box-shadow: -1px 1px 6px 1px var(--themeColor); */
     color: var(--themeColor);
+}
+
+.conDiv .conDiv_img {
+    width: 280px;
+    height: 180px;
 }
 
 .conDiv .conDiv_img img {

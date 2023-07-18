@@ -3,9 +3,12 @@ import './loading.css';
 const hide = (id) => {
   const _id = document.querySelector(id || 'body')
   const loadingDiv = document.querySelector('#loadingDiv')
-  if (loadingDiv) {
-    _id!.removeChild(loadingDiv)
-  }
+  setTimeout(() => {
+    if (loadingDiv) {
+      // 给loadingDiv删除
+      _id!.removeChild(loadingDiv)
+    }
+  }, 500);
 };
 //展示loading效果
 const show = (id, text?) => {
@@ -13,9 +16,22 @@ const show = (id, text?) => {
   var _LoadingHtml = `
   <div id="over" style="position:absolute;position: fixed;top: 0;left: 0; width: 100%;height: 100%; background-color: #fff;opacity:1;z-index: 2;">
   </div>
-  <div id="layout" style="position:absolute;position: fixed;top: 50%;left: 50%;z-index: 2;text-align: center;transform: translate(-50%, -50%);}">
+  <div id="layout"
+   style="position:absolute;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 2;
+    text-align: center;
+    transform: translate(-50%, -50%);
+  }">
   ${html4}
-  <div style="margin: 40px;text-align: center;color: #fff;">${text == null ? text = "加载中..." : text = text}</div>
+  <div style="margin: 40px;
+    text-align: center;
+    font-weight: 600;
+    color: #fff;
+    text-shadow: 1px 1px 3px rgb(81,97,206);
+    font-size: 16px;">${text == null ? text = "加载中..." : text = text}</div>
   </div>
   `;
   var div = document.createElement('div');

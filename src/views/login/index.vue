@@ -3,7 +3,7 @@ import { reactive, ref } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
 import { useThrottleFn } from '@vueuse/core'
 
-import { dayjs } from 'element-plus'
+import dayjs from 'dayjs'
 import http from '@/http/http'
 import { useRouter } from 'vue-router'
 const router = useRouter()
@@ -13,7 +13,7 @@ if (localStorage.getItem('lzy_token')) {
 }
 interface getLoginData {
   error: number
-  token: string
+  data: string
   message: string
   code: number
 }
@@ -49,10 +49,10 @@ const submitForm = useThrottleFn(async (formEl: FormInstance | undefined) => {
     if (!formEl) return;
     formEl.validate(async (valid, fields) => {
       if (valid) {
-        const res = await http('post', '/adminApi/admin/login', ruleForm) as getLoginData;
+        const res = await http('post', '/adminPostApi/login', ruleForm) as getLoginData;
         setTimeout(() => {
           if (res.error === 0 || res.code === 200) {
-            localStorage.setItem('lzy_token', res.token);
+            localStorage.setItem('lzy_token', res.data);
             //设置cookie，cookie过期时间为14天，如果过期则需要重新登陆，销毁localStorage中token
             const date14: any = dayjs().add(7, 'day');
             const date = date14.diff(dayjs(), 'day');

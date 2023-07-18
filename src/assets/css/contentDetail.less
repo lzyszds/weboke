@@ -9,7 +9,7 @@
 
   .center {
     margin: 0 auto;
-    width: 980px;
+    width: 1080px;
     overflow-x: hidden;
 
     h5 {
@@ -29,7 +29,7 @@
     padding: 10px;
     margin-top: 20px;
     border: none;
-    // background: var(--themeColor); 
+    // background: var(--themeColor);
     overflow: hidden;
     border-radius: 10px;
     // border: 3px solid #000;
@@ -57,7 +57,9 @@
         background-color: crimson;
         color: #fff;
         border: 2px solid #000;
-
+        font-size: 12px;
+        padding: 5px;
+        border-radius: 5px;
         &:nth-child(1) {
           margin-left: 0;
         }
@@ -74,7 +76,7 @@
   }
 
   .imgtop img {
-    filter: brightness(.5);
+    filter: brightness(0.5);
     width: 100%;
     height: 400px;
     object-fit: cover;
@@ -103,7 +105,7 @@
   .topTitle p {
     font-size: 20px;
     margin-bottom: 20px;
-    text-indent: 0em
+    text-indent: 0
   }
 
 
@@ -131,9 +133,7 @@
       border-radius: 15px;
       line-height: 30px;
       cursor: var(--linkCup);
-      background-color: #fff;
-
-      :hover {
+      background-color:#fff;:hover {
         color: var(--themeColor);
         text-decoration: underline var(--themeColor);
 
@@ -164,8 +164,7 @@
       border: 4px solid #000;
       z-index: 2;
       background-color: #ffe14d;
-      box-shadow: -1px 3px 1px 0px #fff,
-        -1px 3px 3px 5px #000;
+      box-shadow: -1px 3px 1px 0 #fff, -1px 3px 3px 5px #000;
       color: #000;
       text-align: center;
       line-height: 100px;
@@ -187,10 +186,13 @@
     padding: 0 20px;
     position: relative;
 
+    & > p {
+      margin-left: 25px !important;
+    }
+
     h5 {
       margin: 30px 0;
     }
-
 
 
     &::before {
@@ -219,12 +221,12 @@
   }
 
   .publish {
-    width: 1008px;
+    width: 1108px;
     height: 300px;
     display: flex;
     justify-content: space-between;
 
-    &>.borderw {
+    & > .borderw {
       width: 49%;
       box-sizing: border-box;
 
@@ -263,7 +265,7 @@
           pointer-events: none;
         }
 
-        &>textarea {
+        & > textarea {
           width: 91.4% !important;
           height: 172px !important;
           padding: 10px 20px;
@@ -272,7 +274,7 @@
           border: none;
           resize: none;
           // border-radius: 30px;
-          word-break: break-all; //在合适的点自动换行
+          word-break: break-all; // 在合适的点自动换行
           background-color: transparent;
           transition: background 0.1s, color 0.3s;
 
@@ -290,59 +292,61 @@
       }
     }
 
-    &>.nameqq {
+    & > .nameqq {
       .comment {
         font-family: 'dindin';
-        padding: 10px 10px 0px;
+        padding: 10px 10px 0;
 
         &::before,
         &::after {
           display: none;
         }
 
-        div {
+        & > div {
           display: grid;
           grid-template-columns: 1fr auto 1fr;
           gap: 0 20px;
           align-items: center;
-
-          p {
-            width: 96%;
-            height: 50px;
-            overflow-y: hidden;
+          & > div {
             overflow-x: scroll;
-            display: grid;
-            grid-template-columns: repeat(16, 1fr);
-            gap: 0 15px;
-            position: relative;
-            padding-left: 1.5px;
+            p {
+              width: 720px;
+              height: 50px;
+              overflow: scroll;
+              display: grid;
+              grid-template-columns: repeat(16, 1fr);
+              gap: 0 15px;
+              position: relative;
+              padding-left: 1.5px;
 
-            &::-webkit-scrollbar {
-              display: none !important;
-            }
+              &::-webkit-scrollbar {
+                display: none !important;
+              }
 
-            span {
-              width: 45px;
-              height: 45px;
-              border: 1px solid;
-              position: absolute;
-              left: 1px;
-              top: 1px;
-              margin: 0;
-              background-color: transparent;
-              border-radius: 50%;
-              border: 2px solid #000;
-              box-shadow: inset 0px 0px 10px 1px var(--themeColor);
-              filter: blur(1px);
-            }
+              span {
+                width: 45px;
+                height: 45px;
+                border: 1px solid;
+                position: absolute;
+                left: 1px;
+                top: 1px;
+                margin: 0;
+                background-color: transparent;
+                border-radius: 50%;
+                box-shadow: inset 0 0 10px 1px var(--themeColor);
+                filter: blur(1px);
+                transition: 0.1s ease-in;
+              }
 
-            img {
-              width: 45px;
-              border-radius: 50%;
+              img {
+                width: 45px;
+                border-radius: 50%;
+                cursor: var(--linkCup);
+              }
+
             }
 
           }
-
           button {
             font-size: 20px;
             border: none;
@@ -358,7 +362,7 @@
           line-height: 31px;
 
           input {
-            width: 70%;
+            width: 80%;
             height: 15px;
             font-size: 13px;
             border: 2px solid var(--themeColor);
@@ -368,7 +372,7 @@
 
             &:focus-visible {
               outline: none;
-              box-shadow: 0px 1px 3px 0px var(--themeColor)
+              box-shadow: 0 1px 3px 0 var(--themeColor)
             }
           }
 
@@ -393,7 +397,11 @@
           }
 
         }
-
+        ::-webkit-scrollbar {
+          width: 1px;
+          height: 4px;
+          background-color: rgb(245, 245, 245);
+        }
 
       }
     }
@@ -406,7 +414,7 @@
   .affix-container {
     position: absolute;
     top: 510px;
-    left: calc(50% + 520px);
+    right: calc(50% - 554px - 270px);
     background-color: #fff;
     font-size: 16px;
     z-index: 1;
@@ -459,7 +467,7 @@
           list-style: none;
           margin: 0;
 
-          &>li.active {
+          & > li.active {
             color: var(--themeColor);
 
             &::before {
@@ -467,15 +475,15 @@
             }
           }
 
-          &>li.H2 {
+          & > li.H2 {
             font-weight: 600;
           }
 
-          &>li.H3 {
+          & > li.H3 {
             margin-left: 10px;
           }
 
-          &>li.H4 {
+          & > li.H4 {
             margin-left: 20px;
           }
 

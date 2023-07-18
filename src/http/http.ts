@@ -1,6 +1,5 @@
 // 一、配置axios
 import axios from 'axios'
-import { ElMessageBox } from 'element-plus'
 import { getCookie } from '@/utils/common'
 const instance = axios.create({
   baseURL: window.location.origin,
@@ -21,15 +20,17 @@ instance.interceptors.response.use(response => {
         window.location.href = '/login'
       }, 1000 * 1000)
       localStorage.clear() // 清空本地存储
-      ElMessageBox.alert('登陆验证失败，请重新登陆！！(2秒后自动退出)', '提示', {
-        // 如果要禁用其自动对焦
-        // autofocus: false,
-        confirmButtonText: '确定',
-        callback: () => {
-          window.location.href = '/login'
-          clearTimeout(timer)
-        },
-      })
+
+      /* 此次差一个提示框组件，自己写 */
+      // ElMessageBox.alert('登陆验证失败，请重新登陆！！(2秒后自动退出)', '提示', {
+      //   // 如果要禁用其自动对焦
+      //   // autofocus: false,
+      //   confirmButtonText: '确定',
+      //   callback: () => {
+      //     window.location.href = '/login'
+      //     clearTimeout(timer)
+      //   },
+      // })
     }
   } else {
     return Promise.reject(identifyCode(response.status, response))

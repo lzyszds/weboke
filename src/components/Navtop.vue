@@ -1,45 +1,12 @@
-<!-- 顶部导航栏 -->
-
-<template>
-  <div class="navbarContent">
-    <div class="navConChild">
-      <div class="navbar-brand navbar-logo">
-        <a href="#">
-          <img width="80" src="http://localhost:1027/public/img/lzjyWhite.png" alt="" />
-          <svg class="logoSvg" viewBox="0 0 400 200">
-            <text x="0" y="70%" id="timelinetext"> Jz </text>
-          </svg>
-        </a>
-
-      </div>
-      <div></div>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav ">
-          <li class="nav-item" :class="{ active: data.activeIndex == index }" v-for="(item, index) in data.items"
-            :key="index" @click="menuMethod(index)">
-            <a class="nav-link decoration" href="javascript:void(0);">{{ item.name }}</a>
-          </li>
-          <setThemes :ons="'navbarContent'"></setThemes>
-        </ul>
-      </div>
-      <div class="navbar-toggler">
-        <label class="menu-open-button" @click="openfun">
-          <span class="lines line-1"></span>
-          <span class="lines line-2"></span>
-          <span class="lines line-3"></span>
-        </label>
-      </div>
-    </div>
-  </div>
-</template>
-
-<script setup>
-import { reactive, onMounted, nextTick, ref } from "vue";
+<script setup lang="ts">
+import { reactive, onMounted, nextTick } from "vue";
 import setThemes from "@/uiComponents/setupThemes/Setthemes.vue";
 import { useRouter } from 'vue-router'
 import { useEventListener } from '@vueuse/core'
+import { scrollTo } from "@/utils/common";
 
-const router = useRouter()
+const router = useRouter();
+
 const data = reactive({
   activeIndex: 0,
   items: [
@@ -49,9 +16,20 @@ const data = reactive({
     { name: "疫情", path: '/episit' },
     { name: "登陆", path: '/login' },
   ],
-  opencount: 0,
-  selectorpos: 0
+  //选择器位置
+  selectorpos: {
+    left: '0px',
+    top: '0px'
+  },
+  //是否打开
+  hasopen: false,
+  //获取网页标题
+  webHeadTitle: ''
 });
+
+//获取网页标题 
+data.webHeadTitle = document.title
+
 data.items.forEach((item, index) => {
   const location = router.options.history.location
   if (item.path == router.options.history.location) {
@@ -62,7 +40,7 @@ data.items.forEach((item, index) => {
   }
 })
 const bgBoxfun = () => {
-  const navitem = document.querySelector(".nav-item.active");
+  const navitem = document.querySelector(".nav-item.active") as HTMLElement;
   data.selectorpos = {
     left: navitem.offsetLeft + 'px',
     top: navitem.offsetTop + 'px'
@@ -78,7 +56,7 @@ const menuMethod = (index) => {
 }
 const openfun = () => {
   data.hasopen = !data.hasopen
-  const line = document.querySelectorAll(".lines")
+  const line = document.querySelectorAll(".lines") as NodeListOf<HTMLElement>;
   //按钮动画
   if (data.hasopen) {
     line[0].style.transform = 'rotate(45deg) translate3d(0,0,0)'
@@ -91,6 +69,7 @@ const openfun = () => {
   }
 
 }
+
 onMounted(() => {
   bgBoxfun()
   window.addEventListener("resize", bgBoxfun);
@@ -102,7 +81,54 @@ onMounted(() => {
     }
   })
 })
+
+//鼠标进入顶部中心标题 事件返回顶部
+const tipBackfn = (val) => {
+  if (val == 0) {
+    data.webHeadTitle = document.title
+  } else {
+    data.webHeadTitle = '返回顶部'
+  }
+}
 </script>
+<!-- 顶部导航栏 -->
+<template>
+  <div class="navbarContent">
+    <div class="navConChild">
+      <div class="navbar-brand navbar-logo">
+        <a href="#">
+          <img width="80" src="http://localhost:8089/public/img/lzjyWhite.png" alt="" />
+          <svg class="logoSvg" viewBox="0 0 400 200">
+            <text x="0" y="70%" id="timelinetext"> Jz </text>
+          </svg>
+        </a>
+      </div>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav">
+          <li class="nav-item" :class="{ active: data.activeIndex == index }" v-for="(item, index) in data.items"
+            :key="index" @click="menuMethod(index)">
+            <a class="nav-link decoration" href="javascript:void(0);">{{ item.name }}</a>
+          </li>
+        </ul>
+        <div class="navbar-navTitle" @mouseover="tipBackfn(1)" @mouseout="tipBackfn(0)">
+          <h4 :class="data.webHeadTitle == '返回顶部' ? 'tipBackclass animate__jackInTheBox' : ''" @click="scrollTo(0, 0)">{{
+            data.webHeadTitle }}
+          </h4>
+        </div>
+      </div>
+      <div class="topRight">
+        <setThemes :ons="'navbarContent'"></setThemes>
+      </div>
+      <div class="navbar-toggler">
+        <label class="menu-open-button" @click="openfun">
+          <span class="lines line-1"></span>
+          <span class="lines line-2"></span>
+          <span class="lines line-3"></span>
+        </label>
+      </div>
+    </div>
+  </div>
+</template>
 <style lang="less" scoped>
 body {
   font-family: 'Roboto', sans-serif;
@@ -150,20 +176,15 @@ body {
   height: 60px;
   z-index: 99;
   backdrop-filter: blur(0);
-
-  &.navbarContent100 {
-    background-color: #5161ce99;
-    backdrop-filter: blur(20px);
-
-  }
+  overflow: hidden;
 
   .navConChild {
     margin: 0 auto;
     width: 1280px;
     height: 60px;
     display: grid;
-    grid-template-columns: 1.5fr 3fr 5fr;
-    grid-template-rows: 1;
+    grid-template-columns: 2fr 3fr 2fr;
+    grid-template-rows: 1fr;
 
     .navbar-logo {
       height: 60px;
@@ -185,14 +206,20 @@ body {
     }
 
     .collapse {
+      position: relative;
 
       .navbar-nav {
-        display: grid;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
         align-items: center;
         margin: 0;
-        height: 100%;
-        grid-template-columns: repeat(6, 1fr);
-        gap: 20px;
+        gap: 30px;
+        position: absolute;
+        top: 0;
+        transition: .3s;
+        padding: 0;
 
         &>li {
           display: block;
@@ -221,6 +248,60 @@ body {
         }
       }
     }
+
+    h4 {
+      margin: 0;
+    }
+
+    .navbar-navTitle {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      text-align: center;
+      top: 60px;
+      transition: .3s;
+      font-size: 16px;
+      font-family: "dindin";
+      color: #fff;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-user-drag: none;
+      cursor: pointer;
+      display: flex;
+      place-content: center;
+      place-items: center;
+
+      .tipBackclass {
+        height: 25px;
+        padding: 0 20px;
+        border-radius: 20px;
+        background-color: #fff;
+        color: #000;
+        line-height: 25px;
+        animation-duration: .5s;
+        animation-fill-mode: both;
+      }
+    }
+
+    .topRight {
+      display: flex;
+      justify-content: flex-end;
+      align-self: center;
+    }
+  }
+
+  &.navbarContent100 {
+    background-color: #5161ce;
+    // backdrop-filter: blur(20px);
+
+    .navbar-nav {
+      top: -60px !important;
+    }
+
+    .navbar-navTitle {
+      top: 0 !important;
+
+    }
   }
 }
 
@@ -230,7 +311,7 @@ body {
   font-family: 'firaCode';
 }
 
-.dark .navbarContent {
+.dark .navbarContent.navbarContent100 {
   background-color: var(--darkBgcolor);
 }
 

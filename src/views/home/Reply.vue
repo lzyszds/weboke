@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import { defineProps, ref, defineEmits } from 'vue';
+import { ref } from 'vue';
 import { timeAgo } from '@/utils/common'
 import { Replydata } from './Detailtype'
 

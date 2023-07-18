@@ -25,7 +25,7 @@ export default defineConfig(({ command, mode }): any => {
         languages: ['json', 'js', 'ts', 'css', 'less', 'html', 'markdown', 'sql', 'typescript', 'vim'],
       }),
     ],
-    base: baseUrl[mode],
+    base: "./",
     resolve: {
       alias: {
         '~': path.resolve(__dirname, './'),
@@ -64,10 +64,20 @@ export default defineConfig(({ command, mode }): any => {
           changeOrigin: true,
           rewrite: path => path.replace(/^\/mapApi/, '')
         },
-        '/adminApi': {
-          target: _baseUrl + ':1027/',//这里是域名，不是完整地址
+        '/adminGetApi': {
+          target: _baseUrl + ':8089/overtApis/',//这里是域名，不是完整地址
           changeOrigin: true,//是否跨域
-          rewrite: path => path.replace(/^\/adminApi/, '')
+          rewrite: path => path.replace(/^\/adminGetApi/, '')
+        },
+        '/adminPostApi': {
+          target: _baseUrl + ':8089/privateApis/',//这里是域名，不是完整地址
+          changeOrigin: true,//是否跨域
+          rewrite: path => path.replace(/^\/adminPostApi/, '')
+        },
+        '/adminStatic': {
+          target: _baseUrl + ':8089/public',//这里是域名，不是完整地址
+          changeOrigin: true,//是否跨域
+          rewrite: path => path.replace(/^\/adminStatic/, '')
         },
         '/getIp': {
           target: 'https://v2.jinrishici.com',//这里是域名，不是完整地址

@@ -4,15 +4,15 @@ import { ElPagination } from 'element-plus'
 import ContentHead from '@/components/Content-head.vue'
 import ContentDiv from '@/components/Content-div.vue'
 import { useEventListener } from '@vueuse/core'
+import { useStore } from "@/store/index";
 import http from '@/http/http';
-
+const store = useStore()
 const limit = 5
 const indexList = ref(1)
-const { total, data } = await http('get', '/adminApi/admin/articleList?pages=' + indexList.value + '&limit=' + limit) as any
+const { total, data } = await http('get', '/adminGetApi/articleList?pages=' + indexList.value + '&limit=' + limit) as any
 const list: any = ref(data)
 const totals = ref(total)
 const isload = ref(true)
-const maskShow = ref(true)
 //此处为分页器的回调函数 
 const currentChange = (e: number) => {
   /*
@@ -27,7 +27,7 @@ const currentChange = (e: number) => {
   isload.value = false
   //当前页数
   indexList.value = e
-  http('get', '/adminApi/admin/articleList?pages=' + indexList.value + '&limit=' + limit).then((res: any) => {
+  http('get', '/adminGetApi/articleList?pages=' + indexList.value + '&limit=' + limit).then((res: any) => {
     //跳转路径
     list.value = res.data
     isload.value = true
@@ -36,9 +36,9 @@ const currentChange = (e: number) => {
   })
 }
 onMounted(() => {
-  setTimeout(() => {
-    maskShow.value = false
-  }, 1000)
+  // setTimeout(() => {
+  //   maskShow.value = false
+  // }, 1000)
   //控制滚动到指定位置，固定背景人物
   useEventListener(window, 'scroll', () => {
     const listSum = document.querySelector('#listSum') as HTMLElement
@@ -76,14 +76,14 @@ onBeforeUnmount(() => {
     <div class="home" id="eleme">
       <!-- 遮罩 -->
       <transition name="mask">
-        <div v-if="maskShow" class="mask"></div>
+        <div v-if="!store.dark" class="mask"></div>
       </transition>
     </div>
     <ContentHead></ContentHead>
     <div class="listSum">
       <!-- 文章内容 -->
       <div class="listCom">
-        <img class="listImg" id="listSum" src="http://localhost:1027/public/img/leftbg2.jpg" alt="">
+        <img class="listImg" id="listSum" src="http://localhost:8089/public/img/leftbg2.jpg" alt="">
         <div :id="'list' + item.aid" v-for="(item, index) in list" :key="index" v-if="isload">
           <router-link :to="'/home/detail/' + item.aid">
             <ContentDiv :data="item" :index="index"></ContentDiv>
@@ -102,26 +102,21 @@ onBeforeUnmount(() => {
 </template>
 
 <style  lang="less" scoped>
-.dark .home {
-  background: url('http://localhost:1027/public/img/12.jpg') no-repeat center center;
-  background-size: cover;
-}
-
 .home {
   width: 100%;
   height: 100vh;
-  background: url('http://localhost:1027/public/img/101608761_p0.jpg') no-repeat center center;
+  background: url('http://localhost:8089/public/img/101608761_p0.jpg') no-repeat center center;
   backdrop-filter: blur(50px);
   background-size: cover;
   position: relative;
 
   .mask {
-    position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 1);
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, .5) 100%), radial-gradient(rgba(255, 255, 255, 0) 33%, rgba(0, 0, 0, .3) 166%), linear-gradient(0, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 0% 80%, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, .4) 100%);
+    animation: slide-out-fwd-bl_lzy 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
   }
 
   .mask-enter-active,
@@ -214,7 +209,7 @@ onBeforeUnmount(() => {
 }
 
 .listSum :deep(.example-pagination-block) {
-  transition: .22s cubic-bezier(0.645, 0.045, 0.355, 1);
+  transition: bottom .22s cubic-bezier(0.645, 0.045, 0.355, 1);
   opacity: 1;
   height: 50px;
   width: 100vw;
@@ -229,10 +224,10 @@ onBeforeUnmount(() => {
   padding: 2px !important;
 }
 </style>
-<style  scoped>
+<style scoped>
 .dark .conDiv {
   background: var(--darkBgcolor);
-  box-shadow: 0px 0px 0px 1px #fff;
+  box-shadow: 0px 0px 0px 1px #ffffff6a;
 }
 
 .dark .conDiv :deep(.conDiv_text) div,
@@ -245,18 +240,6 @@ onBeforeUnmount(() => {
 .dark .listSum {
   background: var(--darkBgcolor) !important;
   color: var(--bgcolor);
-}
-
-@keyframes lzy {
-  0% {
-    opacity: 0;
-    transform: translateY(100px);
-  }
-
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 </style>
 <style lang="less">

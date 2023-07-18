@@ -1,8 +1,7 @@
 <script setup lang='ts'>
-import { useDark, useToggle } from '@vueuse/core'
-import { defineProps } from 'vue';
-// import { useStore } from '@/store/index'
-// const store = useStore()
+import { useDark } from '@vueuse/core'
+import { useStore } from '@/store/index'
+const store = useStore()
 const props = defineProps({
   ons: {
     type: String,
@@ -10,19 +9,13 @@ const props = defineProps({
   }
 })
 const isDark = useDark({
-  selector: 'html',
+  selector: 'body',
   attribute: 'class',
   valueDark: 'dark',
-  valueLight: '',
+  valueLight: 'light',
 })
 const toggleDark = () => {
-  useToggle(isDark)
-  // store.$state.dark = isDark
-  // const dn = document.querySelectorAll('input.dn') as any
-  // dn.forEach((item: any) => {
-  //   console.log(`lzy ~ item`, item)
-  //   item.checked = isDark.value
-  // })
+  store.dark = isDark.value
 }
 </script>
 

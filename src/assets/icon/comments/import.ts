@@ -12,4 +12,4 @@ import dog from './NO.0011.jpg'
 import pig from './NO.0012.jpg'
 
 
-export default { rat, cattle, tiger, rabbit, dragon, snake, horse, sheep, monkey, chicken, dog, pig }
+export default [rat, cattle, tiger, rabbit, dragon, snake, horse, sheep, monkey, chicken, dog, pig] 

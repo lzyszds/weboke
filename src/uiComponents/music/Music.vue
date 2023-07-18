@@ -1,5 +1,5 @@
 <template>
-  <div class="musicContent" @mouseleave="mouseleave" @mouseenter="mouseenter" :style="data.index?'width:415px':null">
+  <div class="musicContent" @mouseleave="mouseleave" @mouseenter="mouseenter" :style="data.index ? 'width:415px' : null">
     <audio id="player" ref="player" controls="controls" @timeupdate="update" class="hidden"></audio>
     <!-- 图片 -->
     <div class="musiclogo">
@@ -69,8 +69,7 @@
 
     <!-- 隐式开关 100  -->
     <div class="rightBtn" @click="click">
-      <img width="20" src="@/assets/icon/rightmsk.png" alt=""
-        :style="data.index ? 'transform: rotate(180deg)' : null" />
+      <img width="20" src="@/assets/icon/rightmsk.png" alt="" :style="data.index ? 'transform: rotate(180deg)' : null" />
     </div>
     <!-- 歌词content -->
     <div class="lyricDiv" v-if="data.islyric">
@@ -138,7 +137,7 @@ http('get', "/music/login/status").then((res) => {
 // http('get', "/music/logout").then((res) => {
 //   console.log(`lzy ~ res`, res)
 // })
-// http('get', "/adminApi/admin/musicLogin").then((res) => {
+// http('get', "/adminApi/musicLogin").then((res) => {
 //   console.log(`lzy ~ res`, res)
 // })
 http('get', "/music/playlist/detail?id=7480206477").then((res) => {

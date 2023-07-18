@@ -1,12 +1,11 @@
 <script setup lang='ts'>
-import { onMounted, ref, reactive, getCurrentInstance, nextTick } from 'vue'
-import { ElNotification } from 'element-plus'
+import { onMounted, ref, reactive, getCurrentInstance, nextTick, } from 'vue'
+import { ElNotification, ElTag } from 'element-plus'
 import Maincontent from '../../components/Maincontent.vue';
 // import { useEventListener } from '@vueuse/core'
-import { useRoute } from 'vue-router';
-import icon from '@/components/icon.vue'
+import { useRoute } from "vue-router";
 import http from '@/http/http';
-import ComImg from '@/assets/icon/comments/import'
+import comImg from '@/assets/icon/comments/import'
 import { commentsType } from './Detailtype'
 import Reply from '@/views/home/Reply.vue'
 import { allFunction } from '@/utils/common'
@@ -15,14 +14,14 @@ const overloading = ref(false) //重载评论组件，解决评论后评论组�
 
 const route = useRoute()
 const aid = route.path.replace('/home/detail/', '') //获取当前文章id
-const { data: dataDet } = await http('get', '/adminApi/admin/articleDetail?aid=' + aid) as any
+const { data: dataDet } = await http('get', '/adminGetApi/articleInfo?aid=' + aid) as any
 const affixElm = ref<HTMLElement | null>(null)
 
 const { proxy } = getCurrentInstance() as any
 const tip = allFunction.LNotification // 右下角提示
 const tocList = ref<any>([]);
 const tocACindex = ref<string>('#toc-head-1');
-const listComment = ref<any>(await http('get', '/adminApi/admin/getComment?aid=' + aid) as any)
+const listComment = ref<any>(await http('get', '/adminGetApi/articleComment?aid=' + aid) as any)
 
 //评论上方的诗句请求
 const textbefore = ref<String>('寻找中...')
@@ -39,10 +38,10 @@ try {
 
 /* 组件内部设定组件加载完成返回
 返回后执行此方法来获取当前文章的目录 */
-const updateCop = async (val: number) => {
+const updateCop = async () => {
 
   //获取当前文章的索引目录
-  let toc = document.querySelectorAll('h2,h3,h4') as any;
+  let toc = document.querySelectorAll('.main h2,.main h3,.main h4') as any;
   toc.forEach((element: any) => {
     tocList.value.push({
       title: element.innerText,
@@ -112,6 +111,7 @@ const replyArr = reactive({
 
 // 存储所有评论的状态
 function setReplyStatus() {
+  if (!listComment.value.data) return //如果没有评论则不执行
   listComment.value.data.forEach((res, index) => {
     const replyId = replyArr.replyId
     replyId.push([0])
@@ -176,14 +176,14 @@ const comSubmit = () => {
     email: information.email, //评论人邮箱
     webSite: information.webSite, //评论人网站
     content: information.comContent, //评论内容
-    imgIndex: rangeIndex, //评论人头像
+    imgIndex: rangeIndex.value, //评论人头像
     userIp: '', //用户ip
   }
-  http('post', '/adminApi/admin/addComment', commentData).then(async (res: any) => {
+  http('post', '/adminPostApi/addComment', commentData).then(async (res: any) => {
     if (res.code == 200) {
       tip(`评论成功,感谢你的评论！`)
       overloading.value = true
-      listComment.value = await http('get', '/adminApi/admin/getComment?aid=' + aid) as any
+      listComment.value = await http('get', '/adminGetApi/articleComment?aid=' + aid) as any
       overloading.value = false
       Object.keys(information).map(key => {
         information[key] = ''
@@ -238,28 +238,31 @@ function handleReplyData(replyId) {
 }
 
 //当前图片的索引
-var rangeIndex = 0
+var rangeIndex = ref<number>(0)
 //评论头像更换事件
-function setRange(direction: string) {
+function setRange(clickIndex: number) {
   const defaultval = 60 //每个图片距离的宽度
-  const selcetRound = document.querySelector('#selcetRound') as HTMLSpanElement;
   //获取父元素
-  const parent = selcetRound.parentElement as HTMLDivElement;
+  const selcetRound = document.querySelector('#selcetRound') as HTMLSpanElement;
 
-  direction == 'left' ? rangeIndex-- : rangeIndex++;
-  if (rangeIndex >= 0 && rangeIndex < 2) {
-    selcetRound.style.transform = `translateX(${defaultval * rangeIndex}px)`
-  } else if (rangeIndex >= 2 && rangeIndex < 9) {
-    selcetRound.style.transform = `translateX(${defaultval * rangeIndex}px)`
-    parent.scrollTo(defaultval * (rangeIndex - 2), 0)
-  } else if (rangeIndex >= 9 && rangeIndex < 12) {
-    selcetRound.style.transform = `translateX(${defaultval * rangeIndex}px)`
+  rangeIndex.value = clickIndex
+  const index = rangeIndex.value
+  console.log(index);
+  if (index >= 0 && index <= 11) {
+    selcetRound.style.transform = `translateX(${defaultval * index}px)`
   } else {
-    if (rangeIndex <= 0) rangeIndex = 0;
-    if (rangeIndex >= 11) rangeIndex = 11;
+    if (index <= 0) rangeIndex.value = 0;
+    if (index >= 11) rangeIndex.value = 11;
   }
 }
-
+const wheel = ref<HTMLDivElement>()
+let scrollx = 0
+const onWheelfn = (e) => {
+  window.screen.width > 768 && e.preventDefault()
+  if (e.deltaY < 0 && scrollx > 0) scrollx -= 60
+  if (e.deltaY > 0 && scrollx < 360) scrollx += 60
+  wheel.value!.scrollTo(scrollx, 0)
+}
 
 
 </script>
@@ -268,7 +271,7 @@ function setRange(direction: string) {
   <div class="detail">
     <!-- 文章封面 -->
     <div class="imgtop">
-      <img :src="'/adminApi' + dataDet.coverImg" alt="">
+      <img :src="'/adminStatic' + dataDet.coverImg" alt="">
       <div class="topTitle center">
         <h1>{{ dataDet.title }}</h1>
         <p>{{ dataDet.author }} {{ setTimestamp(dataDet.createTime) }} {{ dataDet.comNumber }}条评论</p>
@@ -312,7 +315,7 @@ function setRange(direction: string) {
     <!-- 评论界面 -->
     <div class="borderw center">
       <div class="before">{{ textbefore }}</div>
-      <div class=" comment">
+      <div class="comment">
         <h5>
           <icon name="icon-icon-taikong13"></icon>评论
         </h5>
@@ -325,7 +328,7 @@ function setRange(direction: string) {
     </div>
     <!-- 发布评论 -->
     <div class="publish center">
-      <div class=" borderw">
+      <div class="borderw">
         <div class="comment ">
           <span> {{ replyArr.replyName }} </span>
         </div>
@@ -336,12 +339,18 @@ function setRange(direction: string) {
       <div class="borderw nameqq">
         <div class="comment">
           <div>
-            <button @click="setRange('left')"><i class="fa fa-caret-left"></i> </button>
-            <p>
-              <span id="selcetRound"></span>
-              <img v-for="(item, index) in ComImg" :key="index" :src="item" alt="">
-            </p>
-            <button @click="setRange('right')"><i class="fa fa-caret-right"></i> </button>
+            <button>
+              <lzy-icon name="gg:chevron-left" animation="animate__heartBeat"></lzy-icon>
+            </button>
+            <div @wheel="onWheelfn" ref="wheel">
+              <p>
+                <span id="selcetRound"></span>
+                <img v-for="(item, index) in comImg" :key="index" :src="item" @click="setRange(index)">
+              </p>
+            </div>
+            <button>
+              <lzy-icon name="gg:chevron-right" animation="animate__heartBeat"></lzy-icon>
+            </button>
           </div>
           <p>昵称：
             <input type="text" :class="{ 'apply-shake': information.nameError }" v-model="information.name"

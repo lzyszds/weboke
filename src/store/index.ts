@@ -67,6 +67,9 @@ export const useStore = defineStore('main', {
         })
       })
     },
-  }
+    setDark(value) {
+      this.dark = value
+    }
+  },
 })
 
