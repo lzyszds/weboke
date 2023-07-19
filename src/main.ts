@@ -1,6 +1,8 @@
 import 'highlight.js/styles/atom-one-dark.css'
 import 'highlight.js/lib/common'
 import "@fancyapps/ui/dist/fancybox.css";
+import 'element-plus/dist/index.css'
+import 'element-plus/theme-chalk/base.css'
 
 import { createApp } from 'vue'
 
@@ -14,6 +16,7 @@ import { createPinia } from 'pinia' //状态管理
 import LzyIcon from '@/components/LzyIcon.vue'; //图标组件
 import VueMarkdownEditor from '@/utils/markDownCreate'; //markdown配置
 
+localStorage.setItem('qwer', 'qwer')
 
 const pinia = createPinia()
 const app = createApp(App)

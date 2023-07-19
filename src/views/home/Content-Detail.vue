@@ -1,7 +1,8 @@
 <script setup lang='ts'>
 import { onMounted, ref, reactive, getCurrentInstance, nextTick, } from 'vue'
 import { ElNotification, ElTag } from 'element-plus'
-import Maincontent from '../../components/Maincontent.vue';
+import Maincontent from '@/components/Maincontent.vue';
+import DeskInfo from "@/components/DeskInfo.vue";
 // import { useEventListener } from '@vueuse/core'
 import { useRoute } from "vue-router";
 import http from '@/http/http';
@@ -181,7 +182,7 @@ const comSubmit = () => {
   }
   http('post', '/adminPostApi/addComment', commentData).then(async (res: any) => {
     if (res.code == 200) {
-      tip(`评论成功,感谢你的评论！`)
+      tip(`评论成功,感谢你的评论！`, 200000)
       overloading.value = true
       listComment.value = await http('get', '/adminGetApi/articleComment?aid=' + aid) as any
       overloading.value = false
@@ -289,10 +290,12 @@ const onWheelfn = (e) => {
     <Maincontent :main="dataDet.main" @update="updateCop"></Maincontent>
     <!-- 文章目录 -->
     <div class="affix-container" ref="affixElm" v-if="tocList.length != 0">
-      <div class="affix">
+      <DeskInfo></DeskInfo>
+      <div class="affix themeCard">
         <div class="affix_item">
           <div class="affix-title" @click="toUp">
-            <lzyIcon :name="`icon-icon-taikong17`"></lzyIcon>
+            <i class="iconfont icon-icon-taikong17"></i>
+
             <span>目录</span>
           </div>
           <ul class="affix-list">
@@ -307,25 +310,11 @@ const onWheelfn = (e) => {
     <!-- 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议 -->
     <footer class="post-footer center ">
       <div class="tool">
-        <lzyIcon :name="`icon-icon-taikong20`" :fill="`#000`"></lzyIcon>
+        <i class="iconfont icon-icon-taikong20" fill="#000"></i>
         <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享署名-非商业性使用-相同方式共享 4.0
           国际许可协议</a>
       </div>
     </footer>
-    <!-- 评论界面 -->
-    <div class="borderw center">
-      <div class="before">{{ textbefore }}</div>
-      <div class="comment">
-        <h5>
-          <icon name="icon-icon-taikong13"></icon>评论
-        </h5>
-        <div class="comContent">
-          <Reply v-if="!overloading" :oldReplydata="listComment.data" :replydata="listComment.data"
-            :replyId="replyArr.replyId" @replycl="replyComment" @replyclLevelTwo="replyComment"
-            @remReplycl="remReplyComment" @remReplyclLevelTwo="remReplyComment" />
-        </div>
-      </div>
-    </div>
     <!-- 发布评论 -->
     <div class="publish center">
       <div class="borderw">
@@ -365,6 +354,20 @@ const onWheelfn = (e) => {
           </p>
           <p class="btn"><button @click="comSubmit"> 发布评论 </button></p>
           <!-- <p class="btn del"><button> 取消评论 </button></p> -->
+        </div>
+      </div>
+    </div>
+    <!-- 评论界面 -->
+    <div class="borderw center">
+      <div class="before">{{ textbefore }}</div>
+      <div class="comment">
+        <h5>
+          <i class="iconfont icon-icon-taikong13"></i>评论
+        </h5>
+        <div class="comContent">
+          <Reply v-if="!overloading" :oldReplydata="listComment.data" :replydata="listComment.data"
+            :replyId="replyArr.replyId" @replycl="replyComment" @replyclLevelTwo="replyComment"
+            @remReplycl="remReplyComment" @remReplyclLevelTwo="remReplyComment" />
         </div>
       </div>
     </div>

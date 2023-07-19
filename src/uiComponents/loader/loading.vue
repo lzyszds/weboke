@@ -1,69 +1,7 @@
 <script setup lang="ts" >
-import img from '@/assets/icon/weather/import'
-import { ref, } from 'vue';
-import { useDateFormat } from '@vueuse/core'
-import { useStore } from '@/store/index'
-const { $state: state } = useStore()
-const data = ref<any>([])
-const datas = await state.nowWeatherData
-
-data.value = datas
+import { getWeather } from "@/utils/common";
 // 高德地图api
-function getWeather() {
-  /*
-    避免当前使用的ip为国外ip 导致的获取不到ip 
-    sougou的查询ip方法不支持国外ip
-  */
-  // if (!cid) {
-  //   console.warn('当前网络环境不支持获取天气信息(把梯子关了才行)')
-  //   return `/src/assets/icon/weather/undefind.svg`
-  // }
-  const { weatherData, beijingTime } = data.value
-  const formatted: any = useDateFormat(beijingTime, 'HH')
-  const isdark = formatted >= 19 || formatted <= 6
-  switch (weatherData.weather) {
-    case '晴':
-      return isdark ? img.NightSunny : img.Sunny
-    case '多云': case '少云':
-      return isdark ? img.NightCloudy : img.NightCloudy
-    case '晴间多云':
-      return isdark ? img.NightLessCloudy : img.Cloudy
-    case '阴':
-      return img.CloudyDay
-    case '阵雨':
-      return img.Shower
-    case '雷阵雨':
-      return img.ThundershowersSunny
-    case '雨夹雪':
-      return img.SleetRain
-    case '小雨': case '小雨-中雨': case '中雨': case '中雨-大雨':
-      return img.Rain
-    case '暴雨':
-      return img.HeavyRain
-    case '霾': case '中度霾': case '重度霾': case '严重霾': case '雾': case '浓雾': case '强浓雾': case '轻雾': case '大雾':
-      return img.Foggy
-    case '浮尘': case '强沙尘暴':
-      return img.Dust
-    case '冻雨':
-      return img.Sleet
-    case '雪':
-      return img.Snow
-    case '暴雪':
-      return img.Snowstorm
-    case '大雪':
-      return img.HeavySnow
-    case '扬沙':
-      return img.Sand
-    case '沙尘暴':
-      return img.Sandstorm
-    case '龙卷风':
-      return img.Tornado
-    case '有风': case '微风': case '和风': case '清风': case '强风/劲风': case '疾风': case '大风': case '烈风': case '风暴': case '狂爆风': case '飓风': case '热带风暴':
-      return img.Wind
-    default:
-      return `/src/assets/icon/weather/undefind.svg`
-  }
-}
+
 </script>
 <template>
   <div class="loaderbody">

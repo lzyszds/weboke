@@ -77,6 +77,10 @@ a {
   cursor: var(--linkCup);
 }
 
+li {
+  list-style: none;
+}
+
 .decoration {
   font-family: 'almama';
   color: #fff;
@@ -229,4 +233,12 @@ html.dark {
 
 #nprogress .bar {
   background: rgb(255, 0, 119) !important;
+}
+
+.themeCard {
+  border: 3px solid #000;
+  border-radius: 20px;
+  background-color: var(--themeColor);
+  padding: 6px;
+  font-family: 'dindin';
 }

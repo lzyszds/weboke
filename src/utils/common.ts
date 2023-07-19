@@ -1,8 +1,13 @@
 import http from '@/http/http'
 import { ElNotification } from 'element-plus'
 import dayjs from "dayjs";
+import { useDateFormat } from '@vueuse/core'
+import img from '@/assets/icon/weather/import'
+import { useStore } from '@/store/index';
+import { ipGetType, WeatherData } from '@/store/type'
+
 // 此函数获取一个数组并将其拆分为更小的块
-export function splitArray(array: any, size) {
+export const splitArray = (array: any, size) => {
   // 创建一个空数组以容纳较小的块
   let data: any[] = [];
   // 在原始阵列上循环
@@ -15,7 +20,7 @@ export function splitArray(array: any, size) {
 }
 
 //时间格式化为字符串 比如说前天 几天前，几小时前
-export function timeAgo(time) {
+export const timeAgo = (time) => {
   const t = dayjs().unix() - time // Y-m-d H:i:s
   let i = 60
   let h = i * 60
@@ -34,13 +39,17 @@ export function timeAgo(time) {
   return ([...mp].find(([n]) => n(t)).pop())(t) + '前'
 }
 
-interface ipGetType {
-  data: [],
-  status: string
+//将数据存进localStorage和pinia里
+export function setLocalStorage(key: string, value: any) {
+  localStorage.setItem(key, JSON.stringify(value))
+  const state = useStore();
+  state.setWeather(value)
 }
 
+
 //获取当前ip以及天气
-export function getIpWeather() {
+export const getIpWeather = (): Promise<WeatherData> => {
+
   let headers = {
     'Content-Type': 'multipart/form-data',
     'X-User-Token': 'iwKIaV2WP/9pLVldKr7qSFoeqAvBCO/n'
@@ -48,13 +57,75 @@ export function getIpWeather() {
   return new Promise((resolve, reject) => {
     http('get', '/getIp/info', headers).then((res: ipGetType) => {
       if (res.status = 'success') {
+        //将个人信息存入localStorage，避免每次刷新都要请求接口
+        setLocalStorage('weatherData', res.data)
         resolve(res.data)
       } else {
         reject(res.status)
       }
     });
   })
+
 }
+/*
+    避免当前使用的ip为国外ip 导致的获取不到ip
+    sougou的查询ip方法不支持国外ip
+  */
+// if (!cid) {
+//   console.warn('当前网络环境不支持获取天气信息(把梯子关了才行)')
+//   return `/src/assets/icon/weather/undefind.svg`
+// }
+
+export const getWeather = () => {
+  const state = useStore();
+  const data: WeatherData = state.weatherData
+  if (!data.weatherData) return
+  const formatted: any = useDateFormat(data.beijingTime, 'HH')
+  const isdark = formatted >= 19 || formatted <= 6
+  switch (data.weatherData.weather) {
+    case '晴':
+      return isdark ? img.NightSunny : img.Sunny
+    case '多云': case '少云':
+      return isdark ? img.NightCloudy : img.NightCloudy
+    case '晴间多云':
+      return isdark ? img.NightLessCloudy : img.Cloudy
+    case '阴':
+      return img.CloudyDay
+    case '阵雨':
+      return img.Shower
+    case '雷阵雨':
+      return img.ThundershowersSunny
+    case '雨夹雪':
+      return img.SleetRain
+    case '小雨': case '小雨-中雨': case '中雨': case '中雨-大雨':
+      return img.Rain
+    case '暴雨':
+      return img.HeavyRain
+    case '霾': case '中度霾': case '重度霾': case '严重霾': case '雾': case '浓雾': case '强浓雾': case '轻雾': case '大雾':
+      return img.Foggy
+    case '浮尘': case '强沙尘暴':
+      return img.Dust
+    case '冻雨':
+      return img.Sleet
+    case '雪':
+      return img.Snow
+    case '暴雪':
+      return img.Snowstorm
+    case '大雪':
+      return img.HeavySnow
+    case '扬沙':
+      return img.Sand
+    case '沙尘暴':
+      return img.Sandstorm
+    case '龙卷风':
+      return img.Tornado
+    case '有风': case '微风': case '和风': case '清风': case '强风/劲风': case '疾风': case '大风': case '烈风': case '风暴': case '狂爆风': case '飓风': case '热带风暴':
+      return img.Wind
+    default:
+      return `/src/assets/icon/weather/undefind.svg`
+  }
+}
+
 
 export function base64toBlob(dataurl) {
   // base64 转 二进制流(blob)
@@ -165,6 +236,7 @@ export const allFunction = {
   splitArray,//把一个数组拆分成几个数组
   timeAgo,//时间转换
   getIpWeather,//获取当前ip以及天气
+  getWeather,
   base64toBlob,//base64转二进制流
   getBase64,//二进制流转换为base64 格式。
   compressPic,//上传图片，图片太大，如何在前端实现图片压缩后上传

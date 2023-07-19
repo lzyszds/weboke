@@ -15,19 +15,11 @@
 // import Music from "./uiComponents/music/Music.vue";
 // import { defineAsyncComponent } from 'vue'
 import Loadinge from '@/uiComponents/loader/loading.vue'
-import { useStore } from '@/store/index';
 import { copyTip, getIpWeather } from '@/utils/common'
 // const Live2d = defineAsyncComponent(() => import('@/uiComponents/live2d/Live2d.vue'))
-
-
-const { $state: state } = useStore();
-const weather = getIpWeather() as any
-weather.then(res => {
-  //将个人信息存入localStorage，避免每次刷新都要请求接口
-  localStorage.setItem('nowWeatherData', JSON.stringify(res))
-})
-state.nowWeatherData = weather;
-
+// 获取当前天气
+getIpWeather()
+//复制提示
 copyTip()
 
 </script>

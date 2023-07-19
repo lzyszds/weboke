@@ -267,7 +267,7 @@
 
         & > textarea {
           width: 91.4% !important;
-          height: 172px !important;
+          height: 170px !important;
           padding: 10px 20px;
           font-family: 'dindin';
           font-size: 18px;
@@ -295,7 +295,7 @@
     & > .nameqq {
       .comment {
         font-family: 'dindin';
-        padding: 10px 10px 0;
+        // padding: 10px 10px 0;
 
         &::before,
         &::after {
@@ -413,7 +413,7 @@
 
   .affix-container {
     position: absolute;
-    top: 510px;
+    top: 495px;
     right: calc(50% - 554px - 270px);
     background-color: #fff;
     font-size: 16px;
@@ -426,13 +426,9 @@
     transition: 1s;
 
     .affix {
+      margin-top: 10px;
       position: sticky;
-      top: 60px;
-      border: 3px solid #000;
-      border-radius: 20px;
-      background-color: var(--themeColor);
-      padding: 6px;
-      font-family: 'dindin';
+      top: 340px;
 
       .affix_item {
         border-radius: 10px;
@@ -446,15 +442,17 @@
           font-weight: 600;
           color: #555;
           display: flex;
-          justify-content: center;
+          // justify-content: center;
+          padding-left: 10px;
           background-color: #ffe14d;
           border-radius: 10px;
           user-select: none;
-
-          svg {
+          cursor: var(--linkCup);
+          i {
             fill: #000;
             width: 30px !important;
             height: 30px;
+            font-size: 30px;
           }
 
           span {
