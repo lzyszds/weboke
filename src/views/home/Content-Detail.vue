@@ -26,16 +26,19 @@ const listComment = ref<any>(await http('get', '/adminGetApi/articleComment?aid=
 
 //评论上方的诗句请求
 const textbefore = ref<String>('寻找中...')
-try {
-  const result = await http('get', '/getIp/sentence') as any
-  textbefore.value = result.data.content
-} catch (e) {
-  console.log("请求频率上限：" + e + "两秒后重新请求")
-  setTimeout(async () => {
-    const result = await http('get', '/getIp/sentence') as any
-    textbefore.value = result.data.content
-  }, 2000)
-}
+setTimeout(() => {
+  try {
+    http('get', '/getIp/sentence').then((res: any) => {
+      textbefore.value = res.data.content
+    })
+  } catch (e) {
+    console.log("请求频率上限：" + e + "两秒后重新请求")
+    setTimeout(async () => {
+      const result = await http('get', '/getIp/sentence') as any
+      textbefore.value = result.data.content
+    }, 2000)
+  }
+}, 50);
 
 /* 组件内部设定组件加载完成返回
 返回后执行此方法来获取当前文章的目录 */
@@ -182,7 +185,7 @@ const comSubmit = () => {
   }
   http('post', '/adminPostApi/addComment', commentData).then(async (res: any) => {
     if (res.code == 200) {
-      tip(`评论成功,感谢你的评论！`, 200000)
+      tip(`评论成功,感谢你的评论！`, 2000)
       overloading.value = true
       listComment.value = await http('get', '/adminGetApi/articleComment?aid=' + aid) as any
       overloading.value = false
@@ -291,7 +294,7 @@ const onWheelfn = (e) => {
     <!-- 文章目录 -->
     <div class="affix-container" ref="affixElm" v-if="tocList.length != 0">
       <DeskInfo></DeskInfo>
-      <div class="affix themeCard">
+      <main class="affix themeCard">
         <div class="affix_item">
           <div class="affix-title" @click="toUp">
             <i class="iconfont icon-icon-taikong17"></i>
@@ -305,7 +308,7 @@ const onWheelfn = (e) => {
             </li>
           </ul>
         </div>
-      </div>
+      </main>
     </div>
     <!-- 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议 -->
     <footer class="post-footer center ">

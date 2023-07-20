@@ -3,7 +3,7 @@ import axios from 'axios'
 import { getCookie } from '@/utils/common'
 const instance = axios.create({
   baseURL: window.location.origin,
-  // timeout: 5000,
+  timeout: 5000,
   withCredentials: true,//表示跨域请求时是否需要使用凭证
 })
 // 响应拦截器

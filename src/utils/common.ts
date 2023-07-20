@@ -55,15 +55,19 @@ export const getIpWeather = (): Promise<WeatherData> => {
     'X-User-Token': 'iwKIaV2WP/9pLVldKr7qSFoeqAvBCO/n'
   }
   return new Promise((resolve, reject) => {
-    http('get', '/getIp/info', headers).then((res: ipGetType) => {
-      if (res.status = 'success') {
-        //将个人信息存入localStorage，避免每次刷新都要请求接口
-        setLocalStorage('weatherData', res.data)
-        resolve(res.data)
-      } else {
-        reject(res.status)
-      }
-    });
+    try {
+      http('get', '/getIp/info', headers).then((res: ipGetType) => {
+        if (res.status = 'success') {
+          //将个人信息存入localStorage，避免每次刷新都要请求接口
+          setLocalStorage('weatherData', res.data)
+          resolve(res.data)
+        } else {
+          reject(res.status)
+        }
+      });
+    } catch (e) {
+      allFunction.LNotification("网络连接出现故障 请稍后尝试")
+    }
   })
 
 }

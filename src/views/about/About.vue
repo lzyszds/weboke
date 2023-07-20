@@ -4,6 +4,7 @@ import http from '@/http/http'
 import { parps, headers } from './config_Github'
 import { onMounted, ref, nextTick, reactive, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router';
+import { ElPageHeader, ElButton, ElDescriptions } from "element-plus";
 import dayjs from 'dayjs';
 import { useEventListener } from '@vueuse/core';
 const router = useRouter();
@@ -102,17 +103,17 @@ onBeforeUnmount(() => {
               <div class="flex items-center">
                 <a href="https://github.com/lzyszds" target="_blank">
                   <el-button type="primary" class="purple">
-                    <lzyIcon width="30" font-size="20" name="icon-github" fill="#fff"></lzyIcon>
+                    <i class="iconfont icon-github" font-size="25"></i>
                   </el-button>
                 </a>
                 <a href="https://github.com/lzyszds" target="_blank">
                   <el-button type="primary" class="purple">
-                    <lzyIcon width="30" font-size="23" name="icon-youxiang" fill="#fff"></lzyIcon>
+                    <i class="iconfont icon-youxiang" font-size="25"></i>
                   </el-button>
                 </a>
                 <a href="https://github.com/lzyszds" target="_blank">
                   <el-button type="primary" class="purple">
-                    <lzyIcon width="30" font-size="20" name="icon-qq" fill="#fff"></lzyIcon>
+                    <i class="iconfont icon-qq" font-size="25"></i>
                   </el-button>
                 </a>
               </div>
@@ -274,46 +275,7 @@ onBeforeUnmount(() => {
 }
 
 
-@keyframes wobble-ver-right {
 
-  0% {
-    -webkit-transform: translateY(0) rotate(0);
-    transform: translateY(0) rotate(0);
-    -webkit-transform-origin: 50% 50%;
-    transform-origin: 50% 50%;
-  }
-
-  15% {
-    -webkit-transform: translateY(-5px) rotate(6deg);
-    transform: translateY(-5px) rotate(6deg);
-    border-radius: 6px 6px 15px 25px;
-  }
-
-  30% {
-    -webkit-transform: translateY(2px) rotate(-6deg);
-    transform: translateY(2px) rotate(-6deg);
-  }
-
-  45% {
-    -webkit-transform: translateY(-2px) rotate(3.6deg);
-    transform: translateY(-2px) rotate(3.6deg);
-  }
-
-  60% {
-    -webkit-transform: translateY(1px) rotate(-2.4deg);
-    transform: translateY(1px) rotate(-2.4deg);
-  }
-
-  75% {
-    -webkit-transform: translateY(-1px) rotate(1.2deg);
-    transform: translateY(-1px) rotate(1.2deg);
-  }
-
-  100% {
-    -webkit-transform: translateY(0) rotate(2.4deg);
-    transform: translateY(0) rotate(2.4deg);
-  }
-}
 
 .toTion-enter-active,
 .toTion-leave-active {
