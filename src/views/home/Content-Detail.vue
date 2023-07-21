@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import { onMounted, ref, reactive, getCurrentInstance, nextTick, } from 'vue'
+import { onMounted, ref, reactive, getCurrentInstance, nextTick, watch, } from 'vue'
 import { ElNotification, ElTag } from 'element-plus'
 import Maincontent from '@/components/Maincontent.vue';
 import DeskInfo from "@/components/DeskInfo.vue";
@@ -73,6 +73,7 @@ onMounted(async () => {
       element.innerHTML = element.getAttribute('data-line-number')
     });
   })
+  moveTo()
 })
 //处理时间戳转换成距离当前日期的时间（一天前，两天前）
 let setTimestamp = (time: string) => {
@@ -102,7 +103,21 @@ const information = reactive({
   comContent: '',
   nameError: false,
   emailError: false,
+  rangeIndex: 0,//头像的索引
 })
+//获取本地存储的评论人信息 如果有则赋值
+if (localStorage.getItem('information')) {
+  const data = JSON.parse(localStorage.getItem('information') as string)
+  Object.keys(data).forEach((key) => {
+    information[key] = data[key]
+  })
+}
+
+//监听评论人信息的变化，如果有变化则存储到本地
+watch(information, () => {
+  localStorage.setItem('information', JSON.stringify(information))
+}, { deep: true })
+
 
 const replyArr = reactive({
   replyId: <number[][]>[],//回复评论初始变量
@@ -121,6 +136,7 @@ function setReplyStatus() {
   });
 }
 setReplyStatus()
+
 //评论人个人信息验证
 const comInfo = () => {
   ElNotification.closeAll()
@@ -176,9 +192,10 @@ const comSubmit = () => {
     email: information.email, //评论人邮箱
     webSite: information.webSite, //评论人网站
     content: information.comContent, //评论内容
-    imgIndex: rangeIndex.value, //评论人头像
+    imgIndex: information.rangeIndex, //评论人头像
     userIp: '', //用户ip
   }
+  //发送请求,提交评论
   http('post', '/adminPostApi/addComment', commentData).then(async (res: any) => {
     if (res.code == 200) {
       tip(`评论成功,感谢你的评论！`, 2000)
@@ -237,24 +254,26 @@ function handleReplyData(replyId) {
   });
 }
 
-//当前图片的索引
-var rangeIndex = ref<number>(0)
-//评论头像更换事件
-function setRange(clickIndex: number) {
+//选择头像时候的移动哐哐的事件
+const moveTo = () => {
   const defaultval = 60 //每个图片距离的宽度
   //获取父元素
   const selcetRound = document.querySelector('#selcetRound') as HTMLSpanElement;
-
-  rangeIndex.value = clickIndex
-  const index = rangeIndex.value
-  console.log(index);
+  selcetRound.style.transform = `translateX(${defaultval * information.rangeIndex}px)`
+}
+//评论头像更换事件
+function setRange(clickIndex: number) {
+  information.rangeIndex = clickIndex
+  const index = information.rangeIndex
   if (index >= 0 && index <= 11) {
-    selcetRound.style.transform = `translateX(${defaultval * index}px)`
+    moveTo()
   } else {
-    if (index <= 0) rangeIndex.value = 0;
-    if (index >= 11) rangeIndex.value = 11;
+    if (index <= 0) information.rangeIndex = 0;
+    if (index >= 11) information.rangeIndex = 11;
   }
 }
+
+//滚轮事件 用于选择头像
 const wheel = ref<HTMLDivElement>()
 let scrollx = 0
 const onWheelfn = (e) => {
@@ -264,6 +283,7 @@ const onWheelfn = (e) => {
   wheel.value!.scrollTo(scrollx, 0)
 }
 
+//点击目录跳转到对应的位置，并且抖动
 const toScrollY = async (id: string) => {
   const el = document.querySelector(id) as HTMLElement
   const top = el.offsetTop
@@ -297,7 +317,7 @@ const toScrollY = async (id: string) => {
     <!-- 文章内容 -->
     <Maincontent :main="dataDet.main" @update="updateCop"></Maincontent>
     <!-- 文章目录 -->
-    <div class="affix-container" ref="affixElm" v-if="tocList.length != 0">
+    <div class="affix-container animate__bounceInDown" ref="affixElm" v-if="tocList.length != 0">
       <DeskInfo></DeskInfo>
       <main class="affix themeCard">
         <div class="affix_item">

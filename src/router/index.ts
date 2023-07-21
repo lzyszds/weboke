@@ -61,7 +61,6 @@ const router = createRouter({
 })
 // 前置钩子
 router.beforeEach(async (to: any, form, next) => {
-    console.log(to, form);
     if (to.hash === '') {
         document.querySelector('.navbarContent')?.classList.remove('navbarContent100')
         document.querySelector('body')!.classList.add('loading')

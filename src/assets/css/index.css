@@ -176,13 +176,8 @@ body::-webkit-scrollbar-track {
   background-color: rgb(245, 245, 245);
 }
 
-
 ::-webkit-scrollbar-thumb {
   background-color: var(--themeColor) !important;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: var(--themeColor);
   border-radius: 20px;
   border: 1px solid rgb(245, 245, 245);
   transition: 1s all;

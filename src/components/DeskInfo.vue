@@ -25,7 +25,7 @@ const convertPM25 = (pm25: number) => {
 </script>
 
 <template>
-  <main class="themeCard deskInfo">
+  <main class="themeCard deskInfo ">
     <section class="cardinter">
       <div class="geoArea">
         <lzyIcon name="ep:location-information"></lzyIcon>
