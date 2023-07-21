@@ -83,9 +83,22 @@ export const getIpWeather = (): Promise<WeatherData> => {
 export const getWeather = () => {
   const state = useStore();
   const data: WeatherData = state.weatherData
-  if (!data.weatherData) return
+  if (!data.weatherData) {
+    state.weatherData.weatherData = {
+      temperature: 0,
+      weather: "未知",
+      windDirection: "未知",
+      windPower: "未知",
+      visibility: "未知",
+      rainfall: "未知",
+      humidity: "未知",
+      pm25: 0,
+      updateTime: "未知",
+    }
+  }
   const formatted: any = useDateFormat(data.beijingTime, 'HH')
   const isdark = formatted >= 19 || formatted <= 6
+  console.log(data.weatherData.weather);
   switch (data.weatherData.weather) {
     case '晴':
       return isdark ? img.NightSunny : img.Sunny

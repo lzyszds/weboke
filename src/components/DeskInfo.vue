@@ -21,7 +21,7 @@ const convertPM25 = (pm25: number) => {
     return "严重污染";
   }
 };
-
+const api = import.meta.env.VITE_API_BASE_URL + '/public/img/10.svg'
 </script>
 
 <template>
@@ -29,15 +29,16 @@ const convertPM25 = (pm25: number) => {
     <section class="cardinter">
       <div class="geoArea">
         <lzyIcon name="ep:location-information"></lzyIcon>
-        {{ region }} <span> {{ ip }}</span>
+        {{ region == '0|0' ? '中国以外' : region }} <span> {{ ip }}</span>
       </div>
     </section>
     <section class="cardinter">
 
       <div class="gridlist">
-        <h2>
-          <img :src="getWeather()" alt="">
-          <span class="temperature">{{ weatherData.temperature }}°C</span>
+        <h2 :style="weatherData.temperature !== 0 ? '' : 'margin:15px 0px 0 20px'">
+          <img :src="getWeather() || api" alt="">
+          <span v-if="weatherData.temperature !== 0" class="temperature">{{
+            weatherData.temperature }}°C</span>
         </h2>
         <p>
           <span><i class="iconfont icon-icon-taikong4"></i>：{{ weatherData.weather }}</span>

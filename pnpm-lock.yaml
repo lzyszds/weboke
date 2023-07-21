@@ -70,6 +70,9 @@ dependencies:
   pinia:
     specifier: ^2.1.4
     version: 2.1.4(typescript@4.9.5)(vue@3.3.4)
+  vite-plugin-env-compatible:
+    specifier: ^1.1.1
+    version: 1.1.1
   vue:
     specifier: ^3.3.4
     version: 3.3.4
@@ -7192,6 +7195,10 @@ packages:
   /vfonts@0.1.0:
     resolution: {integrity: sha512-vQBcvntBlnAPonAkGNM8iJ9NxE3PucA+V2W95xiN75YJKxirLJvOws2kEyOEO45T4N+YTbQOCR2m77Y05pfVhQ==}
     dev: true
+
+  /vite-plugin-env-compatible@1.1.1:
+    resolution: {integrity: sha512-4lqhBWhOzP+SaCPoCVdmpM5cXzjKQV5jgFauxea488oOeElXo/kw6bXkMIooZhrh9q7gclTl8en6N9NmnqUwRQ==}
+    dev: false
 
   /vite-plugin-prismjs@0.0.8(prismjs@1.29.0):
     resolution: {integrity: sha512-mBPPMS/hwVUArdqCtp/oajZT7iq1qwJDDCciNZ3R5+Q5tQUuUHXtDKuZHYnklPLElNbENf2FyuOtC4FrgxQRAA==}

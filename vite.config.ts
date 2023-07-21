@@ -1,7 +1,9 @@
-import { defineConfig, } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import path from 'path'
 import prismjs from 'vite-plugin-prismjs';
+import envCompatible from 'vite-plugin-env-compatible';
+
 
 const baseUrl = {
   development: './',
@@ -11,11 +13,11 @@ const baseUrl = {
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode }): any => {
+  console.log(`lzy  command, mode:`, command, mode)
   // 根据当前工作目录中的 `mode` 加载 .env 文件
   // 设置第三个参数为 '' 来加载所有环境变量，而不管是否有 `VITE_` 前缀。
-  // const env = loadEnv(mode, process.cwd(), '')
-  let _baseUrl = 'http://localhost'
-  if (mode == 'lzym') _baseUrl = 'http://192.168.0.200'
+  const env = loadEnv(mode, process.cwd(), '')
+  let _baseUrl = env.VITE_API_BASE_URL
   return {
     // 在 vite.config.ts 中添加 envDir 属性指定环境文件目录为 env：
     envDir: path.resolve(__dirname, './env'),
@@ -24,6 +26,7 @@ export default defineConfig(({ command, mode }): any => {
       prismjs({
         languages: ['json', 'js', 'ts', 'css', 'less', 'html', 'markdown', 'sql', 'typescript', 'vim'],
       }),
+      envCompatible(),
     ],
     base: "./",
     resolve: {
@@ -65,17 +68,17 @@ export default defineConfig(({ command, mode }): any => {
           rewrite: path => path.replace(/^\/mapApi/, '')
         },
         '/adminGetApi': {
-          target: _baseUrl + ':8089/overtApis/',//这里是域名，不是完整地址
+          target: _baseUrl + '/overtApis/',//这里是域名，不是完整地址
           changeOrigin: true,//是否跨域
           rewrite: path => path.replace(/^\/adminGetApi/, '')
         },
         '/adminPostApi': {
-          target: _baseUrl + ':8089/privateApis/',//这里是域名，不是完整地址
+          target: _baseUrl + '/privateApis/',//这里是域名，不是完整地址
           changeOrigin: true,//是否跨域
           rewrite: path => path.replace(/^\/adminPostApi/, '')
         },
         '/adminStatic': {
-          target: _baseUrl + ':8089/public',//这里是域名，不是完整地址
+          target: _baseUrl + '/public',//这里是域名，不是完整地址
           changeOrigin: true,//是否跨域
           rewrite: path => path.replace(/^\/adminStatic/, '')
         },

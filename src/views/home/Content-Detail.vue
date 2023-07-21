@@ -1,8 +1,7 @@
 <script setup lang='ts'>
-import { onMounted, ref, reactive, getCurrentInstance, nextTick, watch, } from 'vue'
+import { onMounted, ref, reactive, getCurrentInstance, nextTick, watch, defineAsyncComponent } from 'vue'
 import { ElNotification } from 'element-plus'
 import Maincontent from '@/components/Maincontent.vue';
-import DeskInfo from "@/components/DeskInfo.vue";
 // import { useEventListener } from '@vueuse/core'
 import { useRoute } from "vue-router";
 import http from '@/http/http';
@@ -10,6 +9,9 @@ import comImg from '@/assets/icon/comments/import'
 import { commentsType } from './Detailtype'
 import Reply from '@/views/home/Reply.vue'
 import { allFunction, awaitTime, scrollTo } from '@/utils/common'
+
+const DeskInfo = defineAsyncComponent(() => import("@/components/DeskInfo.vue"))
+
 
 const overloading = ref(false) //重载评论组件，解决评论后评论组件不刷新的问题
 
