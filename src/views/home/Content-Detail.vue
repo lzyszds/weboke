@@ -1,6 +1,6 @@
 <script setup lang='ts'>
 import { onMounted, ref, reactive, getCurrentInstance, nextTick, watch, } from 'vue'
-import { ElNotification, ElTag } from 'element-plus'
+import { ElNotification } from 'element-plus'
 import Maincontent from '@/components/Maincontent.vue';
 import DeskInfo from "@/components/DeskInfo.vue";
 // import { useEventListener } from '@vueuse/core'
@@ -308,10 +308,10 @@ const toScrollY = async (id: string) => {
     </div>
     <!-- 文章类型 -->
     <div class="detBreadcrumb center">
-      <div class="boxType">
-        <el-tag class="ml-1" type="info" v-for="(item, index) in dataDet.wtype ? dataDet.wtype.split(',') : []"
-          :key="index">{{ item }}
-        </el-tag>
+      <div class="tags">
+        <span class="mr-1 taglzy" v-for="(item, index) in dataDet.wtype ? dataDet.wtype.split(',') : []" :key="index">{{
+          item }}
+        </span>
       </div>
     </div>
     <!-- 文章内容 -->
@@ -335,7 +335,7 @@ const toScrollY = async (id: string) => {
       </main>
     </div>
     <!-- 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议 -->
-    <footer class="post-footer center ">
+    <footer v-transition="'tosiTion'" class="oldtosiTion post-footer center ">
       <div class="tool">
         <i class="iconfont icon-icon-taikong20" fill="#000"></i>
         <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享署名-非商业性使用-相同方式共享 4.0
@@ -343,7 +343,7 @@ const toScrollY = async (id: string) => {
       </div>
     </footer>
     <!-- 发布评论 -->
-    <div class="publish center">
+    <div v-transition="'tosiTion'" class="oldtosiTion publish center">
       <div class="borderw">
         <div class="comment ">
           <span> {{ replyArr.replyName }} </span>
@@ -385,7 +385,7 @@ const toScrollY = async (id: string) => {
       </div>
     </div>
     <!-- 评论界面 -->
-    <div class="borderw center">
+    <div v-transition="'tosiTion'" class="oldtosiTion borderw center">
       <div class="before">{{ textbefore }}</div>
       <div class="comment">
         <h5>
@@ -404,6 +404,16 @@ const toScrollY = async (id: string) => {
 <style lang="less" scoped>
 @import url('@/assets/css/contentDetail.less');
 
+.oldtosiTion {
+  opacity: 0;
+  transition: .5s ease-in-out;
+  transform: translate(0, 20px);
+}
+
+.tosiTion {
+  opacity: 1 !important;
+  transform: translate(0) !important;
+}
 
 .dark {
   .imgtop {

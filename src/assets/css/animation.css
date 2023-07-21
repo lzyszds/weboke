@@ -83,3 +83,17 @@
      opacity: 1;
    }
  }
+
+ @keyframes translateYopacity {
+   0% {
+     /* -webkit-transform: translateZ(0) translateY(0) translateX(0); */
+     opacity: 0;
+     translate: 0 30px;
+   }
+
+   100% {
+     /* -webkit-transform: translateZ(600px) translateY(300px) translateX(-400px); */
+     opacity: 1;
+     translate: 0 0px;
+   }
+ }
