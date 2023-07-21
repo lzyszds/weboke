@@ -14,7 +14,6 @@ const data = reactive({
     { name: "关于", path: '/about' },
     { name: "相册", path: '/photo' },
     { name: "疫情", path: '/episit' },
-    { name: "登陆", path: '/login' },
   ],
   //选择器位置
   selectorpos: {

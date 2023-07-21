@@ -28,16 +28,15 @@ const routes = [
     {
         path: '/about',
         name: 'about',
-        component: () => import('@/views/about/About.vue')
+        component: () => import('@/views/about/About.vue'),
+        meta: {
+            keepAlive: false  // keepAlive false 不缓存点击重新加载数据
+        }
     },
     {
         path: '/photo',
         name: 'photo',
         component: () => import('@/views/photo/Photo.vue')
-    }, {
-        path: '/login',
-        name: 'login',
-        component: () => import('@/views/login/index.vue')
     }, {
         path: '/episit',
         name: 'Episit',
@@ -61,21 +60,18 @@ const router = createRouter({
     }
 })
 // 前置钩子
-router.beforeEach(async (to: any) => {
-    /* 拦截 正则匹配拦截后台管理页面userAdmin的路由 */
-    if (to.matched.some((record: any) => record.path.indexOf('userAdmin') != -1)) {
-        const token = localStorage.getItem('lzy_token')
-        if (!token) {
-            return '/login'
-        }
-    }
-
+router.beforeEach(async (to: any, form, next) => {
+    console.log(to, form);
     if (to.hash === '') {
-        if (to.href.indexOf('userAdmin') != -1)
-            return
         document.querySelector('.navbarContent')?.classList.remove('navbarContent100')
         document.querySelector('body')!.classList.add('loading')
     }
+    //使用promise延迟进入next()
+    await new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve(next())
+        }, 500)
+    })
 })
 
 

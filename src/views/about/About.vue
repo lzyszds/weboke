@@ -4,9 +4,10 @@ import http from '@/http/http'
 import { parps, headers } from './config_Github'
 import { onMounted, ref, nextTick, reactive, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router';
-import { ElPageHeader, ElButton, ElDescriptions } from "element-plus";
+import { ElPageHeader, ElButton, ElDescriptions, ElDescriptionsItem, ElTooltip } from "element-plus";
 import dayjs from 'dayjs';
 import { useEventListener } from '@vueuse/core';
+import LzyIcon from '@/components/LzyIcon.vue';
 const router = useRouter();
 //实现github贡献图参考
 //https://stackoverflow.com/questions/18262288/finding-total-contributions-of-a-user-from-github-api
@@ -19,12 +20,27 @@ const svgTip = reactive({
   count: 0, //当前格子的提交次数
 })
 
+//技能图标
+const skills = {
+  front: ['logos:typescript-icon', 'logos:vue', 'logos:vueuse', 'logos:vitejs', 'logos:webpack', 'logos:react',
+    'logos:electron', 'logos:tauri', 'logos:jquery', 'fa-brands:weixin', 'logos:leaflet', 'logos:greensock-icon', 'logos:element', 'logos:pinia', 'logos:bootstrap', 'logos:bun', 'logos:css-3'],
+  rear: ['logos:nodejs-icon', 'logos:spring-icon', 'logos:java', 'logos:mysql', 'logos:postman-icon',
+    'logos:apache',],
+  other: ['logos:git-icon', 'logos:github-icon', 'logos:github-copilot', 'logos:visual-studio-code', 'logos:webstorm', 'logos:intellij-idea',
+    'logos:adobe-photoshop', 'logos:linux-tux', 'logos:markdown', 'logos:openai-icon', 'logos:wordpress-icon',
+    'logos:typeform-icon'
+  ]
+}
+const showTip = (val) => {
+  return val.split(':')[1].replace('-icon', '')
+}
+
 //相关经历的初始动画
 const toTion = ref<boolean[]>([false, false, false, false])
 toTion.value.forEach((_item, index) => {
   setTimeout(() => {
     toTion.value[index] = true
-  }, index * 500 + 500)
+  }, index * 500 + 1000)
 })
 
 //github贡献图 获取逻辑、数据处理，具体实现svg绘制在template中循环绘制
@@ -50,7 +66,7 @@ onMounted(() => {
     });
     month.value = now
     nextTick(() => {
-      const rect = document.querySelectorAll('.rectangle')
+      const rect = document.querySelectorAll('.rectangle') as NodeListOf<SVGRectElement>
       const svgTipDom = document.querySelector('#svgTip') as HTMLDivElement
       rect.forEach((item) => {
         //鼠标移入事件 显示tip
@@ -65,6 +81,7 @@ onMounted(() => {
         useEventListener(item, 'mouseleave', () => {
           svgTipDom.style.opacity = '0'
         })
+        item.style.setProperty('--delay', `${Math.random() * 2}s`)
       })
 
     })
@@ -87,6 +104,7 @@ const onBack = () => {
 onBeforeUnmount(() => {
   data.value = []
 })
+
 </script>
 
 <template>
@@ -120,11 +138,28 @@ onBeforeUnmount(() => {
             </template>
 
             <el-descriptions :column="2" class="mt-4">
-              <el-descriptions-item label="Username">lzyszds</el-descriptions-item>
-              <el-descriptions-item label="Place">南宁</el-descriptions-item>
-              <el-descriptions-item label="Occupation"> 学生 </el-descriptions-item>
-              <el-descriptions-item label="Education"> 本科 </el-descriptions-item>
-              <el-descriptions-item label="Technology"> Javascript、Node、Vue、Ts、React？ </el-descriptions-item>
+              <el-descriptions-item label="姓名">lzyszds</el-descriptions-item>
+              <el-descriptions-item label="所在地">南宁</el-descriptions-item>
+              <el-descriptions-item label="职业"> 学生 </el-descriptions-item>
+              <el-descriptions-item label="学历"> 本科 </el-descriptions-item>
+              <el-descriptions-item label="前端技术" class-name="skills">
+                <el-tooltip v-for="item of skills.front" class="box-item" effect="dark" :content="showTip(item)"
+                  placement="top">
+                  <LzyIcon :name="item" />
+                </el-tooltip>
+              </el-descriptions-item>
+              <el-descriptions-item label="后端技术" class-name="skills">
+                <el-tooltip v-for="item of skills.rear" class="box-item" effect="dark" :content="showTip(item)"
+                  placement="top">
+                  <LzyIcon :name="item" />
+                </el-tooltip>
+              </el-descriptions-item>
+              <el-descriptions-item label="其他" class-name="skills">
+                <el-tooltip v-for="item of skills.other" class="box-item" effect="dark" :content="showTip(item)"
+                  placement="top">
+                  <LzyIcon :name="item" />
+                </el-tooltip>
+              </el-descriptions-item>
             </el-descriptions>
             <p class="describe"><i class="fa fa-bookmark-o"></i> 相关经历：</p>
             <ul>
@@ -143,8 +178,6 @@ onBeforeUnmount(() => {
             </ul>
           </el-page-header>
         </div>
-
-
       </div>
       <div class="wave">
         <text>{{ totalCont }} contributions in the last year</text>
@@ -200,9 +233,8 @@ onBeforeUnmount(() => {
     color: var(--themeColor);
 
     .items-center {
-      .purple:hover {
-        animation: wobble-ver-right 0.8s both;
-      }
+      animation: flipInY 1s ease-in-out 1;
+      animation-delay: 1s;
 
       a {
         margin-left: 10px;
@@ -210,7 +242,7 @@ onBeforeUnmount(() => {
     }
 
     .mt-4 {
-      margin-top: 20px;
+      margin-top: 10px;
       font-family: 'almama';
     }
 
@@ -224,7 +256,28 @@ onBeforeUnmount(() => {
     ul {
       padding-left: 25px;
       color: #000;
-      font-size: clamp(0.5rem, 1vw, 1.9rem)
+      margin-top: 5px;
+      font-size: clamp(0.5rem, 1vw, 1.9rem);
+
+      li {
+        list-style: circle;
+      }
+    }
+
+    :deep(.el-descriptions__cell) {
+      padding: 0;
+      font-size: 16px;
+      height: 35px;
+    }
+
+    :deep(.skills) {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--themeColor);
+
+      svg {
+        margin-right: 5px;
+      }
     }
   }
 
@@ -239,7 +292,10 @@ onBeforeUnmount(() => {
     margin: 0 auto;
     user-select: none;
 
-
+    text {
+      display: block;
+      text-align: right;
+    }
   }
 }
 
@@ -287,6 +343,13 @@ onBeforeUnmount(() => {
   opacity: 0;
   transform: translateX(-30px);
 
+}
+
+.rectangle {
+  transition: all .3s;
+  animation: fadeInUpBig var(--delay) ease-in-out 1;
+  // animation-delay: 1s;
+  cursor: pointer;
 }
 
 @media screen and (max-width: 768px) {

@@ -235,12 +235,23 @@ export const scrollTo = (x: number, y: number) => {
   window.scrollTo(x, y)
 }
 
+/* 同步延时函数 */
+export const awaitTime = (fn: Function, time: number | string = 1000) => {
+  const tense = typeof time === 'string' ? parseInt(time) : time
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      fn()
+      resolve("成功")
+    }, tense)
+  })
+}
+
 
 export const allFunction = {
   splitArray,//把一个数组拆分成几个数组
   timeAgo,//时间转换
   getIpWeather,//获取当前ip以及天气
-  getWeather,
+  getWeather, //获取当前天气图标
   base64toBlob,//base64转二进制流
   getBase64,//二进制流转换为base64 格式。
   compressPic,//上传图片，图片太大，如何在前端实现图片压缩后上传
@@ -250,4 +261,5 @@ export const allFunction = {
   setCookie,//设置cookie
   unique,//数组对象去重（区别单数组以及数组中嵌套一层对象）
   scrollTo,//页面滚动到指定位置XY轴
+  awaitTime,//延迟函数
 }

@@ -2,7 +2,7 @@
 
 <script setup lang='ts'>
 import { onMounted, getCurrentInstance } from 'vue'
-import { ElMessage, ElNotification } from 'element-plus'
+import { ElNotification } from 'element-plus'
 import { useEventListener } from '@vueuse/core';
 const { proxy } = getCurrentInstance() as any
 const props = defineProps({
@@ -128,16 +128,16 @@ ol .dark ol {
 }
 
 /* 解决问题，让a标签跳转至id时，可以迁出顶部状态栏的位置 */
-.main :deep(h1)[id*=toc-head]:before,
-.main :deep(h2)[id*=toc-head]:before,
-.main :deep(h3)[id*=toc-head]:before,
-.main :deep(h4)[id*=toc-head]:before,
-.main :deep(h5)[id*=toc-head]:before,
-.main :deep(h6)[id*=toc-head]:before {
-  display: block;
-  content: " ";
-  height: 60px;
-  margin-top: -60px;
-  visibility: hidden;
-}
+// .main :deep(h1)[id*=toc-head]:before,
+// .main :deep(h2)[id*=toc-head]:before,
+// .main :deep(h3)[id*=toc-head]:before,
+// .main :deep(h4)[id*=toc-head]:before,
+// .main :deep(h5)[id*=toc-head]:before,
+// .main :deep(h6)[id*=toc-head]:before {
+//   display: block;
+//   content: " ";
+//   height: 60px;
+//   margin-top: -60px;
+//   visibility: hidden;
+// }
 </style>

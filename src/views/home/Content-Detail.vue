@@ -9,7 +9,7 @@ import http from '@/http/http';
 import comImg from '@/assets/icon/comments/import'
 import { commentsType } from './Detailtype'
 import Reply from '@/views/home/Reply.vue'
-import { allFunction } from '@/utils/common'
+import { allFunction, awaitTime } from '@/utils/common'
 
 const overloading = ref(false) //重载评论组件，解决评论后评论组件不刷新的问题
 
@@ -43,7 +43,7 @@ setTimeout(() => {
 /* 组件内部设定组件加载完成返回
 返回后执行此方法来获取当前文章的目录 */
 const updateCop = async () => {
-
+  tocList.value = []
   //获取当前文章的索引目录
   let toc = document.querySelectorAll('.main h2,.main h3,.main h4') as any;
   toc.forEach((element: any) => {
@@ -268,6 +268,15 @@ const onWheelfn = (e) => {
   wheel.value!.scrollTo(scrollx, 0)
 }
 
+const toScrollY = async (id: string) => {
+  const el = document.querySelector(id) as HTMLElement
+  const top = el.offsetTop
+  window.scrollTo({ top: top + 200, behavior: 'smooth' })
+  el.classList.add('animate__shakeX')
+  await awaitTime(() => {
+    el.classList.remove('animate__shakeX')
+  }, 1000)
+}
 
 </script>
 
@@ -298,13 +307,12 @@ const onWheelfn = (e) => {
         <div class="affix_item">
           <div class="affix-title" @click="toUp">
             <i class="iconfont icon-icon-taikong17"></i>
-
             <span>目录</span>
           </div>
           <ul class="affix-list">
             <li v-for="item in tocList" :class="tocACindex == item.id ? 'active ' + item.nodeName : '' + item.nodeName"
               :key="item.id">
-              <a :href="item.id">{{ item.title }}</a>
+              <a @click="toScrollY(item.id)">{{ item.title }}</a>
             </li>
           </ul>
         </div>
