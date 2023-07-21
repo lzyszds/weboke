@@ -9,7 +9,7 @@ import http from '@/http/http';
 import comImg from '@/assets/icon/comments/import'
 import { commentsType } from './Detailtype'
 import Reply from '@/views/home/Reply.vue'
-import { allFunction, awaitTime } from '@/utils/common'
+import { allFunction, awaitTime, scrollTo } from '@/utils/common'
 
 const overloading = ref(false) //重载评论组件，解决评论后评论组件不刷新的问题
 
@@ -93,10 +93,6 @@ let setTimestamp = (time: string) => {
 //   })
 // }
 
-//处理目录小火箭点击事件 升到最顶部
-const toUp = () => {
-  window.scrollTo({ top: 0, behavior: 'smooth' })
-}
 
 //评论人个人信息
 const information = reactive({
@@ -305,7 +301,7 @@ const toScrollY = async (id: string) => {
       <DeskInfo></DeskInfo>
       <main class="affix themeCard">
         <div class="affix_item">
-          <div class="affix-title" @click="toUp">
+          <div class="affix-title" @click="scrollTo(0, 0)">
             <i class="iconfont icon-icon-taikong17"></i>
             <span>目录</span>
           </div>

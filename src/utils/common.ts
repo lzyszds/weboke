@@ -232,7 +232,7 @@ export const unique = (arr: any[], key?: string) => {
 
 /* 页面滚动到指定位置XY轴 */
 export const scrollTo = (x: number, y: number) => {
-  window.scrollTo(x, y)
+  window.scrollTo({ left: x, top: y, behavior: 'smooth' })
 }
 
 /* 同步延时函数 */
