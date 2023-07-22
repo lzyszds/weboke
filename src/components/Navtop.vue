@@ -89,6 +89,8 @@ const tipBackfn = (val) => {
     data.webHeadTitle = '返回顶部'
   }
 }
+const URL = import.meta.env.VITE_BASE_HTTP
+
 </script>
 <!-- 顶部导航栏 -->
 <template>
@@ -96,7 +98,7 @@ const tipBackfn = (val) => {
     <div class="navConChild">
       <div class="navbar-brand navbar-logo">
         <a href="#">
-          <img width="80" src="http://localhost:8089/public/img/lzjyWhite.png" alt="" />
+          <img width="80" :src="URL + '/public/img/lzjyWhite.png'" alt="" />
           <svg class="logoSvg" viewBox="0 0 400 200">
             <text x="0" y="70%" id="timelinetext"> Jz </text>
           </svg>
@@ -307,7 +309,7 @@ body {
 
 
 #timelinetext {
-  font-family: 'firaCode';
+  font-family: 'dindin';
 }
 
 .dark .navbarContent.navbarContent100 {

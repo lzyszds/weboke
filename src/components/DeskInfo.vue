@@ -21,7 +21,7 @@ const convertPM25 = (pm25: number) => {
     return "严重污染";
   }
 };
-const api = import.meta.env.VITE_API_BASE_URL + '/public/img/10.svg'
+const api = import.meta.env.VITE_BASE_URL + '/public/img/10.svg'
 </script>
 
 <template>
@@ -137,6 +137,8 @@ const api = import.meta.env.VITE_API_BASE_URL + '/public/img/10.svg'
       gap: 5px;
       margin-top: 10px;
       text-align: center;
+      font-family: '微软雅黑';
+      text-shadow: 1px 1px 1px #000;
 
       span.tag {
         padding: 3px 10px;

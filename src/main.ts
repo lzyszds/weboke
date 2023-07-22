@@ -30,4 +30,26 @@ app.use(router)
 app.use(pinia)
 app.use(VueMarkdownEditor);
 
+// 动态字体生成style
+const style = document.createElement('style')
+style.innerHTML = `
+  @font-face {
+    font-family: 'dindin';
+    src: url('${import.meta.env.VITE_BASE_URL}/public/font/dist/DingTalk_JinBuTi_Regular.woff');
+  }
+  @font-face {
+    font-family: 'black-Magic';
+    src: url('${import.meta.env.VITE_BASE_URL}/public/font/dist/Black-Magic.ttf');
+  }
+  @font-face {
+    font-family: 'firaCode';
+    src: url('${import.meta.env.VITE_BASE_URL}/public/font/dist/FiraCode.ttf');
+  }
+  `
+// @font-face {
+//   font - family: 'almama';
+//   src: url('${import.meta.env.VITE_BASE_URL}/public/font/dist/AlimamaShuHeiTi-Bold.woff');
+// }
+document.head.appendChild(style)
+
 app.mount('#app')

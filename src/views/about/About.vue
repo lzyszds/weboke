@@ -1,7 +1,6 @@
 <script setup lang='ts'>
 import TxtDeformation from '@/uiComponents/txtDeformation/Index.vue'
 import http from '@/http/http'
-import { parps, headers } from './config_Github'
 import { onMounted, ref, nextTick, reactive, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router';
 import { ElPageHeader, ElButton, ElDescriptions, ElDescriptionsItem, ElTooltip } from "element-plus";
@@ -9,6 +8,8 @@ import dayjs from 'dayjs';
 import { useEventListener } from '@vueuse/core';
 import LzyIcon from '@/components/LzyIcon.vue';
 const router = useRouter();
+const api = import.meta.env.VITE_BASE_URL
+
 //实现github贡献图参考
 //https://stackoverflow.com/questions/18262288/finding-total-contributions-of-a-user-from-github-api
 const totalCont = ref(0)
@@ -47,7 +48,7 @@ toTion.value.forEach((_item, index) => {
 const data = ref(<any>[])
 const month = ref(<any>[])
 onMounted(() => {
-  http('post', '/github', parps, headers).then((res: any) => {
+  http('get', api + '/proxyApis/github').then((res: any) => {
     const { contributionsCollection } = res.data.user
     const { weeks, totalContributions } = contributionsCollection.contributionCalendar
     // handleData(weeks)
@@ -243,7 +244,7 @@ onBeforeUnmount(() => {
 
     .mt-4 {
       margin-top: 10px;
-      font-family: 'almama';
+      font-family: 'dindin';
     }
 
     .describe {

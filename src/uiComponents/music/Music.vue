@@ -496,7 +496,7 @@ watch(route, (newVal) => {
           font-size: 1.4rem;
           padding: 5px 5px;
           overflow: hidden;
-          font-family: 'almama';
+          font-family: 'dindin';
 
           &:nth-child(1) {
             width: 70%;
@@ -636,7 +636,7 @@ watch(route, (newVal) => {
     bottom: 20px;
     text-align: center;
     font-size: 1.5rem;
-    font-family: "almama";
+    font-family: "dindin";
     user-select: none;
     pointer-events: none;
 

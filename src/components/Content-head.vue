@@ -54,7 +54,7 @@ onMounted(() => {
 </script>
 <style scoped>
 .head {
-  font-family: "almama";
+  font-family: "dindin";
 }
 
 .magic {

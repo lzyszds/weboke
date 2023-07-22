@@ -37,11 +37,12 @@ const routes = [
         path: '/photo',
         name: 'photo',
         component: () => import('@/views/photo/Photo.vue')
-    }, {
-        path: '/episit',
-        name: 'Episit',
-        component: () => import('@/views/episit/index.vue')
     },
+    // {
+    //     path: '/episit',
+    //     name: 'Episit',
+    //     component: () => import('@/views/episit/index.vue')
+    // },
     {
         path: "/:catchAll(.*)",
         name: 'undefind404',
@@ -55,7 +56,7 @@ const router = createRouter({
     scrollBehavior(to, from, savedPosition) { // 始终滚动到顶部
         setTimeout(() => {
             document.querySelector('body')!.classList.remove('loading')
-        }, 1000)
+        }, 500)
         return { top: 0 }
     }
 })

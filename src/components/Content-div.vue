@@ -22,10 +22,12 @@ interface Props {
     data: Data,
     index: number,
 }
+const api = import.meta.env.VITE_BASE_URL
+
 const props = defineProps<Props>();
 const wtype = props.data.wtype.split(',')
 const data = ref<Data>(props.data)
-
+data.value.coverImg = api + '/public/' + data.value.coverImg
 const selectHandle = (index: number) => {
     if (index == 0) return data.value.author
     if (index == 1) return dayjs(Number(data.value.createTime) * 1000).format('YYYY-MM-DD')
@@ -36,8 +38,7 @@ const selectHandle = (index: number) => {
 <template>
     <div v-transition="'tosiTion'" class="conDiv">
         <div class="conDiv_img">
-            <img v-lazy="props.index" :src="'/adminStatic/' + data.coverImg"
-                onerror="this.src='/src/assets/image/imgError.png'" alt="">
+            <img v-lazy="props.index" :src="data.coverImg" onerror="this.src='/src/assets/image/imgError.png'" alt="">
         </div>
         <div class="conDiv_text">
             <div class="title">{{ data.title }}</div>

@@ -6,10 +6,13 @@ import ContentDiv from '@/components/Content-div.vue'
 import { useEventListener } from '@vueuse/core'
 import { useStore } from "@/store/index";
 import http from '@/http/http';
+const api = import.meta.env.VITE_BASE_URL
+
+
 const store = useStore()
 const limit = 5
 const indexList = ref(1)
-const { total, data } = await http('get', '/adminGetApi/articleList?pages=' + indexList.value + '&limit=' + limit) as any
+const { total, data } = await http('get', api + '/overtApis/articleList?pages=' + indexList.value + '&limit=' + limit) as any
 const list: any = ref(data)
 const totals = ref(total)
 const isload = ref(true)
@@ -27,7 +30,7 @@ const currentChange = (e: number) => {
   isload.value = false
   //当前页数
   indexList.value = e
-  http('get', '/adminGetApi/articleList?pages=' + indexList.value + '&limit=' + limit).then((res: any) => {
+  http('get', api + '/overtApis/articleList?pages=' + indexList.value + '&limit=' + limit).then((res: any) => {
     //跳转路径
     list.value = res.data
     isload.value = true
@@ -68,12 +71,12 @@ onBeforeUnmount(() => {
     listSum.style.position = 'absolute'
   }
 })
-
+const URL = import.meta.env.VITE_BASE_HTTP
 </script>
 
 <template>
   <div class="content">
-    <div class="home" id="eleme">
+    <div class="home" :style="'background-image:url(' + URL + '/public/img/101608761_p0.jpg) '" id="eleme">
       <!-- 遮罩 -->
       <transition name="mask">
         <div v-if="!store.dark" class="mask"></div>
@@ -83,7 +86,7 @@ onBeforeUnmount(() => {
     <div class="listSum">
       <!-- 文章内容 -->
       <div class="listCom">
-        <img class="listImg" id="listSum" src="http://localhost:8089/public/img/leftbg2.jpg" alt="">
+        <img class="listImg" id="listSum" :src="URL + '/public/img/leftbg2.jpg'" alt="">
         <div :id="'list' + item.aid" v-for="(item, index) in list" :key="index" v-if="isload">
           <router-link :to="'/home/detail/' + item.aid">
             <ContentDiv :data="item" :index="index"></ContentDiv>
@@ -105,7 +108,7 @@ onBeforeUnmount(() => {
 .home {
   width: 100%;
   height: 100vh;
-  background: url('http://localhost:8089/public/img/101608761_p0.jpg') no-repeat center center;
+  background: no-repeat center center;
   backdrop-filter: blur(50px);
   background-size: cover;
   position: relative;

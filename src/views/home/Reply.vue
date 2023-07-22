@@ -119,14 +119,14 @@ const isReply = (item: Replydata, index: number) => {
     font-size: 12px;
     color: #999;
     margin: 0 10px;
-    font-family: 'almama';
+    font-family: 'dindin';
     letter-spacing: 0px;
   }
 
   .item-right-top-reply {
     font-size: 12px;
     color: #ffff;
-    font-family: 'almama';
+    font-family: 'dindin';
     letter-spacing: 0px;
     background-color: var(--themeColor);
     border-radius: 7px;
@@ -138,7 +138,7 @@ const isReply = (item: Replydata, index: number) => {
     span {
       font-size: 14px;
       color: #999;
-      font-family: 'almama';
+      font-family: 'dindin';
       letter-spacing: 0px;
       user-select: none;
       cursor: var(--linkCup);

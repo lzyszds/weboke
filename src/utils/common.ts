@@ -5,6 +5,7 @@ import { useDateFormat } from '@vueuse/core'
 import img from '@/assets/icon/weather/import'
 import { useStore } from '@/store/index';
 import { ipGetType, WeatherData } from '@/store/type'
+const api = import.meta.env.VITE_BASE_URL
 
 // 此函数获取一个数组并将其拆分为更小的块
 export const splitArray = (array: any, size) => {
@@ -56,7 +57,7 @@ export const getIpWeather = (): Promise<WeatherData> => {
   }
   return new Promise((resolve, reject) => {
     try {
-      http('get', '/getIp/info', headers).then((res: ipGetType) => {
+      http('get', api + '/proxyApis/jinrishici/info', headers).then((res: ipGetType) => {
         if (res.status = 'success') {
           //将个人信息存入localStorage，避免每次刷新都要请求接口
           setLocalStorage('weatherData', res.data)
@@ -83,8 +84,9 @@ export const getIpWeather = (): Promise<WeatherData> => {
 export const getWeather = () => {
   const state = useStore();
   const data: WeatherData = state.weatherData
+  let weatherData
   if (!data.weatherData) {
-    state.weatherData.weatherData = {
+    weatherData = {
       temperature: 0,
       weather: "未知",
       windDirection: "未知",
@@ -98,8 +100,7 @@ export const getWeather = () => {
   }
   const formatted: any = useDateFormat(data.beijingTime, 'HH')
   const isdark = formatted >= 19 || formatted <= 6
-  console.log(data.weatherData.weather);
-  switch (data.weatherData.weather) {
+  switch (weatherData || data.weatherData.weather) {
     case '晴':
       return isdark ? img.NightSunny : img.Sunny
     case '多云': case '少云':

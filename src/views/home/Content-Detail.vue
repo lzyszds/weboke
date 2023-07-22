@@ -9,7 +9,7 @@ import comImg from '@/assets/icon/comments/import'
 import { commentsType } from './Detailtype'
 import Reply from '@/views/home/Reply.vue'
 import { allFunction, awaitTime, scrollTo } from '@/utils/common'
-
+const api = import.meta.env.VITE_BASE_URL
 const DeskInfo = defineAsyncComponent(() => import("@/components/DeskInfo.vue"))
 
 
@@ -17,26 +17,27 @@ const overloading = ref(false) //重载评论组件，解决评论后评论组�
 
 const route = useRoute()
 const aid = route.path.replace('/home/detail/', '') //获取当前文章id
-const { data: dataDet } = await http('get', '/adminGetApi/articleInfo?aid=' + aid) as any
+const { data: dataDet } = await http('get', api + '/overtApis/articleInfo?aid=' + aid) as any
+console.log(`lzy  dataDet:`, dataDet)
 const affixElm = ref<HTMLElement | null>(null)
-
+dataDet.coverImg = api + '/public' + dataDet.coverImg
 const { proxy } = getCurrentInstance() as any
 const tip = allFunction.LNotification // 右下角提示
 const tocList = ref<any>([]);
 const tocACindex = ref<string>('#toc-head-1');
-const listComment = ref<any>(await http('get', '/adminGetApi/articleComment?aid=' + aid) as any)
+const listComment = ref<any>(await http('get', api + '/overtApis/articleComment?aid=' + aid) as any)
 
 //评论上方的诗句请求
 const textbefore = ref<String>('寻找中...')
 setTimeout(() => {
   try {
-    http('get', '/getIp/sentence').then((res: any) => {
+    http('get', api + '/proxyApis/jinrishici/sentence').then((res: any) => {
       textbefore.value = res.data.content
     })
   } catch (e) {
     console.log("请求频率上限：" + e + "两秒后重新请求")
     setTimeout(async () => {
-      const result = await http('get', '/getIp/sentence') as any
+      const result = await http('get', api + '/proxyApis/jinrishici/sentence') as any
       textbefore.value = result.data.content
     }, 2000)
   }
@@ -198,11 +199,11 @@ const comSubmit = () => {
     userIp: '', //用户ip
   }
   //发送请求,提交评论
-  http('post', '/adminPostApi/addComment', commentData).then(async (res: any) => {
+  http('post', api + '/privateApis/addComment', commentData).then(async (res: any) => {
     if (res.code == 200) {
       tip(`评论成功,感谢你的评论！`, 2000)
       overloading.value = true
-      listComment.value = await http('get', '/adminGetApi/articleComment?aid=' + aid) as any
+      listComment.value = await http('get', api + '/overtApis/articleComment?aid=' + aid) as any
       overloading.value = false
       Object.keys(information).map(key => {
         information[key] = ''
@@ -302,7 +303,7 @@ const toScrollY = async (id: string) => {
   <div class="detail">
     <!-- 文章封面 -->
     <div class="imgtop">
-      <img :src="'/adminStatic' + dataDet.coverImg" alt="">
+      <img :src="dataDet.coverImg" alt="">
       <div class="topTitle center">
         <h1>{{ dataDet.title }}</h1>
         <p>{{ dataDet.author }} {{ setTimestamp(dataDet.createTime) }} {{ dataDet.comNumber }}条评论</p>
