@@ -205,9 +205,8 @@ const comSubmit = () => {
       overloading.value = true
       listComment.value = await http('get', api + '/overtApis/articleComment?aid=' + aid) as any
       overloading.value = false
-      Object.keys(information).map(key => {
-        information[key] = ''
-      })//清空评论人信息
+      //清空评论内容
+      information.comContent = ''
       handleReplyData(replyArr.replyId)//清空回复评论的id
       setReplyStatus() // 重新设置回复评论的状态
     } else {

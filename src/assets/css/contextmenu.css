@@ -4,17 +4,14 @@
   top: 90px;
   right: -130px;
   width: 330px;
-  height: 112px;
   background: rgba(255, 255, 255, 1);
   z-index: 99999999;
-  display: block;
   box-shadow: 0px 0px 12px rgba(0, 0, 0, .12);
   display: flex;
   padding: 14px 26px 16px 13px;
   border-radius: 8px;
   box-sizing: border-box;
   border: 1px solid var(--el-border-color-lighter);
-  position: fixed;
   transition: opacity .3s, transform .3s, left .3s, right .3s, top .4s, bottom .3s;
   overflow-wrap: anywhere;
   overflow: hidden;
@@ -50,13 +47,20 @@
   font-size: 20px;
 }
 
-
-.contextMenu {
+.dark .contextMenu {
   --menu-border: rgba(255, 255, 255, 0.08);
   --menu-bg: rgba(0, 0, 0, 0.8);
   --item-border: rgba(255, 255, 255, 0.1);
   --item-color: #fff;
   --item-bg-hover: rgba(255, 255, 255, 0.2);
+}
+
+.contextMenu {
+  --menu-border: rgba(0, 0, 0, 0.08);
+  --menu-bg: rgba(255, 255, 255, 0.8);
+  --item-border: rgba(0, 0, 0, 0.1);
+  --item-color: #000000;
+  --item-bg-hover: rgba(0, 0, 0, 0.2);
   height: 0;
   overflow: hidden;
   background: var(--menu-bg);
@@ -70,19 +74,24 @@
   transform-origin: left;
   list-style: none;
   margin: 4px;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
+  padding: 5px;
+  display: grid;
   z-index: 999999999;
   box-shadow: 0 0 0 1px var(--menu-border), 0 2px 2px rgba(0, 0, 0, 0.03),
     0 4px 4px rgba(0, 0, 0, 0.04), 0 10px 8px rgba(0, 0, 0, 0.05),
     0 15px 15px rgba(0, 0, 0, 0.06), 0 30px 30px rgba(0, 0, 0, 0.07),
     0 70px 65px rgba(0, 0, 0, 0.09);
+  border: 3px solid transparent
+}
+
+.contextMenu:hover {
+  border: 3px solid var(--themeColor)
 }
 
 .contextMenu-item {
   display: flex;
-  padding: 4px 6px;
+  /* padding: 6px; */
+  height: 35px;
 }
 
 .contextMenu-item[data-divider="top"] {
@@ -108,10 +117,11 @@
   border: 0;
   white-space: nowrap;
   width: 100%;
+  padding: 6px 12px;
   border-radius: 4px;
-  padding: 6px 20px 6px 7px;
   text-align: left;
-  display: flex;
+  display: grid;
+  grid-template-columns: 20px 1fr;
   align-items: center;
   font-size: 14px;
   width: 100%;
@@ -119,10 +129,24 @@
   animation: menuItemAnimation 0.2s 0s both;
   font-family: "Inter", sans-serif;
   cursor: var(--linkCup);
+  font-size: 15px;
+  gap: 5px;
 }
 
 .contextMenu-button:hover {
   background-color: var(--item-bg-hover);
+}
+
+.contextMenu-button span {
+  font-size: 15px;
+}
+
+.iconbutton svg {
+  filter: invert(1);
+}
+
+.dark svg {
+  filter: invert(0);
 }
 
 @keyframes menuAnimation {

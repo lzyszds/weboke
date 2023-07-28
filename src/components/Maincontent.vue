@@ -68,7 +68,7 @@ p {
   border-radius: 20px;
   line-height: 40px;
   border: 4px solid #000;
-  animation: translateYopacity .7s 1s 1 ease-in-out;
+  animation: translateYopacity .7s .1s 1 ease-in-out;
 
   /* padding: 0; */
   &>div {
