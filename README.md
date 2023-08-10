@@ -28,12 +28,12 @@
 3. 打包方式：终端运行npm run build || yarn build
 
 ## 系统效果
-  <img src="./public/Snipaste_2023-03-23_12-39-36.png" />
-  <img src="./public/Snipaste_2023-03-23_12-40-25.png" />
-  <img src="./public/Snipaste_2023-03-23_12-40-36.png" />
-  <img src="./public/Snipaste_2023-03-23_12-41-10.png" />
-  <img src="./public/Snipaste_2023-03-23_12-41-25.png" />
-  <img src="./public/Snipaste_2023-03-23_12-41-40.png" />
+  <img src="./md/Snipaste_2023-03-23_12-39-36.png" />
+  <img src="./md/Snipaste_2023-03-23_12-40-25.png" />
+  <img src="./md/Snipaste_2023-03-23_12-40-36.png" />
+  <img src="./md/Snipaste_2023-03-23_12-41-10.png" />
+  <img src="./md/Snipaste_2023-03-23_12-41-25.png" />
+  <img src="./md/Snipaste_2023-03-23_12-41-40.png" />
 
 ## git使用方式
 
