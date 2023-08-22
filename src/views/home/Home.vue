@@ -8,6 +8,8 @@ import { useStore } from "@/store/index";
 import http from '@/http/http';
 const api = import.meta.env.VITE_BASE_URL
 
+const video = ref<HTMLVideoElement>()
+const canvas = ref<HTMLCanvasElement>()
 
 const store = useStore()
 const limit = 5
@@ -60,6 +62,17 @@ onMounted(() => {
       example.style.bottom = '-100px'
     }
   })
+  const ctx = canvas.value?.getContext('2d')
+  useEventListener(video.value, 'play', () => {
+    if (!ctx) return
+    const width = canvas.value!.width = window.innerWidth
+    const height = canvas.value!.height = window.innerHeight
+    const draw = () => {
+      ctx.drawImage(video.value!, 0, 0, width, height)
+      requestAnimationFrame(draw)
+    }
+    draw()
+  })
 })
 onBeforeUnmount(() => {
   list.value = []
@@ -76,11 +89,17 @@ const URL = import.meta.env.VITE_BASE_HTTP
 
 <template>
   <div class="content">
-    <div class="home" :style="'background-image:url(' + URL + '/public/img/101608761_p0.jpg) '" id="eleme">
-      <!-- 遮罩 -->
+    <!-- <div class="home" :style="'background-image:url(' + URL + '/public/img/101608761_p0.jpg) '" id="eleme">
+      //遮罩
       <transition name="mask">
         <div v-if="!store.dark" class="mask"></div>
       </transition>
+    </div> -->
+    <div class="home">
+      <video ref="video" width="0" height="0" style="visibility: hidden" src="../../assets/image/VeryCapture_20230822171203.mp4"
+        autoplay muted loop>
+      </video>
+      <canvas ref="canvas" style="width: 100vw;height:100vh;position:absolute;inset:0"></canvas>
     </div>
     <ContentHead></ContentHead>
     <div class="listSum">
