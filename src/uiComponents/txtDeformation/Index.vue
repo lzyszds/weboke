@@ -136,12 +136,12 @@ onMounted(() => {
   position: absolute;
   /* margin: auto; */
   width: 100%;
-  height: 80px;
+  height: 70px;
   top: 0;
   bottom: 0;
-
   /* This filter is a lot of the magic, try commenting it out to see how the morphing works! */
   filter: url(#threshold) blur(0.6px);
+  pointer-events: none;
 }
 
 /* Your average text styling */
@@ -151,8 +151,13 @@ onMounted(() => {
   width: 100%;
   display: inline-block;
   font-family: 'black-Magic', sans-serif;
-  font-size: 80pt;
+  font-size: 70pt;
   text-align: center;
   user-select: none;
+}
+
+svg {
+  width: 100%;
+  height: 70px;
 }
 </style>
