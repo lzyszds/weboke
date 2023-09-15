@@ -27,11 +27,13 @@
     "lodash": "^4.17.21",
     "markdown-it": "^13.0.1",
     "markdown-it-attrs": "^4.1.6",
+    "markdown-it-container": "^3.0.0",
     "markdown-it-for-inline": "^0.1.1",
     "markdown-it-mark": "^3.0.1",
     "markdown-it-ruby": "^0.1.1",
     "nprogress": "^0.2.0",
     "pinia": "^2.1.4",
+    "prismjs": "^1.29.0",
     "vite-plugin-env-compatible": "^1.1.1",
     "vue": "^3.3.4",
     "vue-router": "^4.2.4"

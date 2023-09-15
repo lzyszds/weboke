@@ -140,8 +140,8 @@ onBeforeUnmount(() => {
 
             <el-descriptions :column="2" class="mt-4">
               <el-descriptions-item label="姓名">lzyszds</el-descriptions-item>
-              <el-descriptions-item label="所在地">南宁</el-descriptions-item>
-              <el-descriptions-item label="职业"> 学生 </el-descriptions-item>
+              <!-- <el-descriptions-item label="所在地">南宁</el-descriptions-item> -->
+              <!-- <el-descriptions-item label="职业"> 学生 </el-descriptions-item> -->
               <el-descriptions-item label="学历"> 本科 </el-descriptions-item>
               <el-descriptions-item label="前端技术" class-name="skills">
                 <el-tooltip v-for="item of skills.front" class="box-item" effect="dark" :content="showTip(item)"
@@ -180,9 +180,9 @@ onBeforeUnmount(() => {
           </el-page-header>
         </div>
       </div>
+      <text class="text">{{ totalCont }} contributions in the last year</text>
       <div class="wave">
-        <text>{{ totalCont }} contributions in the last year</text>
-        <svg id="calendar" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+        <svg id="calendar" width="930px" height="100%" xmlns="http://www.w3.org/2000/svg">
           <g>
             <text v-for="(item, index) in ['日', '一', '二', '三', '四', '五', '六']" :key="index" fill="#000" font-size="13"
               x="8" :y="index * 16.5 + 40">{{ item }}</text>
@@ -207,7 +207,7 @@ onBeforeUnmount(() => {
 <style lang="less" scoped>
 .about {
   background-color: var(--themeColor);
-  width: calc(100vw - 10px);
+  width: 100vw;
   height: 100vh;
   overflow: hidden;
   position: relative;
@@ -217,18 +217,19 @@ onBeforeUnmount(() => {
 }
 
 .content {
-  width: 80%;
-  height: 70rem;
+  width: 85%;
+  height: 90%;
   background-color: rgb(255, 255, 255, .7);
   border-radius: 10px;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 1);
   backdrop-filter: blur(8px);
+  overflow: hidden;
 
   .formInfo {
-    width: 61%;
+    width: 65%;
     margin: 0 auto;
     padding: 0 30px;
-    height: 320px;
+    height: 250px;
     font-size: 2rem;
     font-weight: 600;
     color: var(--themeColor);
@@ -282,21 +283,25 @@ onBeforeUnmount(() => {
     }
   }
 
+  .text {
+    width: 65%;
+    display: block;
+    text-align: right;
+    margin: 0 auto;
+  }
+
   .wave {
-    width: 61%;
-    height: 141px;
+    width: 65%;
+    // height: 141px;
     background-color: #fff;
-    padding: 30px;
+    padding: 20px 0 0;
     // box-shadow: 0px 0px 4px #000;
     border-radius: 5px;
     z-index: 99;
     margin: 0 auto;
     user-select: none;
+    overflow-x: auto;
 
-    text {
-      display: block;
-      text-align: right;
-    }
   }
 }
 
@@ -380,6 +385,10 @@ onBeforeUnmount(() => {
     .formInfo {
       width: 80%;
       height: auto;
+    }
+
+    .text {
+      width: 80%;
     }
 
     .wave {
