@@ -2,10 +2,12 @@
 <script setup lang='ts'>
 import { ref } from 'vue';
 import dayjs from 'dayjs';
+import LzyIcon from './LzyIcon.vue';
 const list = [
-    { name: 'icon-icon-taikong13' },
-    { name: 'icon-riqi' },
-    { name: 'icon-code' },
+    { name: 'basil:user-solid' },
+    { name: 'basil:alarm-outline' },
+    { name: 'humbleicons:chat' },
+    { name: 'ic:baseline-access-time' }
 ]
 interface Data {
     title: string,
@@ -17,28 +19,30 @@ interface Data {
     coverImg: string,
     coverContent: string,
     wtype: string,
+    access_count: number,
 }
 interface Props {
     data: Data,
     index: number,
 }
-const api = import.meta.env.VITE_BASE_URL
+// const api = import.meta.env.VITE_BASE_URL
 
 const props = defineProps<Props>();
 const wtype = props.data.wtype.split(',')
 const data = ref<Data>(props.data)
-data.value.coverImg = api + '/public/' + data.value.coverImg
 const selectHandle = (index: number) => {
     if (index == 0) return data.value.author
     if (index == 1) return dayjs(Number(data.value.createTime) * 1000).format('YYYY-MM-DD')
     if (index == 2) return (data.value.comNumber || 0) + '条评论'
+    if (index == 3) return data.value.access_count
 }
 </script>
 
 <template>
     <div v-transition="'tosiTion'" class="conDiv">
         <div class="conDiv_img">
-            <img v-lazy="props.index" :src="data.coverImg" onerror="this.src='/src/assets/image/imgError.png'" alt="">
+            <img v-lazy="props.index" :src="'/api/public/' + data.coverImg"
+                onerror="this.src='/src/assets/image/imgError.png'" alt="">
         </div>
         <div class="conDiv_text">
             <div class="title">{{ data.title }}</div>
@@ -49,7 +53,7 @@ const selectHandle = (index: number) => {
             </div>
             <div class="time">
                 <span v-for="(item, index) in list " :key="index">
-                    <i class="iconfont" :class="item.name"></i>
+                    <LzyIcon :name="item.name"></LzyIcon>
                     {{ selectHandle(index) }}
                 </span>
             </div>
@@ -100,7 +104,7 @@ const selectHandle = (index: number) => {
     }
 
     .title {
-        font-size: 25px;
+        font-size: 23px;
         color: #000;
         font-family: 'dindin';
     }
@@ -143,9 +147,10 @@ const selectHandle = (index: number) => {
             }
 
             svg {
-                width: 30px !important;
-                height: 25px;
+                width: 20px !important;
+                height: 20px;
                 margin-right: 5px;
+                padding-top: 2px;
             }
         }
 

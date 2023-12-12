@@ -9,6 +9,7 @@ import comImg from '@/assets/icon/comments/import'
 import { commentsType } from './Detailtype'
 import Reply from '@/views/home/Reply.vue'
 import { allFunction, awaitTime, scrollTo } from '@/utils/common'
+import LzyIcon from '@/components/LzyIcon.vue';
 const api = import.meta.env.VITE_BASE_URL
 const DeskInfo = defineAsyncComponent(() => import("@/components/DeskInfo.vue"))
 
@@ -110,7 +111,7 @@ const information = reactive({
 })
 //获取本地存储的评论人信息 如果有则赋值
 if (localStorage.getItem('information')) {
-  const data = JSON.parse(localStorage.getItem('information') as string)
+  const data = JSON.parse(localStorage.getItem('information') as string) as []
   Object.keys(data).forEach((key) => {
     information[key] = data[key]
   })
@@ -305,7 +306,12 @@ const toScrollY = async (id: string) => {
       <img :src="dataDet.coverImg" alt="">
       <div class="topTitle center">
         <h1>{{ dataDet.title }}</h1>
-        <p>{{ dataDet.author }} {{ setTimestamp(dataDet.createTime) }} {{ dataDet.comNumber }}条评论</p>
+        <p style="font-size: 15px;">{{ dataDet.author }} {{ setTimestamp(dataDet.createTime) }} {{ dataDet.comNumber }}条评论
+          <LzyIcon name="ic:baseline-access-time"></LzyIcon>
+          <span>
+            {{ dataDet.access_count }}
+          </span>
+        </p>
       </div>
     </div>
     <!-- 文章类型 -->

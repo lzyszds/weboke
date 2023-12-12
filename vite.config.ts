@@ -51,6 +51,7 @@ export default defineConfig(({ command, mode }): any => {
     server: {
       hmr: true,
       usePolling: true,
+      open: false, // 这里开启自动打开浏览器是可选项
       host: '0.0.0.0',
       port: 1024,
       proxy: {

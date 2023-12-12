@@ -4,14 +4,12 @@ import { ElPagination } from 'element-plus'
 import ContentHead from '@/components/Content-head.vue'
 import ContentDiv from '@/components/Content-div.vue'
 import { useEventListener } from '@vueuse/core'
-import { useStore } from "@/store/index";
 import http from '@/http/http';
 const api = import.meta.env.VITE_BASE_URL
 
 const video = ref<HTMLVideoElement>()
 const canvas = ref<HTMLCanvasElement>()
 
-const store = useStore()
 const limit = 5
 const indexList = ref(1)
 const { total, data } = await http('get', api + '/overtApis/articleList?pages=' + indexList.value + '&limit=' + limit) as any

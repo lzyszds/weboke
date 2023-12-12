@@ -13,7 +13,7 @@ const props = defineProps<Props>()
 </script>
 
 <template>
-  <Icon class="lzyIcon" :class="props.animation" :icon="name" width="20px" :height="props.height ?? '20px'"
+  <Icon class="lzyIcon" :class="props.animation" :icon="name" :width="props.height ?? '20px'" :height="props.height ?? '20px'"
     :style="props.style"></Icon>
 </template>
 

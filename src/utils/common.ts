@@ -81,6 +81,17 @@ export const getIpWeather = (): Promise<WeatherData> => {
 //   return `/src/assets/icon/weather/undefind.svg`
 // }
 
+//尝试方法  mutationObserver 监听dom变化
+const testFunction = () => {
+  const observer = new MutationObserver((mutationsList: MutationRecord[], observer: MutationObserver) => {
+    console.log(mutationsList)
+    console.log(observer)
+  })
+  const test = document.createTextNode('test')
+  observer.observe(test, { characterData: true })
+  test.textContent = 'test2'
+}
+
 export const getWeather = () => {
   const state = useStore();
   const data: WeatherData = state.weatherData
@@ -209,6 +220,7 @@ export const LNotification = (val: string, time: number = 2000, postion: any = '
 
 // 复制内容提示版权信息
 import { useEventListener } from "@vueuse/core";
+import { log } from 'console';
 
 export const copyTip = () => {
   useEventListener(window, 'keydown', e => {
