@@ -22,6 +22,7 @@ import ThundershowersSunny from './Thundershowers Sunny雷阵雨.svg'
 import Thunderstorm from './Thunderstorm雷雨.svg'
 import Tornado from './Tornado龙卷风.svg'
 import Wind from './Wind风.svg'
+import undefind from './undefind.svg'
 const img: any = {
   CloudyDay,
   Cloudy,
@@ -47,6 +48,7 @@ const img: any = {
   Thunderstorm,
   Tornado,
   Wind,
+  undefind
 }
 
 export default img

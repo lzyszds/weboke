@@ -136,7 +136,7 @@ onMounted(() => {
   position: absolute;
   /* margin: auto; */
   width: 100%;
-  height: 70px;
+  height: 100px;
   top: 0;
   bottom: 0;
   /* This filter is a lot of the magic, try commenting it out to see how the morphing works! */
@@ -158,6 +158,6 @@ onMounted(() => {
 
 svg {
   width: 100%;
-  height: 70px;
+  height: 100px;
 }
 </style>

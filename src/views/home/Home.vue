@@ -7,8 +7,6 @@ import { useEventListener } from '@vueuse/core'
 import http from '@/http/http';
 const api = import.meta.env.VITE_BASE_URL
 
-const video = ref<HTMLVideoElement>()
-const canvas = ref<HTMLCanvasElement>()
 
 const limit = 5
 const indexList = ref(1)
@@ -60,17 +58,6 @@ onMounted(() => {
       example.style.bottom = '-100px'
     }
   })
-  const ctx = canvas.value?.getContext('2d')
-  useEventListener(video.value, 'play', () => {
-    if (!ctx) return
-    const width = canvas.value!.width = window.innerWidth
-    const height = canvas.value!.height = window.innerHeight
-    const draw = () => {
-      ctx.drawImage(video.value!, 0, 0, width, height)
-      requestAnimationFrame(draw)
-    }
-    draw()
-  })
 })
 onBeforeUnmount(() => {
   list.value = []
@@ -94,16 +81,19 @@ const URL = import.meta.env.VITE_BASE_HTTP
       </transition>
     </div> -->
     <div class="home">
-      <video ref="video" width="0" height="0" style="visibility: hidden" src="../../assets/image/VeryCapture_20230822171203.mp4"
-        autoplay muted loop>
-      </video>
-      <canvas ref="canvas" style="width: 100vw;height:100vh;position:absolute;inset:0"></canvas>
+      <!-- 遮罩 -->
+      <!-- <transition name="mask">
+        <div v-if="!store.dark" class="mask"></div>
+      </transition> -->
+      <div class="conImg">
+        <img :src="URL + '/public/img/101608761_p0.jpg'" alt="">
+      </div>
     </div>
     <ContentHead></ContentHead>
     <div class="listSum">
       <!-- 文章内容 -->
       <div class="listCom">
-        <img class="listImg" id="listSum" :src="URL + '/public/img/leftbg2.jpg'" alt="">
+        <img class="listImg" id="listSum" :src="URL + '/public/img/reduce.jpg'" alt="">
         <div :id="'list' + item.aid" v-for="(item, index) in list" :key="index" v-if="isload">
           <router-link :to="'/home/detail/' + item.aid">
             <ContentDiv :data="item" :index="index"></ContentDiv>
@@ -159,7 +149,7 @@ const URL = import.meta.env.VITE_BASE_HTTP
 
 .conImg {
   width: 100%;
-  height: 600px
+  height: 100%
 }
 
 .conImg img {

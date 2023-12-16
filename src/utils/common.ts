@@ -151,7 +151,7 @@ export const getWeather = () => {
     case '有风': case '微风': case '和风': case '清风': case '强风/劲风': case '疾风': case '大风': case '烈风': case '风暴': case '狂爆风': case '飓风': case '热带风暴':
       return img.Wind
     default:
-      return `/src/assets/icon/weather/undefind.svg`
+      return img.undefind
   }
 }
 

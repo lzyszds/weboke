@@ -62,7 +62,7 @@ onMounted(() => {
     weeks.forEach((item, index) => {
       const date = dayjs(item.firstDay).format('MM')
       if (!now.includes(months[parseInt(date) - 1])) {
-        now.push({ text: months[parseInt(date) - 1], index: index * 17 + 30 })
+        now.push({ text: months[parseInt(date) - 1], index: index * 19 + 30 })
       }
     });
     month.value = now
@@ -180,25 +180,27 @@ onBeforeUnmount(() => {
           </el-page-header>
         </div>
       </div>
-      <text class="text">{{ totalCont }} contributions in the last year</text>
-      <div class="wave">
-        <svg id="calendar" width="930px" height="100%" xmlns="http://www.w3.org/2000/svg">
-          <g>
-            <text v-for="(item, index) in ['日', '一', '二', '三', '四', '五', '六']" :key="index" fill="#000" font-size="13"
-              x="8" :y="index * 16.5 + 40">{{ item }}</text>
-          </g>
-          <g>
-            <text v-for="(item, index) in month" :key="index" fill="#000" font-size="13" :x="item.index" y="20"
-              v-show="isShow(item.text, index)">
-              {{ item.text }}
-            </text>
-          </g>
-          <g v-for="(item, indexG) in data" :key="indexG">
-            <rect class="rectangle" v-for="(res, indexR) in item.contributionDays" :key="indexR" :x="indexG * 17 + 30"
-              :y="indexR * 16 + 30" rx="3" ry="3" stroke="#999" :fill="res.color" width="12" height="12"
-              :data-date="res.date" :data-count="res.contributionCount" />
-          </g>
-        </svg>
+      <div style="display: grid;grid-template-rows: 20px 1fr;">
+        <text class="text">{{ totalCont }} contributions in the last year</text>
+        <div class="wave">
+          <svg id="calendar" width="1040px" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <g>
+              <text v-for="(item, index) in ['日', '一', '二', '三', '四', '五', '六']" :key="index" fill="#000" font-size="13"
+                x="8" :y="index * 18 + 43" overflow="scroll">{{ item }}</text>
+            </g>
+            <g>
+              <text v-for="(item, index) in month" :key="index" fill="#000" font-size="14" :x="item.index" y="20"
+                v-show="isShow(item.text, index)" overflow="scroll">
+                {{ item.text }}
+              </text>
+            </g>
+            <g v-for="(item, indexG) in data" :key="indexG">
+              <rect class="rectangle" v-for="(res, indexR) in item.contributionDays" :key="indexR" :x="indexG * 19 + 30"
+                :y="indexR * 18 + 30" rx="3" ry="3" stroke="#9d9d9d" :fill="res.color" width="14" height="14"
+                :data-date="res.date" :data-count="res.contributionCount" overflow="scroll" />
+            </g>
+          </svg>
+        </div>
       </div>
     </div>
   </div>
@@ -223,13 +225,15 @@ onBeforeUnmount(() => {
   border-radius: 10px;
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 1);
   backdrop-filter: blur(8px);
-  overflow: hidden;
-
+  overflow: auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 100px 300px 1fr;
+  align-items: center;
   .formInfo {
     width: 65%;
     margin: 0 auto;
     padding: 0 30px;
-    height: 250px;
     font-size: 2rem;
     font-weight: 600;
     color: var(--themeColor);
@@ -292,16 +296,14 @@ onBeforeUnmount(() => {
 
   .wave {
     width: 65%;
-    // height: 141px;
     background-color: #fff;
     padding: 20px 0 0;
-    // box-shadow: 0px 0px 4px #000;
     border-radius: 5px;
     z-index: 99;
     margin: 0 auto;
     user-select: none;
+    overflow-y: hidden;
     overflow-x: auto;
-
   }
 }
 
@@ -348,6 +350,7 @@ onBeforeUnmount(() => {
 .toTion-leave-to {
   opacity: 0;
   transform: translateX(-30px);
+
 
 }
 

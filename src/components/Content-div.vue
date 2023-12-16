@@ -30,6 +30,7 @@ interface Props {
 const props = defineProps<Props>();
 const wtype = props.data.wtype.split(',')
 const data = ref<Data>(props.data)
+data.value.coverContent = data.value.coverContent.replace(/<[^>]+>/g, "")
 const selectHandle = (index: number) => {
     if (index == 0) return data.value.author
     if (index == 1) return dayjs(Number(data.value.createTime) * 1000).format('YYYY-MM-DD')
