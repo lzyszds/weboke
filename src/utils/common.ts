@@ -52,12 +52,11 @@ export function setLocalStorage(key: string, value: any) {
 export const getIpWeather = (): Promise<WeatherData> => {
 
   let headers = {
-    'Content-Type': 'multipart/form-data',
-    'X-User-Token': 'iwKIaV2WP/9pLVldKr7qSFoeqAvBCO/n'
+    "cookie": "X-User-Token=lYw6OgAbhFstAF7hZzSKWJIZN613qwEE"
   }
   return new Promise((resolve, reject) => {
     try {
-      http('get', api + '/proxyApis/jinrishici/info', headers).then((res: ipGetType) => {
+      http('get', '/getIp/info', headers).then((res: ipGetType) => {
         if (res.status = 'success') {
           //将个人信息存入localStorage，避免每次刷新都要请求接口
           setLocalStorage('weatherData', res.data)

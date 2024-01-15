@@ -54,6 +54,26 @@ const router = createRouter({
     history: createWebHashHistory(),
     routes,
     scrollBehavior(to, from, savedPosition) { // 始终滚动到顶部
+        // 创建一个计数器，用于记录静态资源加载的数量
+        var resourceCount = 0;
+
+        // 获取页面中所有静态资源元素（比如图片、脚本、样式表等）
+        var resources = document.querySelectorAll('img, script, link[rel="stylesheet"]');
+
+        // 遍历每个资源元素，为其绑定load事件
+        resources.forEach(function (resource) {
+            resource.addEventListener('load', function () {
+                resourceCount++;
+                console.log(`lzy  resourceCount:`, resourceCount)
+                // 当所有资源加载完成时，执行你需要的操作
+                if (resourceCount === resources.length) {
+                    console.log('所有静态资源加载完成');
+                    // 在这里可以执行你需要的操作，比如显示页面内容，或者其他逻辑
+                }
+            });
+        });
+
+        
         setTimeout(() => {
             document.querySelector('body')!.classList.remove('loading')
         }, 500)

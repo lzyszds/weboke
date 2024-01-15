@@ -3,6 +3,7 @@ import vue from '@vitejs/plugin-vue'
 import path from 'path'
 import prismjs from 'vite-plugin-prismjs';
 import envCompatible from 'vite-plugin-env-compatible';
+import AutoImport from 'unplugin-auto-import/vite'
 
 
 // https://vitejs.dev/config/
@@ -18,6 +19,9 @@ export default defineConfig(({ command, mode }): any => {
         languages: ['json', 'js', 'ts', 'css', 'less', 'html', 'markdown', 'sql', 'typescript', 'vim'],
       }),
       envCompatible(),
+      AutoImport({
+        imports: ['vue', 'vue-router', '@vueuse/core', 'pinia']
+      }),
     ],
     base: "./",
     resolve: {
@@ -60,7 +64,11 @@ export default defineConfig(({ command, mode }): any => {
           changeOrigin: true,
           rewrite: path => path.replace(/^\/api/, '')
         },
-
+        '/getIp': {
+          target: 'https://v2.jinrishici.com',//这里是域名，不是完整地址
+          changeOrigin: true,//是否跨域
+          rewrite: path => path.replace(/^\/getIp/, '')
+        },
         // '/api': {
         //   target: 'https://c.m.163.com/ug/api/wuhan/app/data/list-total',
         //   changeOrigin: true,
@@ -91,11 +99,7 @@ export default defineConfig(({ command, mode }): any => {
         //   changeOrigin: true,//是否跨域
         //   rewrite: path => path.replace(/^\/adminStatic/, '')
         // },
-        // '/getIp': {
-        //   target: 'https://v2.jinrishici.com',//这里是域名，不是完整地址
-        //   changeOrigin: true,//是否跨域
-        //   rewrite: path => path.replace(/^\/getIp/, '')
-        // },
+
         // '/github': {
         //   target: 'https://api.github.com/graphql',//这里是域名，不是完整地址
         //   changeOrigin: true,//是否跨域

@@ -32,13 +32,17 @@ const listComment = ref<any>(await http('get', api + '/overtApis/articleComment?
 const textbefore = ref<String>('寻找中...')
 setTimeout(() => {
   try {
-    http('get', api + '/proxyApis/jinrishici/sentence').then((res: any) => {
+    http('get', '/getIp/sentence', {
+      "Cookie": "X-User-Token=6zImt+uqp/1XS0CJBkw25piggo2ysiiu"
+    }).then((res: any) => {
       textbefore.value = res.data.content
     })
   } catch (e) {
     console.log("请求频率上限：" + e + "两秒后重新请求")
     setTimeout(async () => {
-      const result = await http('get', api + '/proxyApis/jinrishici/sentence') as any
+      const result = await http('get', '/getIp/sentence', {
+        "Cookie": "X-User-Token=6zImt+uqp/1XS0CJBkw25piggo2ysiiu"
+      }) as any
       textbefore.value = result.data.content
     }, 2000)
   }

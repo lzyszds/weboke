@@ -1,12 +1,12 @@
 <script setup lang='ts'>
-import TxtDeformation from '@/uiComponents/txtDeformation/Index.vue'
+import TxtDeformation from '@/uiComponents/txtDeformation/index.vue'
 import http from '@/http/http'
 import { onMounted, ref, nextTick, reactive, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router';
-import { ElPageHeader, ElButton, ElDescriptions, ElDescriptionsItem, ElTooltip } from "element-plus";
 import dayjs from 'dayjs';
 import { useEventListener } from '@vueuse/core';
 import LzyIcon from '@/components/LzyIcon.vue';
+import { ElPageHeader, ElDescriptions, ElDescriptionsItem, ElTooltip, ElButton } from 'element-plus'
 const router = useRouter();
 const api = import.meta.env.VITE_BASE_URL
 
@@ -117,67 +117,67 @@ onBeforeUnmount(() => {
       <TxtDeformation></TxtDeformation>
       <div class="formInfo">
         <div aria-label="A complete example of page header">
-          <el-page-header @back="onBack">
+          <ElPageHeader @back="onBack">
             <template #extra>
               <div class="flex items-center">
                 <a href="https://github.com/lzyszds" target="_blank">
-                  <el-button type="primary" class="purple">
+                  <ElButton type="primary" class="purple">
                     <i class="iconfont icon-github" font-size="25"></i>
-                  </el-button>
+                  </ElButton>
                 </a>
                 <a href="https://github.com/lzyszds" target="_blank">
-                  <el-button type="primary" class="purple">
+                  <ElButton type="primary" class="purple">
                     <i class="iconfont icon-youxiang" font-size="25"></i>
-                  </el-button>
+                  </ElButton>
                 </a>
                 <a href="https://github.com/lzyszds" target="_blank">
-                  <el-button type="primary" class="purple">
+                  <ElButton type="primary" class="purple">
                     <i class="iconfont icon-qq" font-size="25"></i>
-                  </el-button>
+                  </ElButton>
                 </a>
               </div>
             </template>
 
-            <el-descriptions :column="2" class="mt-4">
-              <el-descriptions-item label="姓名">lzyszds</el-descriptions-item>
-              <!-- <el-descriptions-item label="所在地">南宁</el-descriptions-item> -->
-              <!-- <el-descriptions-item label="职业"> 学生 </el-descriptions-item> -->
-              <el-descriptions-item label="学历"> 本科 </el-descriptions-item>
-              <el-descriptions-item label="前端技术" class-name="skills">
-                <el-tooltip v-for="item of skills.front" class="box-item" effect="dark" :content="showTip(item)"
+            <ElDescriptions :column="2" class="mt-4">
+              <ElDescriptionsItem label="姓名">lzyszds</ElDescriptionsItem>
+              <!-- <ElDescriptionsItem label="所在地">南宁</ElDescriptionsItem> -->
+              <!-- <ElDescriptionsItem label="职业"> 学生 </ElDescriptionsItem> -->
+              <ElDescriptionsItem label="学历"> 本科 </ElDescriptionsItem>
+              <ElDescriptionsItem label="前端技术" class-name="skills">
+                <ElTooltip v-for="item of skills.front" class="box-item" effect="dark" :content="showTip(item)"
                   placement="top">
                   <LzyIcon :name="item" />
-                </el-tooltip>
-              </el-descriptions-item>
-              <el-descriptions-item label="后端技术" class-name="skills">
-                <el-tooltip v-for="item of skills.rear" class="box-item" effect="dark" :content="showTip(item)"
+                </ElTooltip>
+              </ElDescriptionsItem>
+              <ElDescriptionsItem label="后端技术" class-name="skills">
+                <ElTooltip v-for="item of skills.rear" class="box-item" effect="dark" :content="showTip(item)"
                   placement="top">
                   <LzyIcon :name="item" />
-                </el-tooltip>
-              </el-descriptions-item>
-              <el-descriptions-item label="其他" class-name="skills">
-                <el-tooltip v-for="item of skills.other" class="box-item" effect="dark" :content="showTip(item)"
+                </ElTooltip>
+              </ElDescriptionsItem>
+              <ElDescriptionsItem label="其他" class-name="skills">
+                <ElTooltip v-for="item of skills.other" class="box-item" effect="dark" :content="showTip(item)"
                   placement="top">
                   <LzyIcon :name="item" />
-                </el-tooltip>
-              </el-descriptions-item>
-            </el-descriptions>
+                </ElTooltip>
+              </ElDescriptionsItem>
+            </ElDescriptions>
             <p class="describe"><i class="fa fa-bookmark-o"></i> 相关经历：</p>
             <ul>
-              <transition name="toTion">
+              <Transition name="toTion">
                 <li v-if="toTion[0]">2019.9 - 2022.7 广西职业技术学院 专科 计算机应用技术专业</li>
-              </transition>
-              <transition name="toTion">
+              </Transition>
+              <Transition name="toTion">
                 <li v-if="toTion[1]">2021.7 - 2022.8 成都云天为民(小公司主要负责气象数据) 实习</li>
-              </transition>
-              <transition name="toTion">
+              </Transition>
+              <Transition name="toTion">
                 <li v-if="toTion[2]">2022.9 - 至今 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;南宁学院 本科 计算机科学与技术专业</li>
-              </transition>
-              <transition name="toTion">
+              </Transition>
+              <Transition name="toTion">
                 <li v-if="toTion[3]">至今还在努力学习中哦...</li>
-              </transition>
+              </Transition>
             </ul>
-          </el-page-header>
+          </ElPageHeader>
         </div>
       </div>
       <div style="display: grid;grid-template-rows: 20px 1fr;">
@@ -230,9 +230,11 @@ onBeforeUnmount(() => {
   grid-template-columns: 1fr;
   grid-template-rows: 100px 300px 1fr;
   align-items: center;
+
   .formInfo {
     width: 65%;
     margin: 0 auto;
+    height: 300px;
     padding: 0 30px;
     font-size: 2rem;
     font-weight: 600;

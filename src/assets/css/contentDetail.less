@@ -4,7 +4,8 @@
   height: auto;
   padding-bottom: 20px;
   background: rgb(255, 255, 255);
-  background-image: linear-gradient(#eee 1px, transparent 0), linear-gradient(90deg, #eee 1px, transparent 0);
+  background-image: linear-gradient(#a1a6c9 2px, transparent 0),
+    linear-gradient(90deg, #a1a6c9 1px, transparent 0);
   background-size: 28px 28px;
   background-repeat: repeat;
 
@@ -118,7 +119,9 @@
       border-radius: 15px;
       line-height: 30px;
       cursor: var(--linkCup);
-      background-color:#fff;:hover {
+      background-color: #fff;
+
+      :hover {
         color: var(--themeColor);
         text-decoration: underline var(--themeColor);
 
@@ -171,12 +174,13 @@
     padding: 0 20px;
     position: relative;
 
-    & > p {
+    &>p {
       margin-left: 25px !important;
     }
 
     h5 {
       margin: 30px 0;
+
       .iconfont {
         color: #000;
         font-size: 30px;
@@ -216,7 +220,7 @@
     display: flex;
     justify-content: space-between;
 
-    & > .borderw {
+    &>.borderw {
       width: 49%;
       box-sizing: border-box;
 
@@ -255,7 +259,7 @@
           pointer-events: none;
         }
 
-        & > textarea {
+        &>textarea {
           width: 91.4% !important;
           height: 170px !important;
           padding: 10px 20px;
@@ -282,7 +286,7 @@
       }
     }
 
-    & > .nameqq {
+    &>.nameqq {
       .comment {
         font-family: 'dindin';
         // padding: 10px 10px 0;
@@ -292,13 +296,15 @@
           display: none;
         }
 
-        & > div {
+        &>div {
           display: grid;
           grid-template-columns: 1fr auto 1fr;
           gap: 0 20px;
           align-items: center;
-          & > div {
+
+          &>div {
             overflow-x: scroll;
+
             p {
               width: 720px;
               height: 50px;
@@ -337,6 +343,7 @@
             }
 
           }
+
           button {
             font-size: 20px;
             border: none;
@@ -387,6 +394,7 @@
           }
 
         }
+
         ::-webkit-scrollbar {
           width: 1px;
           height: 4px;
@@ -438,6 +446,7 @@
           border-radius: 10px;
           user-select: none;
           cursor: var(--linkCup);
+
           i {
             fill: #000;
             width: 30px !important;
@@ -455,7 +464,8 @@
           list-style: none;
           margin: 0;
           font-family: "dindin";
-          & > li.active {
+
+          &>li.active {
             color: var(--themeColor);
 
             &::before {
@@ -463,15 +473,15 @@
             }
           }
 
-          & > li.H2 {
+          &>li.H2 {
             font-weight: 600;
           }
 
-          & > li.H3 {
+          &>li.H3 {
             margin-left: 10px;
           }
 
-          & > li.H4 {
+          &>li.H4 {
             margin-left: 20px;
           }
 

@@ -32,6 +32,7 @@
       "@/*": [
         "src/*"
       ],
+   
       "/*": [
         "public/*"
       ]
@@ -47,11 +48,9 @@
     "src/**/*.vue",
     "types/**/*.d.ts",
     "types/**/*.ts",
-    "build/**/*.ts",
-    "build/**/*.d.ts",
-    "mock/**/*.ts",
     "vite.config.ts",
-    "src/main.ts"
+    "src/main.ts",
+    "**/*.vue",
   ],
   "exclude": [
     "node_modules",

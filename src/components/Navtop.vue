@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { reactive, onMounted, nextTick } from "vue";
-import setThemes from "@/uiComponents/setupThemes/Setthemes.vue";
+import SetupThemes from "@/uiComponents/setupThemes/index.vue";
 import { useRouter } from 'vue-router'
 import { useEventListener } from '@vueuse/core'
 import { scrollTo } from "@/utils/common";
@@ -100,7 +100,7 @@ const URL = import.meta.env.VITE_BASE_HTTP
         <a href="#">
           <img width="80" :src="URL + '/public/img/lzjyWhite.png'" alt="" />
           <svg class="logoSvg" viewBox="0 0 400 200">
-            <text x="0" y="70%" id="timelinetext"> Jz </text>
+            <text x="0" y="70%" id="timelinetext"> Jingzy </text>
           </svg>
         </a>
       </div>
@@ -118,7 +118,7 @@ const URL = import.meta.env.VITE_BASE_HTTP
         </div>
       </div>
       <div class="topRight">
-        <setThemes :ons="'navbarContent'"></setThemes>
+        <SetupThemes :ons="'navbarContent'"></SetupThemes>
       </div>
       <div class="navbar-toggler">
         <label class="menu-open-button" @click="openfun">
@@ -134,39 +134,6 @@ const URL = import.meta.env.VITE_BASE_HTTP
 body {
   font-family: 'Roboto', sans-serif;
 }
-
-@keyframes stroke {
-  0% {
-    fill: rgba(72, 138, 20, 0);
-    stroke: rgba(255, 255, 255, 1);
-    stroke-dashoffset: 25%;
-    stroke-dasharray: 0 50%;
-    stroke-width: 10;
-  }
-
-  70% {
-    fill: rgba(72, 138, 20, 0);
-    stroke: rgba(255, 255, 255, 1);
-    stroke-width: 2;
-  }
-
-  85% {
-    fill: rgba(72, 138, 20, 0);
-    stroke: rgba(255, 255, 255, 1);
-    stroke-width: 1;
-  }
-
-  95%,
-  100% {
-    fill: rgba(255, 255, 255, 1);
-    stroke: rgba(54, 95, 160, 0);
-    stroke-dashoffset: -25%;
-    stroke-dasharray: 30% 0;
-    stroke-width: 50;
-  }
-}
-
-
 
 .navbarContent {
   position: fixed;
@@ -187,24 +154,7 @@ body {
     grid-template-columns: 2fr 3fr 2fr;
     grid-template-rows: 1fr;
 
-    .navbar-logo {
-      height: 60px;
-
-      svg.logoSvg {
-        display: inline-block;
-        width: 100px;
-        height: 60px;
-      }
-
-
-      svg.logoSvg text {
-        // text-transform: uppercase;
-        letter-spacing: 10px;
-        font-size: 150px;
-        animation: stroke 5s infinite alternate;
-        line-height: 60px;
-      }
-    }
+    
 
     .collapse {
       position: relative;
@@ -307,10 +257,6 @@ body {
 }
 
 
-
-#timelinetext {
-  font-family: 'dindin';
-}
 
 .dark .navbarContent.navbarContent100 {
   background-color: var(--darkBgcolor);

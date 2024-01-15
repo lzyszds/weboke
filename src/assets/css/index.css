@@ -220,6 +220,11 @@ html,
 body {
   scroll-behavior: smooth;
   font-family: 'firaCode' !important;
+  overflow: auto !important;
+}
+
+body.loading {
+  overflow: hidden !important;
 }
 
 html.dark {
@@ -249,4 +254,58 @@ html.dark {
   font-size: 12px;
   padding: 2px 5px;
   border-radius: 5px;
+}
+
+.navbar-logo {
+  height: 60px;
+}
+
+.navbar-logo svg.logoSvg {
+  display: inline-block;
+  width: 100px;
+  height: 60px;
+}
+
+
+.navbar-logo svg.logoSvg text {
+  letter-spacing: 10px;
+  font-size: 120px;
+  animation: stroke 5s infinite alternate;
+  line-height: 60px;
+  animation-delay: 1s;
+}
+
+#timelinetext {
+  font-family: 'momo ink night';
+}
+
+@keyframes stroke {
+  0% {
+    fill: rgba(72, 138, 20, 0);
+    stroke: rgba(255, 255, 255, 1);
+    stroke-dashoffset: 25%;
+    stroke-dasharray: 0 50%;
+    stroke-width: 10;
+  }
+
+  70% {
+    fill: rgba(72, 138, 20, 0);
+    stroke: rgba(255, 255, 255, 1);
+    stroke-width: 2;
+  }
+
+  85% {
+    fill: rgba(72, 138, 20, 0);
+    stroke: rgba(255, 255, 255, 1);
+    stroke-width: 1;
+  }
+
+  95%,
+  100% {
+    fill: rgba(255, 255, 255, 1);
+    stroke: rgba(54, 95, 160, 0);
+    stroke-dashoffset: -25%;
+    stroke-dasharray: 30% 0;
+    stroke-width: 50;
+  }
 }

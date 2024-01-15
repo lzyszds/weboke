@@ -14,6 +14,7 @@ const { total, data } = await http('get', api + '/overtApis/articleList?pages=' 
 const list: any = ref(data)
 const totals = ref(total)
 const isload = ref(true)
+const isloaded = ref(false)
 //此处为分页器的回调函数 
 const currentChange = (e: number) => {
   /*
@@ -42,22 +43,32 @@ onMounted(() => {
   // }, 1000)
   //控制滚动到指定位置，固定背景人物
   useEventListener(window, 'scroll', () => {
+    const y = window.scrollY
+    if (y >= 200) {
+      isloaded.value = false
+    } else {
+      isloaded.value = true
+    }
     const listSum = document.querySelector('#listSum') as HTMLElement
     const example = document.querySelector('#example') as HTMLElement
     if (!example) return
-    if (window.scrollY >= 820) {
+    if (y >= 820) {
       listSum.style.transform = 'translateY(154px)'
       listSum.style.position = 'fixed'
     } else {
       listSum.style.transform = 'translateY(974px)'
       listSum.style.position = 'absolute'
     }
-    if (window.scrollY >= 300) {
+    if (y >= 300) {
       example.style.bottom = '0'
     } else {
       example.style.bottom = '-100px'
     }
   })
+
+  setTimeout(() => {
+    isloaded.value = true
+  }, 1000)
 })
 onBeforeUnmount(() => {
   list.value = []
@@ -86,6 +97,20 @@ const URL = import.meta.env.VITE_BASE_HTTP
         <div v-if="!store.dark" class="mask"></div>
       </transition> -->
       <div class="conImg">
+        <div class="navbar-logo" @click="() => isloaded = !isloaded" :class="isloaded ? 'loaded' : ''">
+          <span>
+            <span>Ji</span>
+          </span>
+          <span>
+            <span>n</span>
+          </span>
+          <span>
+            <span>gz</span>
+          </span>
+          <span>
+            <span>y</span>
+          </span>
+        </div>
         <img :src="URL + '/public/img/101608761_p0.jpg'" alt="">
       </div>
     </div>
@@ -149,7 +174,59 @@ const URL = import.meta.env.VITE_BASE_HTTP
 
 .conImg {
   width: 100%;
-  height: 100%
+  height: 100%;
+
+  .navbar-logo {
+    position: absolute;
+    left: 10%;
+    top: 30%;
+    /* 计算最大值与最小值，跟随页面大小变化 */
+    font-size: clamp(30px, 7vw, 20vw);
+    color: #fff;
+    font-family: 'Slackey';
+    user-select: none;
+    cursor: pointer;
+
+    &>span {
+      display: inline-block;
+      overflow: hidden;
+      transition-duration: 0.2s;
+      transition-property: transform;
+      text-align: center;
+
+      span {
+        display: inline-block;
+        transition-duration: 0.5s;
+        transition-property: transform;
+        transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      &:nth-child(odd) {
+        transform: translateY(50%);
+
+        span {
+          transform: translateY(-100%);
+        }
+      }
+
+      &:nth-child(even) {
+        transform: translateY(-50%);
+
+        span {
+          transform: translateY(100%);
+        }
+      }
+    }
+
+    &.loaded>span {
+      transform: translateY(0);
+    }
+
+    &.loaded>span span {
+      transform: translateY(0);
+    }
+
+  }
 }
 
 .conImg img {

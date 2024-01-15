@@ -7,7 +7,7 @@ const list = [
     { name: 'basil:user-solid' },
     { name: 'basil:alarm-outline' },
     { name: 'humbleicons:chat' },
-    { name: 'ic:baseline-access-time' }
+    { name: 'prime:eye' }
 ]
 interface Data {
     title: string,
@@ -79,6 +79,7 @@ const selectHandle = (index: number) => {
     transition: transform .5s cubic-bezier(0.68, -0.55, 0.68, 1.55), opacity .5s cubic-bezier(0.68, -0.55, 0.68, 1.55);
     transform: translateY(200px);
     height: 200px;
+    padding: 5px;
 
     &:hover .title {
         /* box-shadow: -1px 1px 6px 1px var(--themeColor); */
@@ -92,7 +93,7 @@ const selectHandle = (index: number) => {
             height: 100%;
             aspect-ratio: 16 / 9;
             object-fit: cover;
-            border-radius: 8px 0 0 8px;
+            border-radius: 8px;
         }
     }
 
@@ -139,12 +140,22 @@ const selectHandle = (index: number) => {
             line-height: 25px;
             flex: 1;
             margin-right: 10px;
-            width: 125px;
 
             &:nth-child(1) {
-                width: 80px;
                 white-space: nowrap;
                 overflow: hidden;
+            }
+
+            &:nth-child(3) {
+                text-align: center;
+                width: 100px;
+                flex: none;
+            }
+
+            &:nth-child(4) {
+                text-align: center;
+                width: 80px;
+                flex: none;
             }
 
             svg {

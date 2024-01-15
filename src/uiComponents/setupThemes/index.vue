@@ -1,6 +1,6 @@
 <script setup lang='ts'>
 import { useDark } from '@vueuse/core'
-import { useStore } from '@/store/index'
+import { useStore } from '@/store'
 const store = useStore()
 const props = defineProps({
   ons: {

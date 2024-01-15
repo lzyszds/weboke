@@ -1,7 +1,6 @@
 <script setup lang="ts" >
 import { getWeather } from "@/utils/common";
 // 高德地图api
-
 </script>
 <template>
   <div class="loaderbody">
