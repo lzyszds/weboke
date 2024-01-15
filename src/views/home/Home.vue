@@ -1,86 +1,99 @@
-<script setup lang='ts'>
-import { ref, onMounted, onBeforeUnmount } from 'vue'
-import { ElPagination } from 'element-plus'
-import ContentHead from '@/components/Content-head.vue'
-import ContentDiv from '@/components/Content-div.vue'
-import { useEventListener } from '@vueuse/core'
-import http from '@/http/http';
-const api = import.meta.env.VITE_BASE_URL
+<script setup lang="ts">
+import { ref, onMounted } from "vue";
+import { ElPagination } from "element-plus";
+import ContentHead from "@/components/Content-head.vue";
+import ContentDiv from "@/components/Content-div.vue";
+import { useEventListener } from "@vueuse/core";
+import http from "@/http/http";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+gsap.registerPlugin(ScrollTrigger);
 
+const api = import.meta.env.VITE_BASE_URL;
 
-const limit = 5
-const indexList = ref(1)
-const { total, data } = await http('get', api + '/overtApis/articleList?pages=' + indexList.value + '&limit=' + limit) as any
-const list: any = ref(data)
-const totals = ref(total)
-const isload = ref(true)
-const isloaded = ref(false)
-//此处为分页器的回调函数 
+const limit = 5;
+const indexList = ref(1);
+const { total, data } = (await http(
+  "get",
+  api + "/overtApis/articleList?pages=" + indexList.value + "&limit=" + limit
+)) as any;
+const list: any = ref(data);
+const totals = ref(total);
+const isload = ref(true);
+const isloaded = ref(false);
+//此处为分页器的回调函数
 const currentChange = (e: number) => {
   /*
     这三行代码解决了分页器,每次执行时会让dom抖动的问题 
     具体逻辑是，每次切换有页数时页数内容变化，会导致页面高度变化，从而导致页面抖动
     所以在切换页数时，先把页面高度固定，然后再去请求数据，请求完数据后再把页面高度变回来
   */
-  const listCom = document.querySelector('.listCom') as HTMLDivElement
-  const listComHeight = listCom.offsetTop
-  listCom.style.height = listComHeight + 'px'
+  const listCom = document.querySelector(".listCom") as HTMLDivElement;
+  const listComHeight = listCom.offsetTop;
+  listCom.style.height = listComHeight + "px";
   //将当前页重新渲染，vue才能监听到数据的变化
-  isload.value = false
+  isload.value = false;
   //当前页数
-  indexList.value = e
-  http('get', api + '/overtApis/articleList?pages=' + indexList.value + '&limit=' + limit).then((res: any) => {
+  indexList.value = e;
+  http(
+    "get",
+    api + "/overtApis/articleList?pages=" + indexList.value + "&limit=" + limit
+  ).then((res: any) => {
     //跳转路径
-    list.value = res.data
-    isload.value = true
+    list.value = res.data;
+    isload.value = true;
     //将页面高度变回来
-    listCom.style.height = 'auto'
-  })
-}
+    listCom.style.height = "auto";
+  });
+};
 onMounted(() => {
-  // setTimeout(() => {
-  //   maskShow.value = false
-  // }, 1000)
   //控制滚动到指定位置，固定背景人物
-  useEventListener(window, 'scroll', () => {
-    const y = window.scrollY
+  useEventListener(window, "scroll", () => {
+    const y = window.scrollY;
     if (y >= 200) {
-      isloaded.value = false
+      isloaded.value = false;
     } else {
-      isloaded.value = true
+      isloaded.value = true;
     }
-    const listSum = document.querySelector('#listSum') as HTMLElement
-    const example = document.querySelector('#example') as HTMLElement
-    if (!example) return
-    if (y >= 820) {
-      listSum.style.transform = 'translateY(154px)'
-      listSum.style.position = 'fixed'
-    } else {
-      listSum.style.transform = 'translateY(974px)'
-      listSum.style.position = 'absolute'
-    }
+    const example = document.querySelector("#example") as HTMLElement;
+    if (!example) return;
     if (y >= 300) {
-      example.style.bottom = '0'
+      example.style.bottom = "0";
     } else {
-      example.style.bottom = '-100px'
+      example.style.bottom = "-100px";
     }
-  })
+  });
 
   setTimeout(() => {
-    isloaded.value = true
-  }, 1000)
-})
-onBeforeUnmount(() => {
-  list.value = []
-  const listSum = document.querySelector('#listSum') as HTMLElement
-  const example = document.querySelector('#example') as HTMLElement
-  if (document.querySelector('.navbarContent')) {
-    example.style.opacity = '1'
-    listSum.style.transform = 'translateY(1012px)'
-    listSum.style.position = 'absolute'
-  }
-})
-const URL = import.meta.env.VITE_BASE_HTTP
+    isloaded.value = true;
+    ScrollTrigger.create({
+      trigger: ".conImg",
+      start: "top top",
+      end: "+=1080",
+      scrub: true,
+      animation: gsap.to(".homecoverImg", {
+        scale: 2,
+        duration: 1,
+        ease: "none",
+      }),
+    });
+    ScrollTrigger.create({
+      trigger: ".conImg",
+      start: "bottom bottom",
+      endTrigger: ".listSum",
+      end: "top top",
+      scrub: true,
+      animation: gsap.to("#listSum", {
+        scale: 1,
+        position: "fixed",
+        y: 200,
+        duration: 1,
+        ease: "none",
+      }),
+    });
+  }, 300);
+});
+const URL = import.meta.env.VITE_BASE_HTTP;
 </script>
 
 <template>
@@ -97,7 +110,11 @@ const URL = import.meta.env.VITE_BASE_HTTP
         <div v-if="!store.dark" class="mask"></div>
       </transition> -->
       <div class="conImg">
-        <div class="navbar-logo" @click="() => isloaded = !isloaded" :class="isloaded ? 'loaded' : ''">
+        <div
+          class="navbar-logo"
+          @click="() => (isloaded = !isloaded)"
+          :class="isloaded ? 'loaded' : ''"
+        >
           <span>
             <span>Ji</span>
           </span>
@@ -111,32 +128,42 @@ const URL = import.meta.env.VITE_BASE_HTTP
             <span>y</span>
           </span>
         </div>
-        <img :src="URL + '/public/img/101608761_p0.jpg'" alt="">
+        <img class="homecoverImg" :src="URL + '/public/img/101608761_p0.jpg'" alt="" />
       </div>
     </div>
     <ContentHead></ContentHead>
     <div class="listSum">
       <!-- 文章内容 -->
       <div class="listCom">
-        <img class="listImg" id="listSum" :src="URL + '/public/img/reduce.jpg'" alt="">
-        <div :id="'list' + item.aid" v-for="(item, index) in list" :key="index" v-if="isload">
+        <img class="listImg" id="listSum" :src="URL + '/public/img/reduce.jpg'" alt="" />
+        <div
+          :id="'list' + item.aid"
+          v-for="(item, index) in list"
+          :key="index"
+          v-if="isload"
+        >
           <router-link :to="'/home/detail/' + item.aid">
             <ContentDiv :data="item" :index="index"></ContentDiv>
           </router-link>
         </div>
-
       </div>
       <!-- 文章分页 -->
       <div class="example-pagination-block lzy-center" id="example">
-        <div class="example-demonstration">When the content ends, turn the page to see the new content</div>
-        <el-pagination :page-size="limit" layout="prev, pager, next" :total="totals" @current-change="currentChange" />
+        <div class="example-demonstration">
+          When the content ends, turn the page to see the new content
+        </div>
+        <el-pagination
+          :page-size="limit"
+          layout="prev, pager, next"
+          :total="totals"
+          @current-change="currentChange"
+        />
       </div>
     </div>
-
   </div>
 </template>
 
-<style  lang="less" scoped>
+<style lang="less" scoped>
 .home {
   width: 100%;
   height: 100vh;
@@ -150,8 +177,16 @@ const URL = import.meta.env.VITE_BASE_HTTP
     height: 100%;
     position: absolute;
     inset: 0;
-    background-image: radial-gradient(rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, .5) 100%), radial-gradient(rgba(255, 255, 255, 0) 33%, rgba(0, 0, 0, .3) 166%), linear-gradient(0, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 0% 80%, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, .4) 100%);
-    animation: slide-out-fwd-bl_lzy 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+    background-image: radial-gradient(rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 100%),
+      radial-gradient(rgba(255, 255, 255, 0) 33%, rgba(0, 0, 0, 0.3) 166%),
+      linear-gradient(
+        0,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0) 0% 80%,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(0, 0, 0, 0.4) 100%
+      );
+    animation: slide-out-fwd-bl_lzy 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
   }
 
   .mask-enter-active,
@@ -165,7 +200,6 @@ const URL = import.meta.env.VITE_BASE_HTTP
   }
 }
 
-
 .content {
   width: 100%;
   height: inherit;
@@ -175,6 +209,14 @@ const URL = import.meta.env.VITE_BASE_HTTP
 .conImg {
   width: 100%;
   height: 100%;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+  }
 
   .navbar-logo {
     position: absolute;
@@ -183,11 +225,12 @@ const URL = import.meta.env.VITE_BASE_HTTP
     /* 计算最大值与最小值，跟随页面大小变化 */
     font-size: clamp(30px, 7vw, 20vw);
     color: #fff;
-    font-family: 'Slackey';
+    font-family: "Slackey";
     user-select: none;
     cursor: pointer;
+    z-index: 2;
 
-    &>span {
+    & > span {
       display: inline-block;
       overflow: hidden;
       transition-duration: 0.2s;
@@ -218,21 +261,14 @@ const URL = import.meta.env.VITE_BASE_HTTP
       }
     }
 
-    &.loaded>span {
+    &.loaded > span {
       transform: translateY(0);
     }
 
-    &.loaded>span span {
+    &.loaded > span span {
       transform: translateY(0);
     }
-
   }
-}
-
-.conImg img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
 }
 
 .ContentHead {
@@ -255,7 +291,7 @@ const URL = import.meta.env.VITE_BASE_HTTP
   position: fixed;
   top: 0;
   left: 0;
-  transform: translateY(300px);
+  transform: translateY(300px) scale(2);
   z-index: -1;
 }
 
@@ -268,7 +304,7 @@ const URL = import.meta.env.VITE_BASE_HTTP
   scrollbar-width: none;
   -ms-overflow-style: none;
 
-  &>div {
+  & > div {
     margin-bottom: 30px;
   }
 }
@@ -296,7 +332,7 @@ const URL = import.meta.env.VITE_BASE_HTTP
 }
 
 .listSum :deep(.example-pagination-block) {
-  transition: bottom .22s cubic-bezier(0.645, 0.045, 0.355, 1);
+  transition: bottom 0.22s cubic-bezier(0.645, 0.045, 0.355, 1);
   opacity: 1;
   height: 50px;
   width: 100vw;
@@ -330,5 +366,5 @@ const URL = import.meta.env.VITE_BASE_HTTP
 }
 </style>
 <style lang="less">
-@import url('@/assets/css/mobile/homeMobile.less');
+@import url("@/assets/css/mobile/homeMobile.less");
 </style>

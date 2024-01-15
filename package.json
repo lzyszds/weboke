@@ -22,6 +22,7 @@
     "dayjs": "^1.11.9",
     "echarts": "^5.4.2",
     "element-plus": "^2.3.8",
+    "gsap": "^3.12.4",
     "highlight.js": "^11.8.0",
     "live2d-widget": "^3.1.4",
     "lodash": "^4.17.21",

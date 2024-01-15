@@ -154,7 +154,7 @@ body {
     grid-template-columns: 2fr 3fr 2fr;
     grid-template-rows: 1fr;
 
-    
+
 
     .collapse {
       position: relative;

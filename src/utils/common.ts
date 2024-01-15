@@ -271,6 +271,33 @@ export const awaitTime = (fn: Function, time: number | string = 1000) => {
   })
 }
 
+// 数字跳动
+export const numberJump = (num: any, sum: any) => {
+  /* 
+    const data = ref<any[]>([
+      {
+        name: "新增用户",
+        icon: "typcn:user-add",
+        value: 0,
+        click: () => {},
+      },
+    ]);
+  */
+  let timer: any = [];
+  for (const key in num) {
+    num[key].value = 0;
+    timer[key] = setInterval(() => {
+      //去除小数点
+      num[key].value += Math.ceil(sum[key] / 10);
+
+      if (num[key].value >= sum[key]) {
+        num[key].value = sum[key];
+        clearInterval(timer[key]);
+      }
+    }, 60);
+  }
+}
+
 
 export const allFunction = {
   splitArray,//把一个数组拆分成几个数组
@@ -287,4 +314,5 @@ export const allFunction = {
   unique,//数组对象去重（区别单数组以及数组中嵌套一层对象）
   scrollTo,//页面滚动到指定位置XY轴
   awaitTime,//延迟函数
+  numberJump,//数字跳动
 }
