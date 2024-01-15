@@ -17,8 +17,12 @@ onMounted(() => {
     if (elimg) {
       //给当前页面所有图片添加data-fancybox属性，让其可以点击放大
       elimg.querySelectorAll('img').forEach((element: any) => {
-        element.setAttribute('data-fancybox', 'gallery')
-        proxy.$fancyapps.Fancybox.bind('[data-fancybox="gallery"]', {
+        element.setAttribute('data-fancybox','true' )
+        proxy.$fancyapps.Fancybox.bind('data-fancybox', {
+          dragToClose: false,
+          Image: {
+            zoom: false,
+          },
         })
       })
     }

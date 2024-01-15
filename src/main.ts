@@ -9,7 +9,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import hljsVuePlugin from '@highlightjs/vue-plugin'//代码展示高亮
-import { Fancybox, Carousel, Panzoom } from "@fancyapps/ui";//图片放大
+import { Fancybox } from "@fancyapps/ui";//图片放大
 import lazy from '@/utils/lazy'; // 图片懒加载
 import transition from '@/utils/transition'
 import { createPinia } from 'pinia' //状态管理

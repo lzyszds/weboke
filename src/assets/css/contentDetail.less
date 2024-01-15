@@ -247,11 +247,11 @@
         }
 
         &:before {
-          content: '恶语伤人六月寒, 良言一句暖三冬意思';
+          content: '恶语伤人六月寒, 良言一句暖三冬';
           font-family: 'dindin';
           position: absolute;
           inset: auto auto 10% 50%;
-          transform: translateX(-35%);
+          transform: translateX(-25%);
           width: 100%;
           background-color: transparent;
           border: none;
@@ -408,107 +408,111 @@
     }
   }
 
-  .affix-container {
-    position: absolute;
-    top: 473px;
-    right: calc(50% - 554px - 290px);
-    background-color: #fff;
-    font-size: 16px;
-    z-index: 1;
-    // width: 200px;
-    height: calc(100% - 20px);
-    background-color: transparent;
-    // padding-top: 10px;
-    padding-bottom: 10px;
-    transition: .3s;
-    animation-duration: 0.5s;
+  .bodyMain {
+    
 
-    .affix {
-      position: sticky;
-      top: 340px;
+    .affix-container {
+      position: absolute;
+      top: 473px;
+      right: calc(50% - 554px - 290px);
+      background-color: #fff;
+      font-size: 16px;
       z-index: 1;
+      // width: 200px;
+      height: calc(100% - 20px);
+      background-color: transparent;
+      // padding-top: 10px;
+      padding-bottom: 10px;
+      transition: .3s;
+      animation-duration: 0.5s;
 
-      .affix_item {
-        border-radius: 10px;
-        background-color: #fff;
-        padding: 10px;
-        border: 3px solid #000;
+      .affix {
+        position: sticky;
+        top: 340px;
+        z-index: 1;
 
-        .affix-title {
-          margin-bottom: 5px;
-          font-size: 20px;
-          font-weight: 600;
-          color: #555;
-          display: flex;
-          // justify-content: center;
-          padding-left: 10px;
-          background-color: #ffe14d;
+        .affix_item {
           border-radius: 10px;
-          user-select: none;
-          cursor: var(--linkCup);
+          background-color: #fff;
+          padding: 10px;
+          border: 3px solid #000;
 
-          i {
-            fill: #000;
-            width: 30px !important;
-            height: 30px;
-            font-size: 30px;
-          }
+          .affix-title {
+            margin-bottom: 5px;
+            font-size: 20px;
+            font-weight: 600;
+            color: #555;
+            display: flex;
+            // justify-content: center;
+            padding-left: 10px;
+            background-color: #ffe14d;
+            border-radius: 10px;
+            user-select: none;
+            cursor: var(--linkCup);
 
-          span {
-            line-height: 28px;
-          }
-        }
+            i {
+              fill: #000;
+              width: 30px !important;
+              height: 30px;
+              font-size: 30px;
+            }
 
-        .affix-list {
-          padding: 0 10px;
-          list-style: none;
-          margin: 0;
-          font-family: "dindin";
-
-          &>li.active {
-            color: var(--themeColor);
-
-            &::before {
-              z-index: 10;
+            span {
+              line-height: 28px;
             }
           }
 
-          &>li.H2 {
-            font-weight: 600;
-          }
+          .affix-list {
+            padding: 0 10px;
+            list-style: none;
+            margin: 0;
+            font-family: "dindin";
 
-          &>li.H3 {
-            margin-left: 10px;
-          }
+            &>li.active {
+              color: var(--themeColor);
 
-          &>li.H4 {
-            margin-left: 20px;
-          }
+              &::before {
+                z-index: 10;
+              }
+            }
 
-          &>li:before {
-            background-color: transparent;
-            content: ' ';
-            display: inline-block;
-            height: 25px;
-            left: 15px;
-            margin-top: -1px;
-            position: absolute;
-            width: 3px;
-            border-radius: 30px;
-          }
+            &>li.H2 {
+              font-weight: 600;
+            }
 
-          &>li:hover {
-            color: var(--themeColor);
+            &>li.H3 {
+              margin-left: 10px;
+            }
 
-          }
+            &>li.H4 {
+              margin-left: 20px;
+            }
 
-          &>li:hover:before {
-            background-color: var(--themeColor);
-            z-index: 10;
-          }
+            &>li:before {
+              background-color: transparent;
+              content: ' ';
+              display: inline-block;
+              height: 25px;
+              left: 15px;
+              margin-top: -1px;
+              position: absolute;
+              width: 3px;
+              border-radius: 30px;
+            }
 
-          &>li.active:before {
-            background-color: var(--themeColor);
+            &>li:hover {
+              color: var(--themeColor);
+
+            }
+
+            &>li:hover:before {
+              background-color: var(--themeColor);
+              z-index: 10;
+            }
+
+            &>li.active:before {
+              background-color: var(--themeColor);
+            }
           }
         }
       }

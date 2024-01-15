@@ -9,6 +9,8 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
+const mytext = ("编程是一场艺术，逻辑是它的画笔，创新是它的灵魂").split("");
+
 const api = import.meta.env.VITE_BASE_URL;
 
 const limit = 5;
@@ -88,12 +90,24 @@ onMounted(() => {
         position: "fixed",
         y: 200,
         duration: 1,
+        filter: "blur(0px)",
         ease: "none",
       }),
     });
-  }, 300);
+    toGaspText(".myText")
+  }, 1000);
 });
 const URL = import.meta.env.VITE_BASE_HTTP;
+
+function toGaspText(target: string) {
+  return gsap.to(target, {
+    duration: 0.01,
+    y: "+=10",
+    opacity: 1,
+    ease: "power1.inOut",
+    stagger: 0.05 // 延迟每个元素动画开始的时间
+  });
+}
 </script>
 
 <template>
@@ -105,30 +119,27 @@ const URL = import.meta.env.VITE_BASE_HTTP;
       </transition>
     </div> -->
     <div class="home">
-      <!-- 遮罩 -->
-      <!-- <transition name="mask">
-        <div v-if="!store.dark" class="mask"></div>
-      </transition> -->
       <div class="conImg">
-        <div
-          class="navbar-logo"
-          @click="() => (isloaded = !isloaded)"
-          :class="isloaded ? 'loaded' : ''"
-        >
-          <span>
-            <span>Ji</span>
-          </span>
-          <span>
-            <span>n</span>
-          </span>
-          <span>
-            <span>gz</span>
-          </span>
-          <span>
-            <span>y</span>
+        <div class="navbar-logo" :class="isloaded ? 'loaded' : ''">
+          <p>
+            <span>
+              <span>Ji</span>
+            </span>
+            <span>
+              <span>n</span>
+            </span>
+            <span>
+              <span>gz</span>
+            </span>
+            <span>
+              <span>y</span>
+            </span>
+          </p>
+          <span class="myText" v-for="(item, index) in mytext" :key="index" :class="isloaded ? 'loaded' : ''">
+            {{ item }}
           </span>
         </div>
-        <img class="homecoverImg" :src="URL + '/public/img/101608761_p0.jpg'" alt="" />
+        <img class="homecoverImg " :src="URL + '/public/img/bg.png'" alt="" />
       </div>
     </div>
     <ContentHead></ContentHead>
@@ -136,12 +147,7 @@ const URL = import.meta.env.VITE_BASE_HTTP;
       <!-- 文章内容 -->
       <div class="listCom">
         <img class="listImg" id="listSum" :src="URL + '/public/img/reduce.jpg'" alt="" />
-        <div
-          :id="'list' + item.aid"
-          v-for="(item, index) in list"
-          :key="index"
-          v-if="isload"
-        >
+        <div :id="'list' + item.aid" v-for="(item, index) in list" :key="index" v-if="isload">
           <router-link :to="'/home/detail/' + item.aid">
             <ContentDiv :data="item" :index="index"></ContentDiv>
           </router-link>
@@ -152,12 +158,7 @@ const URL = import.meta.env.VITE_BASE_HTTP;
         <div class="example-demonstration">
           When the content ends, turn the page to see the new content
         </div>
-        <el-pagination
-          :page-size="limit"
-          layout="prev, pager, next"
-          :total="totals"
-          @current-change="currentChange"
-        />
+        <el-pagination :page-size="limit" layout="prev, pager, next" :total="totals" @current-change="currentChange" />
       </div>
     </div>
   </div>
@@ -179,13 +180,11 @@ const URL = import.meta.env.VITE_BASE_HTTP;
     inset: 0;
     background-image: radial-gradient(rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 100%),
       radial-gradient(rgba(255, 255, 255, 0) 33%, rgba(0, 0, 0, 0.3) 166%),
-      linear-gradient(
-        0,
+      linear-gradient(0,
         rgba(255, 255, 255, 0) 0%,
         rgba(255, 255, 255, 0) 0% 80%,
         rgba(255, 255, 255, 0) 0%,
-        rgba(0, 0, 0, 0.4) 100%
-      );
+        rgba(0, 0, 0, 0.4) 100%);
     animation: slide-out-fwd-bl_lzy 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
   }
 
@@ -206,6 +205,7 @@ const URL = import.meta.env.VITE_BASE_HTTP;
   overflow-x: hidden;
 }
 
+
 .conImg {
   width: 100%;
   height: 100%;
@@ -219,54 +219,75 @@ const URL = import.meta.env.VITE_BASE_HTTP;
   }
 
   .navbar-logo {
+    height: auto;
+    text-align: center;
     position: absolute;
-    left: 10%;
+    left: 50%;
     top: 30%;
+    transform: translateX(-50%);
     /* 计算最大值与最小值，跟随页面大小变化 */
-    font-size: clamp(30px, 7vw, 20vw);
     color: #fff;
     font-family: "Slackey";
     user-select: none;
     cursor: pointer;
     z-index: 2;
 
-    & > span {
-      display: inline-block;
+    p {
+      margin: 0;
+      height: clamp(10px, 10vw, 20vw);
       overflow: hidden;
-      transition-duration: 0.2s;
-      transition-property: transform;
-      text-align: center;
+      transition: .3s;
 
       span {
+        font-size: clamp(30px, 7vw, 20vw);
+
         display: inline-block;
-        transition-duration: 0.5s;
+        overflow: hidden;
+        transition-duration: 0.2s;
         transition-property: transform;
-        transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
-      }
-
-      &:nth-child(odd) {
-        transform: translateY(50%);
+        text-align: center;
 
         span {
-          transform: translateY(-100%);
+          display: inline-block;
+          transition-duration: 0.5s;
+          transition-property: transform;
+          transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-      }
 
-      &:nth-child(even) {
-        transform: translateY(-50%);
+        &:nth-child(odd) {
+          transform: translateY(50%);
 
-        span {
-          transform: translateY(100%);
+          span {
+            transform: translateY(-100%);
+          }
+        }
+
+        &:nth-child(even) {
+          transform: translateY(-50%);
+
+          span {
+            transform: translateY(100%);
+          }
         }
       }
     }
 
-    &.loaded > span {
+
+    &.loaded p>span {
       transform: translateY(0);
     }
 
-    &.loaded > span span {
+    &.loaded p>span span {
       transform: translateY(0);
+    }
+
+    .myText {
+      display: inline-block;
+      transition: .22s;
+      font-size: clamp(1px, 1vw, 14vw);
+      font-family: 'dindin';
+      transform: translateY(0);
+      opacity: 0;
     }
   }
 }
@@ -293,6 +314,7 @@ const URL = import.meta.env.VITE_BASE_HTTP;
   left: 0;
   transform: translateY(300px) scale(2);
   z-index: -1;
+  filter: blur(5px);
 }
 
 .listCom {
@@ -304,7 +326,7 @@ const URL = import.meta.env.VITE_BASE_HTTP;
   scrollbar-width: none;
   -ms-overflow-style: none;
 
-  & > div {
+  &>div {
     margin-bottom: 30px;
   }
 }

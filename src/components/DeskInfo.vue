@@ -51,8 +51,8 @@ const api = import.meta.env.VITE_BASE_URL + '/public/img/10.svg'
           <span><i class="iconfont icon-kongqizhiliang"></i>：{{ convertPM25(weatherData.pm25) }}</span>
         </p>
         <p class="barload">
-          <span><i class="iconfont icon-shidu"></i>：{{ weatherData.humidity }}%</span>
           <span class="uptime">更新时:{{ weatherData.updateTime }}</span>
+          <span><i class="iconfont icon-shidu"></i>：{{ weatherData.humidity }}%</span>
         </p>
       </div>
       <div class="tags">
@@ -67,7 +67,8 @@ const api = import.meta.env.VITE_BASE_URL + '/public/img/10.svg'
   position: sticky;
   top: 60px;
   margin-bottom: 10px;
-
+  user-select: none;
+  cursor: pointer;
   p {
     margin: 0;
   }
@@ -97,7 +98,7 @@ const api = import.meta.env.VITE_BASE_URL + '/public/img/10.svg'
 
     .gridlist {
       display: grid;
-      gap: 0 20px;
+      gap: 0 30px;
       grid-template-columns: 1fr 1fr;
 
       h2 {
@@ -124,6 +125,7 @@ const api = import.meta.env.VITE_BASE_URL + '/public/img/10.svg'
         grid-column: 1/3;
         display: flex;
         margin-top: 10px;
+        gap: 0 30px;
 
         span {
           flex: 1;

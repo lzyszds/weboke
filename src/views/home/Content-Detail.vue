@@ -81,7 +81,6 @@ onMounted(async () => {
       element.innerHTML = element.getAttribute('data-line-number')
     });
   })
-  moveTo()
 })
 //处理时间戳转换成距离当前日期的时间（一天前，两天前）
 let setTimestamp = (time: string) => {
@@ -326,25 +325,27 @@ const toScrollY = async (id: string) => {
         </span>
       </div>
     </div>
-    <!-- 文章内容 -->
-    <Maincontent :main="dataDet.main" @update="updateCop"></Maincontent>
-    <!-- 文章目录 -->
-    <div class="affix-container animate__bounceInDown" ref="affixElm" v-if="tocList.length != 0">
-      <DeskInfo></DeskInfo>
-      <main class="affix themeCard">
-        <div class="affix_item">
-          <div class="affix-title" @click="scrollTo(0, 0)">
-            <i class="iconfont icon-icon-taikong17"></i>
-            <span>目录</span>
+    <div class="bodyMain">
+      <!-- 文章内容 -->
+      <Maincontent :main="dataDet.main" @update="updateCop"></Maincontent>
+      <!-- 文章目录 -->
+      <div class="affix-container" ref="affixElm">
+        <DeskInfo></DeskInfo>
+        <main class="affix themeCard">
+          <div class="affix_item">
+            <div class="affix-title" @click="scrollTo(0, 0)">
+              <i class="iconfont icon-icon-taikong17"></i>
+              <span>目录</span>
+            </div>
+            <ul class="affix-list">
+              <li v-for="item in tocList" :class="tocACindex == item.id ? 'active ' + item.nodeName : '' + item.nodeName"
+                :key="item.id">
+                <a @click="toScrollY(item.id)">{{ item.title }}</a>
+              </li>
+            </ul>
           </div>
-          <ul class="affix-list">
-            <li v-for="item in tocList" :class="tocACindex == item.id ? 'active ' + item.nodeName : '' + item.nodeName"
-              :key="item.id">
-              <a @click="toScrollY(item.id)">{{ item.title }}</a>
-            </li>
-          </ul>
-        </div>
-      </main>
+        </main>
+      </div>
     </div>
     <!-- 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议 -->
     <footer v-transition="'tosiTion'" class="oldtosiTion post-footer center ">
@@ -415,6 +416,7 @@ const toScrollY = async (id: string) => {
 
 <style lang="less" scoped>
 @import url('@/assets/css/contentDetail.less');
+
 
 .oldtosiTion {
   opacity: 0;
