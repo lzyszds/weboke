@@ -1,6 +1,5 @@
 <script setup lang='ts'>
 import { LNotification } from '@/utils/common'
-import { ref } from 'vue'
 const svg = {
   back: `<svg t="1690022021897" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4346" width="400" height="400"><path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" fill="#ffffff" p-id="4347"></path></svg>`,
   enter: `<svg t="1690022003577" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4144" width="400" height="400"><path d="M731.733333 480l-384-341.333333c-17.066667-14.933333-44.8-14.933333-59.733333 4.266666-14.933333 17.066667-14.933333 44.8 4.266667 59.733334L640 512 292.266667 821.333333c-17.066667 14.933333-19.2 42.666667-4.266667 59.733334 8.533333 8.533333 19.2 14.933333 32 14.933333 10.666667 0 19.2-4.266667 27.733333-10.666667l384-341.333333c8.533333-8.533333 14.933333-19.2 14.933334-32s-4.266667-23.466667-14.933334-32z" fill="#ffffff" p-id="4145"></path></svg>`,
@@ -13,7 +12,8 @@ const svg = {
   downloadIcon: `<svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2.5" style="margin-right: 7px; position: relative; top: -1px" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>`,
   deleteIcon: `<svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2.5" fill="none" style="margin-right: 7px" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>`,
 };
-const isShow = ref(true);
+const isShow = ref(false);
+const position = ref({ x: 0, y: 0 })
 const topOptions = [{
   name: "返回",
   icon: svg.back,
@@ -44,64 +44,95 @@ const options = {
     name: "复制选中文本",
     icon: svg.copyIcon,
     click: () => {
-      LNotification("复制成功",);
+      //获取当前浏览器选中的文本
+      const text = window.getSelection()!.toString()
+      //将文本通过 clipboard 传入剪切板
+      navigator.clipboard.writeText(text).then(() => {
+        if (!text) return LNotification(`<i class="iconfont icon-error-"></i> 复制失败,请选择文本`)
+        LNotification(`<i class="iconfont icon-copy"></i> 复制成功,转载请声明来源！`)
+      }, function (res) {
+        console.log("lzy ~ res", res)
+      });
     },
   },
   paste: {
     name: "粘贴",
     icon: svg.pasteIcon,
     click: () => {
-      LNotification("粘贴成功",);
+      LNotification("暂未开放",);
     },
   },
   share: {
     name: "分享网站",
     icon: svg.share,
     click: () => {
-      LNotification("剪切成功",);
+      LNotification("暂未开放",);
     },
   },
   download: {
     name: "下载",
     icon: svg.downloadIcon,
     click: () => {
-      LNotification("下载成功",);
+      LNotification("暂未开放",);
     },
   },
   delete: {
     name: "删除",
     icon: svg.deleteIcon,
     click: () => {
-      LNotification("删除成功",);
+      LNotification("暂未开放",);
     },
   },
-
 }
+
+const show = (e: MouseEvent) => {
+  isShow.value = false;
+  e.preventDefault()
+  if (e.clientX > window.innerWidth - 160) {
+    position.value.x = e.clientX - 160
+  } else {
+    position.value.x = e.clientX
+  }
+  if (e.clientY > window.innerHeight - 230) {
+    position.value.y = e.clientY - 230
+  } else {
+    position.value.y = e.clientY
+  }
+
+  setTimeout(() => {
+    isShow.value = true;
+  }, 20)
+};
+const hide = () => {
+  isShow.value = false;
+};
+onMounted(() => {
+  window.addEventListener('contextmenu', show);
+  window.addEventListener('click', hide);
+});
 </script>
 
 <template>
-  <div class="body">
-    <ul class="contextMenu">
-      <li class="contextMenu-item">
-        <button class="contextMenu-button iconbutton" v-for="item of topOptions" @click="item.click">
-          <span v-html="item.icon"></span>
-        </button>
-      </li>
-      <li class="contextMenu-item" v-for="item of options">
-        <button class="contextMenu-button" @click="item.click">
-          <span v-html="item.icon"></span> {{ item.name }}
-        </button>
-      </li>
-    </ul>
-  </div>
+  <ul class="contextMenu" v-show="isShow" :style="{ top: `${position.y}px`, left: `${position.x}px` }">
+    <li class="contextMenu-item">
+      <button class="contextMenu-button iconbutton" v-for="item of topOptions" @click="item.click">
+        <span v-html="item.icon"></span>
+      </button>
+    </li>
+    <li class="contextMenu-item" v-for="item of options">
+      <button class="contextMenu-button" @click="item.click">
+        <span v-html="item.icon"></span> {{ item.name }}
+      </button>
+    </li>
+  </ul>
 </template>
 <style lang='less' scoped>
-.body {
-  height: 98vh;
-  width: 100vw;
+.menu {
   display: grid;
   place-content: center;
   place-items: center;
+  position: fixed;
+  transform: translate(-50%, -50%);
 }
 
 li .contextMenu-button.iconbutton {

@@ -61,7 +61,7 @@
   --item-border: rgba(0, 0, 0, 0.1);
   --item-color: #000000;
   --item-bg-hover: rgba(0, 0, 0, 0.2);
-  height: 0;
+  height: var(--height);
   overflow: hidden;
   background: var(--menu-bg);
   -webkit-backdrop-filter: blur(5px);
@@ -151,16 +151,12 @@
 
 @keyframes menuAnimation {
   0% {
-    height: 0;
     opacity: 0;
-    transform: scaleX(.5)
   }
 
   100% {
-    height: var(--height);
     opacity: 1;
     border-radius: 8px;
-    transform: scale(1);
   }
 }
 
