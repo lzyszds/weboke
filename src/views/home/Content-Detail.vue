@@ -19,7 +19,6 @@ const overloading = ref(false) //重载评论组件，解决评论后评论组�
 const route = useRoute()
 const aid = route.path.replace('/home/detail/', '') //获取当前文章id
 const { data: dataDet } = await http('get', api + '/article/getArticleInfo/' + aid) as any
-console.log(`lzy  dataDet:`, dataDet)
 const affixElm = ref<HTMLElement | null>(null)
 dataDet.cover_img = api + '/public' + dataDet.cover_img
 const { proxy } = getCurrentInstance() as any
@@ -266,6 +265,7 @@ const moveTo = () => {
   //获取父元素
   const selcetRound = document.querySelector('#selcetRound') as HTMLSpanElement;
   selcetRound.style.transform = `translateX(${defaultval * information.rangeIndex}px)`
+
 }
 //评论头像更换事件
 function setRange(clickIndex: number) {
@@ -378,7 +378,8 @@ const toScrollY = async (id: string) => {
             <div @wheel="onWheelfn" ref="wheel">
               <p>
                 <span id="selcetRound"></span>
-                <img v-for="(item, index) in comImg" :key="index" :src="item" @click="setRange(index)">
+                <img v-for="(item, index) in comImg" :key="index" :src="item" @click="setRange(index)"
+                  :class="{ animate__headShake: information.rangeIndex == index }">
               </p>
             </div>
             <button>

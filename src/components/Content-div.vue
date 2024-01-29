@@ -30,7 +30,6 @@ interface Props {
 const props = defineProps<Props>();
 const wtype = props.data.wtype;
 const data = ref<Data>(props.data);
-data.value.partial_content = data.value.partial_content.replace(/<[^>]+>/g, "");
 const selectHandle = (index: number) => {
   if (index == 0) return data.value.uname;
   if (index == 1)
