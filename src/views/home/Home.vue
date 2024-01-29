@@ -43,7 +43,7 @@ const currentChange = (e: number) => {
     api + "/article/getArticleList?pages=" + indexList.value + "&limit=" + limit
   ).then((res: any) => {
     //跳转路径
-    list.value = res.data;
+    list.value = res.data.data;
     isload.value = true;
     //将页面高度变回来
     listCom.style.height = "auto";
@@ -241,7 +241,7 @@ function toGaspText(target: string) {
 
       span {
         font-size: clamp(30px, 7vw, 20vw);
-
+        filter: drop-shadow(1px 0 2px #F6569D);
         display: inline-block;
         overflow: hidden;
         transition-duration: 0.2s;
@@ -250,13 +250,13 @@ function toGaspText(target: string) {
 
         span {
           display: inline-block;
-          transition-duration: 0.5s;
+          transition-duration: 1s;
           transition-property: transform;
           transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         &:nth-child(odd) {
-          transform: translateY(50%);
+          transform: translateY(50%) rotateZ(180deg);
 
           span {
             transform: translateY(-100%);
@@ -264,7 +264,7 @@ function toGaspText(target: string) {
         }
 
         &:nth-child(even) {
-          transform: translateY(-50%);
+          transform: translateY(-50%) rotateZ(-180deg);
 
           span {
             transform: translateY(100%);
@@ -289,6 +289,8 @@ function toGaspText(target: string) {
       font-family: 'dindin';
       transform: translateY(0);
       opacity: 0;
+      filter: drop-shadow(1px 0 4px #4e4e4e);
+
     }
   }
 }
