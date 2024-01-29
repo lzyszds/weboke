@@ -60,7 +60,8 @@ export default defineConfig(({ command, mode }): any => {
       port: 1024,
       proxy: {
         "/api": {
-          target: "http://localhost:8089",
+          // target: "http://localhost:8089",
+          target: "http://localhost:1020",
           changeOrigin: true,
           rewrite: path => path.replace(/^\/api/, '')
         },
@@ -85,7 +86,7 @@ export default defineConfig(({ command, mode }): any => {
         //   rewrite: path => path.replace(/^\/mapApi/, '')
         // },
         // '/adminGetApi': {
-        //   target: _baseUrl + '/overtApis/',//这里是域名，不是完整地址
+        //   target: _baseUrl + '/api/',//这里是域名，不是完整地址
         //   changeOrigin: true,//是否跨域
         //   rewrite: path => path.replace(/^\/adminGetApi/, '')
         // },

@@ -18,15 +18,15 @@ const overloading = ref(false) //重载评论组件，解决评论后评论组�
 
 const route = useRoute()
 const aid = route.path.replace('/home/detail/', '') //获取当前文章id
-const { data: dataDet } = await http('get', api + '/overtApis/articleInfo?aid=' + aid) as any
+const { data: dataDet } = await http('get', api + '/article/getArticleInfo/' + aid) as any
 console.log(`lzy  dataDet:`, dataDet)
 const affixElm = ref<HTMLElement | null>(null)
-dataDet.coverImg = api + '/public' + dataDet.coverImg
+dataDet.cover_img = api + '/public' + dataDet.cover_img
 const { proxy } = getCurrentInstance() as any
 const tip = allFunction.LNotification // 右下角提示
 const tocList = ref<any>([]);
 const tocACindex = ref<string>('#toc-head-1');
-const listComment = ref<any>(await http('get', api + '/overtApis/articleComment?aid=' + aid) as any)
+const listComment = ref<any>(await http('get', api + '/article/getArticleComment/?id=' + aid) as any)
 
 //评论上方的诗句请求
 const textbefore = ref<String>('寻找中...')
@@ -207,7 +207,7 @@ const comSubmit = () => {
     if (res.code == 200) {
       tip(`评论成功,感谢你的评论！`, 2000)
       overloading.value = true
-      listComment.value = await http('get', api + '/overtApis/articleComment?aid=' + aid) as any
+      listComment.value = await http('get', api + '/api/articleComment?aid=' + aid) as any
       overloading.value = false
       //清空评论内容
       information.comContent = ''
@@ -306,10 +306,14 @@ const toScrollY = async (id: string) => {
   <div class="detail">
     <!-- 文章封面 -->
     <div class="imgtop">
-      <img :src="dataDet.coverImg" alt="">
+      <img :src="dataDet.cover_img" alt="">
       <div class="topTitle center">
         <h1>{{ dataDet.title }}</h1>
-        <p style="font-size: 15px;">{{ dataDet.author }} {{ setTimestamp(dataDet.createTime) }} {{ dataDet.comNumber }}条评论
+        <p style="font-size: 15px;">
+          {{ dataDet.author }}
+          {{ setTimestamp(dataDet.create_date) }}
+          {{ dataDet.comments_count }}
+          条评论
           <LzyIcon name="ic:baseline-access-time"></LzyIcon>
           <span>
             {{ dataDet.access_count }}
@@ -320,8 +324,8 @@ const toScrollY = async (id: string) => {
     <!-- 文章类型 -->
     <div class="detBreadcrumb center">
       <div class="tags">
-        <span class="mr-1 taglzy" v-for="(item, index) in dataDet.wtype ? dataDet.wtype.split(',') : []" :key="index">{{
-          item }}
+        <span class="mr-1 taglzy" v-for="(item, index) in dataDet.wtype " :key="index">
+          {{ item }}
         </span>
       </div>
     </div>

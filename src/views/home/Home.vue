@@ -15,10 +15,11 @@ const api = import.meta.env.VITE_BASE_URL;
 
 const limit = 5;
 const indexList = ref(1);
-const { total, data } = (await http(
+const itemData = (await http(
   "get",
-  api + "/overtApis/articleList?pages=" + indexList.value + "&limit=" + limit
+  api + "/article/getArticleList?pages=" + indexList.value + "&limit=" + limit
 )) as any;
+const { data, total } = itemData.data;
 const list: any = ref(data);
 const totals = ref(total);
 const isload = ref(true);
@@ -39,7 +40,7 @@ const currentChange = (e: number) => {
   indexList.value = e;
   http(
     "get",
-    api + "/overtApis/articleList?pages=" + indexList.value + "&limit=" + limit
+    api + "/article/getArticleList?pages=" + indexList.value + "&limit=" + limit
   ).then((res: any) => {
     //跳转路径
     list.value = res.data;
@@ -73,7 +74,7 @@ onMounted(() => {
       start: "top top",
       end: "+=1080",
       scrub: true,
-      animation: gsap.to(".homecoverImg", {
+      animation: gsap.to(".homecover_img", {
         scale: 2,
         duration: 1,
         ease: "none",
@@ -139,7 +140,7 @@ function toGaspText(target: string) {
             {{ item }}
           </span>
         </div>
-        <img class="homecoverImg " :src="URL + '/public/img/bg.png'" alt="" />
+        <img class="homecover_img " :src="URL + '/public/img/bg.png'" alt="" />
       </div>
     </div>
     <ContentHead></ContentHead>
