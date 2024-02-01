@@ -48,15 +48,15 @@ toTion.value.forEach((_item, index) => {
 const data = ref(<any>[])
 const month = ref(<any>[])
 onMounted(() => {
-  http('get', api + '/proxyApis/github').then((res: any) => {
+  http('get', api + '/common/getGithubInfo').then((res: any) => {
     const { contributionsCollection } = res.data.user
     const { weeks, totalContributions } = contributionsCollection.contributionCalendar
     // handleData(weeks)
     totalCont.value = totalContributions
     data.value = weeks
     const months = [
-      "Jan", "Feb", "Mar", "Apr", "May", "June",
-      "July", "Aug", "Sept", "Oct", "Nov", "Dec"
+      "一月", "二月", "三月", "四月", "五月", "六月",
+      "七月", "八月", "九月", "十月", "十一月", "十二月"
     ]
     const now = <any>[]
     weeks.forEach((item, index) => {
@@ -105,6 +105,13 @@ const onBack = () => {
 onBeforeUnmount(() => {
   data.value = []
 })
+
+const identifyreatColor = (color: string) => {
+  if (color == '#ebedf0') {
+    return '#fff'
+  }
+  return color
+}
 
 </script>
 
@@ -185,19 +192,19 @@ onBeforeUnmount(() => {
         <div class="wave">
           <svg id="calendar" width="1040px" height="100%" xmlns="http://www.w3.org/2000/svg">
             <g>
-              <text v-for="(item, index) in ['日', '一', '二', '三', '四', '五', '六']" :key="index" fill="#000" font-size="13"
-                x="8" :y="index * 18 + 43" overflow="scroll">{{ item }}</text>
+              <text v-for="(item, index) in ['日', '一', '二', '三', '四', '五', '六']" :key="index" fill="#000" font-size="12"
+                x="8" :y="index * 18 + 42" overflow="scroll">{{ item }}</text>
             </g>
             <g>
-              <text v-for="(item, index) in month" :key="index" fill="#000" font-size="14" :x="item.index" y="20"
+              <text v-for="(item, index) in month" :key="index" fill="#000" font-size="12" :x="item.index" y="20"
                 v-show="isShow(item.text, index)" overflow="scroll">
                 {{ item.text }}
               </text>
             </g>
             <g v-for="(item, indexG) in data" :key="indexG">
               <rect class="rectangle" v-for="(res, indexR) in item.contributionDays" :key="indexR" :x="indexG * 19 + 30"
-                :y="indexR * 18 + 30" rx="3" ry="3" stroke="#9d9d9d" :fill="res.color" width="14" height="14"
-                :data-date="res.date" :data-count="res.contributionCount" overflow="scroll" />
+                :y="indexR * 18 + 30" rx="3" ry="3" stroke="#000" :fill="identifyreatColor(res.color)" width="13"
+                height="13" :data-date="res.date" :data-count="res.contributionCount" overflow="scroll" />
             </g>
           </svg>
         </div>
@@ -292,20 +299,24 @@ onBeforeUnmount(() => {
   .text {
     width: 65%;
     display: block;
-    text-align: right;
+    text-align: left;
     margin: 0 auto;
   }
 
   .wave {
-    width: 65%;
+    max-width: 60%;
+    height: 100%;
     background-color: #fff;
-    padding: 20px 0 0;
+    padding: 0 40px;
+    display: flex;
     border-radius: 5px;
     z-index: 99;
-    margin: 0 auto;
+    margin: 10px auto;
     user-select: none;
     overflow-y: hidden;
     overflow-x: auto;
+    border: 1px solid #999;
+    filter: hue-rotate(120deg);
   }
 }
 

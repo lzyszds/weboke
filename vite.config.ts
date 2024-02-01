@@ -75,43 +75,16 @@ export default defineConfig(({ command, mode }): any => {
         //   changeOrigin: true,
         //   rewrite: path => path.replace(/^\/api/, '')
         // },
-        // '/music': {
-        //   target: _baseUrl + ':1030/',
-        //   changeOrigin: true,
-        //   rewrite: path => path.replace(/^\/music/, '')
-        // },
-        // '/mapApi': { //高德地图api
-        //   target: 'https://restapi.amap.com/v3/',
-        //   changeOrigin: true,
-        //   rewrite: path => path.replace(/^\/mapApi/, '')
-        // },
-        // '/adminGetApi': {
-        //   target: _baseUrl + '/api/',//这里是域名，不是完整地址
-        //   changeOrigin: true,//是否跨域
-        //   rewrite: path => path.replace(/^\/adminGetApi/, '')
-        // },
-        // '/adminPostApi': {
-        //   target: _baseUrl + '/privateApis/',//这里是域名，不是完整地址
-        //   changeOrigin: true,//是否跨域
-        //   rewrite: path => path.replace(/^\/adminPostApi/, '')
-        // },
-        // '/adminStatic': {
-        //   target: _baseUrl + '/public',//这里是域名，不是完整地址
-        //   changeOrigin: true,//是否跨域
-        //   rewrite: path => path.replace(/^\/adminStatic/, '')
-        // },
-
-        // '/github': {
-        //   target: 'https://api.github.com/graphql',//这里是域名，不是完整地址
-        //   changeOrigin: true,//是否跨域
-        //   rewrite: path => path.replace(/^\/github/, '')
-        // }
-
-        // '/live2d': {
-        //   target: 'https://oss.amogu.cn/blog/live2d/api/model/girls-frontline',
-        //   changeOrigin: true,
-        //   rewrite: path => path.replace(/^\/music/, '')
-        // },
+        '/music': {
+          target: 'http://localhost:1030',
+          changeOrigin: true,
+          rewrite: path => path.replace(/^\/music/, '')
+        },
+        '/live2d': {
+          target: 'http://localhost:1020/public/live2d',
+          changeOrigin: true,
+          rewrite: path => path.replace(/^\/live2d/, '')
+        },
       }
     }
   }

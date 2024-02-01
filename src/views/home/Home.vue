@@ -359,7 +359,7 @@ function toGaspText(target: string) {
 .listSum :deep(.example-pagination-block) {
   transition: bottom 0.22s cubic-bezier(0.645, 0.045, 0.355, 1);
   opacity: 1;
-  height: 50px;
+  height: 53px;
   width: 100vw;
   position: fixed;
   left: 0;
@@ -369,7 +369,7 @@ function toGaspText(target: string) {
 }
 
 .example-demonstration {
-  padding: 2px !important;
+  padding: 4px !important;
 }
 </style>
 <style scoped>
