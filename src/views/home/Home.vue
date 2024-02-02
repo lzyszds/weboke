@@ -98,7 +98,7 @@ onMounted(() => {
     toGaspText(".myText")
   }, 1000);
 });
-const URL = import.meta.env.VITE_BASE_HTTP;
+const URL = import.meta.env.VITE_BASE_URL;
 
 function toGaspText(target: string) {
   return gsap.to(target, {
