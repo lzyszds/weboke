@@ -4,23 +4,23 @@ export default function (document) {
   style.innerHTML = `
   @font-face {
     font-family: 'dindin';
-    src: url('${import.meta.env.VITE_BASE_URL}/public/font/dist/DingTalk_JinBuTi_Regular.woff');
+    src: url('/api/public/font/dist/DingTalk_JinBuTi_Regular.woff');
   }
   @font-face {
     font-family: 'black-Magic';
-    src: url('${import.meta.env.VITE_BASE_URL}/public/font/dist/Black-Magic.ttf');
+    src: url('/api/public/font/dist/Black-Magic.ttf');
   }
   @font-face {
     font-family: 'firaCode';
-    src: url('${import.meta.env.VITE_BASE_URL}/public/font/dist/FiraCode.ttf');
+    src: url('/api/public/font/dist/FiraCode.ttf');
   }
   @font-face {
     font-family: 'momo ink night';
-    src: url('${import.meta.env.VITE_BASE_URL}/public/font/dist/momo ink night.ttf');
+    src: url('/api/public/font/dist/momo ink night.ttf');
   }
   @font-face {
     font-family: 'slackey';
-    src: url('${import.meta.env.VITE_BASE_URL}/public/font/dist/slackey.woff2');
+    src: url('/api/public/font/dist/slackey.woff2');
   }
   `
   // @font-face {

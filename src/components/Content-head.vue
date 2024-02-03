@@ -60,6 +60,7 @@ onMounted(() => {
 .magic {
   display: inline-block;
   position: relative;
+  background-color: var(--themeColor);
 }
 
 .magic {
@@ -121,11 +122,9 @@ onMounted(() => {
 
 .magics {
   text-align: center;
-  height: 68px;
   font-size: 20px;
+  margin-top: 200px;
 }
-
-
 .magic-text {
   animation: background-pan 3s linear infinite;
   background: linear-gradient(to right,

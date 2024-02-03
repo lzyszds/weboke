@@ -38,14 +38,13 @@ const selectHandle = (index: number) => {
   if (index == 3) return data.value.access_count;
 };
 
-const URL = import.meta.env.VITE_BASE_URL;
 
 </script>
 
 <template>
   <div v-transition="'tosiTion'" class="conDiv">
     <div class="conDiv_img">
-      <img v-lazy="props.index" :src="URL + '/public' + data.cover_img" alt="" />
+      <img v-lazy="props.index" :src="'/api/public' + data.cover_img" alt="" />
     </div>
     <div class="conDiv_text">
       <div class="title">{{ data.title }}</div>

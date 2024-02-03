@@ -9,15 +9,13 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
-const mytext = ("编程是一场艺术，逻辑是它的画笔，创新是它的灵魂").split("");
-
-const api = import.meta.env.VITE_BASE_URL;
+const mytext = "编程是一场艺术，逻辑是它的画笔，创新是它的灵魂".split("");
 
 const limit = 5;
 const indexList = ref(1);
 const itemData = (await http(
   "get",
-  api + "/article/getArticleList?pages=" + indexList.value + "&limit=" + limit
+  "/api/article/getArticleList?pages=" + indexList.value + "&limit=" + limit
 )) as any;
 const { data, total } = itemData.data;
 const list: any = ref(data);
@@ -40,7 +38,7 @@ const currentChange = (e: number) => {
   indexList.value = e;
   http(
     "get",
-    api + "/article/getArticleList?pages=" + indexList.value + "&limit=" + limit
+    "/apiarticle/getArticleList?pages=" + indexList.value + "&limit=" + limit
   ).then((res: any) => {
     //跳转路径
     list.value = res.data.data;
@@ -71,17 +69,6 @@ onMounted(() => {
     isloaded.value = true;
     ScrollTrigger.create({
       trigger: ".conImg",
-      start: "top top",
-      end: "+=1080",
-      scrub: true,
-      animation: gsap.to(".homecover_img", {
-        scale: 2,
-        duration: 1,
-        ease: "none",
-      }),
-    });
-    ScrollTrigger.create({
-      trigger: ".conImg",
       start: "bottom bottom",
       endTrigger: ".listSum",
       end: "top top",
@@ -95,10 +82,10 @@ onMounted(() => {
         ease: "none",
       }),
     });
-    toGaspText(".myText")
+    toGaspText(".myText");
   }, 1000);
 });
-const URL = import.meta.env.VITE_BASE_URL;
+const URL = import.meta.env.VITE_BASE_HTTP;
 
 function toGaspText(target: string) {
   return gsap.to(target, {
@@ -106,9 +93,24 @@ function toGaspText(target: string) {
     y: "+=10",
     opacity: 1,
     ease: "power1.inOut",
-    stagger: 0.05 // 延迟每个元素动画开始的时间
+    stagger: 0.05, // 延迟每个元素动画开始的时间
   });
 }
+const homecoverLoad = (e) => {
+  console.log(e);
+  //往后的1.5秒内，让图片模糊的从10 到 0
+  gsap.to(e.target, {
+    duration: 1.5,
+    filter: "blur(0px)",
+    display: "block",
+  });
+  gsap.to(".placeholder", {
+    duration: 0.2,
+    filter: "blur(2px)",
+    display: "none",
+  });
+}
+
 </script>
 
 <template>
@@ -140,7 +142,8 @@ function toGaspText(target: string) {
             {{ item }}
           </span>
         </div>
-        <img class="homecover_img " :src="URL + '/public/img/bg.png'" alt="" />
+        <img class="actual-image" :src="URL + '/public/img/bg.png'" @load="homecoverLoad" alt="" />
+        <img class="placeholder" :src="URL + '/public/img/bgExcess.png'" alt="" />
       </div>
     </div>
     <ContentHead></ContentHead>
@@ -206,17 +209,49 @@ function toGaspText(target: string) {
   overflow-x: hidden;
 }
 
-
 .conImg {
   width: 100%;
   height: 100%;
   overflow: hidden;
+  position: relative;
 
   img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     z-index: 1;
+
+    &.placeholder {
+      position: absolute;
+      inset: 0;
+      filter: blur(10px);
+      transform: scale(1.03);
+
+    }
+
+    &.actual-image {
+      display: none;
+    }
+  }
+
+  /* 倒影样式 */
+  &::after {
+    content: "";
+    background: url(/api/public/img/bg128.jpeg) no-repeat;
+    backdrop-filter: blur(10px);
+    background-size: cover;
+    background-position-y: -764px;
+    position: fixed;
+    bottom: -313px;
+    left: 0;
+    height: 300px;
+    width: 100%;
+    /* 使用渐变生成透明度效果 */
+    transform: rotatex(180deg) translatey(15px);
+    mask-image: linear-gradient(0,
+        rgba(0, 0, 0, 1) 0%,
+        rgba(0, 0, 0, 0.5) 50%,
+        transparent 100%);
   }
 
   .navbar-logo {
@@ -237,11 +272,11 @@ function toGaspText(target: string) {
       margin: 0;
       height: clamp(10px, 10vw, 20vw);
       overflow: hidden;
-      transition: .3s;
+      transition: 0.3s;
 
       span {
         font-size: clamp(30px, 7vw, 20vw);
-        filter: drop-shadow(1px 0 2px #F6569D);
+        filter: drop-shadow(1px 0 2px #f6569d);
         display: inline-block;
         overflow: hidden;
         transition-duration: 0.2s;
@@ -273,7 +308,6 @@ function toGaspText(target: string) {
       }
     }
 
-
     &.loaded p>span {
       transform: translateY(0);
     }
@@ -284,13 +318,12 @@ function toGaspText(target: string) {
 
     .myText {
       display: inline-block;
-      transition: .22s;
+      transition: 0.22s;
       font-size: clamp(1px, 1vw, 14vw);
-      font-family: 'dindin';
+      font-family: "dindin";
       transform: translateY(0);
       opacity: 0;
       filter: drop-shadow(1px 0 4px #4e4e4e);
-
     }
   }
 }

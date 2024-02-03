@@ -21,7 +21,7 @@ const convertPM25 = (pm25: number) => {
     return "严重污染";
   }
 };
-const api = import.meta.env.VITE_BASE_URL + '/public/img/10.svg'
+const api = '/api/public/img/10.svg'
 </script>
 
 <template>
@@ -69,6 +69,7 @@ const api = import.meta.env.VITE_BASE_URL + '/public/img/10.svg'
   margin-bottom: 10px;
   user-select: none;
   cursor: pointer;
+
   p {
     margin: 0;
   }

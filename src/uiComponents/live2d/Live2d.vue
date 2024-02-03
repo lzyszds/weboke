@@ -6,7 +6,7 @@ const player = ref(null)
 const contentText = ref('只是因为在人群中多看了你一眼,再也没能忘记你那张苦瓜脸')
 function scriptfnHandle() {
   const script = document.createElement('script')
-  script.src = '/live2d/live2d-widget-master/autoload.js'
+  script.src = '/api/public/live2d/live2d-widget-master/autoload.js'
   document.body.appendChild(script)
 }
 
