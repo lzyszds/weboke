@@ -97,7 +97,7 @@ code {
 
 
   &:not(.custom) a:hover {
-    text-decoration: none;
+    // text-decoration: none;
   }
 
   &:not(.custom) img {
@@ -212,9 +212,10 @@ code {
     margin: 1rem 0;
     padding: 0.25rem rem 0 0.25rem;
     color: #999;
-    font-size: 1rem;
+    font-size: 1.5rem;
     border-left: 0.2rem solid var(--themeColor);
     background: aliceblue;
+    font-family: 'dindin';
   }
 
   /* 代码类型提示，右上角的 */
@@ -231,6 +232,45 @@ code {
   code,
   kbd {
     font-family: 'firaCode' !important;
+  }
+
+  mark {
+
+    padding: 0 5px;
+    border-radius: 2px;
+    font-size: 16px;
+    font-family: 'dindin';
+
+    &.gray {
+      background-color: #555;
+      background-color: #555;
+      color: #fff;
+      box-shadow: 0 0 5px 1px #a7a7a7;
+    }
+
+    &.theme {
+      background-color: var(--themeColor);
+      color: #fff;
+      box-shadow: 0 0 5px 1px #a7a7a7;
+    }
+
+    &.black {
+      background-color: #000;
+      color: #fff;
+      box-shadow: 0 0 5px 1px #a7a7a7;
+    }
+
+    &.white {
+      background-color: #fff;
+      color: #000;
+      box-shadow: 0 0 2px 1px #000000;
+    }
+
+    &.pink {
+      background-color: #ffb3ac;
+      color: #fff;
+      box-shadow: 0 0 5px 1px #a7a7a7;
+    }
   }
 }
 
