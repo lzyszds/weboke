@@ -422,7 +422,6 @@ const toScrollY = async (id: string) => {
 <style lang="less" scoped>
 @import url('@/assets/css/contentDetail.less');
 
-
 .oldtosiTion {
   opacity: 0;
   transition: .5s ease-in-out;

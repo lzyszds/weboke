@@ -16,7 +16,10 @@ export default defineConfig(({ command, mode }): any => {
     plugins: [
       vue(),
       prismjs({
-        languages: ['json', 'js', 'ts', 'css', 'less', 'html', 'markdown', 'sql', 'typescript', 'vim'],
+        languages: ['json', 'js', 'ts', 'css', 'less', 'html', 'markdown', 'sql', 'typescript', 'vim', "git", "bash"],
+        plugins: ['line-numbers', 'show-language', 'copy-to-clipboard', 'inline-color'],
+        theme: 'okaidia',// 主题
+        css: true,
       }),
       envCompatible(),
       AutoImport({

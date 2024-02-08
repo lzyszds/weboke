@@ -17,7 +17,7 @@ onMounted(() => {
     if (elimg) {
       //给当前页面所有图片添加data-fancybox属性，让其可以点击放大
       elimg.querySelectorAll('img').forEach((element: any) => {
-        element.setAttribute('data-fancybox','true' )
+        element.setAttribute('data-fancybox', 'true')
         proxy.$fancyapps.Fancybox.bind('data-fancybox', {
           dragToClose: false,
           Image: {
@@ -53,7 +53,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="main  vuepress-markdown-body v-md-editor-preview center">
+  <div id="markdownMain" class="main vuepress-markdown-body v-md-editor-preview center">
     <div v-html="props.main"></div>
   </div>
 </template>
