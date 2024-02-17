@@ -65,7 +65,7 @@ p {
 }
 
 .vuepress-markdown-body {
-  margin-top: 20px !important;
+  margin-top: 40px !important;
   background-color: var(--themeColor);
   padding: 10px;
   font-size: 18px;

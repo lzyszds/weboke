@@ -319,15 +319,14 @@ const toScrollY = async (id: string) => {
             {{ dataDet.access_count }}
           </span>
         </p>
+        <!-- 文章类型 -->
+        <div class="tags">
+          <span class="mr-1 taglzy" v-for="(item, index) in dataDet.tags " :key="index">
+            {{ item }}
+          </span>
+        </div>
       </div>
-    </div>
-    <!-- 文章类型 -->
-    <div class="detBreadcrumb center">
-      <div class="tags">
-        <span class="mr-1 taglzy" v-for="(item, index) in dataDet.wtype " :key="index">
-          {{ item }}
-        </span>
-      </div>
+
     </div>
     <div class="bodyMain">
       <!-- 文章内容 -->

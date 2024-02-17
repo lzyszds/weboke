@@ -18,7 +18,7 @@ interface Data {
   comments_count: string;
   cover_img: string;
   partial_content: string;
-  wtype: string;
+  tags: string[];
   access_count: number;
 }
 interface Props {
@@ -28,7 +28,7 @@ interface Props {
 // const api = import.meta.env.VITE_BASE_URL
 
 const props = defineProps<Props>();
-const wtype = props.data.wtype;
+const tags = props.data.tags;
 const data = ref<Data>(props.data);
 const selectHandle = (index: number) => {
   if (index == 0) return data.value.uname;
@@ -50,7 +50,7 @@ const selectHandle = (index: number) => {
       <div class="title">{{ data.title }}</div>
       <div class="synopsis" v-text="data.partial_content"></div>
       <div class="tags">
-        <span class="mr-1 taglzy" v-for="item of wtype">{{ item }} </span>
+        <span class="mr-1 taglzy" v-for="item of tags">{{ item }} </span>
       </div>
       <div class="time">
         <span v-for="(item, index) in list" :key="index">
