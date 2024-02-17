@@ -38,7 +38,7 @@ const currentChange = (e: number) => {
   indexList.value = e;
   http(
     "get",
-    "/apiarticle/getArticleList?pages=" + indexList.value + "&limit=" + limit
+    "/api/article/getArticleList?pages=" + indexList.value + "&limit=" + limit
   ).then((res: any) => {
     //跳转路径
     list.value = res.data.data;
