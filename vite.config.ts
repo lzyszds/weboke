@@ -65,6 +65,11 @@ export default defineConfig(({ command, mode }): any => {
         "/api": {
           // target: "http://localhost:8089",
           target: "http://localhost:1020",
+          //设置请求头
+          headers: {
+            //16是梧州的ip，12是南宁的ip
+            "x-real-ip": "113.16.122.38"
+          },
           changeOrigin: true,
           rewrite: path => path.replace(/^\/api/, '')
         },

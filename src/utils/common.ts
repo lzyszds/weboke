@@ -54,14 +54,15 @@ export const getIpWeather = (): Promise<WeatherData> => {
   return new Promise((resolve, reject) => {
     try {
       http('get', '/api/common/ipConfig').then((res: ipGetType) => {
-        if (res.status = 'success') {
+        if (res.code == 200) {
           //将个人信息存入localStorage，避免每次刷新都要请求接口
           setLocalStorage('weatherData', res.data)
           resolve(res.data)
         } else {
-          reject(res.status)
+          setLocalStorage('weatherData', res.msg)
+          reject(res.msg)
         }
-      });
+      })
     } catch (e) {
       allFunction.LNotification("网络连接出现故障 请稍后尝试")
     }

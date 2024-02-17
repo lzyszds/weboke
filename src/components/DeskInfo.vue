@@ -6,14 +6,14 @@ const state = useStore()
 if (JSON.stringify(state.weatherData) == '{}') {
   state.setWeather(JSON.parse(localStorage.getItem("weatherInfo")!))
 }
-const weatherInfo = state.weatherData
+const { province, city, ip, temperature, weather, winddirection, windpower, humidity, reporttime } = state.weatherData
 const api = '/api/public/img/10.svg'
 
 const formatTime = (time: string) => {
   const date = dayjs(time)
   return date.format('HH:mm')
 }
-
+console.log(temperature);
 
 </script>
 
@@ -22,22 +22,22 @@ const formatTime = (time: string) => {
     <section class="cardinter">
       <div class="geoArea">
         <lzyIcon name="ep:location-information"></lzyIcon>
-        {{ weatherInfo.province + "|" + weatherInfo.city }} <span> {{ weatherInfo.ip }}</span>
+        {{ province + "|" + city }} <span> {{ ip }}</span>
       </div>
     </section>
     <section class="cardinter">
 
       <div class="gridlist">
-        <h2 style="margin:15px 0px 0 20px">
-          <img :src="getWeather() || api" alt="">
-          <span class="temperature">{{ weatherInfo.temperature }}°C</span>
+        <h2 :class="{ undef: temperature == '未知' }">
+          <img :src="getWeather() || api">
+          <span class="temperature">{{ temperature }}°C</span>
         </h2>
         <p>
-          <span><i class="iconfont icon-icon-taikong4"></i>：{{ weatherInfo.weather }}</span>
-          <span><i class="iconfont icon-fengsufengxiang"></i>：{{ weatherInfo.winddirection }}</span>
-          <span><i class="iconfont icon-feng"></i>：{{ weatherInfo.windpower }}级</span>
-          <span><i class="iconfont icon-shidu"></i>：{{ weatherInfo.humidity }}%</span>
-          <span class="uptime">更新时间:{{ formatTime(weatherInfo.reporttime) }}</span>
+          <span><i class="iconfont icon-icon-taikong4"></i>：{{ weather }}</span>
+          <span><i class="iconfont icon-fengsufengxiang"></i>：{{ winddirection }}</span>
+          <span><i class="iconfont icon-feng"></i>：{{ windpower }}级</span>
+          <span><i class="iconfont icon-shidu"></i>：{{ humidity }}%</span>
+          <span class="uptime">更新时间:{{ formatTime(reporttime) }}</span>
         </p>
       </div>
     </section>
@@ -51,6 +51,8 @@ const formatTime = (time: string) => {
   margin-bottom: 10px;
   user-select: none;
   cursor: pointer;
+  display: grid;
+  gap: 3px;
 
   p {
     margin: 0;
@@ -63,13 +65,6 @@ const formatTime = (time: string) => {
     border: 3px solid #000;
     position: relative;
 
-    img {
-      height: 50px;
-      border-radius: 50%;
-      filter: drop-shadow(1px 2px 2px black);
-      transform: scale(2);
-    }
-
     .geoArea {
       span {
         text-decoration: 1px underline #000;
@@ -81,8 +76,10 @@ const formatTime = (time: string) => {
 
     .gridlist {
       display: grid;
-      gap: 0 30px;
+      gap: 0 20px;
       grid-template-columns: 1fr 1fr;
+      justify-content: center;
+      align-items: center;
 
       h2 {
         display: flex;
@@ -93,6 +90,14 @@ const formatTime = (time: string) => {
         margin: 0 0 0 10px;
         align-items: self-start;
 
+        &.undef {
+          align-items: inherit;
+
+          .temperature {
+            display: none;
+          }
+        }
+
         .temperature {
           // position: absolute;
           font-size: 40px;
@@ -100,10 +105,18 @@ const formatTime = (time: string) => {
         }
       }
 
+      img {
+        border-radius: 50%;
+        filter: drop-shadow(1px 2px 2px black);
+        width: 50px;
+        transform: scale(2);
+      }
+
       span {
         display: block;
       }
-      .uptime{
+
+      .uptime {
         margin-top: 20px;
       }
     }

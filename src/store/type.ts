@@ -13,6 +13,7 @@ export interface WeatherData {
   ip: string
 }
 export interface ipGetType {
+  code: number,
   data: WeatherData,
-  status: string
+  msg: string
 }
