@@ -97,7 +97,6 @@ function toGaspText(target: string) {
   });
 }
 const homecoverLoad = (e) => {
-  console.log(e);
   //往后的1.5秒内，让图片模糊的从10 到 0
   gsap.to(e.target, {
     duration: 1.5,
