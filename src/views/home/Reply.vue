@@ -58,7 +58,7 @@ const isReply = (item: Replydata, index: number) => {
   <div class="reply">
     <div class="item" v-for="(item, index) in replydata" :key="index">
       <div class="item-left">
-        <img :src="item.head_img" alt="">
+        <img :src="'/api/public'+item.head_img" alt="">
       </div>
       <div class="item-right">
         <div class="item-right-top">
