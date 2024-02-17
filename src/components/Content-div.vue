@@ -48,7 +48,7 @@ const selectHandle = (index: number) => {
     </div>
     <div class="conDiv_text">
       <div class="title">{{ data.title }}</div>
-      <div class="synopsis" v-html="data.partial_content"></div>
+      <div class="synopsis" v-text="data.partial_content"></div>
       <div class="tags">
         <span class="mr-1 taglzy" v-for="item of wtype">{{ item }} </span>
       </div>
