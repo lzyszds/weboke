@@ -51,12 +51,9 @@ export function setLocalStorage(key: string, value: any) {
 //获取当前ip以及天气
 export const getIpWeather = (): Promise<WeatherData> => {
 
-  let headers = {
-    "cookie": "X-User-Token=lYw6OgAbhFstAF7hZzSKWJIZN613qwEE"
-  }
   return new Promise((resolve, reject) => {
     try {
-      http('get', '/getIp/info', headers).then((res: ipGetType) => {
+      http('get', '/api/common/ipConfig').then((res: ipGetType) => {
         if (res.status = 'success') {
           //将个人信息存入localStorage，避免每次刷新都要请求接口
           setLocalStorage('weatherData', res.data)
@@ -95,22 +92,25 @@ export const getWeather = () => {
   const state = useStore();
   const data: WeatherData = state.weatherData
   let weatherData
-  if (!data.weatherData) {
+  if (!data) {
     weatherData = {
-      temperature: 0,
+      province: "未知",
+      city: "未知",
+      adcode: "未知",
       weather: "未知",
-      windDirection: "未知",
-      windPower: "未知",
-      visibility: "未知",
-      rainfall: "未知",
+      temperature: "未知",
+      winddirection: "未知",
+      windpower: "未知",
       humidity: "未知",
-      pm25: 0,
-      updateTime: "未知",
+      reporttime: "未知",
+      temperature_float: "未知",
+      humidity_float: "未知",
+      ip: "未知"
     }
   }
-  const formatted: any = useDateFormat(data.beijingTime, 'HH')
+  const formatted: any = useDateFormat(data.reporttime, 'HH')
   const isdark = formatted >= 19 || formatted <= 6
-  switch (weatherData || data.weatherData.weather) {
+  switch (weatherData || data.weather) {
     case '晴':
       return isdark ? img.NightSunny : img.Sunny
     case '多云': case '少云':

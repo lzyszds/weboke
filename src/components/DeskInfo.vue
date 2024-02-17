@@ -1,27 +1,20 @@
 <script setup lang='ts'>
 import { getWeather } from "@/utils/common";
 import { useStore } from "@/store/index";
+import dayjs from "dayjs";
 const state = useStore()
 if (JSON.stringify(state.weatherData) == '{}') {
-  state.setWeather(JSON.parse(localStorage.getItem("weatherData")!))
+  state.setWeather(JSON.parse(localStorage.getItem("weatherInfo")!))
 }
-const { weatherData, tags, ip, region } = state.weatherData
-const convertPM25 = (pm25: number) => {
-  if (pm25 <= 35) {
-    return "优";
-  } else if (pm25 <= 75) {
-    return "良";
-  } else if (pm25 <= 115) {
-    return "轻度污染";
-  } else if (pm25 <= 150) {
-    return "中度污染";
-  } else if (pm25 <= 250) {
-    return "重度污染";
-  } else {
-    return "严重污染";
-  }
-};
+const weatherInfo = state.weatherData
 const api = '/api/public/img/10.svg'
+
+const formatTime = (time: string) => {
+  const date = dayjs(time)
+  return date.format('HH:mm')
+}
+
+
 </script>
 
 <template>
@@ -29,34 +22,23 @@ const api = '/api/public/img/10.svg'
     <section class="cardinter">
       <div class="geoArea">
         <lzyIcon name="ep:location-information"></lzyIcon>
-        {{ region == '0|0' ? '中国以外' : region }} <span> {{ ip }}</span>
+        {{ weatherInfo.province + "|" + weatherInfo.city }} <span> {{ weatherInfo.ip }}</span>
       </div>
     </section>
     <section class="cardinter">
 
       <div class="gridlist">
-        <h2 :style="weatherData.temperature !== 0 ? '' : 'margin:15px 0px 0 20px'">
+        <h2 style="margin:15px 0px 0 20px">
           <img :src="getWeather() || api" alt="">
-          <span v-if="weatherData.temperature !== 0" class="temperature">{{
-            weatherData.temperature }}°C</span>
+          <span class="temperature">{{ weatherInfo.temperature }}°C</span>
         </h2>
         <p>
-          <span><i class="iconfont icon-icon-taikong4"></i>：{{ weatherData.weather }}</span>
-          <span><i class="iconfont icon-fengsufengxiang"></i>：{{ weatherData.windDirection }}</span>
-          <span><i class="iconfont icon-feng"></i>：{{ weatherData.windPower }}级</span>
+          <span><i class="iconfont icon-icon-taikong4"></i>：{{ weatherInfo.weather }}</span>
+          <span><i class="iconfont icon-fengsufengxiang"></i>：{{ weatherInfo.winddirection }}</span>
+          <span><i class="iconfont icon-feng"></i>：{{ weatherInfo.windpower }}级</span>
+          <span><i class="iconfont icon-shidu"></i>：{{ weatherInfo.humidity }}%</span>
+          <span class="uptime">更新时间:{{ formatTime(weatherInfo.reporttime) }}</span>
         </p>
-        <p>
-          <span><i class="iconfont icon-dinengjian"></i>：{{ weatherData.visibility }}</span>
-          <!-- <span><i class="iconfont icon-jiangyuliang"></i>：{{ weatherData.rainfall }}</span> -->
-          <span><i class="iconfont icon-kongqizhiliang"></i>：{{ convertPM25(weatherData.pm25) }}</span>
-        </p>
-        <p class="barload">
-          <span class="uptime">更新时:{{ weatherData.updateTime }}</span>
-          <span><i class="iconfont icon-shidu"></i>：{{ weatherData.humidity }}%</span>
-        </p>
-      </div>
-      <div class="tags">
-        <span class="tag" v-for="item of tags">{{ item }}</span>
       </div>
     </section>
   </main>
@@ -121,16 +103,8 @@ const api = '/api/public/img/10.svg'
       span {
         display: block;
       }
-
-      .barload {
-        grid-column: 1/3;
-        display: flex;
-        margin-top: 10px;
-        gap: 0 30px;
-
-        span {
-          flex: 1;
-        }
+      .uptime{
+        margin-top: 20px;
       }
     }
 
