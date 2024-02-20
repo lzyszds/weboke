@@ -1,11 +1,10 @@
-import http from '@/http/http'
+import request from '@/http/request'
 import { ElNotification } from 'element-plus'
 import dayjs from "dayjs";
 import { useDateFormat } from '@vueuse/core'
 import img from '@/assets/icon/weather/import'
 import { useStore } from '@/store/index';
 import { ipGetType, WeatherData } from '@/store/type'
-const api = import.meta.env.VITE_BASE_URL
 
 // 此函数获取一个数组并将其拆分为更小的块
 export const splitArray = (array: any, size) => {
@@ -53,15 +52,16 @@ export const getIpWeather = (): Promise<WeatherData> => {
 
   return new Promise((resolve, reject) => {
     try {
-      http('get', '/api/common/ipConfig').then((res: ipGetType) => {
-        if (res.code == 200) {
-          //将个人信息存入localStorage，避免每次刷新都要请求接口
-          setLocalStorage('weatherData', res.data)
-          resolve(res.data)
-        } else {
-          setLocalStorage('weatherData', res.msg)
-          reject(res.msg)
-        }
+      request({
+        method: 'GET',
+        url: '/api/common/ipConfig',
+      }).then((res: WeatherData) => {
+        //将个人信息存入localStorage，避免每次刷新都要请求接口
+        setLocalStorage('weatherData', res)
+        resolve(res)
+      }).catch((err) => {
+        setLocalStorage('weatherData', err)
+        reject(err)
       })
     } catch (e) {
       allFunction.LNotification("网络连接出现故障 请稍后尝试")
@@ -92,6 +92,7 @@ const testFunction = () => {
 export const getWeather = () => {
   const state = useStore();
   const data: WeatherData = state.weatherData
+  console.log(`lzy  data:`, data)
   let weatherData
   if (!data) {
     weatherData = {
