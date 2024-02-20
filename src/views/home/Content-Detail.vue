@@ -4,13 +4,12 @@ import { ElNotification } from 'element-plus'
 import Maincontent from '@/components/Maincontent.vue';
 // import { useEventListener } from '@vueuse/core'
 import { useRoute } from "vue-router";
-import http from '@/http/http';
+import request from '@/http/request';
 import comImg from '@/assets/icon/comments/import'
 import { commentsType } from './Detailtype'
 import Reply from '@/views/home/Reply.vue'
 import { allFunction, awaitTime, scrollTo } from '@/utils/common'
 import LzyIcon from '@/components/LzyIcon.vue';
-const api = import.meta.env.VITE_BASE_URL
 const DeskInfo = defineAsyncComponent(() => import("@/components/DeskInfo.vue"))
 
 
@@ -18,29 +17,51 @@ const overloading = ref(false) //重载评论组件，解决评论后评论组�
 
 const route = useRoute()
 const aid = route.path.replace('/home/detail/', '') //获取当前文章id
-const { data: dataDet } = await http('get', api + '/article/getArticleInfo/' + aid) as any
+const dataDet = await request({
+  method: 'get',
+  url: '/api/article/getArticleInfo/' + aid
+}) as any
 const affixElm = ref<HTMLElement | null>(null)
-dataDet.cover_img = api + '/public' + dataDet.cover_img
+dataDet.cover_img = '/api/public' + dataDet.cover_img
 const { proxy } = getCurrentInstance() as any
 const tip = allFunction.LNotification // 右下角提示
 const tocList = ref<any>([]);
 const tocACindex = ref<string>('#toc-head-1');
-const listComment = ref<any>(await http('get', api + '/article/getArticleComment/?id=' + aid) as any)
+const listComment = ref<any>()
 
+//获取评论列表
+const getComment = async () => {
+  listComment.value = await request({
+    method: 'get',
+    url: '/api/article/getArticleComment',
+    params: {
+      id: aid
+    }
+  }) as any
+}
+await getComment()
 //评论上方的诗句请求
 const textbefore = ref<String>('寻找中...')
 setTimeout(() => {
   try {
-    http('get', '/getIp/sentence', {
-      "Cookie": "X-User-Token=6zImt+uqp/1XS0CJBkw25piggo2ysiiu"
+    request({
+      method: 'get',
+      url: '/getIp/sentence',
+      headers: {
+        "Cookie": "X-User-Token=6zImt+uqp/1XS0CJBkw25piggo2ysiiu"
+      }
     }).then((res: any) => {
       textbefore.value = res.data.content
     })
   } catch (e) {
     console.log("请求频率上限：" + e + "两秒后重新请求")
     setTimeout(async () => {
-      const result = await http('get', '/getIp/sentence', {
-        "Cookie": "X-User-Token=6zImt+uqp/1XS0CJBkw25piggo2ysiiu"
+      const result = await request({
+        method: 'get',
+        url: '/getIp/sentence',
+        headers: {
+          "Cookie": "X-User-Token=6zImt+uqp/1XS0CJBkw25piggo2ysiiu"
+        }
       }) as any
       textbefore.value = result.data.content
     }, 2000)
@@ -202,11 +223,15 @@ const comSubmit = () => {
     userIp: '', //用户ip
   }
   //发送请求,提交评论
-  http('post', api + '/privateApis/addComment', commentData).then(async (res: any) => {
+  request({
+    method: 'post',
+    url: '/api/article/addComment',
+    data: commentData
+  }).then(async (res: any) => {
     if (res.code == 200) {
       tip(`评论成功,感谢你的评论！`, 2000)
       overloading.value = true
-      listComment.value = await http('get', api + '/api/articleComment?aid=' + aid) as any
+      listComment.value = await getComment()
       overloading.value = false
       //清空评论内容
       information.comContent = ''

@@ -4,20 +4,36 @@ import { ElPagination } from "element-plus";
 import ContentHead from "@/components/Content-head.vue";
 import ContentDiv from "@/components/Content-div.vue";
 import { useEventListener } from "@vueuse/core";
-import http from "@/http/http";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import request from "@/http/request";
+import { ResultDataTotal } from '@/types/Result'
+
+
 gsap.registerPlugin(ScrollTrigger);
 
 const mytext = "编程是一场艺术，逻辑是它的画笔，创新是它的灵魂".split("");
 
 const limit = 5;
 const indexList = ref(1);
-const itemData = (await http(
-  "get",
-  "/api/article/getArticleList?pages=" + indexList.value + "&limit=" + limit
-)) as any;
-const { data, total } = itemData.data;
+// const itemData = (await http(
+//   "get",
+//   "/api/article/getArticleList?pages=" + indexList.value + "&limit=" + limit
+// )) as any;
+
+function getArticleList(pages: number, limit: number) {
+  return request<ResultDataTotal<any>>({
+    url: "/api/article/getArticleList",
+    method: "get",
+    params: {
+      pages: pages,
+      limit: limit,
+    },
+  })
+}
+
+const itemData = await getArticleList(indexList.value, limit);
+const { data, total } = itemData;
 const list: any = ref(data);
 const totals = ref(total);
 const isload = ref(true);
@@ -36,14 +52,10 @@ const currentChange = (e: number) => {
   isload.value = false;
   //当前页数
   indexList.value = e;
-  http(
-    "get",
-    "/api/article/getArticleList?pages=" + indexList.value + "&limit=" + limit
-  ).then((res: any) => {
-    //跳转路径
-    list.value = res.data.data;
+  getArticleList(e, limit).then((res) => {
+    list.value = res.data;
+    totals.value = res.total;
     isload.value = true;
-    //将页面高度变回来
     listCom.style.height = "auto";
   });
 };
@@ -425,3 +437,4 @@ const homecoverLoad = (e) => {
 <style lang="less">
 @import url("@/assets/css/mobile/homeMobile.less");
 </style>
+@/http/request
