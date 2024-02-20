@@ -223,7 +223,8 @@ html body.compensate-for-scrollbar {
 html,
 body {
   scroll-behavior: smooth;
-  font-family: 'firaCode' !important;
+  font-family: 'Fira Code VF';
+  font-variation-settings: 'wght' 430;
 }
 
 body.loading {
