@@ -17,7 +17,9 @@
 // import Music from "./uiComponents/music/Music.vue";
 // import { defineAsyncComponent } from 'vue'
 // import ContextMenu from './components/ContextMenu.vue';
-import Loadinge from '@/uiComponents/loader/loading.vue'
+//懒加载loading
+//@ts-ignore
+const Loadinge = defineAsyncComponent(() => import('@/uiComponents/loader/loading.vue'))
 import { copyTip, getIpWeather } from '@/utils/common'
 // import Live2d from '@/uiComponents/live2d/Live2d.vue'
 //懒加载看板娘

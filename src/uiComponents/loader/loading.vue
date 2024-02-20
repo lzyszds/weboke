@@ -1,10 +1,14 @@
 <script setup lang="ts" >
 import { getWeather } from "@/utils/common";
 // 高德地图api
+watch(() => getWeather(), (newVal, oldVal) => {
+  console.log(newVal, oldVal);
+})
+const img = getWeather()
 </script>
 <template>
   <div class="loaderbody">
-    <img :src="getWeather()" alt="">
+    <img :src="img" alt="">
   </div>
 </template>
 
