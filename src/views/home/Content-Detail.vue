@@ -47,11 +47,8 @@ setTimeout(() => {
     request({
       method: 'get',
       url: '/getIp/sentence',
-      headers: {
-        "Cookie": "X-User-Token=6zImt+uqp/1XS0CJBkw25piggo2ysiiu"
-      }
     }).then((res: any) => {
-      textbefore.value = res.data.content
+      textbefore.value = res.content
     })
   } catch (e) {
     console.log("请求频率上限：" + e + "两秒后重新请求")
@@ -63,7 +60,7 @@ setTimeout(() => {
           "Cookie": "X-User-Token=6zImt+uqp/1XS0CJBkw25piggo2ysiiu"
         }
       }) as any
-      textbefore.value = result.data.content
+      textbefore.value = result.content
     }, 2000)
   }
 }, 50);
@@ -153,8 +150,8 @@ const replyArr = reactive({
 
 // 存储所有评论的状态
 function setReplyStatus() {
-  if (!listComment.value.data) return //如果没有评论则不执行
-  listComment.value.data.forEach((res, index) => {
+  if (!listComment.value) return //如果没有评论则不执行
+  listComment.value.forEach((res, index) => {
     const replyId = replyArr.replyId
     replyId.push([0])
     res.reply && res.reply.forEach(() => {
@@ -203,7 +200,7 @@ const comSubmit = () => {
     replyArr.replyId.forEach(element => {
       element.forEach((res) => res != 0 && (value = res))
     });
-    listComment.value.data.forEach((element) => {
+    listComment.value.forEach((element) => {
       element.reply && element.reply.forEach(res => {
         if (res.comId == value) value = res.ground_id
       });
@@ -255,7 +252,7 @@ const replyComment = (item, index) => {
   if (item.reply_id == 0) {
     replyId[index][0] = item.comId;
   } else {
-    const data = listComment.value.data
+    const data = listComment.value
     for (let key in data) {
       if (data[key].comId == item.ground_id) {
         replyId[key][index + 1] = item.comId;
@@ -359,7 +356,7 @@ const toScrollY = async (id: string) => {
       <!-- 文章目录 -->
       <div class="affix-container" ref="affixElm">
         <DeskInfo></DeskInfo>
-        <main class="affix themeCard">
+        <main class="affix themeCard" v-if="tocList.length">
           <div class="affix_item">
             <div class="affix-title" @click="scrollTo(0, 0)">
               <i class="iconfont icon-icon-taikong17"></i>
@@ -434,9 +431,9 @@ const toScrollY = async (id: string) => {
           <i class="iconfont icon-icon-taikong13"></i>评论
         </h5>
         <div class="comContent">
-          <Reply v-if="!overloading" :oldReplydata="listComment.data" :replydata="listComment.data"
-            :replyId="replyArr.replyId" @replycl="replyComment" @replyclLevelTwo="replyComment"
-            @remReplycl="remReplyComment" @remReplyclLevelTwo="remReplyComment" />
+          <Reply v-if="!overloading" :oldReplydata="listComment" :replydata="listComment" :replyId="replyArr.replyId"
+            @replycl="replyComment" @replyclLevelTwo="replyComment" @remReplycl="remReplyComment"
+            @remReplyclLevelTwo="remReplyComment" />
         </div>
       </div>
     </div>
