@@ -92,7 +92,6 @@ const testFunction = () => {
 export const getWeather = () => {
   const state = useStore();
   const data: WeatherData = state.weatherData
-  console.log(`lzy  data:`, data)
   let weatherData
   if (!data) {
     weatherData = {

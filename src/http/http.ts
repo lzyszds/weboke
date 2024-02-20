@@ -1,5 +1,5 @@
 // 一、配置axios
-import axios from 'axios'
+import axios, { Method } from 'axios'
 const instance = axios.create({
   baseURL: window.location.origin,
   timeout: 10000,
@@ -22,28 +22,36 @@ instance.interceptors.response.use(response => {
 // @param url(必须)  接口地址
 // @param data(可选)  携带参数
 // @param headers(可选) 请求头可以自己设置，也可以使用默认的（不传）
-export default function (method = 'get', url = '', data = {}, headers?) {
-  const Authorization = headers?.Authorization ? headers?.Authorization : ''
-  const isHeadPara = headers ? true : false
-  headers = {
+// 封装请求方法
+export default function <T = any>(method: Method, url: string, data?: any, headers?: any): Promise<T> {
+  // 默认请求头
+  const defaultHeaders = {
     'access-control-allow-origin': '*',
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin-Type': '*',
-    'Authorization': localStorage.getItem('lzy_token') as string
+    'Authorization': localStorage.getItem('lzy_token') as string,
   }
-  if (Authorization) headers['Authorization'] = Authorization
-  if (isHeadPara) headers['Content-Type'] = 'multipart/form-data'
+
+  // 合并请求头
+  headers = Object.assign({}, defaultHeaders, headers)
+
   return new Promise((resolve, reject) => {
-    instance({ method, url, data, headers })
-      .then(res => {
-        resolve(res.data)
+    instance({ method, url, data, headers, })
+      .then((res) => {
+        // 处理响应数据
+        const result = res.data
+        if (result.code === 200) {
+          resolve(result.data)
+        } else {
+          reject(new Error(result.msg))
+        }
       })
-      .catch(err => {
+      .catch((err) => {
+        // 处理错误信息
         reject(err)
       })
   })
 }
-
 function identifyCode(code, err) {
   code == 400 && (code = '请求错误')
   code == 401 && (code = '未授权，请登录')

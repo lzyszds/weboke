@@ -64,7 +64,6 @@ const router = createRouter({
         resources.forEach(function (resource) {
             resource.addEventListener('load', function () {
                 resourceCount++;
-                console.log(`lzy  resourceCount:`, resourceCount)
                 // 当所有资源加载完成时，执行你需要的操作
                 if (resourceCount === resources.length) {
                     console.log('所有静态资源加载完成');

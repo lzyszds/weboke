@@ -13,7 +13,6 @@ const formatTime = (time: string) => {
   const date = dayjs(time)
   return date.format('HH:mm')
 }
-console.log(temperature);
 
 </script>
 
