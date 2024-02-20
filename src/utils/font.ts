@@ -15,6 +15,12 @@ export default function (document) {
     src: url('/api/public/font/dist/FiraCode.ttf');
   }
   @font-face {
+    font-family: 'Fira Code VF';
+    src: url('/api/public/font/dist/FiraCode-VF.woff2') format('woff2-variations');
+    font-weight: 300 700;
+    font-style: normal;
+  }
+  @font-face {
     font-family: 'momo ink night';
     src: url('/api/public/font/dist/momo ink night.ttf');
   }
