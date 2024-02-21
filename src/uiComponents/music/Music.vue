@@ -90,6 +90,8 @@ import { ElMessage, ElNotification, ElCard } from "element-plus";
 import http from "@/http/http";
 import { useRoute } from "vue-router";
 
+const { $axios } = window;
+
 const route = useRoute();
 let data = reactive({
   bordermou: [true], //歌单列表鼠标移入样式
@@ -117,32 +119,17 @@ let data = reactive({
   musicId: [],
   hasClick: false, //是否点击过歌单列表
 });
-
-http('get', "/music/register/anonimous").then((res) => {
-  // console.log(`lzy ~ res`, res)
-});
-http('get', "/music/login/refresh").then((res) => {
-  // console.log(`lzy ~ res`, res)
-});
-
-http('get', "/music/login/status").then((res) => {
-  // console.log(`lzy ~ res`, res)
-}).catch(err => {
-  if (err.response.status == '400') {
-    http('get', "/music/login/cellphone?phone=15077415810&password=a395878870").then((res) => {
-      console.log(`lzy ~ res`, res)
-    });
+//获取歌单列表
+$axios({
+  method: "get",
+  url: "/music/playlist/detail",
+  params: {
+    id: 8275347656,
   }
-})
-// http('get', "/music/logout").then((res) => {
-//   console.log(`lzy ~ res`, res)
-// })
-// http('get', "/adminApi/musicLogin").then((res) => {
-//   console.log(`lzy ~ res`, res)
-// })
-http('get', "/music/playlist/detail?id=7480206477").then((res) => {
-  data.musicId.push(...res.privileges);
+}).then((res) => {
+  data.musicId.push(...res.playlist.trackIds);
 });
+
 let timer;
 const store = useStore();
 const bofang_icon = ref(null); //audio标签src地址
@@ -295,6 +282,7 @@ const onListmc = async () => {
     urls.push(item.id);
   });
   const _data = await store.getMusicDetails(urls, false)
+  console.log(`lzy  _data:`, _data)
   _data.res.forEach((res, index) => {
     data.musicList.push({
       id: res.id,
@@ -361,7 +349,11 @@ const theLyricsLogic = () => {
   data.musicList.forEach((item, index) => {
     if (item.picUrl == img.value.src) id = item.id;
   });
-  http('get', "/music/lyric?id=" + id, null).then((res) => {
+  $axios({
+    method: "get",
+    url: "/music/lyric?id=" + id,
+  }).then((res) => {
+    console.log(`lzy  res:`, res)
     // data.lyric.content = res.lrc.lyric
     data.lyric.state = 1;
     data.lyric.data = res.lrc.lyric.split("\n");
@@ -388,6 +380,7 @@ watch(
 watch(data.musicId, (newVal) => {
   onListmc().then(() => {
     //页面初始的时候播放器默认加入歌单第一首歌曲的数据进入播放器
+    if (data.musicList.length == 0) return
     player.value.src = data.musicList[0].url;
     img.value.src = data.musicList[0].picUrl
     mcName.value = data.musicList[0].name;

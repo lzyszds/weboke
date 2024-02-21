@@ -6,9 +6,10 @@
  *    4. 使用容器中的action
  */
 import { defineStore } from "pinia";
-import http from "@/http/http";
 import _ from "lodash";
 import { WeatherData } from '@/store/type'
+import $axios from '@/http/request'
+
 /**
  * 1. 定义容器并导出.
  * 参数一: 容器ID, 唯一, 将来 Pinia 会把所有的容器挂载到根容器
@@ -29,7 +30,7 @@ export const useStore = defineStore('main', {
       hoverIndex: -1,
       dark: true,
       //天气数据和当前ip
-      weatherData: {} as WeatherData
+      weatherData: {} as WeatherData,
     }
   },
   /**
@@ -44,11 +45,19 @@ export const useStore = defineStore('main', {
    */
   actions: {
     getMusicDetails(id: [], commit: boolean) {
-      return http("post", "/music/song/url?id=" + id,).then((res: any) => {
-        return http("get", '/music/song/detail?ids=' + id,).then((item: any) => {
+      const urlArgs = {
+        method: "get",
+        url: "/music/song/url?id=" + id
+      }
+      const detailArgs = {
+        method: "get",
+        url: "/music/song/detail?ids=" + id
+      }
+      return $axios(urlArgs).then((res: any) => {
+        return $axios(detailArgs).then((item: any) => {
           if (commit) {
             return this.musicPlayData = {
-              url: res.data[0].url, // 音乐地址
+              url: res[0].url, // 音乐地址
               picUrl: item.songs[0].al.picUrl, // 封面图片
               name: item.songs[0].name,   // 音乐名称
               artist: item.songs[0].ar[0].name // 歌手名称
@@ -57,7 +66,7 @@ export const useStore = defineStore('main', {
             let resNew: any = []
             let itemNew: any = []
             id.forEach((result) => {
-              const resNewlog: any = _.filter(res.data, ['id', result])
+              const resNewlog: any = _.filter(res, ['id', result])
               const itemNewlog: any = _.filter(item.songs, ['id', result])
               resNew.push(...resNewlog)
               itemNew.push(...itemNewlog)

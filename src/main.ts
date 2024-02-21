@@ -15,13 +15,17 @@ import transition from '@/utils/transition'
 import { createPinia } from 'pinia' //状态管理
 import LzyIcon from '@/components/LzyIcon.vue'; //图标组件
 import VueMarkdownEditor from '@/utils/markDownCreate'; //markdown配置
+import axios from "@/http/request";
 
 import FontFunction from '@/utils/font'
+window.$axios = axios
 
 const pinia = createPinia()
 const app = createApp(App)
 
-app.config.globalProperties.$fancyapps = { Fancybox, }
+// vue3全局变量挂载
+app.config.globalProperties.$fancyapps = { Fancybox }
+
 app.directive('transition', transition)
 app.directive('lazy', lazy)
 app.component('LzyIcon', LzyIcon)

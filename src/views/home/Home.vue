@@ -6,9 +6,8 @@ import ContentDiv from "@/components/Content-div.vue";
 import { useEventListener } from "@vueuse/core";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import request from "@/http/request";
 import { ResultDataTotal } from '@/types/Result'
-
+const { $axios } = window;
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -22,7 +21,7 @@ const indexList = ref(1);
 // )) as any;
 
 function getArticleList(pages: number, limit: number) {
-  return request<ResultDataTotal<any>>({
+  return $axios<ResultDataTotal<any>>({
     url: "/api/article/getArticleList",
     method: "get",
     params: {
@@ -60,22 +59,22 @@ const currentChange = (e: number) => {
   });
 };
 onMounted(() => {
-  //控制滚动到指定位置，固定背景人物
-  useEventListener(window, "scroll", () => {
-    const y = window.scrollY;
-    if (y >= 200) {
-      isloaded.value = false;
-    } else {
-      isloaded.value = true;
-    }
-    const example = document.querySelector("#example") as HTMLElement;
-    if (!example) return;
-    if (y >= 300) {
-      example.style.bottom = "0";
-    } else {
-      example.style.bottom = "-100px";
-    }
-  });
+  // //控制滚动到指定位置，固定背景人物
+  // useEventListener(window, "scroll", () => {
+  //   const y = window.scrollY;
+  //   if (y >= 200) {
+  //     isloaded.value = false;
+  //   } else {
+  //     isloaded.value = true;
+  //   }
+  //   const example = document.querySelector("#example") as HTMLElement;
+  //   if (!example) return;
+  //   if (y >= 300) {
+  //     example.style.bottom = "0";
+  //   } else {
+  //     example.style.bottom = "-100px";
+  //   }
+  // });
 
   setTimeout(() => {
     isloaded.value = true;
@@ -97,7 +96,6 @@ onMounted(() => {
     toGaspText(".myText");
   }, 1000);
 });
-const URL = import.meta.env.VITE_BASE_HTTP;
 
 function toGaspText(target: string) {
   return gsap.to(target, {
@@ -109,7 +107,7 @@ function toGaspText(target: string) {
   });
 }
 const homecoverLoad = (e) => {
-  //往后的1.5秒内，让图片模糊的从10 到 0
+  // 往后的1.5秒内，让图片模糊的从10 到 0
   gsap.to(e.target, {
     duration: 1.5,
     filter: "blur(0px)",
@@ -153,15 +151,15 @@ const homecoverLoad = (e) => {
             {{ item }}
           </span>
         </div>
-        <img class="actual-image" :src="URL + '/public/img/bg.png'" @load="homecoverLoad" alt="" />
-        <img class="placeholder" :src="URL + '/public/img/bgExcess.png'" alt="" />
+        <img class="actual-image" src="/api/public/img/bg.png" @load="homecoverLoad" alt="" />
+        <img class="placeholder" src="/api/public/img/bgExcess.png" alt="" />
       </div>
     </div>
     <ContentHead></ContentHead>
     <div class="listSum">
       <!-- 文章内容 -->
       <div class="listCom">
-        <img class="listImg" id="listSum" :src="URL + '/public/img/reduce.jpg'" alt="" />
+        <img class="listImg" id="listSum" src="/api/public/img/reduce.jpg" alt="" />
         <div :id="'list' + item.aid" v-for="(item, index) in list" :key="index" v-if="isload">
           <router-link :to="'/home/detail/' + item.aid">
             <ContentDiv :data="item" :index="index"></ContentDiv>
@@ -237,7 +235,7 @@ const homecoverLoad = (e) => {
       inset: 0;
       filter: blur(10px);
       transform: scale(1.03);
-
+      // display: none;
     }
 
     &.actual-image {

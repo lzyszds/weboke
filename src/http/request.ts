@@ -56,7 +56,10 @@ export default async function makeRequest<T = any>({
   try {
     // 使用 async/await 简化异步代码
     const response: AxiosResponse<T> = await instance({ method, url, params, data, headers });
-    return response.data;
+    if (response.data !== undefined) {
+      return response.data;
+    }
+    return response as any as T
   } catch (error) {
     // 处理请求失败的情况
     console.error('Request failed:', error);
