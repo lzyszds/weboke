@@ -10,7 +10,6 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-console.log(`lzy  props:`, props)
 
 //评论数据
 const replydata = ref<Replydata[]>(props.replydata)
@@ -37,7 +36,7 @@ const remReplyComment = (item, index) => {
   if (item.reply_id == 0) {
     emit('remReplycl', item, index)
   } else {
-    emit('remReplyclLevelTwo', item, index)
+    emit('remReplyclLevelTwo', item, getIndex(item, index))
   }
 }
 
@@ -46,10 +45,19 @@ const isReply = (item: Replydata, index: number) => {
   if (item.reply_id == 0) {
     if (replyId.value[index]) return replyId.value[index][0] == 0
   } else {
-    for (let key in oldReplydata.value) {
-      if (oldReplydata.value[key].comment_id == item.ground_id) {
-        return replyId.value[key][index + 1] == 0
-      }
+    return getIndex(item, index) == 0
+  }
+}
+
+//
+function getIndex(item, index) {
+  for (let key in oldReplydata.value) {
+    if (oldReplydata.value[key].comment_id == item.ground_id) {
+      //获取到当前oldReplydata中reply_id的值为0的它的索引是什么
+      //(res) => res.reply_id == 0 && res.comment_id == item.ground_id
+      let parentAssemble = oldReplydata.value.filter((res) => res.reply_id == 0)
+      let parentIndex = parentAssemble.findIndex((res) => res.comment_id == item.ground_id)
+      return replyId.value[parentIndex][index]
     }
   }
 }
@@ -59,7 +67,7 @@ const isReply = (item: Replydata, index: number) => {
   <div class="reply">
     <div class="item" v-for="(item, index) in replydata" :key="index">
       <div class="item-left">
-        <img :src="'/api/public'+item.head_img" alt="">
+        <img :src="'/api/public' + item.head_img" alt="">
       </div>
       <div class="item-right">
         <div class="item-right-top">

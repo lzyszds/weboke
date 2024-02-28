@@ -29,7 +29,7 @@ const tocList = ref<any>([]);
 const tocACindex = ref<string>('#toc-head-1');
 const listComment = ref<any>()
 
-//获取评论列表
+// 获取评论列表
 const getComment = async () => {
   listComment.value = await request({
     method: 'get',
@@ -38,16 +38,32 @@ const getComment = async () => {
       id: aid
     }
   }) as any
-  console.log(`lzy  listComment.value:`, listComment.value)
-  listComment.value.forEach((element: any) => {
+  //浅拷贝一份评论数据
+  const oldReplydata = [...listComment.value]
+  // 遍历评论列表，为每个评论添加回复列表
+  const list = oldReplydata.filter((res: any) => res.reply_id == 0)
+  console.log(`lzy  list:`, list)
+  list.forEach((element: any) => {
     element.reply = []
-    listComment.value.forEach((res: any, index: number) => {
-      if (element.comment_id == res.reply_id) {
-        listComment.value.splice(index, 1)
+    oldReplydata.forEach((res: any, index: number) => {
+      // 如果回复的评论id与当前评论的回复id相同，则将该回复添加到当前评论的回复列表中
+      if (element.comment_id == res.ground_id) {
+        list.splice(index, 1)
         element.reply.push(res)
       }
     });
   })
+  listComment.value = list
+  // listComment.value.forEach((element: any) => {
+  //   element.reply = []
+  //   listComment.value.forEach((res: any, index: number) => {
+  //     // 如果回复的评论id与当前评论的回复id相同，则将该回复添加到当前评论的回复列表中
+  //     if (element. == res.comment_id) {
+  //       listComment.value.splice(index, 1)
+  //       element.reply.push(res)
+  //     }
+  //   });
+  // })
 }
 await getComment()
 //评论上方的诗句请求
@@ -168,6 +184,7 @@ function setReplyStatus() {
       replyId[index].push(0)
     })
   });
+  console.log(`lzy  replyId:`, replyArr.replyId)
 }
 setReplyStatus()
 
