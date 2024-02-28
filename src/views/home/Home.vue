@@ -3,7 +3,6 @@ import { ref, onMounted } from "vue";
 import { ElPagination } from "element-plus";
 import ContentHead from "@/components/Content-head.vue";
 import ContentDiv from "@/components/Content-div.vue";
-import { useEventListener } from "@vueuse/core";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ResultDataTotal } from '@/types/Result'

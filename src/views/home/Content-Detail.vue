@@ -38,6 +38,7 @@ const getComment = async () => {
       id: aid
     }
   }) as any
+  console.log(`lzy  listComment.value:`, listComment.value)
 }
 await getComment()
 //评论上方的诗句请求
@@ -225,10 +226,10 @@ const comSubmit = () => {
     url: '/api/article/addComment',
     data: commentData
   }).then(async (res: any) => {
-    if (res.code == 200) {
+    if (res == '评论成功') {
       tip(`评论成功,感谢你的评论！`, 2000)
       overloading.value = true
-      listComment.value = await getComment()
+      await getComment()
       overloading.value = false
       //清空评论内容
       information.comContent = ''
