@@ -11,7 +11,7 @@ export interface commentsType {
 }
 
 export interface Replydata {
-  comId: number,
+  comment_id: number,
   head_img: string,
   user_name: string,
   time: string,

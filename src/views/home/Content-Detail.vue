@@ -39,6 +39,15 @@ const getComment = async () => {
     }
   }) as any
   console.log(`lzy  listComment.value:`, listComment.value)
+  listComment.value.forEach((element: any) => {
+    element.reply = []
+    listComment.value.forEach((res: any, index: number) => {
+      if (element.comment_id == res.reply_id) {
+        listComment.value.splice(index, 1)
+        element.reply.push(res)
+      }
+    });
+  })
 }
 await getComment()
 //评论上方的诗句请求
@@ -202,8 +211,9 @@ const comSubmit = () => {
       element.forEach((res) => res != 0 && (value = res))
     });
     listComment.value.forEach((element) => {
+      console.log(element);
       element.reply && element.reply.forEach(res => {
-        if (res.comId == value) value = res.ground_id
+        if (res.comment_id == value) value = res.ground_id
       });
     })
     return value
@@ -251,12 +261,12 @@ const replyComment = (item, index) => {
   //每次选择回复都要将其他的回复id置为0
   handleReplyData(replyId)
   if (item.reply_id == 0) {
-    replyId[index][0] = item.comId;
+    replyId[index][0] = item.comment_id;
   } else {
     const data = listComment.value
     for (let key in data) {
-      if (data[key].comId == item.ground_id) {
-        replyId[key][index + 1] = item.comId;
+      if (data[key].comment_id == item.ground_id) {
+        replyId[key][index + 1] = item.comment_id;
       }
     }
   }

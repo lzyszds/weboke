@@ -10,6 +10,7 @@ interface Props {
 }
 
 const props = defineProps<Props>()
+console.log(`lzy  props:`, props)
 
 //评论数据
 const replydata = ref<Replydata[]>(props.replydata)
@@ -46,7 +47,7 @@ const isReply = (item: Replydata, index: number) => {
     if (replyId.value[index]) return replyId.value[index][0] == 0
   } else {
     for (let key in oldReplydata.value) {
-      if (oldReplydata.value[key].comId == item.ground_id) {
+      if (oldReplydata.value[key].comment_id == item.ground_id) {
         return replyId.value[key][index + 1] == 0
       }
     }
