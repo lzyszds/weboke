@@ -1,6 +1,5 @@
 <script setup lang='ts'>
 import TxtDeformation from '@/uiComponents/txtDeformation/index.vue'
-import http from '@/http/http'
 import { onMounted, ref, nextTick, reactive, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router';
 import dayjs from 'dayjs';
@@ -48,8 +47,11 @@ toTion.value.forEach((_item, index) => {
 const data = ref(<any>[])
 const month = ref(<any>[])
 onMounted(() => {
-  http('get', api + '/common/getGithubInfo').then((res: any) => {
-    const { contributionsCollection } = res.data.user
+  window.$axios({
+    method: 'get',
+    url: api + '/common/getGithubInfo'
+  }).then((res: any) => {
+    const { contributionsCollection } = res.user
     const { weeks, totalContributions } = contributionsCollection.contributionCalendar
     // handleData(weeks)
     totalCont.value = totalContributions
@@ -304,11 +306,9 @@ const identifyreatColor = (color: string) => {
   }
 
   .wave {
-    max-width: 60%;
     height: 100%;
     background-color: #fff;
-    padding: 0 40px;
-    display: flex;
+    padding: 0 10px;
     border-radius: 5px;
     z-index: 99;
     margin: 10px auto;

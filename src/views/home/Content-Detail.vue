@@ -391,8 +391,8 @@ const toScrollY = async (id: string) => {
               <span>目录</span>
             </div>
             <ul class="affix-list">
-              <li v-for="item in tocList" :class="tocACindex == item.id ? 'active ' + item.nodeName : '' + item.nodeName"
-                :key="item.id">
+              <li v-for="item in tocList"
+                :class="tocACindex == item.id ? 'active ' + item.nodeName : '' + item.nodeName" :key="item.id">
                 <a @click="toScrollY(item.id)">{{ item.title }}</a>
               </li>
             </ul>
@@ -526,4 +526,3 @@ const toScrollY = async (id: string) => {
   }
 }
 </style>
-

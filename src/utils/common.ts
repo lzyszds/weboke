@@ -2,7 +2,7 @@ import request from '@/http/request'
 import { ElNotification } from 'element-plus'
 import dayjs from "dayjs";
 import { useDateFormat } from '@vueuse/core'
-import img from '@/assets/icon/weather/import'
+import handleWeatherUrl from '@/assets/icon/weather/import'
 import { useStore } from '@/store/index';
 import { ipGetType, WeatherData } from '@/store/type'
 
@@ -89,70 +89,14 @@ const testFunction = () => {
   test.textContent = 'test2'
 }
 
-export const getWeather = () => {
+export const getWeather = (): String => {
   const state = useStore();
   const data: WeatherData = state.weatherData
-  let weatherData
-  if (!data) {
-    weatherData = {
-      province: "未知",
-      city: "未知",
-      adcode: "未知",
-      weather: "未知",
-      temperature: "未知",
-      winddirection: "未知",
-      windpower: "未知",
-      humidity: "未知",
-      reporttime: "未知",
-      temperature_float: "未知",
-      humidity_float: "未知",
-      ip: "未知"
-    }
-  }
-  const formatted: any = useDateFormat(data.reporttime, 'HH')
-  const isdark = formatted >= 19 || formatted <= 6
-  switch (weatherData || data.weather) {
-    case '晴':
-      return isdark ? img.NightSunny : img.Sunny
-    case '多云': case '少云':
-      return isdark ? img.NightCloudy : img.NightCloudy
-    case '晴间多云':
-      return isdark ? img.NightLessCloudy : img.Cloudy
-    case '阴':
-      return img.CloudyDay
-    case '阵雨':
-      return img.Shower
-    case '雷阵雨':
-      return img.ThundershowersSunny
-    case '雨夹雪':
-      return img.SleetRain
-    case '小雨': case '小雨-中雨': case '中雨': case '中雨-大雨':
-      return img.Rain
-    case '暴雨':
-      return img.HeavyRain
-    case '霾': case '中度霾': case '重度霾': case '严重霾': case '雾': case '浓雾': case '强浓雾': case '轻雾': case '大雾':
-      return img.Foggy
-    case '浮尘': case '强沙尘暴':
-      return img.Dust
-    case '冻雨':
-      return img.Sleet
-    case '雪':
-      return img.Snow
-    case '暴雪':
-      return img.Snowstorm
-    case '大雪':
-      return img.HeavySnow
-    case '扬沙':
-      return img.Sand
-    case '沙尘暴':
-      return img.Sandstorm
-    case '龙卷风':
-      return img.Tornado
-    case '有风': case '微风': case '和风': case '清风': case '强风/劲风': case '疾风': case '大风': case '烈风': case '风暴': case '狂爆风': case '飓风': case '热带风暴':
-      return img.Wind
-    default:
-      return img.undefind
-  }
+
+  const formatted: any = useDateFormat(data.reporttime, 'HH');
+  const isdark = formatted >= 19 || formatted <= 6;
+  let result = handleWeatherUrl({ ...data }, isdark)
+  return result;
 }
 
 

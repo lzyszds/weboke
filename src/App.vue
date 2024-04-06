@@ -1,4 +1,4 @@
-<template >
+<template>
   <div>
     <Suspense>
       <Loadinge></Loadinge>
@@ -20,12 +20,8 @@
 //懒加载loading
 //@ts-ignore
 const Loadinge = defineAsyncComponent(() => import('@/uiComponents/loader/loading.vue'))
-import { copyTip, getIpWeather } from '@/utils/common'
 // import Live2d from '@/uiComponents/live2d/Live2d.vue'
 //懒加载看板娘
 // const Live2d = defineAsyncComponent(() => import('@/uiComponents/live2d/Live2d.vue'))
-// 获取当前天气
-getIpWeather()
-//复制提示
-copyTip()
+
 </script>

@@ -58,22 +58,17 @@ const currentChange = (e: number) => {
   });
 };
 onMounted(() => {
-  // //控制滚动到指定位置，固定背景人物
-  // useEventListener(window, "scroll", () => {
-  //   const y = window.scrollY;
-  //   if (y >= 200) {
-  //     isloaded.value = false;
-  //   } else {
-  //     isloaded.value = true;
-  //   }
-  //   const example = document.querySelector("#example") as HTMLElement;
-  //   if (!example) return;
-  //   if (y >= 300) {
-  //     example.style.bottom = "0";
-  //   } else {
-  //     example.style.bottom = "-100px";
-  //   }
-  // });
+  //控制滚动到底部时，分页器的显示与隐藏
+  useEventListener(window, "scroll", () => {
+    const y = window.scrollY;
+    const example = document.querySelector("#example") as HTMLElement;
+    if (!example) return;
+    if (y >= 300) {
+      example.style.bottom = "0";
+    } else {
+      example.style.bottom = "-100px";
+    }
+  });
 
   setTimeout(() => {
     isloaded.value = true;
@@ -242,25 +237,6 @@ const homecoverLoad = (e) => {
     }
   }
 
-  /* 倒影样式 */
-  &::after {
-    content: "";
-    background: url(/api/public/img/bg128.jpeg) no-repeat;
-    backdrop-filter: blur(10px);
-    background-size: cover;
-    background-position-y: -764px;
-    position: fixed;
-    bottom: -313px;
-    left: 0;
-    height: 300px;
-    width: 100%;
-    /* 使用渐变生成透明度效果 */
-    transform: rotatex(180deg) translatey(15px);
-    mask-image: linear-gradient(0,
-        rgba(0, 0, 0, 1) 0%,
-        rgba(0, 0, 0, 0.5) 50%,
-        transparent 100%);
-  }
 
   .navbar-logo {
     height: auto;

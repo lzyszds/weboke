@@ -55,7 +55,13 @@ export default async function makeRequest<T = any>({
 
   try {
     // 使用 async/await 简化异步代码
-    const response: AxiosResponse<T> = await instance({ method, url, params, data, headers });
+    const response: AxiosResponse<T> = await instance({
+      method,
+      url,
+      params,
+      data,
+      headers
+    });
     if (response.data !== undefined) {
       return response.data;
     }

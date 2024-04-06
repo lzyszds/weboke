@@ -16,6 +16,7 @@ import { createPinia } from 'pinia' //状态管理
 import LzyIcon from '@/components/LzyIcon.vue'; //图标组件
 import VueMarkdownEditor from '@/utils/markDownCreate'; //markdown配置
 import axios from "@/http/request";
+import { copyTip, getIpWeather } from '@/utils/common'
 
 import FontFunction from '@/utils/font'
 window.$axios = axios
@@ -34,6 +35,9 @@ app.use(router)
 app.use(pinia)
 app.use(VueMarkdownEditor);
 
-
+// 获取当前天气
+await getIpWeather()
+//复制提示
+copyTip()
 FontFunction(document)
 app.mount('#app')
