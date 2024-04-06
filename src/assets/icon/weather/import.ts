@@ -11,7 +11,7 @@ enum WeatherConditions {
   Shower = '阵雨',
   ThundershowersSunny = '雷阵雨',
   SleetRain = '雨夹雪',
-  Rain = '小雨',
+  Rain = '雨',
   HeavyRain = '大雨',
   Foggy = '霾',
   Dust = '浮尘',

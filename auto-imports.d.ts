@@ -303,12 +303,3 @@ declare global {
   import('vue')
 }
 
-
-//定义window.$axios 
-declare global {
-  interface Window {
-    $axios: typeof import('@/http/request')['default']
-  }
-}
-
-export { };
