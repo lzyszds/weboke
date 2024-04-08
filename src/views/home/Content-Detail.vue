@@ -380,7 +380,7 @@ const toScrollY = async (id: string) => {
     </div>
     <div class="bodyMain">
       <!-- 文章内容 -->
-      <Maincontent :main="dataDet.main" @update="updateCop"></Maincontent>
+      <Maincontent :main="dataDet.main" :content="dataDet.content" @update="updateCop"></Maincontent>
       <!-- 文章目录 -->
       <div class="affix-container" ref="affixElm">
         <DeskInfo></DeskInfo>

@@ -36,7 +36,7 @@ app.use(pinia)
 app.use(VueMarkdownEditor);
 
 // 获取当前天气
-await getIpWeather()
+getIpWeather()
 //复制提示
 copyTip()
 FontFunction(document)

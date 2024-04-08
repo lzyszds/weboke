@@ -145,15 +145,15 @@ const homecoverLoad = (e) => {
             {{ item }}
           </span>
         </div>
-        <img class="actual-image" src="/api/public/img/bg.png" @load="homecoverLoad" alt="" />
-        <img class="placeholder" src="/api/public/img/bgExcess.png" alt="" />
+        <img class="actual-image" :src="'/api/public/img/bg.png'" @load="homecoverLoad" alt="" />
+        <img class="placeholder" :src="'/api/public/img/bgExcess.png'" alt="" />
       </div>
     </div>
     <ContentHead></ContentHead>
     <div class="listSum">
       <!-- 文章内容 -->
       <div class="listCom">
-        <img class="listImg" id="listSum" src="/api/public/img/reduce.jpg" alt="" />
+        <img class="listImg" id="listSum" :src="'/api/public/img/reduce.jpg'" alt="" />
         <div :id="'list' + item.aid" v-for="(item, index) in list" :key="index" v-if="isload">
           <router-link :to="'/home/detail/' + item.aid">
             <ContentDiv :data="item" :index="index"></ContentDiv>

@@ -123,8 +123,8 @@ onMounted(() => {
 .magics {
   text-align: center;
   font-size: 20px;
-  margin-top: 200px;
 }
+
 .magic-text {
   animation: background-pan 3s linear infinite;
   background: linear-gradient(to right,

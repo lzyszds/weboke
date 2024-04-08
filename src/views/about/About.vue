@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import { useEventListener } from '@vueuse/core';
 import LzyIcon from '@/components/LzyIcon.vue';
 import { ElPageHeader, ElDescriptions, ElDescriptionsItem, ElTooltip, ElButton } from 'element-plus'
+import ColorRoulette from '@/uiComponents/ColorRoulette.vue';
 const router = useRouter();
 const api = import.meta.env.VITE_BASE_URL
 
@@ -189,8 +190,9 @@ const identifyreatColor = (color: string) => {
           </ElPageHeader>
         </div>
       </div>
-      <div style="display: grid;grid-template-rows: 20px 1fr;">
+      <div class="waveMain">
         <text class="text">{{ totalCont }} contributions in the last year</text>
+        <!-- <ColorRoulette /> -->
         <div class="wave">
           <svg id="calendar" width="1040px" height="100%" xmlns="http://www.w3.org/2000/svg">
             <g>
@@ -296,6 +298,12 @@ const identifyreatColor = (color: string) => {
         margin-right: 5px;
       }
     }
+  }
+
+  .waveMain {
+    display: grid;
+    grid-template-rows: 20px 1fr;
+    position: relative;
   }
 
   .text {

@@ -6,13 +6,17 @@ import { ElNotification } from 'element-plus'
 import { useEventListener } from '@vueuse/core';
 const { proxy } = getCurrentInstance() as any
 const props = defineProps({
-  main: String
+  main: String,
+  content: String,
 });
 
 const emit = defineEmits(['update'])
+const aiContent = ref('生成中...')
+
+const doneFlag = ref(false)
 
 onMounted(() => {
-  setTimeout(() => {
+  setTimeout(async () => {
     const elimg = document.querySelector('.main') as HTMLDivElement
     if (elimg) {
       //给当前页面所有图片添加data-fancybox属性，让其可以点击放大
@@ -48,12 +52,100 @@ onMounted(() => {
     })
     emit('update', 1)
 
+    getAbstract('/chatAi/', "sk-4EMijL3N2LTlRkVZ8JtkxLCCAbLyNKIr1KjgWrShzxyKHcFI").catch(res => {
+      getAbstract('/chatAi/', 'sk-HhqOOePbYD99TzdCOpul1i9kDJVk28r0WSPJbJclCTovKyuC').catch(res => {
+        getAbstract('/chatAi/', 'sk-ns5vEPDSCOdao8fi4q2mFycccRUKOfHodjgV0RUJMA5PHv0M').catch(res => {
+          aiContent.value = "生成失败，请稍后再试"
+        })
+      })
+    })
+
+
   }, 1000)
 })
+let strConnect = ''
+function getAbstract(url, key) {
+  return new Promise<any>(async (resolve, reject) => {
+    try {
+      const result = await fetch(url, {
+        method: 'POST',
+        body: JSON.stringify({
+          model: "gpt-3.5-turbo-0125",
+          messages: [
+            {
+              role: "user",
+              content: "帮我对下面的文章内容进行一个摘要。" + props.content
+            }
+          ],
+          presence_penalty: 0,
+          stream: true,
+          temperature: 0.5,
+          top_p: 1
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${key}`
+        },
+      })
+      const textDecoder = new TextDecoder()
+      const reader = result.body?.getReader()!
+      aiContent.value = ""
+      async function slowLoop() {
+        let partialData = ''; // 保存部分数据
+        while (true) {
+          const { done, value } = await reader.read()
+          doneFlag.value = done
+          if (done) {
+            break
+          }
+          const text = textDecoder.decode(value)
+          const lines = (partialData + text).split('\n'); // 将部分数据与新数据合并后再按行分割
+          partialData = lines.pop() || ''; // 获取新数据中的不完整行，并保存到 partialData 中
+          for (let line of lines) { // 逐行处理数据
+            try {
+              if (strConnect != '') {
+                line = strConnect + line
+                strConnect = ''
+              }
+              if (line.includes("[DONE]")) continue; // 如果包含 "[DONE]" 字符串则跳过该行
+              const resObj: any = JSON.parse(line.replace('data: ', ''));
+              const str = resObj.choices[0].delta.content;
+              if (str) {
+                aiContent.value += str; // 将逐字生成的数据拼接到 aiContent 中
+              }
+            } catch (e) {
+              // 处理异常
+              strConnect = line
+            }
+          }
+          // 添加延迟，单位为毫秒（例如延迟 500 毫秒）
+          await new Promise(resolve => setTimeout(resolve, 100));
+        }
+      }
+
+      await slowLoop();
+    } catch (e) {
+      reject(e)
+    }
+  })
+
+}
 </script>
 
 <template>
   <div id="markdownMain" class="main vuepress-markdown-body v-md-editor-preview center">
+    <div class="aiMain">
+      <p class="title">
+        <LzyIcon name="mdi:robot-excited-outline"></LzyIcon>文章摘要
+      </p>
+      <div class="aiContent">
+        <p>
+          <span v-html="aiContent"></span>
+          <LzyIcon v-if="!doneFlag" name="ph:fan-duotone"></LzyIcon>
+        </p>
+      </div>
+      <p class="affirm">此内容根据文章生成，并经过人工审核，仅用于文章内容的解释与总结</p>
+    </div>
     <div v-html="props.main"></div>
   </div>
 </template>
@@ -132,17 +224,87 @@ ol .dark ol {
   color: #fff;
 }
 
-/* 解决问题，让a标签跳转至id时，可以迁出顶部状态栏的位置 */
-// .main :deep(h1)[id*=toc-head]:before,
-// .main :deep(h2)[id*=toc-head]:before,
-// .main :deep(h3)[id*=toc-head]:before,
-// .main :deep(h4)[id*=toc-head]:before,
-// .main :deep(h5)[id*=toc-head]:before,
-// .main :deep(h6)[id*=toc-head]:before {
-//   display: block;
-//   content: " ";
-//   height: 60px;
-//   margin-top: -60px;
-//   visibility: hidden;
-// }
+.aiMain {
+  background-color: rgb(243, 243, 243);
+  border-radius: 10px !important;
+  padding: 12px;
+  line-height: 1.3;
+  border: #000;
+  margin-bottom: 16px;
+  min-height: 101.22px;
+
+  div.aiContent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-indent: 0;
+    font-weight: 600;
+    /* 字体间隔 */
+    letter-spacing: 0.5px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 0 4px #eee;
+    font-size: 14px;
+    padding: 8px 5px;
+    word-break: break-all;
+
+    p {
+      margin: 5px;
+    }
+
+    svg {
+      color: var(--themeColor);
+      animation: blinking-cursor 1s infinite;
+      vertical-align: text-top;
+    }
+  }
+
+  p.title {
+    background-color: var(--borderColor);
+    color: #000;
+    border-radius: 10px;
+    margin: 0;
+    margin-bottom: 10px;
+    font-size: 15px;
+    text-indent: 0;
+    padding-left: 10px;
+    font-family: 'dindin';
+
+    svg {
+      margin-right: 5px;
+    }
+  }
+
+  p.affirm {
+    text-indent: .5em;
+    font-size: 12px;
+    color: #000;
+    text-align: left;
+    margin: 0;
+    font-family: 'dindin';
+
+  }
+}
+
+@keyframes blinking-cursor {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  25% {
+    transform: rotate(60deg)
+  }
+
+  50% {
+    transform: rotate(120deg);
+  }
+
+  75% {
+    transform: rotate(180deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
 </style>

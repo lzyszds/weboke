@@ -28,7 +28,7 @@ const formatTime = (time: string) => {
 
       <div class="gridlist">
         <h2 :class="{ undef: temperature == '未知' }">
-          <img :src="getWeather() || api">
+          <img :src="(getWeather() as any) || api">
           <span class="temperature">{{ temperature }}°C</span>
         </h2>
         <p>
