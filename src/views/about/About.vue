@@ -382,24 +382,9 @@ const identifyreatColor = (color: string) => {
   cursor: pointer;
 }
 
-@media screen and (max-width: 768px) {
-  .about {
-    .content {
-      height: 95%;
-      width: 95%;
-    }
 
-    .formInfo {
-      height: auto;
-    }
 
-    .purple {
-      padding: 5px;
-    }
-  }
-}
-
-@media screen and (max-width:1280px) {
+@media (max-width:1280px) {
   .about {
     .content {
       height: 90%;
@@ -421,6 +406,58 @@ const identifyreatColor = (color: string) => {
 
     .purple {
       padding: 5px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .about {
+
+
+    .content {
+      height: 95%;
+      width: 95%;
+      grid-template-rows: 140px 500px 1fr;
+    }
+
+    .formInfo {
+      height: 100% !important;
+    }
+
+    .purple {
+      padding: 5px;
+    }
+
+    :deep(.el-page-header__left) {
+      margin-right: 0;
+    }
+
+    :deep(.el-descriptions__table) {
+      tr {
+        display: grid;
+
+        &:nth-child(2) {
+          gap: 40px;
+        }
+
+      }
+
+
+    }
+
+    .describe {
+      margin-top: 50px !important;
+      display: none;
+    }
+
+    ul {
+      display: none;
+    }
+
+    .waveMain {
+      text {
+        font-size: 12px;
+      }
     }
   }
 }

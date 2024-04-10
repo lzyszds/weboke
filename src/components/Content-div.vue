@@ -102,29 +102,28 @@ const selectHandle = (index: number) => {
     width: 99%;
     padding: 20px 40px 0;
     display: grid;
-    grid-template-rows: 1fr 2.5fr 1fr;
+    grid-template-rows: 30px 1fr 30px 35px;
+    align-items: center;
+    gap: 5px
   }
 
   .title {
     font-size: 23px;
     color: #000;
     font-family: "dindin";
+    overflow: hidden;
   }
 
   /* 超出数量显示省略号 */
   .synopsis {
     font-size: 14px;
     color: #888;
-    text-overflow: -o-ellipsis-lastline;
+    height: 60px;
     overflow: hidden;
     text-overflow: ellipsis;
-    display: -webkit-box;
     -webkit-line-clamp: 3;
-    line-clamp: 3;
-    -webkit-box-orient: vertical;
-    margin-top: 20px;
-    line-height: 20px;
-    margin-bottom: 20px;
+    display: -webkit-box;
+
   }
 
   .time {

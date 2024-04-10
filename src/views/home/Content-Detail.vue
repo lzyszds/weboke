@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import { onMounted, ref, reactive, getCurrentInstance, nextTick, watch, defineAsyncComponent } from 'vue'
+import { onMounted, ref, reactive, getCurrentInstance, nextTick, watch, defineAsyncComponent, HtmlHTMLAttributes } from 'vue'
 import { ElNotification } from 'element-plus'
 import Maincontent from '@/components/Maincontent.vue';
 // import { useEventListener } from '@vueuse/core'
@@ -10,6 +10,8 @@ import { commentsType } from './Detailtype'
 import Reply from '@/views/home/Reply.vue'
 import { allFunction, awaitTime, scrollTo } from '@/utils/common'
 import LzyIcon from '@/components/LzyIcon.vue';
+import { useEventListener } from '@vueuse/core'
+
 const DeskInfo = defineAsyncComponent(() => import("@/components/DeskInfo.vue"))
 
 
@@ -124,6 +126,7 @@ onMounted(async () => {
       element.innerHTML = element.getAttribute('data-line-number')
     });
   })
+  resizeWidth()
 })
 //处理时间戳转换成距离当前日期的时间（一天前，两天前）
 let setTimestamp = (time: string) => {
@@ -350,6 +353,14 @@ const toScrollY = async (id: string) => {
   }, 1000)
 }
 
+useEventListener('resize', () => {
+  resizeWidth()
+})
+function resizeWidth() {
+  const detail = document.querySelector(".detail") as HTMLDivElement;
+  detail.style.setProperty('--centerWidth', String(window.innerWidth - 25) + 'px')
+}
+
 </script>
 
 <template>
@@ -379,8 +390,78 @@ const toScrollY = async (id: string) => {
 
     </div>
     <div class="bodyMain">
-      <!-- 文章内容 -->
-      <Maincontent :main="dataDet.main" :content="dataDet.content" @update="updateCop"></Maincontent>
+      <div class="mainLeft">
+        <!-- 文章内容 -->
+        <Maincontent :main="dataDet.main" :content="dataDet.content" @update="updateCop"></Maincontent>
+        <!-- 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议 -->
+        <footer v-transition="'tosiTion'" class="oldtosiTion post-footer center ">
+          <div class="tool">
+            <i class="iconfont icon-icon-taikong20" fill="#000"></i>
+            <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享署名-非商业性使用-相同方式共享 4.0
+              国际许可协议</a>
+          </div>
+        </footer>
+        <!-- 发布评论 -->
+        <div v-transition="'tosiTion'" class="oldtosiTion publish center">
+          <div class="borderw">
+            <div class="comment ">
+              <span> {{ replyArr.replyName }} </span>
+            </div>
+            <div class="comment textareas">
+              <textarea id="textarea" v-model="information.comContent"></textarea>
+            </div>
+          </div>
+          <div class="borderw nameqq">
+            <div class="comment">
+              <div>
+                <button>
+                  <lzy-icon name="gg:chevron-left" animation="animate__heartBeat"></lzy-icon>
+                </button>
+                <div @wheel="onWheelfn" ref="wheel">
+                  <p>
+                    <span id="selcetRound"></span>
+                    <img v-for="(item, index) in comImg" :key="index" :src="item" @click="setRange(index)"
+                      :class="{ animate__headShake: information.rangeIndex == index }">
+                  </p>
+                </div>
+                <button>
+                  <lzy-icon name="gg:chevron-right" animation="animate__heartBeat"></lzy-icon>
+                </button>
+              </div>
+              <p>昵称：
+                <input type="text" :class="{ 'apply-shake': information.nameError }" v-model="information.name"
+                  placeholder="昵称或者QQ号">
+              </p>
+              <p>邮箱：
+                <input type="text" :class="{ 'apply-shake': information.emailError }" v-model="information.email"
+                  placeholder="xxx@xxx.xxx">
+              </p>
+              <p>网站：
+                <input type="text" v-model="information.webSite" placeholder="你的网站(选填)">
+              </p>
+              <p class="btn"><button @click="comSubmit"> 发布评论 </button></p>
+              <!-- <p class="btn del"><button> 取消评论 </button></p> -->
+            </div>
+          </div>
+        </div>
+        <!-- 评论界面 -->
+        <div v-transition="'tosiTion'" class="oldtosiTion borderw center">
+          <div class="before">{{ textbefore }}</div>
+          <div class="comment">
+            <h5>
+              <i class="iconfont icon-icon-taikong13"></i>评论
+            </h5>
+            <div class="comContent">
+              <Reply v-if="!overloading" :oldReplydata="listComment" :replydata="listComment"
+                :replyId="replyArr.replyId" @replycl="replyComment" @replyclLevelTwo="replyComment"
+                @remReplycl="remReplyComment" @remReplyclLevelTwo="remReplyComment" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
       <!-- 文章目录 -->
       <div class="affix-container" ref="affixElm">
         <DeskInfo></DeskInfo>
@@ -400,71 +481,7 @@ const toScrollY = async (id: string) => {
         </main>
       </div>
     </div>
-    <!-- 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议 -->
-    <footer v-transition="'tosiTion'" class="oldtosiTion post-footer center ">
-      <div class="tool">
-        <i class="iconfont icon-icon-taikong20" fill="#000"></i>
-        <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享署名-非商业性使用-相同方式共享 4.0
-          国际许可协议</a>
-      </div>
-    </footer>
-    <!-- 发布评论 -->
-    <div v-transition="'tosiTion'" class="oldtosiTion publish center">
-      <div class="borderw">
-        <div class="comment ">
-          <span> {{ replyArr.replyName }} </span>
-        </div>
-        <div class="comment textareas">
-          <textarea id="textarea" v-model="information.comContent"></textarea>
-        </div>
-      </div>
-      <div class="borderw nameqq">
-        <div class="comment">
-          <div>
-            <button>
-              <lzy-icon name="gg:chevron-left" animation="animate__heartBeat"></lzy-icon>
-            </button>
-            <div @wheel="onWheelfn" ref="wheel">
-              <p>
-                <span id="selcetRound"></span>
-                <img v-for="(item, index) in comImg" :key="index" :src="item" @click="setRange(index)"
-                  :class="{ animate__headShake: information.rangeIndex == index }">
-              </p>
-            </div>
-            <button>
-              <lzy-icon name="gg:chevron-right" animation="animate__heartBeat"></lzy-icon>
-            </button>
-          </div>
-          <p>昵称：
-            <input type="text" :class="{ 'apply-shake': information.nameError }" v-model="information.name"
-              placeholder="昵称或者QQ号">
-          </p>
-          <p>邮箱：
-            <input type="text" :class="{ 'apply-shake': information.emailError }" v-model="information.email"
-              placeholder="xxx@xxx.xxx">
-          </p>
-          <p>网站：
-            <input type="text" v-model="information.webSite" placeholder="你的网站(选填)">
-          </p>
-          <p class="btn"><button @click="comSubmit"> 发布评论 </button></p>
-          <!-- <p class="btn del"><button> 取消评论 </button></p> -->
-        </div>
-      </div>
-    </div>
-    <!-- 评论界面 -->
-    <div v-transition="'tosiTion'" class="oldtosiTion borderw center">
-      <div class="before">{{ textbefore }}</div>
-      <div class="comment">
-        <h5>
-          <i class="iconfont icon-icon-taikong13"></i>评论
-        </h5>
-        <div class="comContent">
-          <Reply v-if="!overloading" :oldReplydata="listComment" :replydata="listComment" :replyId="replyArr.replyId"
-            @replycl="replyComment" @replyclLevelTwo="replyComment" @remReplycl="remReplyComment"
-            @remReplyclLevelTwo="remReplyComment" />
-        </div>
-      </div>
-    </div>
+
   </div>
 </template>
 

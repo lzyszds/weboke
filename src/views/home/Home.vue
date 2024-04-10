@@ -58,19 +58,22 @@ const currentChange = (e: number) => {
   });
 };
 onMounted(() => {
-  //控制滚动到底部时，分页器的显示与隐藏
-  useEventListener(window, "scroll", () => {
-    const y = window.scrollY;
-    const example = document.querySelector("#example") as HTMLElement;
-    if (!example) return;
-    if (y >= 300) {
-      example.style.bottom = "0";
-    } else {
-      example.style.bottom = "-100px";
-    }
-  });
-
   setTimeout(() => {
+    const example = document.querySelector("#example") as HTMLElement;
+    if (window.innerWidth < 600) {
+      example.style.bottom = "0";
+    }
+
+    //控制滚动到底部时，分页器的显示与隐藏
+    useEventListener(window, "scroll", () => {
+      const y = window.scrollY;
+      if (!example) return;
+      if (y >= 300 || innerWidth < 600) {
+        example.style.bottom = "0";
+      } else {
+        example.style.bottom = "-100px";
+      }
+    });
     isloaded.value = true;
     ScrollTrigger.create({
       trigger: ".conImg",
@@ -410,4 +413,3 @@ const homecoverLoad = (e) => {
 <style lang="less">
 @import url("@/assets/css/mobile/homeMobile.less");
 </style>
-@/http/request
