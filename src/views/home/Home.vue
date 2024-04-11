@@ -1,18 +1,19 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { ElPagination } from "element-plus";
-import ContentHead from "@/components/Content-head.vue";
-import ContentDiv from "@/components/Content-div.vue";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ResultDataTotal } from '@/types/Result'
+import { ElPagination } from 'element-plus'
+import SkillSwiper from "@/components/SkillSwiper.vue";
+import GithubPlot from "@/components/GithubPlot.vue";
+import ContentDiv from "@/components/ContentDiv.vue";
 const { $axios } = window;
 
 gsap.registerPlugin(ScrollTrigger);
 
 const mytext = "编程是一场艺术，逻辑是它的画笔，创新是它的灵魂".split("");
 
-const limit = 5;
+const limit = 10;
 const indexList = ref(1);
 // const itemData = (await http(
 //   "get",
@@ -120,296 +121,185 @@ const homecoverLoad = (e) => {
 </script>
 
 <template>
-  <div class="content">
-    <!-- <div class="home" :style="'background-image:url(' + URL + '/public/img/101608761_p0.jpg) '" id="eleme">
-      //遮罩
-      <transition name="mask">
-        <div v-if="!store.dark" class="mask"></div>
-      </transition>
-    </div> -->
-    <div class="home">
-      <div class="conImg">
-        <div class="navbar-logo" :class="isloaded ? 'loaded' : ''">
-          <p>
-            <span>
-              <span>Ji</span>
-            </span>
-            <span>
-              <span>n</span>
-            </span>
-            <span>
-              <span>gz</span>
-            </span>
-            <span>
-              <span>y</span>
-            </span>
-          </p>
-          <span class="myText" v-for="(item, index) in mytext" :key="index" :class="isloaded ? 'loaded' : ''">
-            {{ item }}
-          </span>
-        </div>
-        <img class="actual-image" :src="'/api/public/img/bg.png'" @load="homecoverLoad" alt="" />
-        <img class="placeholder" :src="'/api/public/img/bgExcess.png'" alt="" />
+  <div class="content" style="--maxWidth:1380px">
+    <div class="notice themeCard">
+      <div class="noticeMain ">
+
       </div>
     </div>
-    <ContentHead></ContentHead>
-    <div class="listSum">
-      <!-- 文章内容 -->
-      <div class="listCom">
-        <img class="listImg" id="listSum" :src="'/api/public/img/reduce.jpg'" alt="" />
-        <div :id="'list' + item.aid" v-for="(item, index) in list" :key="index" v-if="isload">
-          <router-link :to="'/home/detail/' + item.aid">
-            <ContentDiv :data="item" :index="index"></ContentDiv>
-          </router-link>
+    <div class="swiper_container_card themeCard">
+      <div class="swiperitem leftCard">
+        <div class="swiperCard">
+          <p class="slogan">
+            过去无法挽留
+          <p>未来仍可改变</p>
+          </p>
+          <p class="small">
+            <span>编程</span>、
+            <span>逻辑</span>、
+            <span>创新</span>、
+            <span>灵魂</span>
+          </p>
+          <SkillSwiper></SkillSwiper>
         </div>
       </div>
-      <!-- 文章分页 -->
-      <div class="example-pagination-block lzy-center" id="example">
-        <div class="example-demonstration">
-          When the content ends, turn the page to see the new content
+      <div class="swiperitem rightCard">
+        <div class="swiperCard">
+          <!-- <GithubPlot :data="getGithubData()" :x="836" :y="204"></GithubPlot> -->
         </div>
-        <el-pagination :page-size="limit" layout="prev, pager, next" :total="totals" @current-change="currentChange" />
+      </div>
+    </div>
+    <div class="main">
+      <!-- 文章内容 -->
+      <div class="listMain">
+        <div class="listCom ">
+          <div :id="'list' + item.aid" v-for="(item, index) in list" :key="index" v-if="isload">
+            <RouterLink :to="'/home/detail/' + item.aid">
+              <ContentDiv :data="item" :index="index"></ContentDiv>
+            </RouterLink>
+          </div>
+        </div>
+        <!-- 文章分页 -->
+        <div class="example-pagination-block lzy-center" id="example">
+          <ElPagination :page-size="limit" layout="prev, pager, next" background :total="totals"
+            @current-change="currentChange" />
+        </div>
+      </div>
+      <div class="systemInfo">
+
       </div>
     </div>
   </div>
 </template>
+<style lang="scss">
+.themeCard {
+  background-color: var(--themeColor);
+  border-radius: 20px;
+  border: 4px solid #000;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+}
 
-<style lang="less" scoped>
-.home {
-  width: 100%;
-  height: 100vh;
-  background: no-repeat center center;
-  backdrop-filter: blur(50px);
-  background-size: cover;
-  position: relative;
+.notice {
+  margin: 70px auto 10px;
+  height: 40px;
+  max-width: var(--maxWidth);
+  border-radius: 15px;
+  background-color: var(--themeColor);
+  padding: 5px 10px;
 
-  .mask {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    inset: 0;
-    background-image: radial-gradient(rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 100%),
-      radial-gradient(rgba(255, 255, 255, 0) 33%, rgba(0, 0, 0, 0.3) 166%),
-      linear-gradient(0,
-        rgba(255, 255, 255, 0) 0%,
-        rgba(255, 255, 255, 0) 0% 80%,
-        rgba(255, 255, 255, 0) 0%,
-        rgba(0, 0, 0, 0.4) 100%);
-    animation: slide-out-fwd-bl_lzy 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
-  }
-
-  .mask-enter-active,
-  .mask-leave-active {
-    transition: 1s;
-  }
-
-  .mask-leave-to,
-  .mask-enter-from {
-    background: rgba(0, 0, 0, 0);
+  .noticeMain {
+    background-color: #fff;
+    border: 4px solid #000;
+    width: calc(100% - 5px);
+    height: calc(100% - 8px);
+    padding: 0;
+    border-radius: 10px;
   }
 }
 
-.content {
-  width: 100%;
-  height: inherit;
-  overflow-x: hidden;
-}
+.swiper_container_card {
+  display: grid;
+  grid-template-columns: 49.5% 49.5%;
+  gap: 10px;
+  max-width: var(--maxWidth);
+  justify-content: space-between;
+  margin: 0 auto 0;
 
-.conImg {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  position: relative;
-
-  img {
+  .swiperitem {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: 1;
-
-    &.placeholder {
-      position: absolute;
-      inset: 0;
-      filter: blur(10px);
-      transform: scale(1.03);
-      // display: none;
-    }
-
-    &.actual-image {
-      display: none;
-    }
+    height: 330px;
   }
 
+  .swiperCard {
+    background-color: #fff;
+    height: calc(100% - 5px);
+    border-radius: 15px;
+    border: 4px solid #000;
+    overflow: hidden;
+    position: relative;
 
-  .navbar-logo {
-    height: auto;
-    text-align: center;
-    position: absolute;
-    left: 50%;
-    top: 30%;
-    transform: translateX(-50%);
-    /* 计算最大值与最小值，跟随页面大小变化 */
-    color: #fff;
-    font-family: "Slackey";
-    user-select: none;
-    cursor: pointer;
-    z-index: 2;
+    .slogan {
+      font-size: 3rem;
+      margin-left: 30px;
+      font-weight: 600;
+      margin-bottom: 0;
 
-    p {
-      margin: 0;
-      height: clamp(10px, 10vw, 20vw);
-      overflow: hidden;
-      transition: 0.3s;
-
-      span {
-        font-size: clamp(30px, 7vw, 20vw);
-        filter: drop-shadow(1px 0 2px #f6569d);
-        display: inline-block;
-        overflow: hidden;
-        transition-duration: 0.2s;
-        transition-property: transform;
-        text-align: center;
-
-        span {
-          display: inline-block;
-          transition-duration: 1s;
-          transition-property: transform;
-          transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        &:nth-child(odd) {
-          transform: translateY(50%) rotateZ(180deg);
-
-          span {
-            transform: translateY(-100%);
-          }
-        }
-
-        &:nth-child(even) {
-          transform: translateY(-50%) rotateZ(-180deg);
-
-          span {
-            transform: translateY(100%);
-          }
-        }
+      p {
+        margin: 0;
       }
     }
 
-    &.loaded p>span {
-      transform: translateY(0);
+    .small {
+      margin-left: 40px;
+      font-size: 1.2rem;
+      top: 0;
     }
+  }
 
-    &.loaded p>span span {
-      transform: translateY(0);
-    }
+  .leftCard {}
 
-    .myText {
-      display: inline-block;
-      transition: 0.22s;
-      font-size: clamp(1px, 1vw, 14vw);
-      font-family: "dindin";
-      transform: translateY(0);
-      opacity: 0;
-      filter: drop-shadow(1px 0 4px #4e4e4e);
+  .rightCard {
+    .swiperCard {
+      background-image: url('../../assets/image/login/117154133_p0.png');
+      background-position: center;
+      background-size: cover;
     }
   }
 }
 
-.ContentHead {
-  width: 100%;
-  height: 100%;
-  text-align: center;
-}
-
-.listSum {
-  /* transition: .1s; */
-  padding: 40px;
-  padding-top: 0;
-  height: calc(100% - 808px);
+.main {
   margin: 0 auto;
-}
+  margin-top: 20px;
+  width: calc(var(--maxWidth) + 20px);
+  display: grid;
+  grid-template-columns: minmax(300px, calc(var(--maxWidth) - 100px)) 280px;
+  gap: 20px;
 
-.listImg {
-  width: 100%;
-  object-fit: cover;
-  position: fixed;
-  top: 0;
-  left: 0;
-  transform: translateY(300px) scale(2);
-  z-index: -1;
-  filter: blur(5px);
-}
+  .listMain {
+    width: 100%;
 
-.listCom {
-  margin: 0 auto;
-  padding: 40px;
-  width: 960px;
-  height: 100%;
-  overflow: hidden;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+    .listCom {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
 
-  &>div {
-    margin-bottom: 30px;
+      &>div {
+        width: 100%;
+        height: 410px;
+      }
+    }
+  }
+
+  #example.example-pagination-block {
+    margin: 20px 0;
+    margin-bottom: 200px;
+
+    .el-pagination {
+      justify-content: center;
+    }
+
+    li,
+    button {
+      background-color: #fff;
+      border: 1px solid #eee;
+      box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+      cursor: pointer;
+      transition: .24s;
+      width: 40px;
+      height: 40px;
+
+      &:hover {
+        border: 1px solid var(--themeColor);
+        box-shadow: 0 0 10px #5161ce30;
+      }
+    }
+
+    .is-active {
+      background-color: var(--themeColor);
+      color: #fff !important;
+    }
   }
 }
-
-.listCom::-webkit-scrollbar {
-  display: none;
-  /* Chrome Safari */
-}
-
-.lzy-center {
-  padding-top: 6px;
-  border-top: 1px solid #ebeef5;
-}
-
-.lzy-center :deep(.el-pagination) {
-  justify-content: center;
-}
-
-.lzy-center :deep(.el-pager) li.active {
-  color: var(--themeColor);
-}
-
-.lzy-center:deep(.el-pager) li:hover {
-  color: var(--themeColor);
-}
-
-.listSum :deep(.example-pagination-block) {
-  transition: bottom 0.22s cubic-bezier(0.645, 0.045, 0.355, 1);
-  opacity: 1;
-  height: 53px;
-  width: 100vw;
-  position: fixed;
-  left: 0;
-  bottom: -100px;
-  /* transform: translateX(-50%); */
-  background-color: #fff;
-}
-
-.example-demonstration {
-  padding: 4px !important;
-}
-</style>
-<style scoped>
-.dark .conDiv {
-  background: var(--darkBgcolor);
-  box-shadow: 0px 0px 0px 1px #ffffff6a;
-}
-
-.dark .conDiv :deep(.conDiv_text) div,
-.dark .lzy-center,
-.dark .conDiv :deep(.conDiv_text) .title,
-.dark .content,
-.dark .magics,
-.dark .lzy-center :deep(.el-pagination) button,
-.dark .lzy-center :deep(.el-pagination) li,
-.dark .listSum {
-  background: var(--darkBgcolor) !important;
-  color: var(--bgcolor);
-}
-</style>
-<style lang="less">
-@import url("@/assets/css/mobile/homeMobile.less");
 </style>

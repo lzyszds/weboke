@@ -21,6 +21,10 @@ export const splitArray = (array: any, size) => {
 
 //时间格式化为字符串 比如说前天 几天前，几小时前
 export const timeAgo = (time) => {
+  //判断当前time是否为时间戳，如果不是，则转换为时间戳
+  if (Number.isNaN(time)) {
+    time = dayjs(time).unix()
+  }
   const t = dayjs().unix() - time // Y-m-d H:i:s
   let i = 60
   let h = i * 60

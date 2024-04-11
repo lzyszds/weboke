@@ -62,7 +62,7 @@
   }
 
   .imgtop img {
-    filter: brightness(0.5);
+    filter: brightness(0.5) blur(10px);
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -75,16 +75,18 @@
   .topTitle {
     z-index: 2;
     position: absolute;
-    bottom: 20px;
+    bottom: 10rem;
     left: 50%;
     height: 130px;
     transform: translateX(-50%);
     color: #fff;
     text-shadow: 1px 2px 4px #000;
+    width: 1400px;
+
   }
 
   .topTitle h1 {
-    font-size: 40px;
+    font-size: 6rem;
     margin-bottom: 20px;
     margin-top: 0;
     font-family: 'dindin';
@@ -92,9 +94,11 @@
 
   .topTitle p {
     font-size: 20px;
-    margin-bottom: 10px;
     margin-top: 0;
-    text-indent: 0
+    text-indent: 0;
+    display: flex;
+    gap: 20px;
+    font-family: '微软雅黑';
   }
 
 
@@ -232,6 +236,7 @@
       span {
         display: flex;
         margin: 10px 20px;
+        line-height: 21px;
         place-content: left;
         font-family: 'dindin';
       }
@@ -437,7 +442,7 @@
 
       .affix {
         position: sticky;
-        top: 270px;
+        top: 285px;
         z-index: 1;
 
         .affix_item {

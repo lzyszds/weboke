@@ -89,7 +89,6 @@ const tipBackfn = (val) => {
     data.webHeadTitle = '返回顶部'
   }
 }
-const URL = import.meta.env.VITE_BASE_HTTP
 
 </script>
 <!-- 顶部导航栏 -->
@@ -98,10 +97,8 @@ const URL = import.meta.env.VITE_BASE_HTTP
     <div class="navConChild">
       <div class="navbar-brand navbar-logo">
         <a href="#">
-          <img width="80" :src="URL + '/public/img/lzjyWhite.png'" alt="" />
-          <svg class="logoSvg" viewBox="0 0 400 200">
-            <text x="0" y="70%" id="timelinetext"> Jingzy </text>
-          </svg>
+          <img width="30" src="/src/assets/image/logo.png" alt="" />
+          <span>Jingzy</span>
         </a>
       </div>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -112,8 +109,9 @@ const URL = import.meta.env.VITE_BASE_HTTP
           </li>
         </ul>
         <div class="navbar-navTitle" @mouseover="tipBackfn(1)" @mouseout="tipBackfn(0)">
-          <h4 :class="data.webHeadTitle == '返回顶部' ? 'tipBackclass animate__jackInTheBox' : ''" @click="scrollTo(0, 0)">{{
-            data.webHeadTitle }}
+          <h4 :class="data.webHeadTitle == '返回顶部' ? 'tipBackclass animate__jackInTheBox' : ''" @click="scrollTo(0, 0)">
+            {{
+              data.webHeadTitle }}
           </h4>
         </div>
       </div>
@@ -148,7 +146,7 @@ body {
 
   .navConChild {
     margin: 0 auto;
-    width: 1280px;
+    width: 1420px;
     height: 60px;
     display: grid;
     grid-template-columns: 2fr 3fr 2fr;
@@ -191,7 +189,7 @@ body {
         &>li>a {
           font-size: 16px;
           color: #fff;
-          text-shadow: 1px 2px 1px #000;
+          text-shadow: 1px 2px 1px #000, 0 0 1px #000000;
           font-weight: 600;
           text-decoration: none;
           padding-bottom: 10px;
@@ -253,6 +251,7 @@ body {
       top: 0 !important;
 
     }
+
   }
 }
 

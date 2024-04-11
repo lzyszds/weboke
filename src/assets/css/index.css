@@ -57,6 +57,7 @@ html,
   font-size: 10px;
   margin: 0;
   padding: 0;
+  background-color: #f9f8ff;
 }
 
 a {
@@ -263,26 +264,30 @@ html.dark {
 
 .navbar-logo {
   height: 60px;
+
+  a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 100%;
+    line-height: 10px;
+  }
+
+  img {
+    filter: drop-shadow(1px 2px 1px #000);
+  }
+
+  span {
+    font-family: fantasy;
+    font-size: 3rem;
+    color: #fff;
+    text-shadow: 1px 2px 1px #000, 0 0 1px #000000
+  }
 }
 
-.navbar-logo svg.logoSvg {
-  display: inline-block;
-  width: 100px;
-  height: 60px;
-}
 
 
-.navbar-logo svg.logoSvg text {
-  letter-spacing: 10px;
-  font-size: 120px;
-  animation: stroke 5s infinite alternate;
-  line-height: 60px;
-  animation-delay: 1s;
-}
 
-#timelinetext {
-  font-family: 'momo ink night';
-}
 
 @keyframes stroke {
   0% {

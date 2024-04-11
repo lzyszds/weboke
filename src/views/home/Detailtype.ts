@@ -19,5 +19,8 @@ export interface Replydata {
   replyPeople: string,
   reply_id: number,
   ground_id: number,
-  reply: Replydata[]
+  reply: Replydata[],
+  browserSystem: string,
+  deviceSystem: string,
+  user_ip: string
 }

@@ -368,20 +368,29 @@ function resizeWidth() {
     <!-- 文章封面 -->
     <div class="imgtop">
       <img :src="dataDet.cover_img" alt="">
-      <div class="topTitle center">
+      <div class="topTitle">
         <h1>{{ dataDet.title }}</h1>
         <p style="font-size: 15px;">
-          {{ dataDet.author }}
-          {{ setTimestamp(dataDet.create_date) }}
-          {{ dataDet.comments_count }}
-          条评论
-          <LzyIcon name="ic:baseline-access-time"></LzyIcon>
+          <!-- {{ dataDet.uname }} -->
           <span>
+            <LzyIcon name="ic:baseline-access-time"></LzyIcon>
+            发表时间
+            {{ setTimestamp(dataDet.create_date) }}
+          </span>
+          <span>
+            <LzyIcon name="iconoir:chat-lines"></LzyIcon>
+            评论数
+            {{ dataDet.comments_count }}
+          </span>
+          <span>
+            <LzyIcon name="iconoir:fire-flame"></LzyIcon>
+            浏览量
             {{ dataDet.access_count }}
           </span>
         </p>
         <!-- 文章类型 -->
         <div class="tags">
+          文章分类：
           <span class="mr-1 taglzy" v-for="(item, index) in dataDet.tags " :key="index">
             {{ item }}
           </span>
@@ -404,7 +413,7 @@ function resizeWidth() {
         <!-- 发布评论 -->
         <div v-transition="'tosiTion'" class="oldtosiTion publish center">
           <div class="borderw">
-            <div class="comment ">
+            <div class="comment">
               <span> {{ replyArr.replyName }} </span>
             </div>
             <div class="comment textareas">
@@ -540,6 +549,7 @@ function resizeWidth() {
     h5 svg {
       fill: #fff !important;
     }
+
   }
 }
 </style>

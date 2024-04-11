@@ -37,6 +37,7 @@
     "nprogress": "^0.2.0",
     "pinia": "^2.1.4",
     "prismjs": "^1.29.0",
+    "sass": "^1.74.1",
     "unplugin-auto-import": "^0.17.3",
     "vite-plugin-env-compatible": "^1.1.1",
     "vue": "^3.3.4",

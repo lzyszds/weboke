@@ -6,7 +6,6 @@ import dayjs from 'dayjs';
 import { useEventListener } from '@vueuse/core';
 import LzyIcon from '@/components/LzyIcon.vue';
 import { ElPageHeader, ElDescriptions, ElDescriptionsItem, ElTooltip, ElButton } from 'element-plus'
-import ColorRoulette from '@/uiComponents/ColorRoulette.vue';
 const router = useRouter();
 const api = import.meta.env.VITE_BASE_URL
 

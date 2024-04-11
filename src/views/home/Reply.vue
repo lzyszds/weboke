@@ -73,12 +73,24 @@ function getIndex(item, index) {
         <div class="item-right-top">
           <span class="item-right-top-name">{{ item.user_name }}</span>
           <span class="item-right-top-time">{{ timeAgo(item.time) }}</span>
-          <button v-if="isReply(item, index)" class="item-right-top-reply" @click="replyComment(item, index)">回复</button>
+          <button v-if="isReply(item, index)" class="item-right-top-reply"
+            @click="replyComment(item, index)">回复</button>
           <button v-else class="item-right-top-reply" @click="remReplyComment(item, index)">取消回复</button>
         </div>
         <div class="item-right-bottom">
           <span>{{ item.replyPeople ? '@' + item.replyPeople : '' }}</span>
           {{ item.content }}
+        </div>
+        <div class="item-right-info">
+          <span>
+            <LzyIcon name="iconoir:train" width="15px" />{{ item.user_ip }}
+          </span>
+          <span>
+            <LzyIcon name="iconoir:brain-warning" width="15px" />{{ item.deviceSystem }}
+          </span>
+          <span>
+            <LzyIcon name="iconoir:window-check" width="15px" />{{ item.browserSystem }}
+          </span>
         </div>
         <Reply v-if="item.reply" :oldReplydata="oldReplydata" :replydata="item.reply" :replyId="replyId"
           @replyclLevelTwo="replyComment" @remReplyclLevelTwo="remReplyComment" />
@@ -87,7 +99,7 @@ function getIndex(item, index) {
   </div>
 </template>
 
-<style  lang="less">
+<style lang="less">
 .reply {
 
   .item {
@@ -120,8 +132,9 @@ function getIndex(item, index) {
   .item-right-top-name {
     font-size: 18px;
     font-weight: 600;
-    color: #555;
+    color: var(--themeColor);
     letter-spacing: 0px;
+    font-family: none;
   }
 
   .item-right-top-time {
@@ -151,6 +164,27 @@ function getIndex(item, index) {
       letter-spacing: 0px;
       user-select: none;
       cursor: var(--linkCup);
+    }
+  }
+
+  .item-right-info {
+    display: flex;
+    gap: 5px;
+    margin-top: 10px;
+
+    span {
+      font-size: 12px;
+      color: #fff;
+      font-family: 'dindin';
+      letter-spacing: 0px;
+      user-select: none;
+      background-color: var(--themeColor);
+      padding: 2px 10px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
     }
   }
 }
