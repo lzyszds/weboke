@@ -1,5 +1,6 @@
 <template>
-  <div class="musicContent" @mouseleave="mouseleave" @mouseenter="mouseenter" :style="data.index ? 'width:415px' : null">
+  <div class="musicContent" @mouseleave="mouseleave" @mouseenter="mouseenter"
+    :style="data.index ? 'width:415px' : null">
     <audio id="player" ref="player" controls="controls" @timeupdate="update" class="hidden"></audio>
     <!-- 图片 -->
     <div class="musiclogo">
@@ -69,7 +70,8 @@
 
     <!-- 隐式开关 100  -->
     <div class="rightBtn" @click="click">
-      <img width="20" src="@/assets/icon/rightmsk.png" alt="" :style="data.index ? 'transform: rotate(180deg)' : null" />
+      <img width="20" src="@/assets/icon/rightmsk.png" alt=""
+        :style="data.index ? 'transform: rotate(180deg)' : null" />
     </div>
     <!-- 歌词content -->
     <div class="lyricDiv" v-if="data.islyric">
@@ -80,8 +82,7 @@
   </div>
 </template>
 
-<script setup >
-import { reactive, ref, onMounted, watch, nextTick, getCurrentInstance } from "vue";
+<script setup>
 import SliderX from "./SliderX.vue";
 import SliderY from "./SliderY.vue";
 import { storeToRefs } from "pinia";

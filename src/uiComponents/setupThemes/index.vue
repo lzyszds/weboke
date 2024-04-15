@@ -42,7 +42,7 @@ const toggleDark = () => {
 
 <style scoped>
 .setThemes {
-  width: 100px;
+  width: 60px;
   transform: scale(.5);
 }
 

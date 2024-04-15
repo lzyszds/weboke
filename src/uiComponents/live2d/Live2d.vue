@@ -1,6 +1,5 @@
 <script setup>
 
-import { onMounted, ref } from "vue";
 
 const player = ref(null)
 const contentText = ref('只是因为在人群中多看了你一眼,再也没能忘记你那张苦瓜脸')
@@ -62,7 +61,7 @@ function drag(el) {
   </div>
 </template>
 
-<style >
+<style>
 #live2d-widget {
   pointer-events: auto !important;
   color: #eee;

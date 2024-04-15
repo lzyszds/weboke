@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { reactive, onMounted, nextTick } from "vue";
 import SetupThemes from "@/uiComponents/setupThemes/index.vue";
 import { useRouter } from 'vue-router'
 import { useEventListener } from '@vueuse/core'
@@ -143,15 +142,18 @@ body {
   z-index: 99;
   backdrop-filter: blur(0);
   overflow: hidden;
+  display: flex;
+  justify-content: center;
 
   .navConChild {
-    margin: 0 auto;
-    width: 1420px;
+    margin: 0;
+    padding: 0 5rem;
+    max-width: 1300px;
+    width: 100%;
     height: 60px;
     display: grid;
     grid-template-columns: 2fr 3fr 2fr;
     grid-template-rows: 1fr;
-
 
 
     .collapse {
@@ -262,5 +264,5 @@ body {
 }
 
 //响应式css
-@import url('@/assets/css/mobile/navtopMobile.less');
+@import url('@/assets/css/mobile/navtopMobile.scss');
 </style>

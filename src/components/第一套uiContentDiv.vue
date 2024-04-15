@@ -1,6 +1,5 @@
 <!-- 文章列表中的长方形组件 -->
 <script setup lang="ts">
-import { ref } from "vue";
 import dayjs from "dayjs";
 import LzyIcon from "./LzyIcon.vue";
 const list = [

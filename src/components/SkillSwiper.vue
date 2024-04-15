@@ -124,7 +124,7 @@ onMounted(() => {
 .skillMain {
   position: absolute;
   top: 0%;
-  right: -70%;
+  right: -55rem;
   transform: rotate(-35deg);
 
   .skill-item {
@@ -141,8 +141,8 @@ onMounted(() => {
         justify-content: center;
         align-items: center;
         margin: 10px;
-        width: 80px;
-        height: 80px;
+        width: 8rem;
+        height: 8rem;
         padding: 10px;
         border-radius: 20px;
         background-color: var(--themeColor);

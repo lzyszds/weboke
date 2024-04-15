@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { useEventListener } from "@vueuse/core";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ResultDataTotal } from '@/types/Result'
 import { ElPagination } from 'element-plus'
 import SkillSwiper from "@/components/SkillSwiper.vue";
-import GithubPlot from "@/components/GithubPlot.vue";
 import ContentDiv from "@/components/ContentDiv.vue";
+import NewComment from "@/components/NewComment.vue";
+const DeskInfo = defineAsyncComponent(() => import("@/components/DeskInfo.vue"))
+
 const { $axios } = window;
 
 gsap.registerPlugin(ScrollTrigger);
@@ -92,6 +94,10 @@ onMounted(() => {
       }),
     });
     toGaspText(".myText");
+    resizeWidth()
+
+    //删除加载loading
+    document.querySelector('body')!.classList.remove('loading')
   }, 1000);
 });
 
@@ -116,6 +122,14 @@ const homecoverLoad = (e) => {
     filter: "blur(2px)",
     display: "none",
   });
+}
+
+useEventListener('resize', () => {
+  resizeWidth()
+})
+function resizeWidth() {
+  const detail = document.querySelector(".content") as HTMLDivElement;
+  detail.style.setProperty('--maxWidth', String(window.innerWidth - 130) + 'px')
 }
 
 </script>
@@ -149,7 +163,7 @@ const homecoverLoad = (e) => {
         </div>
       </div>
     </div>
-    <div class="main">
+    <div class="mainHome">
       <!-- 文章内容 -->
       <div class="listMain">
         <div class="listCom ">
@@ -166,7 +180,8 @@ const homecoverLoad = (e) => {
         </div>
       </div>
       <div class="systemInfo">
-
+        <DeskInfo></DeskInfo>
+        <NewComment></NewComment>
       </div>
     </div>
   </div>
@@ -183,6 +198,7 @@ const homecoverLoad = (e) => {
 .notice {
   margin: 70px auto 10px;
   height: 40px;
+  width: 1280px;
   max-width: var(--maxWidth);
   border-radius: 15px;
   background-color: var(--themeColor);
@@ -202,6 +218,7 @@ const homecoverLoad = (e) => {
   display: grid;
   grid-template-columns: 49.5% 49.5%;
   gap: 10px;
+  width: 1280px;
   max-width: var(--maxWidth);
   justify-content: space-between;
   margin: 0 auto 0;
@@ -220,7 +237,7 @@ const homecoverLoad = (e) => {
     position: relative;
 
     .slogan {
-      font-size: 3rem;
+      font-size: 5rem;
       margin-left: 30px;
       font-weight: 600;
       margin-bottom: 0;
@@ -248,12 +265,13 @@ const homecoverLoad = (e) => {
   }
 }
 
-.main {
+.mainHome {
   margin: 0 auto;
   margin-top: 20px;
-  width: calc(var(--maxWidth) + 20px);
+  width: 1310px;
+  max-width: calc(var(--maxWidth) + 20px);
   display: grid;
-  grid-template-columns: minmax(300px, calc(var(--maxWidth) - 100px)) 280px;
+  grid-template-columns: auto 305px;
   gap: 20px;
 
   .listMain {
@@ -299,6 +317,117 @@ const homecoverLoad = (e) => {
     .is-active {
       background-color: var(--themeColor);
       color: #fff !important;
+    }
+  }
+}
+
+@media (max-width: 1450px) {
+  .content {
+    .swiper_container_card {
+      .swiperCard {
+        .slogan {
+          font-size: 3rem;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 1250px) {
+  .content {
+    --maxWidth: 100%;
+
+    .swiper_container_card {
+      .swiperCard {
+        .slogan {
+          font-size: 3rem;
+        }
+      }
+    }
+
+    .mainHome {
+      .listMain {
+        .listCom {
+          grid-template-columns: 1fr;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 1080px) {
+  .content {
+    .swiper_container_card {
+      grid-template-columns: 1fr;
+
+      .rightCard {
+        display: none;
+      }
+    }
+  }
+}
+
+@media (max-width: 991px) {
+  .content {}
+}
+
+@media (max-width: 832px) {
+  .content {
+    --maxWidth: 96% !important;
+    margin: 20px;
+
+    .mainHome {
+      grid-template-columns: 1fr;
+    }
+
+    .systemInfo {
+      display: none;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .content {}
+}
+
+@media (max-width: 575px) {
+  .content {
+    margin: 0;
+
+    .notice {
+      width: auto;
+    }
+
+    .swiper_container_card {
+      width: auto;
+
+      .swiperCard {
+        p {
+          text-align: center;
+          margin: 10px 0;
+
+          &.slogan {
+            font-size: 4rem;
+          }
+        }
+
+        .skillMain {
+          transform: rotate(0);
+          bottom: 0;
+          top: auto;
+
+          .skillCard {
+            &>div {
+              width: 4rem;
+              height: 4rem;
+            }
+          }
+        }
+      }
+    }
+
+    .mainHome {
+      width: auto;
     }
   }
 }

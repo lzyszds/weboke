@@ -4,6 +4,7 @@
   --darkBgcolor: rgb(24, 23, 29);
   --darkContentBgcolor: #1E1E1E;
   --darkColor: rgb(255, 255, 255, .8);
+  --systemSelectColor: #344449;
   --textcolor: #fe9600;
   --borderColor: #ffe14d;
   --delColor: rgb(220, 20, 60);
@@ -163,7 +164,7 @@ input {
   /* //设置input输入框的背景颜色为透明色 */
 }
 
-input:-webkit-autofill::selection {
+/* input:-webkit-autofill::selection {
   -webkit-text-fill-color: #fff !important;
 }
 
@@ -183,6 +184,41 @@ body::-webkit-scrollbar-track {
   border-radius: 20px;
   border: 1px solid rgb(245, 245, 245);
   transition: 1s all;
+} */
+::-webkit-scrollbar {
+  /*滚动条整体样式*/
+  height: 15px !important;
+  /*高宽分别对应横竖滚动条的尺寸*/
+  width: 10px !important;
+}
+
+::-webkit-scrollbar-thumb {
+  /*滚动条里面小方块*/
+  border-radius: 8px;
+  border-style: dashed;
+  background-color: var(--themeColor);
+  border-color: transparent;
+  border-width: 3px;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--borderColor);
+  border-width: 2px;
+  background-clip: padding-box;
+  cursor: pointer;
+}
+
+
+::-webkit-scrollbar-track {
+  /*滚动条里面轨道*/
+  border-radius: 0;
+  background: #fff;
+  cursor: pointer;
+}
+
+::-webkit-scrollbar-corner {
+  background: #fff;
 }
 
 .compensate-for-scrollbar {
@@ -247,6 +283,46 @@ html.dark {
   background-color: var(--themeColor);
   padding: 6px;
   font-family: 'dindin';
+
+  &.stickyTop {
+    position: sticky;
+    top: 60px;
+    margin-bottom: 10px;
+    -webkit-user-drag: none;
+    font-size: 1.6rem;
+  }
+
+  .cardinter {
+    border-radius: 10px;
+    background-color: #fff;
+    padding: 10px;
+    border: 3px solid #000;
+    position: relative;
+    margin-bottom: 5px;
+
+    &.stickers {
+
+      &:before,
+      &:after {
+        content: '';
+        position: absolute;
+        top: 10px;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        border: 3px solid #000;
+        background-color: #7588ff;
+      }
+
+      &:before {
+        left: 10px;
+      }
+
+      &:after {
+        right: 10px;
+      }
+    }
+  }
 }
 
 .mr-1 {
@@ -278,8 +354,10 @@ html.dark {
   }
 
   span {
-    font-family: fantasy;
-    font-size: 3rem;
+    font-family: "微软雅黑";
+    font-size: 30px;
+    line-height: 35px;
+    display: block;
     color: #fff;
     text-shadow: 1px 2px 1px #000, 0 0 1px #000000
   }

@@ -72,10 +72,6 @@ const router = createRouter({
             });
         });
 
-        
-        setTimeout(() => {
-            document.querySelector('body')!.classList.remove('loading')
-        }, 500)
         return { top: 0 }
     }
 })

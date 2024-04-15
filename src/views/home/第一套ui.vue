@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
 import { ElPagination } from "element-plus";
 import ContentHead from "@/components/Content-head.vue";
 import ContentDiv from "@/components/Content-div.vue";
@@ -411,5 +410,5 @@ const homecoverLoad = (e) => {
 }
 </style>
 <style lang="less">
-@import url("@/assets/css/mobile/homeMobile.less");
+@import url("@/assets/css/mobile/homeMobile.scss");
 </style>

@@ -1,5 +1,4 @@
 <script setup>
-import { reactive, ref, defineProps, watch } from "vue";
 const props = defineProps({
   width: String,
   height: String,

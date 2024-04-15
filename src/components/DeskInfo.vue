@@ -17,8 +17,8 @@ const formatTime = (time: string) => {
 </script>
 
 <template>
-  <main class="themeCard deskInfo ">
-    <section class="cardinter">
+  <main class="themeCard stickyTop">
+    <section class="cardinter stickers">
       <div class="geoArea">
         <lzyIcon name="ep:location-information"></lzyIcon>
         {{ province + "|" + city }} <span> {{ ip }}</span>
@@ -44,34 +44,23 @@ const formatTime = (time: string) => {
 </template>
 
 <style lang='less' scoped>
-.deskInfo {
-  position: sticky;
-  top: 60px;
-  margin-bottom: 10px;
-  user-select: none;
-  cursor: pointer;
-  display: grid;
-  gap: 3px;
+.stickyTop {
 
   p {
     margin: 0;
   }
 
   .cardinter {
-    border-radius: 10px;
-    background-color: #fff;
-    padding: 10px;
-    border: 3px solid #000;
-    position: relative;
 
     .geoArea {
+
       span {
         text-decoration: 1px underline #000;
         margin-left: 10px;
+        z-index: 99999;
+
       }
     }
-
-
 
     .gridlist {
       display: grid;

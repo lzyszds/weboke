@@ -1,16 +1,19 @@
-@media(min-width:1280px) {
-  .listImg {
-    display: block;
+@media (max-width: 1450px) {
+  .content {
+    .main {
+      display: block;
+      grid-template-columns: 865px 1fr;
+    }
   }
 }
 
-@media(max-width:1280px) {
+@media (max-width: 1280px) {
   .listImg {
     display: none;
   }
 }
 
-@media(max-width: 1080px) {
+@media (max-width: 1080px) {
   .content {
     .listSum {
       padding: 0 10px;
@@ -29,7 +32,7 @@
   }
 }
 
-@media(max-width: 991px) {
+@media (max-width: 991px) {
   .content {
     .home {
       height: 70vh;
@@ -55,16 +58,14 @@
   }
 }
 
-@media(max-width:832px) {
+@media (max-width: 832px) {
   .content {
-
     .listCom {
       width: calc(100% - 10px);
 
       .conDiv {
         display: grid;
         grid-template-columns: 258px 1fr;
-
 
         .conDiv_text {
           width: auto;
@@ -91,7 +92,7 @@
   }
 }
 
-@media(max-width:768px) {
+@media (max-width: 768px) {
   .content {
     .home {
       height: 50vh;
@@ -99,8 +100,7 @@
   }
 }
 
-
-@media(max-width:575px) {
+@media (max-width: 575px) {
   .content {
     .listSum {
       padding: 0;
@@ -137,7 +137,6 @@
             white-space: nowrap;
             text-overflow: ellipsis;
             -o-text-overflow: ellipsis;
-
           }
 
           .tags {
@@ -169,8 +168,5 @@
     .home {
       height: 30vh;
     }
-
-
   }
-
 }

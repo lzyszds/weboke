@@ -1,7 +1,6 @@
 <script setup>
 // import Navleft from "@/components/Navleft.vue";
 import Navtop from "@/components/Navtop.vue";
-import { onMounted } from "vue";
 // import Content from "@/components/Content.vue";
 </script>
 

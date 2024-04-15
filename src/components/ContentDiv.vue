@@ -1,6 +1,5 @@
 <!-- 文章列表中的长方形组件 -->
 <script setup lang="ts">
-import { ref } from "vue";
 import dayjs from "dayjs";
 import LzyIcon from "./LzyIcon.vue";
 const list = [
@@ -34,7 +33,7 @@ const selectHandle = (index: number) => {
   if (index == 0) return data.value.uname;
   if (index == 1)
     return dayjs(data.value.create_date).format("YYYY-MM-DD");
-  if (index == 2) return (data.value.comments_count || 0) + "条评论";
+  if (index == 2) return (data.value.comments_count || 0);
   if (index == 3) return data.value.access_count;
 };
 
@@ -81,10 +80,16 @@ const selectHandle = (index: number) => {
   transform: translateY(200px);
   height: 400px;
   padding: 5px;
+  border: 1px solid #888;
 
-  &:hover .title {
-    /* box-shadow: -1px 1px 6px 1px var(--themeColor); */
-    color: var(--themeColor);
+  &:hover {
+    border: 1px solid var(--themeColor);
+
+    .title {
+      /* box-shadow: -1px 1px 6px 1px var(--themeColor); */
+      color: var(--themeColor);
+
+    }
   }
 
   .conDiv_img {
@@ -99,15 +104,16 @@ const selectHandle = (index: number) => {
   }
 
   .conDiv_text {
-    width: 92%;
+    width: 96%;
+    height: 20rem;
     padding: 10px;
     display: grid;
-    grid-template-rows: 50px 1fr 30px 35px;
+    grid-template-rows: 60px 1fr 30px 35px;
     gap: 5px
   }
 
   .title {
-    font-size: 23px;
+    font-size: 22px;
     color: #000;
     font-family: "dindin";
     overflow: hidden;
@@ -117,11 +123,14 @@ const selectHandle = (index: number) => {
   .synopsis {
     font-size: 14px;
     color: #888;
-    height: 60px;
+    height: 40px;
+    //超出两行显示省略号
     overflow: hidden;
-    text-overflow: ellipsis;
-    -webkit-line-clamp: 3;
     display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    line-height: 1.5;
 
   }
 
@@ -146,7 +155,7 @@ const selectHandle = (index: number) => {
 
       &:nth-child(3) {
         text-align: center;
-        width: 100px;
+        width: 60px;
         flex: none;
       }
 

@@ -51,7 +51,13 @@ onMounted(() => {
       })
     })
     emit('update', 1)
-
+    const keys = [
+      'sk-4EMijL3N2LTlRkVZ8JtkxLCCAbLyNKIr1KjgWrShzxyKHcFI',
+      'sk-HhqOOePbYD99TzdCOpul1i9kDJVk28r0WSPJbJclCTovKyuC',
+      'sk-ns5vEPDSCOdao8fi4q2mFycccRUKOfHodjgV0RUJMA5PHv0M',
+      'sk-vPMwI4Qv32xSXutKVpJ0xsoL9yEoKMEjki8UOrszoq2MHk6j'
+    ]
+    let i = 0
     getAbstract('/chatAi/', "sk-4EMijL3N2LTlRkVZ8JtkxLCCAbLyNKIr1KjgWrShzxyKHcFI").catch(res => {
       getAbstract('/chatAi/', 'sk-HhqOOePbYD99TzdCOpul1i9kDJVk28r0WSPJbJclCTovKyuC').catch(res => {
         getAbstract('/chatAi/', 'sk-ns5vEPDSCOdao8fi4q2mFycccRUKOfHodjgV0RUJMA5PHv0M').catch(res => {
@@ -61,7 +67,7 @@ onMounted(() => {
     })
 
 
-  }, 1000)
+  }, 500)
 })
 let strConnect = ''
 function getAbstract(url, key) {
@@ -133,9 +139,9 @@ function getAbstract(url, key) {
 </script>
 
 <template>
-  <div id="markdownMain" class="main vuepress-markdown-body v-md-editor-preview center">
+  <div id="markdownMain" class="main vuepress-markdown-body v-md-editor-preview ">
     <div class="aiMain">
-      <p class="title">
+      <p class="abstract" id="abstract">
         <LzyIcon name="mdi:robot-excited-outline"></LzyIcon>文章摘要
       </p>
       <div class="aiContent">
@@ -259,7 +265,7 @@ ol .dark ol {
     }
   }
 
-  p.title {
+  p.abstract {
     background-color: var(--borderColor);
     color: #000;
     border-radius: 10px;
@@ -269,6 +275,8 @@ ol .dark ol {
     text-indent: 0;
     padding-left: 10px;
     font-family: 'dindin';
+    animation-duration: 0.5s;
+    animation-delay: 0.5s;
 
     svg {
       margin-right: 5px;

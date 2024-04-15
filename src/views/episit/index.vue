@@ -13,12 +13,10 @@
 </template>
 
 <script setup>
-import { reactive, onMounted, ref, watch } from "vue";
 import http from "@/http/http";
 // import { show, hide } from "@/utils/loading.js";
 import lzyButton from "@/uiComponents/Button.vue";
 import _ from "lodash";
-import { } from "vue";
 import * as echarts from "echarts";
 import china from "/public/china.json";
 import { useRouter } from 'vue-router'

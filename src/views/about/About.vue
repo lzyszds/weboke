@@ -89,6 +89,8 @@ onMounted(() => {
 
     })
   })
+  //删除加载loading
+  document.querySelector('body')!.classList.remove('loading')
 })
 //判断当前日期标题是否显示
 const isShow = (value, index) => {
@@ -179,12 +181,12 @@ const identifyreatColor = (color: string) => {
               <Transition name="toTion">
                 <li v-if="toTion[1]">2021.7 - 2022.8 成都云天为民(小公司主要负责气象数据) 实习</li>
               </Transition>
-              <Transition name="toTion">
+              <!-- <Transition name="toTion">
                 <li v-if="toTion[2]">2022.9 - 至今 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;南宁学院 本科 计算机科学与技术专业</li>
               </Transition>
               <Transition name="toTion">
                 <li v-if="toTion[3]">至今还在努力学习中哦...</li>
-              </Transition>
+              </Transition> -->
             </ul>
           </ElPageHeader>
         </div>
