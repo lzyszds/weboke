@@ -7,7 +7,7 @@ import { useEventListener } from '@vueuse/core';
 const { proxy } = getCurrentInstance() as any
 const props = defineProps({
   main: String,
-  content: String,
+  aid: Number,
 });
 
 const emit = defineEmits(['update'])
@@ -51,90 +51,41 @@ onMounted(() => {
       })
     })
     emit('update', 1)
-    const keys = [
-      'sk-4EMijL3N2LTlRkVZ8JtkxLCCAbLyNKIr1KjgWrShzxyKHcFI',
-      'sk-HhqOOePbYD99TzdCOpul1i9kDJVk28r0WSPJbJclCTovKyuC',
-      'sk-ns5vEPDSCOdao8fi4q2mFycccRUKOfHodjgV0RUJMA5PHv0M',
-      'sk-vPMwI4Qv32xSXutKVpJ0xsoL9yEoKMEjki8UOrszoq2MHk6j'
-    ]
-    let i = 0
-    getAbstract('/chatAi/', "sk-4EMijL3N2LTlRkVZ8JtkxLCCAbLyNKIr1KjgWrShzxyKHcFI").catch(res => {
-      getAbstract('/chatAi/', 'sk-HhqOOePbYD99TzdCOpul1i9kDJVk28r0WSPJbJclCTovKyuC').catch(res => {
-        getAbstract('/chatAi/', 'sk-ns5vEPDSCOdao8fi4q2mFycccRUKOfHodjgV0RUJMA5PHv0M').catch(res => {
-          aiContent.value = "生成失败，请稍后再试"
-        })
-      })
-    })
 
+    getAbstract('/api/aiService/getAifox?aid=' + props.aid)
 
   }, 500)
 })
-let strConnect = ''
-function getAbstract(url, key) {
+function getAbstract(url) {
   return new Promise<any>(async (resolve, reject) => {
     try {
-      const result = await fetch(url, {
-        method: 'POST',
-        body: JSON.stringify({
-          model: "gpt-3.5-turbo-0125",
-          messages: [
-            {
-              role: "user",
-              content: "帮我对下面的文章内容进行一个摘要。" + props.content
-            }
-          ],
-          presence_penalty: 0,
-          stream: true,
-          temperature: 0.5,
-          top_p: 1
-        }),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${key}`
-        },
-      })
+      const result = await fetch(url, { method: 'GET', })
       const textDecoder = new TextDecoder()
       const reader = result.body?.getReader()!
+
       aiContent.value = ""
-      async function slowLoop() {
-        let partialData = ''; // 保存部分数据
-        while (true) {
-          const { done, value } = await reader.read()
-          doneFlag.value = done
-          if (done) {
-            break
-          }
-          const text = textDecoder.decode(value)
-          const lines = (partialData + text).split('\n'); // 将部分数据与新数据合并后再按行分割
-          partialData = lines.pop() || ''; // 获取新数据中的不完整行，并保存到 partialData 中
-          for (let line of lines) { // 逐行处理数据
-            try {
-              if (strConnect != '') {
-                line = strConnect + line
-                strConnect = ''
-              }
-              if (line.includes("[DONE]")) continue; // 如果包含 "[DONE]" 字符串则跳过该行
-              const resObj: any = JSON.parse(line.replace('data: ', ''));
-              const str = resObj.choices[0].delta.content;
-              if (str) {
-                aiContent.value += str; // 将逐字生成的数据拼接到 aiContent 中
-              }
-            } catch (e) {
-              // 处理异常
-              strConnect = line
+      while (true) {
+        const { done, value } = await reader.read()
+        doneFlag.value = done
+        if (done) {
+          break
+        }
+        const text = textDecoder.decode(value)
+        const lines = text.split('\n'); // 将部分数据与新数据合并后再按行分割
+        for (let line of lines) { // 逐行处理数据
+          // 添加延迟，单位为毫秒（例如延迟 100 毫秒） 一帧等于 16.67 毫秒
+          await new Promise(resolve => setTimeout(resolve, 16.67));
+          try {
+            if (line) {
+              aiContent.value += line; // 将逐字生成的数据拼接到 aiContent 中
             }
-          }
-          // 添加延迟，单位为毫秒（例如延迟 500 毫秒）
-          await new Promise(resolve => setTimeout(resolve, 100));
+          } catch (e) { }
         }
       }
-
-      await slowLoop();
     } catch (e) {
       reject(e)
     }
   })
-
 }
 </script>
 

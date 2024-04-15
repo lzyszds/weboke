@@ -400,7 +400,7 @@ function resizeWidth() {
     <div class="bodyMain">
       <div class="mainLeft">
         <!-- 文章内容 -->
-        <Maincontent :main="dataDet.main" :content="dataDet.content" @update="updateCop"></Maincontent>
+        <Maincontent :main="dataDet.main" :aid="dataDet.aid" @update="updateCop"></Maincontent>
         <!-- 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议 -->
         <footer v-transition="'tosiTion'" class="oldtosiTion post-footer center ">
           <div class="tool">
