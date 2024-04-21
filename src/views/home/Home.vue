@@ -159,6 +159,7 @@ function resizeWidth() {
       </div>
       <div class="swiperitem rightCard">
         <div class="swiperCard">
+          <img v-lazy="5" src="/api/public/img/homeItem.png" alt="">
           <!-- <GithubPlot :data="getGithubData()" :x="836" :y="204"></GithubPlot> -->
         </div>
       </div>
@@ -258,9 +259,11 @@ function resizeWidth() {
 
   .rightCard {
     .swiperCard {
-      background-image: url('../../assets/image/login/117154133_p0.png');
-      background-position: center;
-      background-size: cover;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
     }
   }
 }

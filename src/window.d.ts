@@ -2,6 +2,7 @@
 declare global {
   interface Window {
     $axios: typeof import('@/http/request')['default']
+    lzyLazyImg: string
   }
 }
 

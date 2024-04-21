@@ -4,6 +4,7 @@
 import { onMounted, getCurrentInstance } from 'vue'
 import { ElNotification } from 'element-plus'
 import { useEventListener } from '@vueuse/core';
+import VueMarkdownEditor, { xss } from '@kangc/v-md-editor'
 const { proxy } = getCurrentInstance() as any
 const props = defineProps({
   main: String,
@@ -12,7 +13,11 @@ const props = defineProps({
 
 const emit = defineEmits(['update'])
 const aiContent = ref('生成中...')
-
+const aiContentHtml = computed(() => {
+  return xss.process(
+    VueMarkdownEditor.vMdParser.themeConfig.markdownParser.render(aiContent.value)
+  )
+})
 const doneFlag = ref(false)
 
 onMounted(() => {
@@ -58,11 +63,31 @@ onMounted(() => {
 })
 function getAbstract(url) {
   return new Promise<any>(async (resolve, reject) => {
+
+    //ai摘要生成时间超过6秒还没有返回结果，就提醒用户稍等一下
+
+    let timer6 = setTimeout(async () => {
+      aiContent.value = ""
+      for (let i = 0; i < 'AI摘要还在生成中，请稍等...'.length; i++) {
+        await new Promise(resolve => setTimeout(resolve, 35));
+        aiContent.value += 'AI摘要还在生成中，请稍等...'.charAt(i)
+      }
+    }, 1000 * 3)
+
+    //ai摘要生成时间超过10秒还没有返回结果，提示用户超时
+    let timer10 = setTimeout(async () => {
+      aiContent.value = ""
+      for (let i = 0; i < 'AI摘要生成超时，请重新生成'.length; i++) {
+        await new Promise(resolve => setTimeout(resolve, 35));
+        aiContent.value += 'AI摘要生成超时，请重新生成'.charAt(i)
+      }
+    }, 1000 * 10)
     try {
       const result = await fetch(url, { method: 'GET', })
       const textDecoder = new TextDecoder()
       const reader = result.body?.getReader()!
-
+      timer6 && clearTimeout(timer6)
+      timer10 && clearTimeout(timer10)
       aiContent.value = ""
       while (true) {
         const { done, value } = await reader.read()
@@ -74,7 +99,7 @@ function getAbstract(url) {
         const lines = text.split('\n'); // 将部分数据与新数据合并后再按行分割
         for (let line of lines) { // 逐行处理数据
           // 添加延迟，单位为毫秒（例如延迟 100 毫秒） 一帧等于 16.67 毫秒
-          await new Promise(resolve => setTimeout(resolve, 16.67));
+          await new Promise(resolve => setTimeout(resolve, 35));
           try {
             if (line) {
               aiContent.value += line; // 将逐字生成的数据拼接到 aiContent 中
@@ -97,7 +122,7 @@ function getAbstract(url) {
       </p>
       <div class="aiContent">
         <p>
-          <span v-html="aiContent"></span>
+          <span class="aiText" v-html="aiContentHtml"></span>
           <LzyIcon v-if="!doneFlag" name="ph:fan-duotone"></LzyIcon>
         </p>
       </div>
@@ -206,7 +231,13 @@ ol .dark ol {
     word-break: break-all;
 
     p {
-      margin: 5px;
+      margin: 0 5px;
+    }
+
+    .aiText {
+      :deep(p) {
+        display: inline;
+      }
     }
 
     svg {

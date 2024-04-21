@@ -93,11 +93,6 @@ export default defineConfig(({ command, mode }): any => {
           changeOrigin: true,
           rewrite: path => path.replace(/^\/live2d/, '')
         },
-        '/chatAi': {
-          target: 'https://api.chatanywhere.com.cn/v1/chat/completions',
-          changeOrigin: true,
-          rewrite: path => path.replace(/^\/chatAi/, '')
-        },
       }
     }
   }
