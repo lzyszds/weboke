@@ -4,7 +4,7 @@ import { timeAgo } from '@/utils/common'
 import { Replydata } from './Detailtype'
 
 interface Props {
-  oldReplydata: Replydata[]
+  oldReplicate: Replydata[]
   replydata: Replydata[],
   replyId: number[][],
 }
@@ -15,7 +15,7 @@ const props = defineProps<Props>()
 const replydata = ref<Replydata[]>(props.replydata)
 
 //评论数据复制
-const oldReplydata = ref<Replydata[]>(props.oldReplydata)
+const oldReplicate = ref<Replydata[]>(props.oldReplicate)
 
 //评论的id
 const replyId = ref<number[][]>(props.replyId)
@@ -51,11 +51,11 @@ const isReply = (item: Replydata, index: number) => {
 
 //
 function getIndex(item, index) {
-  for (let key in oldReplydata.value) {
-    if (oldReplydata.value[key].comment_id == item.ground_id) {
-      //获取到当前oldReplydata中reply_id的值为0的它的索引是什么
+  for (let key in oldReplicate.value) {
+    if (oldReplicate.value[key].comment_id == item.ground_id) {
+      //获取到当前oldReplicate中reply_id的值为0的它的索引是什么
       //(res) => res.reply_id == 0 && res.comment_id == item.ground_id
-      let parentAssemble = oldReplydata.value.filter((res) => res.reply_id == 0)
+      let parentAssemble = oldReplicate.value.filter((res) => res.reply_id == 0)
       let parentIndex = parentAssemble.findIndex((res) => res.comment_id == item.ground_id)
       return replyId.value[parentIndex][index]
     }
@@ -92,7 +92,7 @@ function getIndex(item, index) {
             <LzyIcon name="iconoir:window-check" width="15px" />{{ item.browserSystem }}
           </span>
         </div>
-        <Reply v-if="item.reply" :oldReplydata="oldReplydata" :replydata="item.reply" :replyId="replyId"
+        <Reply v-if="item.reply" :oldReplicate="oldReplicate" :replydata="item.reply" :replyId="replyId"
           @replyclLevelTwo="replyComment" @remReplyclLevelTwo="remReplyComment" />
       </div>
     </div>

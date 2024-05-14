@@ -37,13 +37,12 @@ const getComment = async () => {
     }
   }) as any
   //浅拷贝一份评论数据
-  const oldReplydata = [...listComment.value]
+  const oldReplicate = [...listComment.value]
   // 遍历评论列表，为每个评论添加回复列表
-  const list = oldReplydata.filter((res: any) => res.reply_id == 0)
-  console.log(`lzy  list:`, list)
+  const list = oldReplicate.filter((res: any) => res.reply_id == 0)
   list.forEach((element: any) => {
     element.reply = []
-    oldReplydata.forEach((res: any, index: number) => {
+    oldReplicate.forEach((res: any, index: number) => {
       // 如果回复的评论id与当前评论的回复id相同，则将该回复添加到当前评论的回复列表中
       if (element.comment_id == res.ground_id) {
         list.splice(index, 1)
@@ -460,7 +459,7 @@ function resizeWidth() {
               <i class="iconfont icon-icon-taikong13"></i>评论
             </h5>
             <div class="comContent">
-              <Reply v-if="!overloading" :oldReplydata="listComment" :replydata="listComment"
+              <Reply v-if="!overloading" :oldReplicate="listComment" :replydata="listComment"
                 :replyId="replyArr.replyId" @replycl="replyComment" @replyclLevelTwo="replyComment"
                 @remReplycl="remReplyComment" @remReplyclLevelTwo="remReplyComment" />
             </div>

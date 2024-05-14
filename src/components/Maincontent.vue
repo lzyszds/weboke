@@ -57,7 +57,7 @@ onMounted(() => {
     })
     emit('update', 1)
 
-    getAbstract('/api/aiService/getAifox?aid=' + props.aid)
+    getAbstract('/api/aiService/getAiNewWord?aid=' + props.aid)
 
   }, 500)
 })
@@ -99,7 +99,7 @@ function getAbstract(url) {
         const lines = text.split('\n'); // 将部分数据与新数据合并后再按行分割
         for (let line of lines) { // 逐行处理数据
           // 添加延迟，单位为毫秒（例如延迟 100 毫秒） 一帧等于 16.67 毫秒
-          await new Promise(resolve => setTimeout(resolve, 35));
+          await new Promise(resolve => setTimeout(resolve, 60));
           try {
             if (line) {
               aiContent.value += line; // 将逐字生成的数据拼接到 aiContent 中
