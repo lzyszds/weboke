@@ -66,7 +66,7 @@
   background: #5161ce10 !important;
 }
 
-.el-table__body tr.hover-row > td.el-table__cell {
+.el-table__body tr.hover-row>td.el-table__cell {
   background: #5161ce08 !important;
 }
 
@@ -93,7 +93,9 @@
 button {
   &.el-button {
     &.is-disabled {
-      background-color:#5161ce99;:hover {
+      background-color: #5161ce99;
+
+      :hover {
         background-color: #5161ce99 !important;
       }
 
@@ -103,6 +105,9 @@ button {
     }
 
     &.el-button--primary {
+      background-color: var(--themeColor);
+      border-color: #000;
+
       &.purple {
         background-color: var(--themeColor);
         border-color: var(--themeColor);
@@ -116,9 +121,6 @@ button {
         }
       }
 
-      background-color: var(--themeColor);
-      border-color: #000;
-
       &:hover {
         background-color: #5161ce99;
         border: 2px solid #fff;
@@ -126,7 +128,9 @@ button {
       }
 
       &.is-disabled {
-        background-color:#5161ce99;:hover {
+        background-color: #5161ce99;
+
+        :hover {
           background-color: #5161ce99 !important;
         }
 
@@ -158,6 +162,7 @@ span.el-tag.purple {
 .copy-success {
   border: 1px solid var(--themeColor) !important;
   display: flex;
+
   .el-notification__content {
     // color: var(--themeColor) !important;
     font-family: 'dindin';

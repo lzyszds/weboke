@@ -33,8 +33,7 @@ function getArticleList(pages: number, limit: number) {
   })
 }
 
-const itemData = await getArticleList(indexList.value, limit);
-const { data, total } = itemData;
+const { data, total } = await getArticleList(indexList.value, limit);
 const list: any = ref(data);
 const totals = ref(total);
 const isload = ref(true);
@@ -159,7 +158,7 @@ function resizeWidth() {
       </div>
       <div class="swiperitem rightCard">
         <div class="swiperCard">
-          <img v-lazy="5" src="/api/public/img/homeItem.png" alt="">
+          <img v-lazy="5" :src="'/api/public/img/homeItem.png'" alt="">
           <!-- <GithubPlot :data="getGithubData()" :x="836" :y="204"></GithubPlot> -->
         </div>
       </div>

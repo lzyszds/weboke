@@ -4,34 +4,31 @@ export default function (document) {
   style.innerHTML = `
   @font-face {
     font-family: 'dindin';
-    src: url('/api/public/font/dist/DingTalk_JinBuTi_Regular.woff');
+    src: url('/api/public/fonts/DingTalk JinBuTi.woff2');
   }
   @font-face {
     font-family: 'black-Magic';
-    src: url('/api/public/font/dist/Black-Magic.ttf');
+    src: url('/api/public/fonts/Black-Magic.ttf');
   }
   @font-face {
-    font-family: 'firaCode';
-    src: url('/api/public/font/dist/FiraCode.ttf');
-  }
-  @font-face {
-    font-family: 'Fira Code VF';
-    src: url('/api/public/font/dist/FiraCode-VF.woff2') format('woff2-variations');
+    font-family: 'Fira Code';
+    src: url('/api/public/fonts/FiraCode-VF.woff2') format('woff2-variations');
     font-weight: 300 700;
     font-style: normal;
   }
   @font-face {
     font-family: 'momo ink night';
-    src: url('/api/public/font/dist/momo ink night.ttf');
+    src: url('/api/public/fonts/momo ink night.ttf');
   }
   @font-face {
     font-family: 'slackey';
-    src: url('/api/public/font/dist/slackey.woff2');
+    src: url('/api/public/fonts/slackey.woff2');
+  }
+  @font-face {
+    font - family: 'almama';
+    src: url('/api/public/fonts/AlimamaShuHeiTi-Bold.woff2');
   }
   `
-  // @font-face {
-  //   font - family: 'almama';
-  //   src: url('${import.meta.env.VITE_BASE_URL}/public/font/dist/AlimamaShuHeiTi-Bold.woff');
-  // }
+
   document.head.appendChild(style)
 }

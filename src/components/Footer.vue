@@ -5,6 +5,7 @@ const footData = await $axios({
   url: '/api/common/getFooterInfo',
   method: 'get'
 })
+console.log(footData);
 const userInfo = [{
   name: 'github',
   icon: 'grommet-icons:github',
