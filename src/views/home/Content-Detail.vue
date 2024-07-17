@@ -251,11 +251,12 @@ const comSubmit = () => {
   //发送请求,提交评论
   request({
     method: 'post',
-    url: '/api/article/addComment',
+    url: '/api/comment/addComment',
     data: commentData
   }).then(async (res: any) => {
+    console.log(`lzy  res:`, res)
     if (res == '评论成功') {
-      tip(`评论成功,感谢你的评论！`, 2000)
+      tip(`评论成功,感谢你的评论！`, 100000)
       overloading.value = true
       await getComment()
       overloading.value = false
@@ -264,10 +265,7 @@ const comSubmit = () => {
       handleReplyData(replyArr.replyId)//清空回复评论的id
       setReplyStatus() // 重新设置回复评论的状态
     } else {
-      proxy.$message({
-        message: '评论失败',
-        type: 'error'
-      })
+      tip(`评论失败,请稍后再试！`, 2000)
     }
   })
 }

@@ -37,7 +37,6 @@ const selectHandle = (index: number) => {
   if (index == 3) return data.value.access_count;
 };
 
-
 </script>
 
 <template>

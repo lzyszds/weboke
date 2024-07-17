@@ -36,9 +36,10 @@ console.log(`lzy  userInfo:`, userInfo)
     </div>
     <div class="navigation">
       <div class="column" v-for="(items, index) in footData" :key="index">
-        <div class="title">{{ items[0].footer_type }}</div>
-        <div v-for="(item, index) in items" :key="index">
-          <router-link :to="item.footer_url">{{ item.footer_content }}</router-link>
+        <div class="title">{{ items.footer_content }}</div>
+        <div v-for="(item, index) in items.children" :key="index">
+          <!-- 打开新窗口 -->
+          <a :href="item.footer_url" target="_blank">{{ item.footer_content }}</a>
         </div>
       </div>
     </div>

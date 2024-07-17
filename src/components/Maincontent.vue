@@ -57,7 +57,7 @@ onMounted(() => {
     })
     emit('update', 1)
 
-    getAbstract('/api/aiService/getAiNewWord?aid=' + props.aid)
+    getAbstract('/api/aiService/getAifox?aid=' + props.aid)
 
   }, 500)
 })
