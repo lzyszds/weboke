@@ -61,17 +61,22 @@ onMounted(() => {
 
   }, 500)
 })
+
+
+async function aiTip() {
+  aiContent.value = ""
+  for (let i = 0; i < 'AI摘要还在生成中，请稍等...'.length; i++) {
+    await new Promise(resolve => setTimeout(resolve, 35));
+    aiContent.value += 'AI摘要还在生成中，请稍等...'.charAt(i)
+  }
+}
 function getAbstract(url) {
   return new Promise<any>(async (resolve, reject) => {
 
     //ai摘要生成时间超过6秒还没有返回结果，就提醒用户稍等一下
 
     let timer6 = setTimeout(async () => {
-      aiContent.value = ""
-      for (let i = 0; i < 'AI摘要还在生成中，请稍等...'.length; i++) {
-        await new Promise(resolve => setTimeout(resolve, 35));
-        aiContent.value += 'AI摘要还在生成中，请稍等...'.charAt(i)
-      }
+      await aiTip()
     }, 1000 * 3)
 
     //ai摘要生成时间超过10秒还没有返回结果，提示用户超时
@@ -93,18 +98,23 @@ function getAbstract(url) {
         const { done, value } = await reader.read()
         doneFlag.value = done
         if (done) {
+          if (aiContent.value == "") {
+            await aiTip()
+            //重新生成
+            getAbstract('/api/aiService/getAifox?aid=' + props.aid)
+          }
           break
         }
         const text = textDecoder.decode(value)
         const lines = text.split('\n'); // 将部分数据与新数据合并后再按行分割
+        console.log(`lzy  lines:`, lines)
         for (let line of lines) { // 逐行处理数据
           // 添加延迟，单位为毫秒（例如延迟 100 毫秒） 一帧等于 16.67 毫秒
           await new Promise(resolve => setTimeout(resolve, 60));
-          try {
-            if (line) {
-              aiContent.value += line; // 将逐字生成的数据拼接到 aiContent 中
-            }
-          } catch (e) { }
+          if (line) {
+            aiContent.value += line; // 将逐字生成的数据拼接到 aiContent 中
+            console.log(`lzy  aiContent.value:`, aiContent.value)
+          }
         }
       }
     } catch (e) {
@@ -128,7 +138,7 @@ function getAbstract(url) {
       </div>
       <p class="affirm">此内容根据文章生成，并经过人工审核，仅用于文章内容的解释与总结</p>
     </div>
-    <div v-html="props.main"></div>
+    <div class="mainHtml" v-html="props.main"></div>
   </div>
 </template>
 
@@ -273,6 +283,12 @@ ol .dark ol {
     margin: 0;
     font-family: 'dindin';
 
+  }
+}
+
+.mainHtml {
+  :deep(p) {
+    margin: 5px 0 0 !important
   }
 }
 

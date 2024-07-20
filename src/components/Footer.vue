@@ -51,6 +51,8 @@ console.log(`lzy  userInfo:`, userInfo)
   width: 100%;
   margin: 0 auto;
   overflow: hidden;
+  padding-top: 20px;
+  background-color: transparent;
 
   .userLink {
     display: flex;
