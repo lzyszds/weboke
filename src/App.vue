@@ -14,11 +14,14 @@
       <!-- <Live2d></Live2d> -->
     </div>
     <!-- <ContextMenu></ContextMenu> -->
+
+    <!-- 自定义滚动条 -->
+    <ScrollBar></ScrollBar>
   </div>
 </template>
 <script setup lang="ts">
 import Footer from '@/components/Footer.vue'
-
+import ScrollBar from '@/components/ScrollBar.vue'
 // import Music from "./uiComponents/music/Music.vue";
 // import { defineAsyncComponent } from 'vue'
 // import ContextMenu from './components/ContextMenu.vue';
@@ -38,6 +41,7 @@ $axios({
 }).then(data => {
   webokeTitle.value = data.filter((item: any) => item.config_key === "weboke_page_title")[0].config_value
 })
+
 
 </script>
 

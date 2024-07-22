@@ -4,7 +4,9 @@
 import { onMounted, getCurrentInstance } from 'vue'
 import { ElNotification } from 'element-plus'
 import { useEventListener } from '@vueuse/core';
-import VueMarkdownEditor, { xss } from '@kangc/v-md-editor'
+// import VueMarkdownEditor, { xss } from '@kangc/v-md-editor'
+import { marked } from 'marked';
+
 const { proxy } = getCurrentInstance() as any
 const props = defineProps({
   main: String,
@@ -14,9 +16,11 @@ const props = defineProps({
 const emit = defineEmits(['update'])
 const aiContent = ref('生成中...')
 const aiContentHtml = computed(() => {
-  return xss.process(
-    VueMarkdownEditor.vMdParser.themeConfig.markdownParser.render(aiContent.value)
-  )
+  console.log(aiContent.value, marked(aiContent.value))
+  return marked(aiContent.value)
+  // return xss.process(
+  //   VueMarkdownEditor.vMdParser.themeConfig.markdownParser.render(aiContent.value)
+  // )
 })
 const doneFlag = ref(false)
 
@@ -63,11 +67,11 @@ onMounted(() => {
 })
 
 
-async function aiTip() {
+async function aiTip(string = 'AI摘要还在生成中，请稍等...') {
   aiContent.value = ""
-  for (let i = 0; i < 'AI摘要还在生成中，请稍等...'.length; i++) {
+  for (let i = 0; i < string.length; i++) {
     await new Promise(resolve => setTimeout(resolve, 35));
-    aiContent.value += 'AI摘要还在生成中，请稍等...'.charAt(i)
+    aiContent.value += string.charAt(i)
   }
 }
 function getAbstract(url) {
@@ -79,27 +83,27 @@ function getAbstract(url) {
       await aiTip()
     }, 1000 * 3)
 
-    //ai摘要生成时间超过10秒还没有返回结果，提示用户超时
-    let timer10 = setTimeout(async () => {
-      aiContent.value = ""
-      for (let i = 0; i < 'AI摘要生成超时，请重新生成'.length; i++) {
-        await new Promise(resolve => setTimeout(resolve, 35));
-        aiContent.value += 'AI摘要生成超时，请重新生成'.charAt(i)
-      }
-    }, 1000 * 10)
+
     try {
       const result = await fetch(url, { method: 'GET', })
       const textDecoder = new TextDecoder()
       const reader = result.body?.getReader()!
       timer6 && clearTimeout(timer6)
-      timer10 && clearTimeout(timer10)
       aiContent.value = ""
+
+      let generateIndex = 0
       while (true) {
+        aiContent.value = ""
         const { done, value } = await reader.read()
         doneFlag.value = done
         if (done) {
           if (aiContent.value == "") {
             await aiTip()
+            timer6 && clearTimeout(timer6)
+            if (generateIndex > 3) {
+              await aiTip("AI摘要生成失败，请刷新重试")
+            }
+            generateIndex++
             //重新生成
             getAbstract('/api/aiService/getAifox?aid=' + props.aid)
           }
@@ -107,13 +111,12 @@ function getAbstract(url) {
         }
         const text = textDecoder.decode(value)
         const lines = text.split('\n'); // 将部分数据与新数据合并后再按行分割
-        console.log(`lzy  lines:`, lines)
+
         for (let line of lines) { // 逐行处理数据
           // 添加延迟，单位为毫秒（例如延迟 100 毫秒） 一帧等于 16.67 毫秒
           await new Promise(resolve => setTimeout(resolve, 60));
           if (line) {
             aiContent.value += line; // 将逐字生成的数据拼接到 aiContent 中
-            console.log(`lzy  aiContent.value:`, aiContent.value)
           }
         }
       }
