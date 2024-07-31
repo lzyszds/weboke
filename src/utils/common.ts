@@ -22,7 +22,7 @@ export const splitArray = (array: any, size) => {
 //时间格式化为字符串 比如说前天 几天前，几小时前
 export const timeAgo = (time) => {
   //判断当前time是否为时间戳，如果不是，则转换为时间戳
-  if (Number.isNaN(time)) {
+  if (!Number.isNaN(time)) {
     time = dayjs(time).unix()
   }
   const t = dayjs().unix() - time // Y-m-d H:i:s
@@ -37,7 +37,7 @@ export const timeAgo = (time) => {
     [n => n < h, n => (n / i >> 0) + '分钟'],
     [n => n < d, n => (n / h >> 0) + '小时'],
     [n => n < m, n => (n / d >> 0) + '天'],
-    [n => n < y, n => (n / m >> 0) + '月'],
+    [n => n < y, n => (n / m >> 0) + '个月'],
     [() => true, n => (n / y >> 0) + '年'],
   ])
   return ([...mp].find(([n]) => n(t)).pop())(t) + '前'

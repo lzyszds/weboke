@@ -128,6 +128,7 @@ onMounted(async () => {
 })
 //处理时间戳转换成距离当前日期的时间（一天前，两天前）
 let setTimestamp = (time: string) => {
+  console.log(`lzy  time:`, time)
   //他妈的这里巨奇怪，不知道为什么这个方法会被下面handleScroll方法一直调用真的迷
   return allFunction.timeAgo(time)
 }

@@ -4,8 +4,7 @@
 import { onMounted, getCurrentInstance } from 'vue'
 import { ElNotification } from 'element-plus'
 import { useEventListener } from '@vueuse/core';
-// import VueMarkdownEditor, { xss } from '@kangc/v-md-editor'
-import { marked } from 'marked';
+import VueMarkdownEditor, { xss } from '@kangc/v-md-editor'
 
 const { proxy } = getCurrentInstance() as any
 const props = defineProps({
@@ -16,11 +15,9 @@ const props = defineProps({
 const emit = defineEmits(['update'])
 const aiContent = ref('生成中...')
 const aiContentHtml = computed(() => {
-  console.log(aiContent.value, marked(aiContent.value))
-  return marked(aiContent.value)
-  // return xss.process(
-  //   VueMarkdownEditor.vMdParser.themeConfig.markdownParser.render(aiContent.value)
-  // )
+  return xss.process(
+    VueMarkdownEditor.vMdParser.themeConfig.markdownParser.render(aiContent.value)
+  )
 })
 const doneFlag = ref(false)
 
@@ -78,35 +75,20 @@ function getAbstract(url) {
   return new Promise<any>(async (resolve, reject) => {
 
     //ai摘要生成时间超过6秒还没有返回结果，就提醒用户稍等一下
-
     let timer6 = setTimeout(async () => {
       await aiTip()
     }, 1000 * 3)
-
 
     try {
       const result = await fetch(url, { method: 'GET', })
       const textDecoder = new TextDecoder()
       const reader = result.body?.getReader()!
       timer6 && clearTimeout(timer6)
-      aiContent.value = ""
-
-      let generateIndex = 0
+      aiContent.value = ''
       while (true) {
-        aiContent.value = ""
         const { done, value } = await reader.read()
         doneFlag.value = done
         if (done) {
-          if (aiContent.value == "") {
-            await aiTip()
-            timer6 && clearTimeout(timer6)
-            if (generateIndex > 3) {
-              await aiTip("AI摘要生成失败，请刷新重试")
-            }
-            generateIndex++
-            //重新生成
-            getAbstract('/api/aiService/getAifox?aid=' + props.aid)
-          }
           break
         }
         const text = textDecoder.decode(value)
