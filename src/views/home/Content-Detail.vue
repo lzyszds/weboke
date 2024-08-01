@@ -133,17 +133,19 @@ let setTimestamp = (time: string) => {
 }
 
 //当前内容的滚动距离，用于判断目录的高亮   但是好像有点问题先不用了
-// const scrollTop = ref<number>(0); // 记录当前的滚动距离
-// function handleScroll() {
-//   useEventListener(window, 'scroll', () => {
-//     scrollTop.value = window.scrollY;
-//     tocList.value.forEach((element: any) => {
-//       if (scrollTop.value - 400 >= element.top) {
-//         tocACindex.value = element.id;
-//       }
-//     })
-//   })
-// }
+const scrollTop = ref<number>(0); // 记录当前的滚动距离
+useEventListener(window, 'scroll', () => {
+  scrollTop.value = window.scrollY;
+  if (scrollTop.value > 550) {
+    tocACindex.value = '#toc-head-1'
+  }
+  tocList.value.forEach((element: any) => {
+    if (scrollTop.value - 400 >= element.top) {
+      tocACindex.value = element.id;
+    }
+  })
+
+})
 
 
 //评论人个人信息
@@ -342,7 +344,7 @@ const onWheelfn = (e) => {
 const toScrollY = async (id: string) => {
   const el = document.querySelector(id) as HTMLElement
   const top = el.offsetTop
-  window.scrollTo({ top: top + 200, behavior: 'smooth' })
+  window.scrollTo({ top: top + 400, behavior: 'smooth' })
   el.classList.add('animate__shakeX')
   await awaitTime(() => {
     el.classList.remove('animate__shakeX')
@@ -474,7 +476,7 @@ function resizeWidth() {
               <span>目录</span>
             </div>
             <ul class="affix-list">
-              <li class="H2">
+              <li :class="scrollTop < 550 ? 'active H2' : 'H2'">
                 <a @click="toScrollY('#abstract')">摘要</a>
               </li>
               <li v-for="item in tocList"

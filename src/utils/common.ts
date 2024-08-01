@@ -28,7 +28,6 @@ export const timeAgo = (time) => {
   if (time < 10e8) {
     time = time * 1000
   }
-  console.log(dayjs().unix(), time, 10e8);
   const t = dayjs().unix() - time // Y-m-d H:i:s
   let i = 60
   let h = i * 60

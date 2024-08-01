@@ -68,7 +68,7 @@ export default defineConfig(({ command, mode }): any => {
           //设置请求头
           headers: {
             //16是梧州的ip，12是南宁的ip
-            "x-real-ip": "113.16.122.38"
+            "x-real-ip": "180.139.210.51"
           },
           changeOrigin: true,
           rewrite: path => path.replace(/^\/api/, '')

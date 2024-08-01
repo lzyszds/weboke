@@ -16,7 +16,7 @@
     <!-- <ContextMenu></ContextMenu> -->
 
     <!-- 自定义滚动条 -->
-    <ScrollBar></ScrollBar>
+    <!-- <ScrollBar></ScrollBar> -->
   </div>
 </template>
 <script setup lang="ts">
