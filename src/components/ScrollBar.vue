@@ -18,9 +18,9 @@ const dragStartEvent = (event) => {
 }
 
 //滚动条
-useEventListener(window, 'scroll', (event) => {
-  console.log(window.scrollY);
-})
+// useEventListener(window, 'scroll', (event) => {
+//   console.log(window.scrollY);
+// })
 </script>
 
 <template>

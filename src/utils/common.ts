@@ -25,6 +25,10 @@ export const timeAgo = (time) => {
   if (!Number.isNaN(time)) {
     time = dayjs(time).unix()
   }
+  if (time < 10e8) {
+    time = time * 1000
+  }
+  console.log(dayjs().unix(), time, 10e8);
   const t = dayjs().unix() - time // Y-m-d H:i:s
   let i = 60
   let h = i * 60
@@ -41,6 +45,19 @@ export const timeAgo = (time) => {
     [() => true, n => (n / y >> 0) + '年'],
   ])
   return ([...mp].find(([n]) => n(t)).pop())(t) + '前'
+}
+
+//浏览量转换成 k m b
+export const numFormat = (num: number) => {
+  if (num >= 1e3 && num < 1e6) {
+    return (num / 1e3).toFixed(1) + 'k'
+  } else if (num >= 1e6 && num < 1e9) {
+    return (num / 1e6).toFixed(1) + 'm'
+  } else if (num >= 1e9) {
+    return (num / 1e9).toFixed(1) + 'b'
+  } else {
+    return num
+  }
 }
 
 //将数据存进localStorage和pinia里

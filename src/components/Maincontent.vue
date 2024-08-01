@@ -127,7 +127,7 @@ function getAbstract(url) {
   </div>
 </template>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 p {
   margin: 10px 0;
   text-indent: 2em
@@ -263,7 +263,7 @@ ol .dark ol {
   p.affirm {
     text-indent: .5em;
     font-size: 12px;
-    color: #000;
+    color: var(--color);
     text-align: left;
     margin: 0;
     font-family: 'dindin';

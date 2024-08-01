@@ -22,8 +22,6 @@
 <script setup lang="ts">
 import Footer from '@/components/Footer.vue'
 import ScrollBar from '@/components/ScrollBar.vue'
-import dayjs from 'dayjs'
-console.log(dayjs().unix() - dayjs("2024-01-18T10:59:02.000Z").unix());
 
 // import Music from "./uiComponents/music/Music.vue";
 // import { defineAsyncComponent } from 'vue'

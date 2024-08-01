@@ -1,6 +1,7 @@
 :root {
   --themeColor: #5161ce;
   --bgcolor: #fff !important;
+  --color: #000 !important;
   --darkBgcolor: rgb(24, 23, 29);
   --darkContentBgcolor: #1E1E1E;
   --darkColor: rgb(255, 255, 255, .8);
@@ -28,6 +29,10 @@
   background: #344449;
   color: #fff;
   text-shadow: none;
+}
+
+body.dark {
+  --color: #fff !important;
 }
 
 /* @tailwind base;
