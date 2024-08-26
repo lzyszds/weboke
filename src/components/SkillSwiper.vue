@@ -147,6 +147,13 @@ onMounted(() => {
         border-radius: 20px;
         background-color: var(--themeColor);
         box-shadow: 0 2px 16px -3px rgba(0, 0, 0, 0.15);
+        transition: all .3s;
+
+        &:hover {
+          transform: scale(1.1);
+          //缩小阴影
+          box-shadow: 0 0px 10px -3px var(--themeColor);
+        }
       }
     }
   }

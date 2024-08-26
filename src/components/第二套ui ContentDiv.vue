@@ -33,19 +33,18 @@ const selectHandle = (index: number) => {
   if (index == 0) return data.value.uname;
   if (index == 1)
     return dayjs(data.value.create_date).format("YYYY-MM-DD");
-  if (index == 2) return (data.value.comments_count || 0) + "条评论";
+  if (index == 2) return (data.value.comments_count || 0);
   if (index == 3) return data.value.access_count;
 };
-
 
 </script>
 
 <template>
-  <div v-transition="'tosiTion'" class="conDiv">
-    <div class="conDiv_img">
+  <div v-transition="'tosiTion'" class="conent_div">
+    <div class="conent_div_img">
       <img v-lazy="props.index" :src="'/api/public' + data.cover_img" alt="" />
     </div>
-    <div class="conDiv_text">
+    <div class="conent_div_text">
       <div class="title">{{ data.title }}</div>
       <div class="synopsis" v-text="data.partial_content"></div>
       <div class="tags">
@@ -67,9 +66,9 @@ const selectHandle = (index: number) => {
   transform: translate(0) !important;
 }
 
-.conDiv {
+.conent_div {
   cursor: var(--linkCup);
-  display: flex;
+  display: block;
   box-shadow: 0 0px 5px rgb(0 0 0 / 33%);
   border-radius: 8px;
   overflow: hidden;
@@ -78,36 +77,43 @@ const selectHandle = (index: number) => {
   transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.68, 1.55),
     opacity 0.5s cubic-bezier(0.68, -0.55, 0.68, 1.55);
   transform: translateY(200px);
-  height: 200px;
+  height: 400px;
   padding: 5px;
+  border: 1px solid #888;
 
-  &:hover .title {
-    /* box-shadow: -1px 1px 6px 1px var(--themeColor); */
-    color: var(--themeColor);
+  &:hover {
+    border: 1px solid var(--themeColor);
+    box-shadow: 0px 10px 15px -3px rgba(93, 110, 205, 0.1);
+
+    .title {
+      /* box-shadow: -1px 1px 6px 1px var(--themeColor); */
+      color: var(--themeColor);
+
+    }
   }
 
-  .conDiv_img {
-    height: 100%;
+  .conent_div_img {
+    border-bottom: 1px solid #eee;
 
     img {
-      height: 100%;
-      aspect-ratio: 16 / 9;
+      width: 100%;
+      aspect-ratio: 16 / 6;
       object-fit: cover;
       border-radius: 8px;
     }
   }
 
-  .conDiv_text {
-    width: 99%;
-    padding: 20px 40px 0;
+  .conent_div_text {
+    width: 96%;
+    height: 20rem;
+    padding: 10px;
     display: grid;
-    grid-template-rows: 30px 1fr 30px 35px;
-    align-items: center;
+    grid-template-rows: 60px 1fr 30px 35px;
     gap: 5px
   }
 
   .title {
-    font-size: 23px;
+    font-size: 22px;
     color: #000;
     font-family: "dindin";
     overflow: hidden;
@@ -117,11 +123,14 @@ const selectHandle = (index: number) => {
   .synopsis {
     font-size: 14px;
     color: #888;
-    height: 60px;
+    height: 40px;
+    //超出两行显示省略号
     overflow: hidden;
-    text-overflow: ellipsis;
-    -webkit-line-clamp: 3;
     display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    line-height: 1.5;
 
   }
 
@@ -146,7 +155,7 @@ const selectHandle = (index: number) => {
 
       &:nth-child(3) {
         text-align: center;
-        width: 100px;
+        width: 60px;
         flex: none;
       }
 

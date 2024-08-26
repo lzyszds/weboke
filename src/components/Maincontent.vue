@@ -13,7 +13,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['update'])
-const aiContent = ref('生成中...')
+const aiContent = ref('AI摘要还在生成中，请稍等...')
 const aiContentHtml = computed(() => {
   return xss.process(
     VueMarkdownEditor.vMdParser.themeConfig.markdownParser.render(aiContent.value)
@@ -63,27 +63,13 @@ onMounted(() => {
   }, 500)
 })
 
-
-async function aiTip(string = 'AI摘要还在生成中，请稍等...') {
-  aiContent.value = ""
-  for (let i = 0; i < string.length; i++) {
-    await new Promise(resolve => setTimeout(resolve, 35));
-    aiContent.value += string.charAt(i)
-  }
-}
 function getAbstract(url) {
   return new Promise<any>(async (resolve, reject) => {
-
-    //ai摘要生成时间超过6秒还没有返回结果，就提醒用户稍等一下
-    let timer6 = setTimeout(async () => {
-      await aiTip()
-    }, 1000 * 3)
 
     try {
       const result = await fetch(url, { method: 'GET', })
       const textDecoder = new TextDecoder()
       const reader = result.body?.getReader()!
-      timer6 && clearTimeout(timer6)
       aiContent.value = ''
       while (true) {
         const { done, value } = await reader.read()
@@ -224,6 +210,7 @@ ol .dark ol {
     font-size: 14px;
     padding: 8px 5px;
     word-break: break-all;
+    min-height: 26px;
 
     p {
       margin: 0 5px;

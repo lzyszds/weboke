@@ -37,7 +37,7 @@ const webokeTitle = useTitle('Jz 恰沐春风共同游，终只叹，木已舟')
 //获取系统配置
 const { $axios } = window;
 $axios({
-  url: '/api/common/getSystemConfig?type=reception',
+  url: '/api/system/getSystemConfig?type=reception',
   method: 'get',
 }).then(data => {
   webokeTitle.value = data.filter((item: any) => item.config_key === "weboke_page_title")[0].config_value

@@ -42,9 +42,9 @@ const currentChange = (e: number) => {
     具体逻辑是，每次切换有页数时页数内容变化，会导致页面高度变化，从而导致页面抖动
     所以在切换页数时，先把页面高度固定，然后再去请求数据，请求完数据后再把页面高度变回来
   */
-  const listCom = document.querySelector(".listCom") as HTMLDivElement;
-  const listComHeight = listCom.offsetTop;
-  listCom.style.height = listComHeight + "px";
+  const list_content = document.querySelector(".list_content") as HTMLDivElement;
+  const listComHeight = list_content.offsetTop;
+  list_content.style.height = listComHeight + "px";
   //将当前页重新渲染，vue才能监听到数据的变化
   isload.value = false;
   //当前页数
@@ -53,7 +53,7 @@ const currentChange = (e: number) => {
     list.value = res.data;
     totals.value = res.total;
     isload.value = true;
-    listCom.style.height = "auto";
+    list_content.style.height = "auto";
   });
 };
 onMounted(() => {
@@ -154,7 +154,7 @@ const homecoverLoad = (e) => {
     <ContentHead></ContentHead>
     <div class="listSum">
       <!-- 文章内容 -->
-      <div class="listCom">
+      <div class="list_content">
         <img class="listImg" id="listSum" :src="'/api/public/img/reduce.jpg'" alt="" />
         <div :id="'list' + item.aid" v-for="(item, index) in list" :key="index" v-if="isload">
           <router-link :to="'/home/detail/' + item.aid">
@@ -339,7 +339,7 @@ const homecoverLoad = (e) => {
   filter: blur(5px);
 }
 
-.listCom {
+.list_content {
   margin: 0 auto;
   padding: 40px;
   width: 960px;
@@ -353,7 +353,7 @@ const homecoverLoad = (e) => {
   }
 }
 
-.listCom::-webkit-scrollbar {
+.list_content::-webkit-scrollbar {
   display: none;
   /* Chrome Safari */
 }
@@ -392,14 +392,14 @@ const homecoverLoad = (e) => {
 }
 </style>
 <style scoped>
-.dark .conDiv {
+.dark .conent_div {
   background: var(--darkBgcolor);
   box-shadow: 0px 0px 0px 1px #ffffff6a;
 }
 
-.dark .conDiv :deep(.conDiv_text) div,
+.dark .conent_div :deep(.conent_div_text) div,
 .dark .lzy-center,
-.dark .conDiv :deep(.conDiv_text) .title,
+.dark .conent_div :deep(.conent_div_text) .title,
 .dark .content,
 .dark .magics,
 .dark .lzy-center :deep(.el-pagination) button,

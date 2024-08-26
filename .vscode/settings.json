@@ -142,5 +142,6 @@
     "windicss",
     "zxcvbn"
   ],
-  "vue.codeActions.enabled": false
+  "vue.codeActions.enabled": false,
+  "svn.ignoreMissingSvnWarning": true
 }

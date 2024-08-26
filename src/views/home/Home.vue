@@ -45,9 +45,9 @@ const currentChange = (e: number) => {
     具体逻辑是，每次切换有页数时页数内容变化，会导致页面高度变化，从而导致页面抖动
     所以在切换页数时，先把页面高度固定，然后再去请求数据，请求完数据后再把页面高度变回来
   */
-  const listCom = document.querySelector(".listCom") as HTMLDivElement;
-  const listComHeight = listCom.offsetTop;
-  listCom.style.height = listComHeight + "px";
+  const list_content = document.querySelector(".list_content") as HTMLDivElement;
+  const listComHeight = list_content.offsetTop;
+  list_content.style.height = listComHeight + "px";
   //将当前页重新渲染，vue才能监听到数据的变化
   isload.value = false;
   //当前页数
@@ -56,7 +56,7 @@ const currentChange = (e: number) => {
     list.value = res.data;
     totals.value = res.total;
     isload.value = true;
-    listCom.style.height = "auto";
+    list_content.style.height = "auto";
   });
 };
 onMounted(() => {
@@ -163,10 +163,10 @@ function resizeWidth() {
         </div>
       </div>
     </div>
-    <div class="mainHome">
+    <div class="main_home">
       <!-- 文章内容 -->
-      <div class="listMain">
-        <div class="listCom ">
+      <div class="list_main">
+        <div class="list_content ">
           <div :id="'list' + item.aid" v-for="(item, index) in list" :key="index" v-if="isload">
             <RouterLink :to="'/home/detail/' + item.aid">
               <ContentDiv :data="item" :index="index"></ContentDiv>
@@ -267,7 +267,7 @@ function resizeWidth() {
   }
 }
 
-.mainHome {
+.main_home {
   margin: 0 auto;
   margin-top: 20px;
   width: 1310px;
@@ -276,17 +276,18 @@ function resizeWidth() {
   grid-template-columns: auto 305px;
   gap: 20px;
 
-  .listMain {
+  .list_main {
     width: 100%;
 
-    .listCom {
+    .list_content {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
       gap: 20px;
+      margin-top: 20px;
 
       &>div {
         width: 100%;
-        height: 410px;
+        height: 120px;
+        z-index: 2;
       }
     }
   }
@@ -294,6 +295,8 @@ function resizeWidth() {
   #example.example-pagination-block {
     margin: 20px 0;
     margin-bottom: 200px;
+    z-index: 1;
+    position: relative;
 
     .el-pagination {
       justify-content: center;
@@ -347,9 +350,9 @@ function resizeWidth() {
       }
     }
 
-    .mainHome {
-      .listMain {
-        .listCom {
+    .main_home {
+      .list_main {
+        .list_content {
           grid-template-columns: 1fr;
         }
       }
@@ -378,7 +381,7 @@ function resizeWidth() {
     --maxWidth: 96% !important;
     margin: 20px;
 
-    .mainHome {
+    .main_home {
       grid-template-columns: 1fr;
     }
 
@@ -428,7 +431,7 @@ function resizeWidth() {
       }
     }
 
-    .mainHome {
+    .main_home {
       width: auto;
     }
   }

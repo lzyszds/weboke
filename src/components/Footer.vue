@@ -2,7 +2,7 @@
 import LzyIcon from './LzyIcon.vue';
 const { $axios } = window
 const footData = await $axios({
-  url: '/api/common/getFooterInfo',
+  url: '/api/system/getFooterInfo',
   method: 'get'
 })
 console.log(footData);

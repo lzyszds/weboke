@@ -169,7 +169,7 @@ body {
         gap: 30px;
         position: absolute;
         top: 0;
-        transition: .3s;
+        transition: .5s;
         padding: 0;
 
         &>li {
@@ -210,7 +210,7 @@ body {
       position: absolute;
       text-align: center;
       top: 60px;
-      transition: .3s;
+      transition: .5s;
       font-size: 16px;
       font-family: "dindin";
       color: #fff;
@@ -244,6 +244,7 @@ body {
   &.navbarContent100 {
     background-color: #5161ce;
     // backdrop-filter: blur(20px);
+    box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.15);
 
     .navbar-nav {
       top: -60px !important;
