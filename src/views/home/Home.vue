@@ -281,8 +281,9 @@ function resizeWidth() {
 
     .list_content {
       display: grid;
-      gap: 20px;
+      gap: 10px;
       margin-top: 20px;
+      position: relative;
 
       &>div {
         width: 100%;
