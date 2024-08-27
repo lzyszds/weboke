@@ -117,10 +117,7 @@ const mouseleave = _.debounce(function (event) {
   gsap.to(mask, {
     duration: 0.3,
     opacity: 0,
-    scale: 0.5,
-    rotation: gsap.utils.random(1, 2) >= 1.5 ? -15 : 15,
-    transformOrigin: "center center",
-    boxShadow: "0 0 0 rgba(0,0,0,0)"
+    scale: 1,
   });
 }, 100, { leading: true, trailing: false });
 
