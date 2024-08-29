@@ -1,0 +1,30 @@
+name: Deploy to server
+
+on:
+  push:
+    branches: [ main ]  # 当推送到main分支时触发
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Install dependencies
+      run: npm ci  # 假设您使用npm管理依赖
+    
+    - name: Build project
+      run: npm run build  # 构建您的项目
+    
+    - name: Deploy to server
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USERNAME }}
+        key: ${{ secrets.SERVER_SSH_KEY }}
+        script: |
+          cd /path/to/your/project
+          git pull origin main
+          npm install
+          npm run build
+          pm2 restart your-app  # 如果使用pm2管理Node.js应用
