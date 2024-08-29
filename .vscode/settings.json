@@ -143,5 +143,8 @@
     "zxcvbn"
   ],
   "vue.codeActions.enabled": false,
-  "svn.ignoreMissingSvnWarning": true
+  "svn.ignoreMissingSvnWarning": true,
+  "[yaml]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  }
 }
