@@ -72,7 +72,7 @@ function getIndex(item, index) {
       <div class="item-right">
         <div class="item-right-top">
           <span class="item-right-top-name">{{ item.user_name }}</span>
-          <span class="item-right-top-time">{{ timeAgo(item.time) }}</span>
+          <span class="item-right-top-time">{{ timeAgo(item.create_date) }}</span>
           <button v-if="isReply(item, index)" class="item-right-top-reply"
             @click="replyComment(item, index)">回复</button>
           <button v-else class="item-right-top-reply" @click="remReplyComment(item, index)">取消回复</button>

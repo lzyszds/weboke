@@ -22,8 +22,11 @@ export const splitArray = (array: any, size) => {
 //时间格式化为字符串 比如说前天 几天前，几小时前
 export const timeAgo = (time) => {
   //判断当前time是否为时间戳，如果不是，则转换为时间戳
-  if (Number.isNaN(time)) {
+  if (!Number.isNaN(time)) {
     time = dayjs(time).unix()
+  }
+  if (time < 10e8) {
+    time = time * 1000
   }
   const t = dayjs().unix() - time // Y-m-d H:i:s
   let i = 60
@@ -37,10 +40,23 @@ export const timeAgo = (time) => {
     [n => n < h, n => (n / i >> 0) + '分钟'],
     [n => n < d, n => (n / h >> 0) + '小时'],
     [n => n < m, n => (n / d >> 0) + '天'],
-    [n => n < y, n => (n / m >> 0) + '月'],
+    [n => n < y, n => (n / m >> 0) + '个月'],
     [() => true, n => (n / y >> 0) + '年'],
   ])
   return ([...mp].find(([n]) => n(t)).pop())(t) + '前'
+}
+
+//浏览量转换成 k m b
+export const numFormat = (num: number) => {
+  if (num >= 1e3 && num < 1e6) {
+    return (num / 1e3).toFixed(1) + 'k'
+  } else if (num >= 1e6 && num < 1e9) {
+    return (num / 1e6).toFixed(1) + 'm'
+  } else if (num >= 1e9) {
+    return (num / 1e9).toFixed(1) + 'b'
+  } else {
+    return num
+  }
 }
 
 //将数据存进localStorage和pinia里

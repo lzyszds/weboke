@@ -2,11 +2,13 @@
 <script setup lang="ts">
 import dayjs from "dayjs";
 import LzyIcon from "./LzyIcon.vue";
+import _ from "lodash";
+import { gsap } from "gsap";
 const list = [
-  { name: "basil:user-solid" },
-  { name: "basil:alarm-outline" },
-  { name: "humbleicons:chat" },
-  { name: "prime:eye" },
+  { name: "typcn:time" },
+  { name: "iconoir:stackoverflow" },
+  { name: "typcn:eye-outline" },
+  { name: "typcn:messages" },
 ];
 interface Data {
   title: string;
@@ -30,22 +32,117 @@ const props = defineProps<Props>();
 const tags = props.data.tags;
 const data = ref<Data>(props.data);
 const selectHandle = (index: number) => {
-  if (index == 0) return data.value.uname;
-  if (index == 1)
-    return dayjs(data.value.create_date).format("YYYY-MM-DD");
-  if (index == 2) return (data.value.comments_count || 0);
-  if (index == 3) return data.value.access_count;
+  let result = "" as string | number;
+  const { create_date, comments_count, access_count } = data.value;
+  if (index == 0) {
+    result = dayjs(create_date).format("YYYY-MM-DD HH:mm:ss");
+  } else if (index == 1) {
+    if (tags) result = tags.join(", ");
+  } else if (index == 2) {
+    result = access_count
+  } else if (index == 3) {
+    result = (comments_count || 0)
+  }
+  return result
 };
 
+
+
+// 鼠标划入事件
+const mouseenter = _.debounce(function (event) {
+  const mask = event.target.querySelector('.maskContent');
+
+  // 如果鼠标划入的是 .maskContent 本身，直接返回
+  if (event.target.classList.contains('maskContent')) {
+    return;
+  }
+
+  // 获取所有的 .maskContent 元素并重置它们的样式
+  const allMasks = document.querySelectorAll('.maskContent');
+  allMasks.forEach(maskElement => {
+    gsap.killTweensOf(maskElement); // 停止正在进行的动画
+    gsap.set(maskElement, { clearProps: "all" }); // 清除所有动画的状态和内联样式
+  });
+  // 创建一个创新的动画效果
+  const tl = gsap.timeline();
+  // 设置初始状态
+  tl.set(mask, {
+    opacity: 0,
+    scale: 0.5,
+    rotation: gsap.utils.random(1, 2) >= 1.5 ? -15 : 15,// 旋转角度
+    transformOrigin: "center center"
+  })
+    .to(mask, {
+      opacity: 1,
+      scale: 1.1,
+      rotation: 0,
+      duration: 0.4,
+      ease: "back.out(1.7)"
+    })
+    .to(mask, {
+      scale: 1,
+      duration: 0.2,
+      ease: "power1.inOut"
+    })
+    .to(mask, {
+      y: -5,
+      repeat: 1,
+      yoyo: true,
+      duration: 0.1,
+      ease: "power1.inOut"
+    })
+    .to(mask, {
+      boxShadow: "0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)",
+      duration: 0.3
+    });
+
+  // 添加颜色变化效果
+  tl.to(mask, {
+    duration: 0.5,
+    backgroundColor: "rgba(255, 114, 86, 0.2)", // 半透明的亮粉色
+    color: "#ffffff",
+    ease: "none"
+  }, "-=0.7");
+
+  // 最后的强调效果
+  tl.to(mask, {
+    boxShadow: "0 0 20px rgba(255, 105, 180, 0.7)",
+    duration: 0.3
+  }, "-=0.3");
+
+}, 100, { leading: true, trailing: false });
+
+const mouseleave = _.debounce(function (event) {
+  const mask = event.target.querySelector('.maskContent');
+  gsap.to(mask, {
+    duration: 0.3,
+    opacity: 0,
+    scale: 1,
+  });
+}, 100, { leading: true, trailing: false });
 
 </script>
 
 <template>
-  <div v-transition="'tosiTion'" class="conDiv">
-    <div class="conDiv_img">
+  <div v-transition="'tosiTion'" class="conent_div" @mouseenter="mouseenter" @mouseleave="mouseleave">
+    <div class="maskContent"></div>
+    <div class="title">{{ data.title }}</div>
+    <div class="synopsis" v-text="data.partial_content"></div>
+    <div class="time">
+      <span v-for="(item, index) in list" :key="index">
+        <span v-if="index == 1">#{{ selectHandle(index) }}</span>
+        <span v-else>
+          <LzyIcon :name="item.name"></LzyIcon>{{ selectHandle(index) }}
+        </span>
+      </span>
+    </div>
+  </div>
+
+  <!-- <div v-transition="'tosiTion'" class="conent_div">
+    <div class="conent_div_img">
       <img v-lazy="props.index" :src="'/api/public' + data.cover_img" alt="" />
     </div>
-    <div class="conDiv_text">
+    <div class="conent_div_text">
       <div class="title">{{ data.title }}</div>
       <div class="synopsis" v-text="data.partial_content"></div>
       <div class="tags">
@@ -58,7 +155,7 @@ const selectHandle = (index: number) => {
         </span>
       </div>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <style scoped lang="less">
@@ -67,49 +164,40 @@ const selectHandle = (index: number) => {
   transform: translate(0) !important;
 }
 
-.conDiv {
-  cursor: var(--linkCup);
-  display: block;
-  box-shadow: 0 0px 5px rgb(0 0 0 / 33%);
-  border-radius: 8px;
+
+.conent_div {
+  padding: 10px 20px;
+  border-radius: 10px;
+  transition: .5s;
+  position: relative;
+  /* 禁止该元素接收鼠标事件 */
+  pointer-events: auto;
   overflow: hidden;
-  background-color: #fff;
-  opacity: 0.5;
-  transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.68, 1.55),
-    opacity 0.5s cubic-bezier(0.68, -0.55, 0.68, 1.55);
-  transform: translateY(200px);
-  height: 400px;
-  padding: 5px;
-  border: 1px solid #888;
 
-  &:hover {
-    border: 1px solid var(--themeColor);
-
-    .title {
-      /* box-shadow: -1px 1px 6px 1px var(--themeColor); */
-      color: var(--themeColor);
-
-    }
+  .maskContent {
+    width: 100%;
+    height: 110px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    opacity: 0;
+    background-color: rgba(var(--themeColorRgb), .3);
+    border-radius: 10px;
+    /* 禁止该元素接收鼠标事件 */
+    pointer-events: none;
   }
 
-  .conDiv_img {
-    border-bottom: 1px solid #eee;
-
-    img {
-      width: 100%;
-      aspect-ratio: 16 / 6;
-      object-fit: cover;
-      border-radius: 8px;
-    }
-  }
-
-  .conDiv_text {
+  .conent_div_text {
     width: 96%;
     height: 20rem;
     padding: 10px;
     display: grid;
     grid-template-rows: 60px 1fr 30px 35px;
-    gap: 5px
+    z-index: 0;
+    gap: 5px;
+    /* 禁止该元素接收鼠标事件 */
+    pointer-events: none;
   }
 
   .title {
@@ -117,6 +205,8 @@ const selectHandle = (index: number) => {
     color: #000;
     font-family: "dindin";
     overflow: hidden;
+    /* 禁止该元素接收鼠标事件 */
+    pointer-events: none;
   }
 
   /* 超出数量显示省略号 */
@@ -131,45 +221,26 @@ const selectHandle = (index: number) => {
     -webkit-box-orient: vertical;
     text-overflow: ellipsis;
     line-height: 1.5;
-
+    /* 禁止该元素接收鼠标事件 */
+    pointer-events: none;
   }
 
   .time {
-    border-top: 1px solid #eee;
-    font-size: 14px;
+    font-size: 12px;
     color: #888;
-    padding: 7px;
-    display: flex;
+    /* 禁止该元素接收鼠标事件 */
+    pointer-events: none;
 
-    span {
-      display: flex;
+    &>span {
       height: 20px;
       line-height: 25px;
-      flex: 1;
       margin-right: 10px;
 
-      &:nth-child(1) {
-        white-space: nowrap;
-        overflow: hidden;
-      }
-
-      &:nth-child(3) {
-        text-align: center;
-        width: 60px;
-        flex: none;
-      }
-
-      &:nth-child(4) {
-        text-align: center;
-        width: 80px;
-        flex: none;
-      }
-
       svg {
-        width: 20px !important;
-        height: 20px;
+        width: 16px !important;
+        height: 16px;
+        vertical-align: text-top;
         margin-right: 5px;
-        padding-top: 2px;
       }
     }
   }

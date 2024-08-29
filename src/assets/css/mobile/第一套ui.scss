@@ -19,14 +19,14 @@
       padding: 0 10px;
       margin-bottom: 40px;
 
-      .listCom {
+      .list_content {
         padding: 10px 5px 45px;
         width: 100%;
         margin-top: 20px;
       }
     }
 
-    .conDiv_text {
+    .conent_div_text {
       align-items: center;
     }
   }
@@ -41,12 +41,12 @@
     .listSum {
       padding: 0 10px;
 
-      .listCom {
+      .list_content {
         margin-top: 20px;
       }
     }
 
-    .conDiv_text {
+    .conent_div_text {
       .title {
         overflow: hidden;
         white-space: nowrap;
@@ -60,14 +60,14 @@
 
 @media (max-width: 832px) {
   .content {
-    .listCom {
+    .list_content {
       width: calc(100% - 10px);
 
-      .conDiv {
+      .conent_div {
         display: grid;
         grid-template-columns: 258px 1fr;
 
-        .conDiv_text {
+        .conent_div_text {
           width: auto;
 
           .synopsis {
@@ -81,7 +81,7 @@
           }
         }
 
-        .conDiv_img {
+        .conent_div_img {
           img {
             width: 100%;
             border-radius: 10px;
@@ -106,16 +106,16 @@
       padding: 0;
       padding-right: 10px;
 
-      .conDiv {
+      .conent_div {
         height: 120px;
         gap: 10px;
         grid-template-columns: 158px 1fr;
 
-        .conDiv_img {
+        .conent_div_img {
           height: 120px;
         }
 
-        .conDiv_text {
+        .conent_div_text {
           height: 120px;
           display: block;
           width: auto;

@@ -33,8 +33,7 @@ function getArticleList(pages: number, limit: number) {
   })
 }
 
-const itemData = await getArticleList(indexList.value, limit);
-const { data, total } = itemData;
+const { data, total } = await getArticleList(indexList.value, limit);
 const list: any = ref(data);
 const totals = ref(total);
 const isload = ref(true);
@@ -46,9 +45,9 @@ const currentChange = (e: number) => {
     具体逻辑是，每次切换有页数时页数内容变化，会导致页面高度变化，从而导致页面抖动
     所以在切换页数时，先把页面高度固定，然后再去请求数据，请求完数据后再把页面高度变回来
   */
-  const listCom = document.querySelector(".listCom") as HTMLDivElement;
-  const listComHeight = listCom.offsetTop;
-  listCom.style.height = listComHeight + "px";
+  const list_content = document.querySelector(".list_content") as HTMLDivElement;
+  const listComHeight = list_content.offsetTop;
+  list_content.style.height = listComHeight + "px";
   //将当前页重新渲染，vue才能监听到数据的变化
   isload.value = false;
   //当前页数
@@ -57,7 +56,7 @@ const currentChange = (e: number) => {
     list.value = res.data;
     totals.value = res.total;
     isload.value = true;
-    listCom.style.height = "auto";
+    list_content.style.height = "auto";
   });
 };
 onMounted(() => {
@@ -66,6 +65,13 @@ onMounted(() => {
     if (window.innerWidth < 600) {
       example.style.bottom = "0";
     }
+    gsap.to(".noticeMain span", {
+      duration: 1.5, // 动画持续时间
+      opacity: 1,    // 初始透明度为0
+      y: 50,         // 初始Y轴位置，向下偏移50px
+      stagger: 0.2,  // 每个元素的动画间隔时间
+      ease: "power3.out", // 缓动效果
+    });
 
     //控制滚动到底部时，分页器的显示与隐藏
     useEventListener(window, "scroll", () => {
@@ -110,19 +116,6 @@ function toGaspText(target: string) {
     stagger: 0.05, // 延迟每个元素动画开始的时间
   });
 }
-const homecoverLoad = (e) => {
-  // 往后的1.5秒内，让图片模糊的从10 到 0
-  gsap.to(e.target, {
-    duration: 1.5,
-    filter: "blur(0px)",
-    display: "block",
-  });
-  gsap.to(".placeholder", {
-    duration: 0.2,
-    filter: "blur(2px)",
-    display: "none",
-  });
-}
 
 useEventListener('resize', () => {
   resizeWidth()
@@ -138,7 +131,7 @@ function resizeWidth() {
   <div class="content" style="--maxWidth:1380px">
     <div class="notice themeCard">
       <div class="noticeMain ">
-
+        <span v-for="item in mytext">{{ item }}</span>
       </div>
     </div>
     <div class="swiper_container_card themeCard">
@@ -159,15 +152,15 @@ function resizeWidth() {
       </div>
       <div class="swiperitem rightCard">
         <div class="swiperCard">
-          <img v-lazy="5" src="/api/public/img/homeItem.png" alt="">
+          <img v-lazy="5" :src="'/api/public/img/homeItem.png'" alt="">
           <!-- <GithubPlot :data="getGithubData()" :x="836" :y="204"></GithubPlot> -->
         </div>
       </div>
     </div>
-    <div class="mainHome">
+    <div class="main_home">
       <!-- 文章内容 -->
-      <div class="listMain">
-        <div class="listCom ">
+      <div class="list_main">
+        <div class="list_content ">
           <div :id="'list' + item.aid" v-for="(item, index) in list" :key="index" v-if="isload">
             <RouterLink :to="'/home/detail/' + item.aid">
               <ContentDiv :data="item" :index="index"></ContentDiv>
@@ -212,6 +205,14 @@ function resizeWidth() {
     height: calc(100% - 8px);
     padding: 0;
     border-radius: 10px;
+    font-size: 1.6rem;
+    text-align: center;
+    line-height: 30px;
+
+    span {
+      opacity: 0;
+      transform: translateY(20px);
+    }
   }
 }
 
@@ -268,7 +269,7 @@ function resizeWidth() {
   }
 }
 
-.mainHome {
+.main_home {
   margin: 0 auto;
   margin-top: 20px;
   width: 1310px;
@@ -277,17 +278,19 @@ function resizeWidth() {
   grid-template-columns: auto 305px;
   gap: 20px;
 
-  .listMain {
+  .list_main {
     width: 100%;
 
-    .listCom {
+    .list_content {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
+      gap: 10px;
+      margin-top: 20px;
+      position: relative;
 
       &>div {
         width: 100%;
-        height: 410px;
+        height: 120px;
+        z-index: 2;
       }
     }
   }
@@ -295,6 +298,8 @@ function resizeWidth() {
   #example.example-pagination-block {
     margin: 20px 0;
     margin-bottom: 200px;
+    z-index: 1;
+    position: relative;
 
     .el-pagination {
       justify-content: center;
@@ -348,9 +353,9 @@ function resizeWidth() {
       }
     }
 
-    .mainHome {
-      .listMain {
-        .listCom {
+    .main_home {
+      .list_main {
+        .list_content {
           grid-template-columns: 1fr;
         }
       }
@@ -379,7 +384,7 @@ function resizeWidth() {
     --maxWidth: 96% !important;
     margin: 20px;
 
-    .mainHome {
+    .main_home {
       grid-template-columns: 1fr;
     }
 
@@ -429,7 +434,7 @@ function resizeWidth() {
       }
     }
 
-    .mainHome {
+    .main_home {
       width: auto;
     }
   }

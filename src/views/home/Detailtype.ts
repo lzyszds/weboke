@@ -14,7 +14,7 @@ export interface Replydata {
   comment_id: number,
   head_img: string,
   user_name: string,
-  time: string,
+  create_date: string,
   content: string,
   replyPeople: string,
   reply_id: number,

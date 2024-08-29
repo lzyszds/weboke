@@ -4,16 +4,13 @@ import { timeAgo } from '@/utils/common'
 const comment = ref<Comment[]>()
 const { $axios } = window
 
-const getComment = async () => {
-  return await $axios({
-    url: '/api/comment/getNewComment',
-    method: 'get',
-    params: {
-      limit: 6
-    }
-  })
-}
-comment.value = await getComment()
+comment.value = await $axios({
+  url: '/api/comment/getNewComment',
+  method: 'get',
+  params: {
+    limit: 6
+  }
+})
 
 
 </script>

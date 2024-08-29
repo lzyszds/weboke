@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import { ElNotification } from 'element-plus'
+import { dayjs, ElNotification } from 'element-plus'
 import Maincontent from '@/components/Maincontent.vue';
 // import { useEventListener } from '@vueuse/core'
 import { useRoute } from "vue-router";
@@ -7,7 +7,7 @@ import request from '@/http/request';
 import comImg from '@/assets/icon/comments/import'
 import { commentsType } from './Detailtype'
 import Reply from '@/views/home/Reply.vue'
-import { allFunction, awaitTime, scrollTo } from '@/utils/common'
+import { allFunction, awaitTime, scrollTo, numFormat } from '@/utils/common'
 import LzyIcon from '@/components/LzyIcon.vue';
 import { useEventListener } from '@vueuse/core'
 
@@ -133,17 +133,19 @@ let setTimestamp = (time: string) => {
 }
 
 //当前内容的滚动距离，用于判断目录的高亮   但是好像有点问题先不用了
-// const scrollTop = ref<number>(0); // 记录当前的滚动距离
-// function handleScroll() {
-//   useEventListener(window, 'scroll', () => {
-//     scrollTop.value = window.scrollY;
-//     tocList.value.forEach((element: any) => {
-//       if (scrollTop.value - 400 >= element.top) {
-//         tocACindex.value = element.id;
-//       }
-//     })
-//   })
-// }
+const scrollTop = ref<number>(0); // 记录当前的滚动距离
+useEventListener(window, 'scroll', () => {
+  scrollTop.value = window.scrollY;
+  if (scrollTop.value > 550) {
+    tocACindex.value = '#toc-head-1'
+  }
+  tocList.value.forEach((element: any) => {
+    if (scrollTop.value - 400 >= element.top) {
+      tocACindex.value = element.id;
+    }
+  })
+
+})
 
 
 //评论人个人信息
@@ -251,11 +253,12 @@ const comSubmit = () => {
   //发送请求,提交评论
   request({
     method: 'post',
-    url: '/api/article/addComment',
+    url: '/api/comment/addComment',
     data: commentData
   }).then(async (res: any) => {
+    console.log(`lzy  res:`, res)
     if (res == '评论成功') {
-      tip(`评论成功,感谢你的评论！`, 2000)
+      tip(`评论成功,感谢你的评论！`, 100000)
       overloading.value = true
       await getComment()
       overloading.value = false
@@ -264,10 +267,7 @@ const comSubmit = () => {
       handleReplyData(replyArr.replyId)//清空回复评论的id
       setReplyStatus() // 重新设置回复评论的状态
     } else {
-      proxy.$message({
-        message: '评论失败',
-        type: 'error'
-      })
+      tip(`评论失败,请稍后再试！`, 2000)
     }
   })
 }
@@ -344,7 +344,7 @@ const onWheelfn = (e) => {
 const toScrollY = async (id: string) => {
   const el = document.querySelector(id) as HTMLElement
   const top = el.offsetTop
-  window.scrollTo({ top: top + 200, behavior: 'smooth' })
+  window.scrollTo({ top: top + 400, behavior: 'smooth' })
   el.classList.add('animate__shakeX')
   await awaitTime(() => {
     el.classList.remove('animate__shakeX')
@@ -383,7 +383,7 @@ function resizeWidth() {
           <span>
             <LzyIcon name="iconoir:fire-flame"></LzyIcon>
             浏览量
-            {{ dataDet.access_count }}
+            {{ numFormat(dataDet.access_count) }}
           </span>
         </p>
         <!-- 文章类型 -->
@@ -403,7 +403,7 @@ function resizeWidth() {
         <!-- 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议 -->
         <footer v-transition="'tosiTion'" class="oldtosiTion post-footer center ">
           <div class="tool">
-            <i class="iconfont icon-icon-taikong20" fill="#000"></i>
+            <i class="iconfont icon-icon-taikong20"></i>
             <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享署名-非商业性使用-相同方式共享 4.0
               国际许可协议</a>
           </div>
@@ -476,7 +476,7 @@ function resizeWidth() {
               <span>目录</span>
             </div>
             <ul class="affix-list">
-              <li class="H2">
+              <li :class="scrollTop < 550 ? 'active H2' : 'H2'">
                 <a @click="toScrollY('#abstract')">摘要</a>
               </li>
               <li v-for="item in tocList"
@@ -493,743 +493,5 @@ function resizeWidth() {
 </template>
 
 <style lang="scss" scoped>
-.detail {
-  width: 100%;
-  height: auto;
-  padding-bottom: 40px;
-  background: rgb(255, 255, 255);
-  background-image: linear-gradient(#e0e0e0 2px, transparent 0),
-    linear-gradient(90deg, #e0e0e0 1px, transparent 0);
-  background-size: 28px 28px;
-  background-repeat: repeat;
-
-  .center {
-    overflow-x: hidden;
-
-    h5 {
-      display: flex;
-      font-size: 30px;
-      line-height: 50px;
-
-      svg {
-        width: 50px !important;
-        font-size: 50px;
-        fill: #000 !important;
-      }
-    }
-  }
-
-  .detBreadcrumb {
-    padding: 10px;
-    margin-top: 20px;
-    border: none;
-    // background: var(--themeColor);
-    overflow: hidden;
-    border-radius: 10px;
-    // border: 3px solid #000;
-    font-family: "dindin";
-
-    & .boxType {
-      // flex: 1;
-      width: 100%;
-      height: 100%;
-      overflow-y: hidden;
-      overflow-x: auto;
-      text-overflow: inherit;
-      border: none;
-      outline: none;
-      font-size: 20px;
-      white-space: nowrap;
-      margin: 0 30px 0 0;
-      line-height: 35px;
-    }
-  }
-
-  .imgtop {
-    width: 100%;
-    height: 400px;
-    /* overflow: hidden; */
-    position: relative;
-    box-shadow: 1px 1px 10px 2px rgb(115, 115, 115);
-  }
-
-  .imgtop img {
-    filter: brightness(0.5) blur(10px);
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1;
-  }
-
-  .topTitle {
-    z-index: 2;
-    position: absolute;
-    bottom: 10rem;
-    left: 50%;
-    transform: translateX(-50%);
-    color: #fff;
-    text-shadow: 1px 2px 4px #000;
-    max-width: 1300px;
-    width: calc(var(--centerWidth) - 50px);
-  }
-
-  .topTitle h1 {
-    font-size: 6rem;
-    margin-bottom: 20px;
-    margin-top: 0;
-    font-family: "dindin";
-  }
-
-  .topTitle p {
-    font-size: 20px;
-    margin-top: 0;
-    text-indent: 0;
-    display: flex;
-    gap: 20px;
-    font-family: "微软雅黑";
-  }
-
-  .post-footer {
-    margin-top: 10px;
-    padding: 5px;
-    border-radius: 15px;
-    font-size: 16px;
-    background-color: var(--themeColor);
-    border: 4px solid #000;
-    font-family: "dindin";
-
-    svg {
-      width: 30px !important;
-      height: 30px;
-      margin-right: 5px;
-      display: inline-block;
-      vertical-align: bottom;
-    }
-
-    .tool {
-      border: 3px solid #000;
-      padding: 10px;
-      text-align: center;
-      border-radius: 15px;
-      line-height: 30px;
-      cursor: var(--linkCup);
-      background-color: #fff;
-
-      :hover {
-        color: var(--themeColor);
-        text-decoration: underline var(--themeColor);
-
-        svg {
-          fill: var(--themeColor) !important;
-        }
-      }
-    }
-  }
-
-  .commentui {
-    border-radius: 20px;
-    border: 4px solid #000;
-    padding: 10px;
-    background-color: var(--themeColor);
-
-    & .before {
-      user-select: none;
-      position: absolute;
-      top: -40px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 60%;
-      height: 80px;
-      border-radius: 50%;
-      border: 4px solid #000;
-      z-index: 2;
-      background-color: #ffe14d;
-      box-shadow: -1px 3px 1px 0 #fff, -1px 3px 3px 5px #000;
-      color: #000;
-      text-align: center;
-      line-height: 100px;
-      font-size: 15px;
-      font-family: "dindin";
-      /* 超出部分显示省略号 */
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-  }
-
-  .comment {
-    font-size: 18px;
-    background: #fff;
-    border: 3px solid #000;
-    border-radius: 30px;
-    padding: 0 20px;
-    position: relative;
-
-    &>p {
-      margin-left: 25px !important;
-    }
-
-    h5 {
-      margin: 30px 0;
-
-      .iconfont {
-        color: #000;
-        font-size: 30px;
-      }
-    }
-
-    &::before {
-      content: "";
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      width: 15px;
-      height: 15px;
-      border-radius: 50%;
-      border: 3px solid #000;
-      background-color: #7588ff;
-    }
-
-    &::after {
-      content: "";
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      width: 15px;
-      height: 15px;
-      border-radius: 50%;
-      border: 3px solid #000;
-      background-color: #7588ff;
-    }
-  }
-
-  .publish {
-    // width: 1108px;
-    height: 300px;
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-
-    &>.borderw {
-      box-sizing: border-box;
-      font-size: 18px;
-      border-radius: 30px;
-      padding: 5px 10px;
-      position: relative;
-      flex: 1;
-
-      span {
-        display: flex;
-        margin: 10px 20px;
-        line-height: 21px;
-        place-content: left;
-        font-family: "dindin";
-      }
-
-      .icon {
-        width: 30px !important;
-        height: 30px;
-      }
-
-      .textareas {
-        height: 78.5%;
-        margin-top: 5px;
-        padding: 0;
-        border-radius: 20px;
-
-        &:after {
-          display: none;
-        }
-
-        &:before {
-          content: "恶语伤人六月寒, 良言一句暖三冬";
-          font-family: "dindin";
-          position: absolute;
-          inset: auto auto 10% 0%;
-          width: 100%;
-          text-align: center;
-          background-color: transparent;
-          border: none;
-          color: #00000030;
-          pointer-events: none;
-        }
-
-        &>textarea {
-          width: 91.4% !important;
-          height: 170px !important;
-          padding: 10px 20px;
-          font-family: "dindin";
-          font-size: 18px;
-          border: none;
-          resize: none;
-          // border-radius: 30px;
-          word-break: break-all; // 在合适的点自动换行
-          background-color: transparent;
-          transition: background 0.1s, color 0.3s;
-
-          &:focus-visible {
-            border: none;
-            outline: none;
-          }
-
-          &::-webkit-scrollbar {
-            background-color: transparent;
-          }
-        }
-      }
-    }
-
-    &>.nameqq {
-      padding-bottom: 10px;
-
-      .comment {
-        font-family: "dindin";
-        height: 98%;
-        // padding: 10px 10px 0;
-
-        &::before,
-        &::after {
-          display: none;
-        }
-
-        &>div {
-          display: grid;
-          grid-template-columns: 1fr auto 1fr;
-          gap: 0 20px;
-          align-items: center;
-
-          &>div {
-            overflow-x: scroll;
-
-            p {
-              width: 720px;
-              height: 50px;
-              overflow: scroll;
-              display: grid;
-              grid-template-columns: repeat(16, 1fr);
-              gap: 0 15px;
-              position: relative;
-              padding-left: 1.5px;
-
-              &::-webkit-scrollbar {
-                display: none !important;
-              }
-
-              span {
-                width: 45px;
-                height: 45px;
-                border: 1px solid;
-                position: absolute;
-                left: 1px;
-                top: 1px;
-                margin: 0;
-                background-color: transparent;
-                border-radius: 50%;
-                box-shadow: inset 0 0 10px 1px var(--themeColor);
-                filter: blur(1px);
-                transition: 0.1s ease-in;
-                z-index: 6;
-              }
-
-              img {
-                width: 45px;
-                border-radius: 50%;
-                cursor: var(--linkCup);
-                animation-duration: 0.5s;
-              }
-            }
-          }
-
-          button {
-            font-size: 20px;
-            border: none;
-            height: 30px;
-            background-color: transparent;
-          }
-        }
-
-        p {
-          margin: 9px 15px;
-          font-size: 18px;
-          line-height: 31px;
-
-          input {
-            width: 80%;
-            height: 15px;
-            font-size: 13px;
-            border: 2px solid var(--themeColor);
-            border-radius: 10px;
-            padding: 5px;
-            font-family: "dindin";
-
-            &:focus-visible {
-              outline: none;
-              box-shadow: 0 1px 3px 0 var(--themeColor);
-            }
-          }
-
-          &.btn {
-            text-align: center;
-
-            &.del {
-              button {
-                background-color: var(--delColor);
-                color: #fff;
-              }
-            }
-
-            button {
-              background-color: var(--borderColor);
-              width: 70%;
-              border-radius: 30px;
-              margin: 4px;
-              font-family: "dindin";
-            }
-          }
-        }
-
-        ::-webkit-scrollbar {
-          width: 1px;
-          height: 4px;
-          background-color: rgb(245, 245, 245);
-        }
-      }
-    }
-
-    &::before {
-      display: none;
-    }
-  }
-
-  .bodyMain {
-    width: 1300px;
-    margin: 0 auto;
-    display: grid;
-    gap: 10px;
-    grid-template-columns: 1fr 245px;
-
-    .mainLeft {
-      display: grid;
-      gap: 10px;
-    }
-
-    .affix {
-      flex-shrink: 0;
-      transition: 0.3s;
-      animation-duration: 0.5s;
-      z-index: 1;
-      margin-top: 40px;
-
-      .affix_item {
-        border-radius: 10px;
-        background-color: #fff;
-        padding: 10px;
-        border: 3px solid #000;
-
-        .affix-title {
-          margin-bottom: 5px;
-          font-size: 20px;
-          font-weight: 600;
-          color: #555;
-          display: flex;
-          // justify-content: center;
-          padding-left: 10px;
-          background-color: #ffe14d;
-          border-radius: 10px;
-          user-select: none;
-          cursor: var(--linkCup);
-
-          i {
-            fill: #000;
-            width: 30px !important;
-            height: 30px;
-            font-size: 30px;
-          }
-
-          span {
-            line-height: 28px;
-          }
-        }
-
-        .affix-list {
-          padding: 0 10px;
-          list-style: none;
-          margin: 0;
-          font-family: "dindin";
-
-          &>li.active {
-            color: var(--themeColor);
-
-            &::before {
-              z-index: 10;
-            }
-          }
-
-          &>li.H2 {
-            font-weight: 600;
-          }
-
-          &>li.H3 {
-            margin-left: 10px;
-          }
-
-          &>li.H4 {
-            margin-left: 20px;
-          }
-
-          &>li:before {
-            background-color: transparent;
-            content: " ";
-            display: inline-block;
-            height: 25px;
-            left: 15px;
-            margin-top: -1px;
-            position: absolute;
-            width: 3px;
-            border-radius: 30px;
-          }
-
-          &>li:hover {
-            color: var(--themeColor);
-          }
-
-          &>li:hover:before {
-            background-color: var(--themeColor);
-            z-index: 10;
-          }
-
-          &>li.active:before {
-            background-color: var(--themeColor);
-          }
-        }
-      }
-    }
-  }
-}
-
-
-.oldtosiTion {
-  opacity: 0;
-  transition: .5s ease-in-out;
-  transform: translate(0, 20px);
-}
-
-.tosiTion {
-  opacity: 1 !important;
-  transform: translate(0) !important;
-}
-
-.dark {
-  .imgtop {
-    box-shadow: none;
-  }
-
-  .detail {
-    background: var(--darkBgcolor);
-    color: #ffff;
-
-  }
-
-  .post-footer {
-
-    .tool {
-      background-color: var(--darkBgcolor);
-
-      svg {
-        fill: #fff !important;
-      }
-    }
-  }
-
-  .comment-item-right-top-name {
-    color: #fff;
-  }
-
-  .affix-title {
-    color: #fff;
-
-    &>svg {
-      fill: #fff !important;
-    }
-  }
-
-  .comment {
-    background: var(--darkBgcolor);
-    color: #fff;
-
-    h5 svg {
-      fill: #fff !important;
-    }
-
-  }
-}
-
-@media (max-width: 1440px) {
-  .detail {
-    .topTitle {
-      max-width: auto;
-      margin: 0 0px;
-    }
-
-    .center {}
-
-    .bodyMain {
-      margin: 0 20px;
-      width: calc(var(--centerWidth) - 20px);
-
-      .affix-container {}
-    }
-  }
-}
-
-@media (max-width: 1280px) {
-  .detail {
-    .center {}
-
-    .publish {
-      display: block;
-      height: auto;
-
-      .nameqq {
-        margin-top: 10px;
-      }
-    }
-
-    .bodyMain {
-      .affix-container {}
-    }
-  }
-}
-
-@media (max-width: 1130px) {
-  .detail {
-    .publish {}
-
-    .bodyMain {
-      grid-template-columns: 1fr;
-
-      .affix-container {
-        display: none;
-      }
-    }
-  }
-}
-
-@media (max-width: 865px) {
-  .vuepress-markdown-body {
-    width: calc(var(--centerWidth) - 50px);
-  }
-}
-
-@media (max-width: 575px) {
-  .detail {
-    .imgtop {
-      height: 258px;
-    }
-
-    .topTitle {
-      height: 7rem;
-
-      h1 {
-        font-size: clamp(1rem, 10vw, 52rem);
-      }
-    }
-
-    .center {
-      margin: 0 0;
-      padding: 5px;
-    }
-
-    .oldtosiTion {
-      width: 100%;
-      margin: 0;
-      padding: 0 0;
-
-      .borderw {
-        width: 100%;
-        margin-bottom: 0;
-
-        .comment>p {
-          display: flex;
-          justify-content: center;
-
-          input {
-            width: 70% !important;
-          }
-        }
-      }
-
-      .before {
-        font-size: clamp(12px, 1.2rem, 1.5rem);
-      }
-    }
-
-    .commentui {
-      width: 95%;
-      border-width: 3px;
-      padding: 10px;
-
-      :deep(.item-right-info) span {
-        font-size: clamp(6px, 2vw, 2rem);
-
-        svg {
-          width: 10px;
-        }
-      }
-    }
-
-    .post-footer {
-      width: calc(96% - 1px);
-      margin-top: 10px;
-      padding: 5px;
-    }
-
-    .borderw {
-      width: calc(97% - 3px);
-      margin: 10px 0;
-      padding: 5px;
-
-      .textareas::before {}
-    }
-  }
-}
-
-@media (max-width: 425px) {
-  .detail {
-    .topTitle {
-      max-width: auto;
-      // margin: 0 15px;
-    }
-
-    .bodyMain {
-      width: 100%;
-      margin: 0;
-    }
-
-    .vuepress-markdown-body {
-      width: calc(var(--centerWidth) - 3px);
-    }
-
-    .comment {
-      padding: 0 7px;
-
-      div {
-        gap: 0 5px !important;
-      }
-    }
-
-    .commentui {
-      width: calc(93% + 1.5px);
-      border-width: 3px;
-      padding: 10px;
-
-      .reply .item-right-info span {
-        font-size: 6px;
-      }
-    }
-  }
-}
+@import url(@/assets/css/contentDetail.scss);
 </style>

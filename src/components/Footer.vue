@@ -2,9 +2,10 @@
 import LzyIcon from './LzyIcon.vue';
 const { $axios } = window
 const footData = await $axios({
-  url: '/api/common/getFooterInfo',
+  url: '/api/system/getFooterInfo',
   method: 'get'
 })
+console.log(footData);
 const userInfo = [{
   name: 'github',
   icon: 'grommet-icons:github',
@@ -35,9 +36,10 @@ console.log(`lzy  userInfo:`, userInfo)
     </div>
     <div class="navigation">
       <div class="column" v-for="(items, index) in footData" :key="index">
-        <div class="title">{{ items[0].footer_type }}</div>
-        <div v-for="(item, index) in items" :key="index">
-          <router-link :to="item.footer_url">{{ item.footer_content }}</router-link>
+        <div class="title">{{ items.footer_content }}</div>
+        <div v-for="(item, index) in items.children" :key="index">
+          <!-- 打开新窗口 -->
+          <a :href="item.footer_url" target="_blank">{{ item.footer_content }}</a>
         </div>
       </div>
     </div>
@@ -49,6 +51,8 @@ console.log(`lzy  userInfo:`, userInfo)
   width: 100%;
   margin: 0 auto;
   overflow: hidden;
+  padding-top: 20px;
+  background-color: transparent;
 
   .userLink {
     display: flex;

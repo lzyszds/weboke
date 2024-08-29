@@ -1,13 +1,15 @@
 :root {
   --themeColor: #5161ce;
+  --themeColorRgb: 81, 97, 206;
   --bgcolor: #fff !important;
+  --color: #000 !important;
   --darkBgcolor: rgb(24, 23, 29);
   --darkContentBgcolor: #1E1E1E;
   --darkColor: rgb(255, 255, 255, .8);
   --systemSelectColor: #344449;
   --textcolor: #fe9600;
   --borderColor: #ffe14d;
-  --delColor: rgb(220, 20, 60);
+  --delColor: rgb(248, 68, 104);
   --normalCup: url('../icon/Normal.png'), auto;
   --linkCup: url('../icon/Link.png'), auto;
   --verticalCup: url('../icon/Vertical.png'), auto;
@@ -28,6 +30,10 @@
   background: #344449;
   color: #fff;
   text-shadow: none;
+}
+
+body.dark {
+  --color: #fff !important;
 }
 
 /* @tailwind base;
@@ -58,7 +64,8 @@ html,
   font-size: 10px;
   margin: 0;
   padding: 0;
-  background-color: #f9f8ff;
+  background-color: #ffffff;
+
 }
 
 a {
@@ -185,6 +192,7 @@ body::-webkit-scrollbar-track {
   border: 1px solid rgb(245, 245, 245);
   transition: 1s all;
 } */
+
 ::-webkit-scrollbar {
   /*滚动条整体样式*/
   height: 15px !important;
@@ -362,9 +370,6 @@ html.dark {
     text-shadow: 1px 2px 1px #000, 0 0 1px #000000
   }
 }
-
-
-
 
 
 @keyframes stroke {

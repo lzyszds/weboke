@@ -74,7 +74,7 @@
     "editor.defaultFormatter": "vscode.css-language-features"
   },
   "[scss]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "vscode.css-language-features"
   },
   "[markdown]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -142,5 +142,9 @@
     "windicss",
     "zxcvbn"
   ],
-  "vue.codeActions.enabled": false
+  "vue.codeActions.enabled": false,
+  "svn.ignoreMissingSvnWarning": true,
+  "[yaml]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  }
 }

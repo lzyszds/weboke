@@ -2,7 +2,7 @@
 export default {
   mounted(el, binding) {
     const elImg = el.src
-    el.src = window.lzyLazyImg
+    el.src = '/api/system/getLazyLoadImage'
     const observe = new IntersectionObserver((entries) => {
       const { isIntersecting } = entries[0]
       if (isIntersecting == true) {

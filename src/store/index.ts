@@ -31,6 +31,8 @@ export const useStore = defineStore('main', {
       dark: true,
       //天气数据和当前ip
       weatherData: {} as WeatherData,
+      //所有图片的缓存
+      allImageStoreMap: new Map()
     }
   },
   /**

@@ -26,6 +26,7 @@
     "highlight.js": "^11.8.0",
     "live2d-widget": "^3.1.4",
     "lodash": "^4.17.21",
+    "lzyutils": "^1.0.5",
     "markdown-it": "^13.0.1",
     "markdown-it-attrs": "^4.1.6",
     "markdown-it-bracketed-spans": "^1.0.1",
@@ -34,7 +35,7 @@
     "markdown-it-inline-comments": "^1.0.1",
     "markdown-it-mark": "^3.0.1",
     "markdown-it-ruby": "^0.1.1",
-    "marked": "^12.0.2",
+    "marked": "^13.0.2",
     "nprogress": "^0.2.0",
     "pinia": "^2.1.4",
     "prismjs": "^1.29.0",
@@ -47,12 +48,12 @@
   "devDependencies": {
     "@arco-design/web-vue": "^2.48.1",
     "@types/node": "^18.16.19",
-    "@vitejs/plugin-vue": "^1.10.2",
+    "@vitejs/plugin-vue": "^5.0.5",
     "@vue/cli-plugin-typescript": "^5.0.8",
     "less": "^4.1.3",
-    "typescript": "^4.9.5",
+    "typescript": "^5.2.2",
     "vfonts": "^0.1.0",
-    "vite": "^2.9.16",
+    "vite": "^5.3.1",
     "vite-plugin-prismjs": "^0.0.8"
   }
 }
