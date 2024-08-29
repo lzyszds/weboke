@@ -11,11 +11,16 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
       - name: Install dependencies
-        run: npm ci # 假设您使用npm管理依赖
+        run: bun install
 
       - name: Build project
-        run: npm run build # 构建您的项目
+        run: bun run build # 假设您的 package.json 中有 build 脚本
 
       - name: Deploy to server
         uses: appleboy/ssh-action@master
@@ -26,7 +31,7 @@ jobs:
           script: |
             cd /home/useradmin/nginx/html
             git pull origin main
-            npm install
-            npm run build
+            bun install
+            bun run build
 
           # pm2 restart your-app  # 如果使用pm2管理Node.js应用
