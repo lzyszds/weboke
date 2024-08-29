@@ -1,8 +1,6 @@
 name: 博客打包部署
 
 on:
-  push:
-    branches: [main] # 当推送到main分支时触发
 
 jobs:
   deploy:
