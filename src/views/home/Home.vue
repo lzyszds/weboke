@@ -65,6 +65,13 @@ onMounted(() => {
     if (window.innerWidth < 600) {
       example.style.bottom = "0";
     }
+    gsap.to(".noticeMain span", {
+      duration: 1.5, // 动画持续时间
+      opacity: 1,    // 初始透明度为0
+      y: 50,         // 初始Y轴位置，向下偏移50px
+      stagger: 0.2,  // 每个元素的动画间隔时间
+      ease: "power3.out", // 缓动效果
+    });
 
     //控制滚动到底部时，分页器的显示与隐藏
     useEventListener(window, "scroll", () => {
@@ -109,19 +116,6 @@ function toGaspText(target: string) {
     stagger: 0.05, // 延迟每个元素动画开始的时间
   });
 }
-const homecoverLoad = (e) => {
-  // 往后的1.5秒内，让图片模糊的从10 到 0
-  gsap.to(e.target, {
-    duration: 1.5,
-    filter: "blur(0px)",
-    display: "block",
-  });
-  gsap.to(".placeholder", {
-    duration: 0.2,
-    filter: "blur(2px)",
-    display: "none",
-  });
-}
 
 useEventListener('resize', () => {
   resizeWidth()
@@ -137,7 +131,7 @@ function resizeWidth() {
   <div class="content" style="--maxWidth:1380px">
     <div class="notice themeCard">
       <div class="noticeMain ">
-
+        <span v-for="item in mytext">{{ item }}</span>
       </div>
     </div>
     <div class="swiper_container_card themeCard">
@@ -211,6 +205,14 @@ function resizeWidth() {
     height: calc(100% - 8px);
     padding: 0;
     border-radius: 10px;
+    font-size: 1.6rem;
+    text-align: center;
+    line-height: 30px;
+
+    span {
+      opacity: 0;
+      transform: translateY(20px);
+    }
   }
 }
 
