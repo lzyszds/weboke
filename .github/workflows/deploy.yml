@@ -1,4 +1,4 @@
-name: Deploy to server
+name: 博客部署
 
 on:
   workflow_dispatch:
@@ -20,22 +20,22 @@ jobs:
       - name: Build project
         run: bun run build
 
-      - name: Deploy to server
-        uses: appleboy/ssh-action@master
+      # 删除旧的文件
+      - name: Remove old files on server
+        uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            if [ ! -d "/home/useradmin/nginx/weboke/.git" ]; then
-              git clone https://github.com/yourusername/yourrepository.git /home/useradmin/nginx/weboke
-            fi
-            cd /home/useradmin/nginx/weboke
-            git pull origin main
-            if ! command -v bun &> /dev/null; then
-              echo "Bun is not installed. Installing Bun..."
-              curl -fsSL https://bun.sh/install | bash
-              export PATH="/root/.bun/bin:$PATH"
-            fi
-            bun install
-            bun run build
+            rm -rf /home/useradmin/nginx/html/*
+
+      # 或者如果你只想上传构建后的文件
+      - name: Upload build to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          source: "dist/*"
+          target: "/home/useradmin/nginx/html"
