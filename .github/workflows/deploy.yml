@@ -1,7 +1,9 @@
 name: 博客部署
 
+# 提交后的触发器
 on:
-  workflow_dispatch:
+  push:
+    branches: [main]
 
 jobs:
   deploy:
@@ -9,19 +11,19 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Setup Bun
+      - name: 设置Bun
         uses: oven-sh/setup-bun@v1
         with:
           bun-version: latest
 
-      - name: Install dependencies
+      - name: 安装依赖
         run: bun install
 
-      - name: Build project
+      - name: 项目构建打包
         run: bun run build
 
       # 删除旧的文件
-      - name: Remove old files on server
+      - name: 清空旧项目文件
         uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ secrets.SERVER_HOST }}
@@ -31,7 +33,7 @@ jobs:
             rm -rf /home/useradmin/nginx/html/*
 
       # 或者如果你只想上传构建后的文件
-      - name: Upload build to server
+      - name: 上传构建后的文件
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SERVER_HOST }}
