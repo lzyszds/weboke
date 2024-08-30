@@ -33,7 +33,8 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            rm -rf $DEPLOY_PATH/*
+            rm -rf $DEPLOY_PATH/src/*
+            rm -rf $DEPLOY_PATH/config.js
 
       # 或者如果你只想上传构建后的文件
       - name: 上传构建后的文件
