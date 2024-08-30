@@ -262,6 +262,10 @@ ol .dark ol {
   :deep(p) {
     margin: 5px 0 0 !important
   }
+
+  :deep(li) {
+    list-style: decimal !important;
+  }
 }
 
 @keyframes blinking-cursor {
