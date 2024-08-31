@@ -476,7 +476,7 @@ watch(route, (newVal) => {
         justify-content: space-between;
         padding: 0 1rem;
         border-left: .4rem solid transparent;
-        cursor: var(--linkCup);
+
         border-bottom: 1px solid #e2e8f0;
 
         &.borderleft {
@@ -595,7 +595,7 @@ watch(route, (newVal) => {
       width: 20px;
       height: 20px;
       padding: 0;
-      cursor: var(--linkCup);
+
 
       img {
         width: 100%;
@@ -619,7 +619,7 @@ watch(route, (newVal) => {
     cursor: pointer;
     z-index: 40;
     background-color: #5161ce;
-    cursor: var(--linkCup);
+
   }
 
   .lyricDiv {

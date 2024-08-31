@@ -1,3 +1,4 @@
+import { setMessage } from '@/utils/common';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 interface AxiosConfig {
@@ -43,7 +44,7 @@ export default async function makeRequest<T = any>({
     (response: AxiosResponse<T>) => {
       // 在响应返回之前做一些事情，例如处理错误
       if (response.status !== 200) {
-        throw new Error(response.statusText);
+        setMessage('error', '请求失败');
       }
       return response.data;
     },

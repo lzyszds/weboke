@@ -143,7 +143,7 @@ p {
     border: 1px solid #000;
     padding: 2px;
     border-radius: 8px;
-    cursor: var(--linkCup);
+
   }
 
   ol {
@@ -259,6 +259,8 @@ ol .dark ol {
 }
 
 .mainHtml {
+  font-size: 16px;
+
   :deep(p) {
     margin: 5px 0 0 !important
   }

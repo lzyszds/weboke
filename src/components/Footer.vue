@@ -80,7 +80,7 @@ console.log(`lzy  userInfo:`, userInfo)
       gap: 10px;
       grid-template-rows: 40px repeat(6, 1fr);
       font-size: 1.5rem;
-      font-family: '微软雅黑';
+      font-family: 'Red Hat Display';
 
       .title {
         font-size: 1.7rem;

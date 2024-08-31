@@ -73,11 +73,6 @@ export default defineConfig(({ command, mode }): any => {
           changeOrigin: true,
           rewrite: path => path.replace(/^\/api/, '')
         },
-        '/getIp': {
-          target: 'https://v2.jinrishici.com',//这里是域名，不是完整地址
-          changeOrigin: true,//是否跨域
-          rewrite: path => path.replace(/^\/getIp/, '')
-        },
         // '/api': {
         //   target: 'https://c.m.163.com/ug/api/wuhan/app/data/list-total',
         //   changeOrigin: true,

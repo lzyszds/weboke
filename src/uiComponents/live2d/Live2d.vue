@@ -65,7 +65,7 @@ function drag(el) {
 #live2d-widget {
   pointer-events: auto !important;
   color: #eee;
-  cursor: var(--linkCup);
+
 }
 
 #live2d-widget #live2dcanvas {

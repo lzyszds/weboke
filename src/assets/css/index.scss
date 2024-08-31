@@ -10,9 +10,8 @@
   --textcolor: #fe9600;
   --borderColor: #ffe14d;
   --delColor: rgb(248, 68, 104);
-  --normalCup: url('../icon/Normal.png'), auto;
   --linkCup: url('../icon/Link.png'), auto;
-  --verticalCup: url('../icon/Vertical.png'), auto;
+  --normalCup: url('../icon/Normal.png'), auto;
   --article-cover: linear-gradient(180deg, hsla(0, 0%, 98%, 0) 0, hsla(0, 0%, 98%, .013) 8.1%, hsla(0, 0%, 98%, .049) 15.5%, hsla(0, 0%, 98%, .104) 22.5%, hsla(0, 0%, 98%, .175) 29%, hsla(0, 0%, 98%, .259) 35.3%, hsla(0, 0%, 98%, .352) 41.2%, hsla(0, 0%, 98%, .45) 47.1%, hsla(0, 0%, 98%, .55) 52.9%, hsla(0, 0%, 98%, .648) 58.8%, hsla(0, 0%, 98%, .741) 64.7%, hsla(0, 0%, 98%, .825) 71%, hsla(0, 0%, 98%, .896) 77.5%, hsla(0, 0%, 98%, .951) 84.5%, hsla(0, 0%, 98%, .987) 91.9%, #fff);
   --broRadius: 9px;
   --breakpoint-sm: 576px;
@@ -82,10 +81,6 @@ svg {
   display: initial;
 }
 
-button,
-a {
-  cursor: var(--linkCup) !important;
-}
 
 li {
   list-style: none;
@@ -94,7 +89,6 @@ li {
 .decoration {
   font-family: 'dindin';
   color: #fff;
-  cursor: var(--linkCup);
   text-shadow: 1px 3px 3px #000;
   transition: .6s;
   background: linear-gradient(#fff, #fff) no-repeat left 100%/0 2px;
@@ -234,21 +228,67 @@ body::-webkit-scrollbar-track {
 }
 
 #app {
-  cursor: var(--normalCup);
   position: relative;
+
+  img,
+  a {
+    cursor: var(--linkCup);
+  }
+
+  address,
+  article,
+  aside,
+  blockquote,
+  details,
+  dialog,
+  dd,
+  div,
+  dl,
+  dt,
+  fieldset,
+  figcaption,
+  figure,
+  footer,
+  form,
+  header,
+  hgroup,
+  hr,
+  li,
+  main,
+  nav,
+  ol,
+  section,
+  table,
+  ul {
+    cursor: var(--normalCup);
+  }
+
+  /* 文本相关元素使用text光标，悬停时使用自定义光标 */
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  li,
+  dt,
+  dd,
+  span,
+  em,
+  strong,
+  small,
+  code,
+  pre,
+  th,
+  td,
+  blockquote,
+  label {
+    cursor: auto;
+    /* 默认使用文本选择光标 */
+  }
 }
 
-#app a {
-  cursor: var(--linkCup)
-}
-
-#app input {
-  cursor: var(--verticalCup)
-}
-
-#app textarea {
-  cursor: var(--verticalCup)
-}
 
 .maskBg {
   width: 25px;
@@ -269,7 +309,10 @@ html body.compensate-for-scrollbar {
 html,
 body {
   scroll-behavior: smooth;
-  font-family: 'Fira Code VF';
+
+  font-family: 'Red Hat Display';
+  font-variant-numeric: tabular-nums;
+  /* 使用等宽特性 */
   font-variation-settings: 'wght' 430;
 }
 
@@ -362,7 +405,7 @@ html.dark {
   }
 
   span {
-    font-family: "微软雅黑";
+    font-family: 'Red Hat Display';
     font-size: 30px;
     line-height: 35px;
     display: block;

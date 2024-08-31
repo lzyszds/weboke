@@ -279,7 +279,7 @@ watch(
     z-index: 1;
     border: 2px solid #fff;
     border-left: none;
-    cursor: var(--linkCup);
+
     background-color: var(--themeColor);
     padding: 0px 10px;
     border-radius: 0 20px 20px 0;
@@ -302,7 +302,7 @@ watch(
 
     a {
       color: #fff;
-      cursor: var(--linkCup);
+
     }
   }
 }

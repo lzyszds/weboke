@@ -97,7 +97,7 @@ const tipBackfn = (val) => {
       <div class="navbar-brand navbar-logo">
         <a href="#">
           <img width="30" src="/src/assets/image/logo.png" alt="" />
-          <span>Jingzy</span>
+          <span style="cursor: var(--linkCup)">Jingzy</span>
         </a>
       </div>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">

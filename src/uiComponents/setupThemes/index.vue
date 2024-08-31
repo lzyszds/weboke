@@ -67,7 +67,7 @@ const toggleDark = () => {
 }
 
 .toggle {
-  cursor: var(--linkCup);
+
   display: inline-block;
   position: relative;
   width: 90px;

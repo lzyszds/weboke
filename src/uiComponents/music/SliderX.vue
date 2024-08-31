@@ -57,7 +57,7 @@ watch(() => {
   display: flex;
   justify-items: center;
   align-items: center;
-  cursor: var(--linkCup);
+
 }
 
 .strip {

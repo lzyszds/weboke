@@ -104,7 +104,7 @@
     text-indent: 0;
     display: flex;
     gap: 20px;
-    font-family: "微软雅黑";
+    font-family: 'Red Hat Display';
   }
 
   .post-footer {
@@ -130,7 +130,6 @@
       text-align: center;
       border-radius: 15px;
       line-height: 30px;
-      cursor: var(--linkCup);
       background-color: #fff;
 
       :hover {
@@ -176,7 +175,7 @@
   }
 
   .comment {
-    font-size: 18px;
+    font-size: 16px;
     background: #fff;
     border: 3px solid #000;
     border-radius: 30px;
@@ -353,7 +352,7 @@
               img {
                 width: 45px;
                 border-radius: 50%;
-                cursor: var(--linkCup);
+
                 animation-duration: 0.5s;
               }
             }
@@ -457,7 +456,7 @@
           background-color: #ffe14d;
           border-radius: 10px;
           user-select: none;
-          cursor: var(--linkCup);
+
 
           i {
             fill: #000;
@@ -477,12 +476,23 @@
           list-style: none;
           margin: 0;
           font-family: "dindin";
+          font-size: 13px;
 
-          &>li.active {
-            color: var(--themeColor);
+          &>li {
+            overflow: hidden;
+            width: 100%;
+            display: inline-block;
+            white-space: nowrap;
+            width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
 
-            &::before {
-              z-index: 10;
+            &.active {
+              color: var(--themeColor);
+
+              &::before {
+                z-index: 10;
+              }
             }
           }
 

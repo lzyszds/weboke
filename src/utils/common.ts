@@ -1,5 +1,6 @@
 import request from '@/http/request'
-import { ElNotification } from 'element-plus'
+import { ElNotification, ElMessage } from 'element-plus'
+import type { messageType, MessageOptions } from 'element-plus'
 import dayjs from "dayjs";
 import { useDateFormat } from '@vueuse/core'
 import handleWeatherUrl from '@/assets/icon/weather/import'
@@ -182,9 +183,18 @@ export const LNotification = (val: string, time: number = 2000, postion: any = '
   })
 }
 
+//提示通知
+export const setMessage = (type: messageType, message: string, options?: MessageOptions) => {
+  ElMessage({
+    message,
+    grouping: true,
+    type,
+    ...options
+  })
+}
+
 // 复制内容提示版权信息
 import { useEventListener } from "@vueuse/core";
-import { log } from 'console';
 
 export const copyTip = () => {
   useEventListener(window, 'keydown', e => {

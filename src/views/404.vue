@@ -1185,7 +1185,7 @@ button {
   color: white;
   background-color: transparent;
   border: 0;
-  cursor: var(--linkCup);
+
   z-index: 999;
   border: 2px solid white;
   border-radius: 5px;

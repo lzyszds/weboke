@@ -115,7 +115,7 @@ const formatTime = (time: string) => {
       gap: 5px;
       margin-top: 10px;
       text-align: center;
-      font-family: '微软雅黑';
+      font-family: 'Red Hat Display';
       text-shadow: 1px 1px 1px #000;
 
       span.tag {

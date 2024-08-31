@@ -67,7 +67,7 @@ const selectHandle = (index: number) => {
 }
 
 .conent_div {
-  cursor: var(--linkCup);
+
   display: block;
   box-shadow: 0 0px 5px rgb(0 0 0 / 33%);
   border-radius: 8px;
