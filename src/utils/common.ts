@@ -75,7 +75,7 @@ export const getIpWeather = (): Promise<WeatherData> => {
     try {
       request({
         method: 'GET',
-        url: '/api/common/ipConfig',
+        url: '/toolkit/getWeather',
       }).then((res: WeatherData) => {
         //将个人信息存入localStorage，避免每次刷新都要请求接口
         setLocalStorage('weatherData', res)

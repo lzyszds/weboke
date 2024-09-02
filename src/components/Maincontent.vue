@@ -58,7 +58,7 @@ onMounted(() => {
     })
     emit('update', 1)
 
-    getAbstract('/api/aiService/getAifox?aid=' + props.aid)
+    getAbstract('/firstHonoApi/api/openAI/getAifox?aid=' + props.aid)
 
   }, 500)
 })
@@ -67,7 +67,7 @@ function getAbstract(url) {
   return new Promise<any>(async (resolve, reject) => {
 
     try {
-      const result = await fetch(url, { method: 'GET', })
+      const result = await fetch(url)
       const textDecoder = new TextDecoder()
       const reader = result.body?.getReader()!
       aiContent.value = ''
@@ -82,9 +82,9 @@ function getAbstract(url) {
 
         for (let line of lines) { // 逐行处理数据
           // 添加延迟，单位为毫秒（例如延迟 100 毫秒） 一帧等于 16.67 毫秒
-          await new Promise(resolve => setTimeout(resolve, 60));
+          // await new Promise(resolve => setTimeout(resolve, 30));
           if (line) {
-            aiContent.value += line; // 将逐字生成的数据拼接到 aiContent 中
+            aiContent.value += line.replace("data: ", ""); // 将逐字生成的数据拼接到 aiContent 中
           }
         }
       }
@@ -107,7 +107,7 @@ function getAbstract(url) {
           <LzyIcon v-if="!doneFlag" name="ph:fan-duotone"></LzyIcon>
         </p>
       </div>
-      <p class="affirm">此内容根据文章生成，并经过人工审核，仅用于文章内容的解释与总结</p>
+      <p class="affirm">此内容根据文章生成，未经过人工审核，仅用于文章内容的解释与总结，不承担任何法律责任！</p>
     </div>
     <div class="mainHtml" v-html="props.main"></div>
   </div>

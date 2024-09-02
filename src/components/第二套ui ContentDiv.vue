@@ -42,7 +42,7 @@ const selectHandle = (index: number) => {
 <template>
   <div v-transition="'tosiTion'" class="conent_div">
     <div class="conent_div_img">
-      <img v-lazy="props.index" :src="'/api/public' + data.cover_img" alt="" />
+      <img v-lazy="props.index" :src="'/firstHonoApi/static' + data.cover_img" alt="" />
     </div>
     <div class="conent_div_text">
       <div class="title">{{ data.title }}</div>

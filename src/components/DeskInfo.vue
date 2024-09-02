@@ -7,7 +7,7 @@ if (JSON.stringify(state.weatherData) == '{}') {
   state.setWeather(JSON.parse(localStorage.getItem("weatherInfo")!))
 }
 const { province, city, ip, temperature, weather, winddirection, windpower, humidity, reporttime } = state.weatherData
-const api = '/api/public/img/10.svg'
+const api = '/firstHonoApi/static/img/10.svg'
 
 const formatTime = (time: string) => {
   const date = dayjs(time)

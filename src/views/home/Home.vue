@@ -7,9 +7,10 @@ import { ElPagination } from 'element-plus'
 import SkillSwiper from "@/components/SkillSwiper.vue";
 import ContentDiv from "@/components/ContentDiv.vue";
 import NewComment from "@/components/NewComment.vue";
+import { getArticleList } from '@/api/home/article';
+
 const DeskInfo = defineAsyncComponent(() => import("@/components/DeskInfo.vue"))
 
-const { $axios } = window;
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -17,21 +18,7 @@ const mytext = "编程是一场艺术，逻辑是它的画笔，创新是它的�
 
 const limit = 10;
 const indexList = ref(1);
-// const itemData = (await http(
-//   "get",
-//   "/api/article/getArticleList?pages=" + indexList.value + "&limit=" + limit
-// )) as any;
 
-function getArticleList(pages: number, limit: number) {
-  return $axios<ResultDataTotal<any>>({
-    url: "/api/article/getArticleList",
-    method: "get",
-    params: {
-      pages: pages,
-      limit: limit,
-    },
-  })
-}
 
 const { data, total } = await getArticleList(indexList.value, limit);
 const list: any = ref(data);
@@ -152,7 +139,7 @@ function resizeWidth() {
       </div>
       <div class="swiperitem rightCard">
         <div class="swiperCard">
-          <img v-lazy="5" :src="'/api/public/img/homeItem.png'" alt="">
+          <img v-lazy="5" :src="'/firstHonoApi/static/img/homeItem.png'" alt="">
           <!-- <GithubPlot :data="getGithubData()" :x="836" :y="204"></GithubPlot> -->
         </div>
       </div>

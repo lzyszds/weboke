@@ -62,16 +62,16 @@ export default defineConfig(({ command, mode }): any => {
       host: '0.0.0.0',
       port: 1024,
       proxy: {
-        "/api": {
+        "/firstHonoApi": {
           // target: "http://localhost:8089",
-          target: "http://localhost:1020",
+          target: "http://localhost:2024",
           //设置请求头
           headers: {
             //16是梧州的ip，12是南宁的ip
             "x-real-ip": "180.139.210.51"
           },
           changeOrigin: true,
-          rewrite: path => path.replace(/^\/api/, '')
+          rewrite: path => path.replace(/^\/firstHonoApi/, '')
         },
         // '/api': {
         //   target: 'https://c.m.163.com/ug/api/wuhan/app/data/list-total',

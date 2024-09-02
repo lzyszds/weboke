@@ -3,7 +3,6 @@ import { ElNotification } from 'element-plus'
 import Maincontent from '@/components/Maincontent.vue';
 // import { useEventListener } from '@vueuse/core'
 import { useRoute } from "vue-router";
-import request from '@/http/request';
 import comImg from '@/assets/icon/comments/import'
 import { commentsType, Replydata } from './Detailtype'
 import Reply from '@/views/home/Reply.vue'
@@ -12,17 +11,15 @@ import LzyIcon from '@/components/LzyIcon.vue';
 import { useEventListener } from '@vueuse/core'
 import { getPoetry } from '@/api/home/public'
 import { getArticleComment, postRemarkList } from '@/api/home/comment';
+import { getArticleDetail } from '@/api/home/article';
 
 const overloading = ref(false) //重载评论组件，解决评论后评论组件不刷新的问题
 
 const route = useRoute()
 const aid = route.path.replace('/home/detail/', '') //获取当前文章id
-const dataDet = await request({
-  method: 'get',
-  url: '/api/article/getArticleInfo/' + aid
-}) as any
+const dataDet = await getArticleDetail(Number(aid)) //获取当前文章详情
 const affixElm = ref<HTMLElement | null>(null)
-dataDet.cover_img = '/api/public' + dataDet.cover_img
+dataDet.cover_img = '/firstHonoApi/static' + dataDet.cover_img
 const tip = allFunction.LNotification // 右下角提示
 const tocList = ref<any>([]);
 const tocACindex = ref<string>('#toc-head-1');

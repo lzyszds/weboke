@@ -16,9 +16,11 @@ export default async function makeRequest<T = any>({
   params,
   data,
   headers,
+  timeout = 10000,
 }: AxiosRequestConfig): Promise<T> {
   const defaultConfig: AxiosConfig = {
-    timeout: 10000,
+    baseURL: import.meta.env.VITE_BASE_URL as string,
+    timeout,
     headers: {
       'access-control-allow-origin': '*',
       'Content-Type': 'application/json',

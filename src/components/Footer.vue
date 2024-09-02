@@ -1,11 +1,9 @@
 <script setup lang='ts'>
 import LzyIcon from './LzyIcon.vue';
-const { $axios } = window
-const footData = await $axios({
-  url: '/api/system/getFooterInfo',
-  method: 'get'
-})
-console.log(footData);
+import { getFooterInfo } from '@/api/system'
+const footData = (await getFooterInfo()).filter((item: any) => item != null)
+console.log(`lzy  footData:`, footData)
+
 const userInfo = [{
   name: 'github',
   icon: 'grommet-icons:github',
@@ -23,7 +21,7 @@ const userInfo = [{
   icon: 'grommet-icons:github',
   url: 'https://github.com/lzyszds'
 }]
-console.log(`lzy  userInfo:`, userInfo)
+// console.log(`lzy  userInfo:`, userInfo)
 
 </script>
 

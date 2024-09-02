@@ -8,7 +8,7 @@ export interface Comment {
   ground_id: number;
   head_img: string;
   reply_id: number;
-  time: string;
+  create_date: number;
   user_ip: string;
   user_name: string;
 }

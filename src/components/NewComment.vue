@@ -1,17 +1,9 @@
 <script setup lang='ts'>
 import { Comment } from '@/types/Comment'
 import { timeAgo } from '@/utils/common'
+import { getNewComment } from '@/api/home/comment'
 const comment = ref<Comment[]>()
-const { $axios } = window
-
-comment.value = await $axios({
-  url: '/api/comment/getNewComment',
-  method: 'get',
-  params: {
-    limit: 6
-  }
-})
-
+comment.value = await getNewComment()
 
 </script>
 
@@ -22,9 +14,9 @@ comment.value = await $axios({
     </div>
     <!-- 最新评论 -->
     <div class="cardinter" v-for="(item, index) in comment" :key="index">
-      <img :src="'/api/public' + item.head_img" alt="" />
+      <img :src="'/firstHonoApi/static' + item.head_img" alt="" />
       <div class="comment-content">{{ item.content }}</div>
-      <div>{{ timeAgo(item.time) }}</div>
+      <div>{{ timeAgo(item.create_date) }}</div>
     </div>
   </div>
 </template>
@@ -39,6 +31,7 @@ comment.value = await $axios({
   display: flex;
   gap: 5px;
   align-items: center;
+  justify-content: space-between;
 
   .comment-title {
     margin: 0 30px;

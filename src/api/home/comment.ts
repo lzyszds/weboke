@@ -4,7 +4,7 @@ import request from '@/http/request';
 export function getArticleComment(aid) {
   return request({
     method: 'get',
-    url: '/api/comment/getArticleComment',
+    url: '/comment/getArticleComment',
     params: {
       id: aid
     }
@@ -16,7 +16,19 @@ export function getArticleComment(aid) {
 export function postRemarkList(data) {
   return request({
     method: 'post',
-    url: '/api/comment/addComment',
+    url: '/comment/addComment',
     data
+  })
+}
+
+
+//获取最新评论
+export function getNewComment() {
+  return request({
+    method: 'get',
+    url: '/comment/getNewComment',
+    params: {
+      limit: 5
+    }
   })
 }
