@@ -82,9 +82,13 @@
     left: 50%;
     transform: translateX(-50%);
     color: #fff;
-    text-shadow: 1px 2px 4px #000;
+    text-shadow: 1px 2px 4px #000, 1px 1px 3px #000000, 1px 0 2px #000000;
     max-width: 1300px;
     width: calc(var(--centerWidth) - 50px);
+    overflow: hidden;
+    /* 显示省略号 */
+    text-overflow: ellipsis;
+    white-space: nowrap;
 
     svg {
       color: #fff;
@@ -92,10 +96,11 @@
   }
 
   .topTitle h1 {
-    font-size: 6rem;
+    font-size: clamp(1rem, 4vw, 6rem);
     margin-bottom: 20px;
     margin-top: 0;
     font-family: "dindin";
+    filter: drop-shadow(1px 5px 1px #000);
   }
 
   .topTitle p {
@@ -445,6 +450,7 @@
         padding: 10px;
         border: 3px solid #000;
 
+
         .affix-title {
           margin-bottom: 5px;
           font-size: 20px;
@@ -456,7 +462,10 @@
           background-color: #ffe14d;
           border-radius: 10px;
           user-select: none;
+          font-family: "dindin";
+          cursor: var(--linkCup) !important;
 
+          // &:hover i {}
 
           i {
             fill: #000;
@@ -464,10 +473,18 @@
             height: 30px;
             font-size: 30px;
             color: #555;
+            animation: 1s linear infinite wiggle;
           }
 
           span {
-            line-height: 28px;
+            line-height: 30px;
+          }
+
+          b {
+            font-size: 20px;
+            line-height: 30px;
+            margin-left: 20px;
+            font-weight: 300;
           }
         }
 
@@ -479,16 +496,22 @@
           font-size: 13px;
 
           &>li {
-            overflow: hidden;
-            width: 100%;
+            height: 20px;
             display: inline-block;
             white-space: nowrap;
             width: 100%;
             overflow: hidden;
             text-overflow: ellipsis;
 
+            a {
+              line-height: 20px;
+              color: #999;
+            }
+
             &.active {
-              color: var(--themeColor);
+              a {
+                color: var(--themeColor);
+              }
 
               &::before {
                 z-index: 10;
@@ -497,39 +520,45 @@
           }
 
           &>li.H2 {
-            font-weight: 600;
+            font-weight: 500;
           }
 
-          &>li.H3 {
+          &>li.H3 a {
             margin-left: 10px;
           }
 
-          &>li.H4 {
+          &>li.H4 a {
             margin-left: 20px;
           }
 
           &>li:before {
             background-color: transparent;
             content: " ";
-            display: inline-block;
+            // display: inline-block;
+            display: block;
             height: 20px;
             left: 15px;
             margin-top: 0px;
-            position: absolute;
-            width: 3px;
             border-radius: 30px;
+            width: 3px;
+            float: left;
+            transition: .1s;
+            opacity: 0;
           }
 
           &>li:hover {
-            color: var(--themeColor);
+            a {
+              color: var(--themeColor);
+            }
           }
 
           &>li:hover:before {
-            background-color: var(--themeColor);
             z-index: 10;
           }
 
           &>li.active:before {
+            opacity: 1;
+            margin-right: 10px;
             background-color: var(--themeColor);
           }
         }

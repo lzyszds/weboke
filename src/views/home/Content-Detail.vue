@@ -115,16 +115,44 @@ let setTimestamp = (time: string) => {
 const scrollTop = ref<number>(0); // 记录当前的滚动距离
 useEventListener(window, 'scroll', () => {
   scrollTop.value = window.scrollY;
-  if (scrollTop.value > 550) {
+  if (scrollTop.value < 250) {
     tocACindex.value = '#toc-head-1'
   }
-  tocList.value.forEach((element: any) => {
+  tocList.value.forEach((element: any, index) => {
     if (scrollTop.value - 400 >= element.top) {
       tocACindex.value = element.id;
     }
   })
-
 })
+
+//计算滚动进度
+const handleScroll = computed(() => {
+  const docElement = document.documentElement;
+  // 封装局部变量
+  const scrollTopValue = scrollTop.value;
+  const scrollHeight = docElement.scrollHeight - docElement.clientHeight;
+
+  // 类型注解
+  if (typeof scrollTopValue !== 'number' || typeof scrollHeight !== 'number') {
+    return '0%';
+  }
+
+  // 异常处理
+  if (isNaN(scrollTopValue) || isNaN(scrollHeight)) {
+    return '0%';
+  }
+
+  let scrollPercent = scrollTopValue / scrollHeight * 100;
+
+  if (isNaN(scrollPercent) || scrollPercent == 0) {
+    return ""
+  }
+
+  if (scrollPercent > 100) scrollPercent = 100
+
+  return scrollPercent.toFixed(2) + '%';
+
+});
 
 
 //评论人个人信息
@@ -401,7 +429,7 @@ function resizeWidth() {
           <div class="before">{{ textbefore }}</div>
           <div class="comment">
             <h5>
-              <i class="iconfont icon-icon-taikong13"></i>评论
+              <!-- <i class="iconfont icon-icon-taikong13"></i>评论 -->
             </h5>
             <div class="comContent">
               <h3 style="text-align: center;" v-if="remarkList.length == 0">
@@ -420,13 +448,14 @@ function resizeWidth() {
       <!-- 文章目录 -->
       <div class="affix-container">
         <main class="affix themeCard stickyTop" ref="affixElm">
-          <div class="affix_item">
-            <div class="affix-title" @click="scrollTo(0, 0)">
+          <div class="affix_item" @click="scrollTo(0, 0)">
+            <div class="affix-title">
               <i class="iconfont icon-icon-taikong17"></i>
               <span>目录</span>
+              <b v-html="handleScroll"></b>
             </div>
-            <ul class="affix-list">
-              <li :class="scrollTop < 550 ? 'active H2' : 'H2'">
+            <ul class=" affix-list">
+              <li :class="tocACindex == '#toc-head-1' ? 'active H2' : 'H2'">
                 <a @click="toScrollY('#abstract')">摘要</a>
               </li>
               <li v-for="item in tocList"

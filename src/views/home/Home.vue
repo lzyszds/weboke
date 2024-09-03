@@ -167,15 +167,7 @@ function resizeWidth() {
     </div>
   </div>
 </template>
-<style lang="scss">
-.themeCard {
-  background-color: var(--themeColor);
-  border-radius: 20px;
-  border: 4px solid #000;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  padding: 10px;
-}
-
+<style lang="scss" scoped>
 .notice {
   margin: 70px auto 10px;
   height: 40px;

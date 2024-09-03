@@ -329,15 +329,15 @@ html.dark {
 }
 
 .themeCard {
-  border: 3px solid #000;
-  border-radius: 20px;
   background-color: var(--themeColor);
-  padding: 6px;
-  font-family: 'dindin';
+  border-radius: 20px;
+  border: 4px solid #000;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 10px;
 
   &.stickyTop {
     position: sticky;
-    top: 60px;
+    top: 75px;
     margin-bottom: 10px;
     -webkit-user-drag: none;
     font-size: 1.6rem;
@@ -380,13 +380,17 @@ html.dark {
   margin-right: 10px;
 }
 
-.tags .taglzy {
-  background-color: var(--themeColor);
-  color: #fff;
-  border: 1px solid #000;
-  font-size: 12px;
-  padding: 2px 5px;
-  border-radius: 5px;
+.tags {
+  height: 20px;
+
+  .taglzy {
+    background-color: var(--themeColor);
+    color: #fff;
+    border: 1px solid #000;
+    font-size: 12px;
+    padding: 2px 5px;
+    border-radius: 5px;
+  }
 }
 
 .navbar-logo {
