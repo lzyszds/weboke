@@ -13,7 +13,6 @@ import { getPoetry } from '@/api/home/toolkit'
 import { getArticleComment, postRemarkList } from '@/api/home/comment';
 import { getArticleDetail } from '@/api/home/article';
 
-const overloading = ref(false) //重载评论组件，解决评论后评论组件不刷新的问题
 
 const route = useRoute()
 const aid = route.path.replace('/home/detail/', '') //获取当前文章id
@@ -238,14 +237,10 @@ const comSubmit = () => {
   postRemarkList(remarkData).then(async (res: any) => {
     if (res == '评论成功') {
       tip(`评论成功,感谢你的评论！`)
-      overloading.value = true
       await getRemarkList()
       //清空评论内容
       information.comContent = ''
       remReplyComment()
-      setTimeout(() => {
-        overloading.value = false
-      }, 1000);
     } else {
       tip(`评论失败,请稍后再试！`)
     }
