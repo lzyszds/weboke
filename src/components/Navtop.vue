@@ -72,7 +72,7 @@ onMounted(() => {
   bgBoxfun()
   window.addEventListener("resize", bgBoxfun);
   useEventListener(window, 'scroll', () => {
-    if (window.scrollY >= 100) {
+    if (window.scrollY >= 10) {
       document.querySelector('.navbarContent')?.classList.add('navbarContent100')
     } else {
       document.querySelector('.navbarContent')?.classList.remove('navbarContent100')

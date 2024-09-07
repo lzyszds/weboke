@@ -63,6 +63,8 @@ onMounted(() => {
   }, 500)
 })
 
+
+//获取AI摘要
 function getAbstract(url) {
   return new Promise<any>(async (resolve, reject) => {
 

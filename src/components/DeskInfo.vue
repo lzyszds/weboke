@@ -53,6 +53,7 @@ const formatTime = (time: string) => {
   .cardinter {
 
     .geoArea {
+      font-size: 14px;
 
       span {
         text-decoration: 1px underline #000;
