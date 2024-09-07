@@ -9,7 +9,7 @@ import Reply from '@/views/home/Reply.vue'
 import { allFunction, awaitTime, scrollTo, numFormat } from '@/utils/common'
 import LzyIcon from '@/components/LzyIcon.vue';
 import { useEventListener } from '@vueuse/core'
-import { getPoetry } from '@/api/home/public'
+import { getPoetry } from '@/api/home/toolkit'
 import { getArticleComment, postRemarkList } from '@/api/home/comment';
 import { getArticleDetail } from '@/api/home/article';
 
@@ -50,6 +50,7 @@ const getRemarkList = async () => {
   for (let item of data) {
     if (item.reply_id == 0) {
       remarkList.value.push(item)
+      console.log(remarkList.value);
     } else {
       for (let remark of data) {
         if (remark.comment_id == item.ground_id) {
@@ -211,10 +212,12 @@ const comSubmit = () => {
       tip(`评论成功,感谢你的评论！`)
       overloading.value = true
       await getRemarkList()
-      overloading.value = false
       //清空评论内容
       information.comContent = ''
       remReplyComment()
+      setTimeout(() => {
+        overloading.value = false
+      }, 1000);
     } else {
       tip(`评论失败,请稍后再试！`)
     }
@@ -410,7 +413,7 @@ function resizeWidth() {
                 </p>
                 暂无评论，快来试试评论吧！
               </h3>
-              <Reply v-if="!overloading || remarkList.length != 0" :oldReplicate="remarkList" :replydata="remarkList"
+              <Reply v-show="remarkList.length != 0" :oldReplicate="remarkList" :replydata="remarkList"
                 :replyId="replyArr.replyId" @replying="replyComment" @remReply="remReplyComment" />
             </div>
           </div>

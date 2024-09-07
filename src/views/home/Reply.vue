@@ -15,10 +15,10 @@ interface Props {
 const props = defineProps<Props>()
 
 //评论数据
-const replydata = ref<Replydata[]>(props.replydata)
+const replydata = computed(() => props.replydata)
 
 //评论数据复制
-const oldReplicate = ref<Replydata[]>(props.oldReplicate)
+const oldReplicate = computed(() => props.oldReplicate)
 
 //评论的id
 const replyId = props.replyId

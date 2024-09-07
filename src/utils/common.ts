@@ -73,10 +73,7 @@ export const getIpWeather = (): Promise<WeatherData> => {
 
   return new Promise((resolve, reject) => {
     try {
-      request({
-        method: 'GET',
-        url: '/toolkit/getWeather',
-      }).then((res: WeatherData) => {
+      getWeatherApi().then((res: WeatherData) => {
         //将个人信息存入localStorage，避免每次刷新都要请求接口
         setLocalStorage('weatherData', res)
         resolve(res)
@@ -195,6 +192,7 @@ export const setMessage = (type: messageType, message: string, options?: Message
 
 // 复制内容提示版权信息
 import { useEventListener } from "@vueuse/core";
+import { getWeatherApi } from '@/api/home/toolkit';
 
 export const copyTip = () => {
   useEventListener(window, 'keydown', e => {
