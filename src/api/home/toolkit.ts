@@ -15,3 +15,11 @@ export function getWeatherApi() {
     method: 'get'
   });
 }
+
+//获取github信息
+export function getGithubInfo() {
+  return request({
+    method: 'get',
+    url: '/toolkit/getGithubInfo'
+  });
+}

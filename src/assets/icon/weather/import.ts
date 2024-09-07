@@ -57,7 +57,7 @@ const img = {
 }
 
 
-export function handleWeatherUrl(...args): String {
+export function handleWeatherUrl(...args): string {
   const [data, isdark] = args;
 
   // 使用对象映射来代替 switch 语句，提高查找效率和可维护性

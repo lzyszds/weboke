@@ -12,14 +12,16 @@
   border-color: var(--themeColor) !important;
 }
 
-.lzyColor .el-pager li.is-active {
-  background-color: var(--themeColor) !important;
-}
+
 
 .lzyColor .el-pager li:hover {
   color: var(--themeColor);
 }
 
+.el-pager li.is-active {
+  background-color: var(--themeColor) !important;
+  color: #fff;
+}
 
 .toolfooter .el-input__wrapper.is-focus {
   border-color: var(--themeColor) !important;
@@ -171,11 +173,6 @@ span.el-tag.purple {
   .el-icon {
     display: none;
   }
-}
-
-
-.lzy-center .el-pager li.is-active {
-  color: var(--themeColor) !important;
 }
 
 .el-pagination .btn-next,

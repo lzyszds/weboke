@@ -107,7 +107,7 @@ const testFunction = () => {
   test.textContent = 'test2'
 }
 
-export const getWeather = (): String => {
+export const getWeather = (): string => {
   const state = useStore();
   const data: WeatherData = state.weatherData
 

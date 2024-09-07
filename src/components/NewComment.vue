@@ -23,7 +23,7 @@ comment.value = await getNewComment()
 
 <style lang='scss' scoped>
 .stickyTop {
-  top: 295px;
+  top: 330px;
 }
 
 .cardinter {

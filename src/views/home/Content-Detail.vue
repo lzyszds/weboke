@@ -118,7 +118,7 @@ useEventListener(window, 'scroll', () => {
   if (scrollTop.value < 250) {
     tocACindex.value = '#toc-head-1'
   }
-  tocList.value.forEach((element: any, index) => {
+  tocList.value.forEach((element: any, _index) => {
     if (scrollTop.value - 400 >= element.top) {
       tocACindex.value = element.id;
     }
@@ -216,7 +216,7 @@ const comSubmit = () => {
   }
   //处理一级评论的id
   const groundVal = () => {
-    for (let [key, item] of replyId) {
+    for (let [_key, item] of replyId) {
       if (item.isReply) return item.ground_id
     }
     return 0

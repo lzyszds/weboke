@@ -27,10 +27,10 @@ const formatTime = (time: string) => {
     <section class="cardinter">
 
       <div class="gridlist">
-        <h2 :class="{ undef: temperature == '未知' }">
+        <div :class="{ undef: temperature == '未知', 'div': true }">
           <img :src="(getWeather() as any) || api">
           <span class="temperature">{{ temperature }}°C</span>
-        </h2>
+        </div>
         <p>
           <span><i class="iconfont icon-icon-taikong4"></i>：{{ weather }}</span>
           <span><i class="iconfont icon-fengsufengxiang"></i>：{{ winddirection }}</span>
@@ -43,7 +43,7 @@ const formatTime = (time: string) => {
   </main>
 </template>
 
-<style lang='less' scoped>
+<style lang='scss' scoped>
 .stickyTop {
 
   p {
@@ -70,17 +70,17 @@ const formatTime = (time: string) => {
       justify-content: center;
       align-items: center;
 
-      h2 {
-        display: flex;
+      .div {
+        display: grid;
         width: 85px;
         flex-direction: column;
-        grid-column: 1/2;
-        grid-row: 1/3;
-        margin: 0 0 0 10px;
+        grid-template-columns: 1fr;
+        grid-template-rows: 2fr auto;
         align-items: self-start;
 
         &.undef {
           align-items: inherit;
+          justify-content: center;
 
           .temperature {
             display: none;
@@ -88,17 +88,17 @@ const formatTime = (time: string) => {
         }
 
         .temperature {
-          // position: absolute;
-          font-size: 40px;
+          font-size: 30px;
+          font-weight: 600;
           color: var(--themeColor);
+          text-align: center;
         }
       }
 
       img {
         border-radius: 50%;
         filter: drop-shadow(1px 2px 2px black);
-        width: 50px;
-        transform: scale(2);
+        width: 100px;
       }
 
       span {
