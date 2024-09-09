@@ -102,7 +102,6 @@ onMounted(async () => {
   })
   setTimeout(() => {
     resizeWidth()
-    document.querySelector('body')!.classList.remove('loading')
   }, 500)
 })
 //处理时间戳转换成距离当前日期的时间（一天前，两天前）

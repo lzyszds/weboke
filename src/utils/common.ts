@@ -271,6 +271,23 @@ export const numberJump = (num: any, sum: any) => {
   }
 }
 
+// 在 Vue 组件中监听某个元素的 class 名变化
+export function observeClassChange(element: Element, callback: Function) {
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.attributeName === 'class') {
+        //@ts-ignore
+        callback(mutation.target)
+      }
+    });
+  });
+
+  observer.observe(element, {
+    attributes: true, // 监听属性变化
+    attributeFilter: ['class'], // 只监听 class 属性
+  });
+}
+
 
 export const allFunction = {
   splitArray,//把一个数组拆分成几个数组
@@ -288,4 +305,5 @@ export const allFunction = {
   scrollTo,//页面滚动到指定位置XY轴
   awaitTime,//延迟函数
   numberJump,//数字跳动
+  observeClassChange,//在 Vue 组件中监听某个元素的 class 名变化
 }

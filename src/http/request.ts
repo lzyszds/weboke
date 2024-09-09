@@ -9,6 +9,9 @@ interface AxiosConfig {
   };
 }
 
+// 请求记录器
+let requestCounter: any = null
+
 // 更具体的请求方法和响应数据类型
 export default async function makeRequest<T = any>({
   method,
@@ -65,6 +68,10 @@ export default async function makeRequest<T = any>({
       data,
       headers
     });
+    requestCounter && clearTimeout(requestCounter)
+    requestCounter = setTimeout(() => {
+      document.querySelector('body')!.classList.remove('loading')
+    }, 1000)
     if (response.data !== undefined) {
       return response.data;
     }

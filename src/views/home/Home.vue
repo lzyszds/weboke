@@ -2,11 +2,12 @@
 import { useEventListener } from "@vueuse/core";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ResultDataTotal } from '@/types/Result'
 import { ElPagination } from 'element-plus'
 import SkillSwiper from "@/components/SkillSwiper.vue";
 import ContentDiv from "@/components/ContentDiv.vue";
 import NewComment from "@/components/NewComment.vue";
+import Footer from '@/components/Footer.vue'
+
 import { getArticleList } from '@/api/home/article';
 
 const DeskInfo = defineAsyncComponent(() => import("@/components/DeskInfo.vue"))
@@ -88,9 +89,6 @@ onMounted(() => {
     });
     toGaspText(".myText");
     resizeWidth()
-
-    //删除加载loading
-    document.querySelector('body')!.classList.remove('loading')
   }, 1000);
 });
 
@@ -148,7 +146,8 @@ function resizeWidth() {
       <!-- 文章内容 -->
       <div class="list_main">
         <div class="list_content ">
-          <div :id="'list' + item.aid" v-for="(item, index) in list" :key="index" v-if="isload">
+          <div :id="'list' + item.aid" v-for="(item, index) in list" :key="index" v-if="isload"
+            v-transition="'animate__fadeInUp'">
             <RouterLink :to="'/home/detail/' + item.aid">
               <ContentDiv :data="item" :index="index"></ContentDiv>
             </RouterLink>
@@ -165,6 +164,7 @@ function resizeWidth() {
         <NewComment></NewComment>
       </div>
     </div>
+    <Footer></Footer>
   </div>
 </template>
 <style lang="scss" scoped>

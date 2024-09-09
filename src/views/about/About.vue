@@ -86,8 +86,6 @@ onMounted(() => {
 
     })
   })
-  //删除加载loading
-  document.querySelector('body')!.classList.remove('loading')
 })
 //判断当前日期标题是否显示
 const isShow = (value, index) => {
