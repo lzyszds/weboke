@@ -20,6 +20,9 @@ export function getWeatherApi() {
 export function getGithubInfo() {
   return request({
     method: 'get',
-    url: '/toolkit/getGithubInfo'
+    url: '/toolkit/getGithubInfo',
+    headers: {
+      "Accept-Encoding": "gzip",
+    }
   });
 }

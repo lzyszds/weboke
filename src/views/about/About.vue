@@ -2,7 +2,6 @@
 import TxtDeformation from '@/uiComponents/txtDeformation/index.vue'
 import { onMounted, ref, nextTick, reactive, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router';
-import dayjs from 'dayjs';
 import { useEventListener } from '@vueuse/core';
 import LzyIcon from '@/components/LzyIcon.vue';
 import { ElPageHeader, ElDescriptions, ElDescriptionsItem, ElTooltip, ElButton } from 'element-plus'
@@ -12,7 +11,7 @@ const router = useRouter();
 
 //实现github贡献图参考
 //https://stackoverflow.com/questions/18262288/finding-total-contributions-of-a-user-from-github-api
-const totalCont = ref(0)
+const totalCount = ref(0)
 //svg参数设置
 const svgTip = reactive({
   x: 0,  //鼠标x坐标
@@ -62,24 +61,9 @@ const data = ref<any>([])
 const month = ref<any>([])
 onMounted(() => {
   getGithubInfo().then((res: any) => {
-    const { contributionsCollection } = res.user
-    const { weeks, totalContributions } = contributionsCollection.contributionCalendar
-    // handleData(weeks)
-    totalCont.value = totalContributions
-    data.value = weeks
-    const months: string[] = [
-      "一月", "二月", "三月", "四月", "五月", "六月",
-      "七月", "八月", "九月", "十月", "十一月", "十二月"
-    ]
-    const now: any[] = []
-    weeks.forEach((item, index) => {
-      const date = dayjs(item.firstDay).format('MM')
-      if (!now.includes(months[parseInt(date) - 1])) {
-        now.push({ text: months[parseInt(date) - 1], index: index * 19 + 30 })
-      }
-    });
-    month.value = now
-
+    data.value = res.weeks
+    month.value = res.month
+    totalCount.value = res.totalCount
     getWidth(true)
 
 
@@ -230,7 +214,7 @@ useEventListener("resize", () => {
       <div class="waveMain">
         <!-- <ColorRoulette /> -->
         <div class="wave" :style="{ height: svgConfig.totalHeight + 'px' }">
-          <text class="text">{{ totalCont }} contributions in the last year</text>
+          <text class="text">{{ totalCount }} contributions in the last year</text>
           <div class="svg-scroll">
             <svg id="calendar" :width="svgConfig.waveWidth" height="100%" xmlns="http://www.w3.org/2000/svg">
               <g>
