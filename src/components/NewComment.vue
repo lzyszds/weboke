@@ -13,7 +13,7 @@ comment.value = await getNewComment()
       <div class="comment-title">最新评论</div>
     </div>
     <!-- 最新评论 -->
-    <div class="cardinter" v-for="(item, index) in comment" :key="index">
+    <div class="cardinter" v-for="(item, index) in comment" :key="index" v-transition="'animate__backInRight'">
       <img :src="'/firstHonoApi/static' + item.head_img" alt="" />
       <div class="comment-content">{{ item.content }}</div>
       <div>{{ timeAgo(item.create_date) }}</div>
@@ -24,6 +24,7 @@ comment.value = await getNewComment()
 <style lang='scss' scoped>
 .stickyTop {
   top: 330px;
+  overflow: hidden;
 }
 
 .cardinter {

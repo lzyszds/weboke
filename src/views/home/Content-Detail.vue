@@ -334,9 +334,9 @@ function resizeWidth() {
 <template>
   <div class="detail">
     <!-- 文章封面 -->
-    <div class="imgtop">
+    <div class="imgtop" >
       <img :src="dataDet.cover_img" alt="">
-      <div class="topTitle">
+      <div class="topTitle" >
         <h1>{{ dataDet.title }}</h1>
         <p style="font-size: 15px;">
           <!-- {{ dataDet.uname }} -->
@@ -371,7 +371,7 @@ function resizeWidth() {
         <!-- 文章内容 -->
         <Maincontent :main="dataDet.main" :aid="dataDet.aid" @update="updateCop"></Maincontent>
         <!-- 知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议 -->
-        <footer v-transition="'tosiTion'" class="oldtosiTion post-footer center ">
+        <footer v-transition="'animate__bounceIn'" class="oldtosiTion post-footer center ">
           <div class="tool">
             <i class="iconfont icon-icon-taikong20"></i>
             <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享署名-非商业性使用-相同方式共享 4.0
@@ -379,7 +379,7 @@ function resizeWidth() {
           </div>
         </footer>
         <!-- 发布评论 -->
-        <div v-transition="'tosiTion'" class="oldtosiTion publish center">
+        <div v-transition="'animate__bounceIn'" class="oldtosiTion publish center">
           <div class="borderw themeCard">
             <div class="comment">
               <span> {{ replyArr.replyName }} </span>
@@ -422,7 +422,7 @@ function resizeWidth() {
           </div>
         </div>
         <!-- 评论界面 -->
-        <div v-transition="'tosiTion'" class="oldtosiTion commentui center">
+        <div v-transition="'animate__bounceIn'" class="oldtosiTion commentui center">
           <div class="before">{{ textbefore }}</div>
           <div class="comment">
             <h5>
@@ -443,7 +443,7 @@ function resizeWidth() {
       </div>
 
       <!-- 文章目录 -->
-      <div class="affix-container">
+      <div class="affix-container" >
         <main class="affix themeCard stickyTop" ref="affixElm">
           <div class="affix_item" @click="scrollTo(0, 0)">
             <div class="affix-title">

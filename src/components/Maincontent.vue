@@ -66,7 +66,7 @@ onMounted(() => {
 
 //获取AI摘要
 function getAbstract(url) {
-  return new Promise<any>(async (resolve, reject) => {
+  return new Promise<any>(async (_resolve, reject) => {
 
     try {
       const result = await fetch(url)

@@ -11,7 +11,7 @@ import router from './router'
 import hljsVuePlugin from '@highlightjs/vue-plugin'//代码展示高亮
 import { Fancybox } from "@fancyapps/ui";//图片放大
 import lazy from '@/utils/lazy'; // 图片懒加载
-import transition from '@/utils/transition'
+import { domOrderedAnimateDirective } from '@/utils/transition'
 import { createPinia } from 'pinia' //状态管理
 import LzyIcon from '@/components/LzyIcon.vue'; //图标组件
 import VueMarkdownEditor from '@/utils/markDownCreate'; //markdown配置
@@ -27,7 +27,7 @@ const app = createApp(App)
 // vue3全局变量挂载
 app.config.globalProperties.$fancyapps = { Fancybox }
 
-app.directive('transition', transition)
+app.directive('transition', domOrderedAnimateDirective)
 app.directive('lazy', lazy)
 app.component('LzyIcon', LzyIcon)
 app.use(hljsVuePlugin)

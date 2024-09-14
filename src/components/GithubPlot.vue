@@ -76,7 +76,7 @@ onMounted(() => {
       </g>
       <g v-for="(item, indexG) in githubData" :key="indexG">
         <rect class="rectangle" v-for="(res, indexR) in item.contributionDays" :key="indexR" :x="indexG * 19 + 30"
-          :y="indexR * 18 + 20" rx="3" ry="3" stroke="#000" :fill="identifyreatColor(res.color)" width="13" height="13"
+          :y="indexR * 18 + 20" rx="3" ry="3" stroke="#000" :fill="identifyreatColor(res.color)" width="20" height="13"
           :data-date="res.date" :data-count="res.contributionCount" overflow="scroll" />
       </g>
     </svg>

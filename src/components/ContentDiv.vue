@@ -124,7 +124,7 @@ const mouseleave = _.debounce(function (event) {
 </script>
 
 <template>
-  <div v-transition="'tosiTion'" class="conent_div" @mouseenter="mouseenter" @mouseleave="mouseleave">
+  <div class="conent_div" @mouseenter="mouseenter" @mouseleave="mouseleave">
     <div class="maskContent"></div>
     <div class="title">{{ data.title }}</div>
     <div class="synopsis" v-text="data.partial_content"></div>
