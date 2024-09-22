@@ -12,6 +12,7 @@ enum WeatherConditions {
   ThundershowersSunny = '雷阵雨',
   SleetRain = '雨夹雪',
   Rain = '雨',
+  ModerateRain = '中雨',
   HeavyRain = '大雨',
   Foggy = '霾',
   Dust = '浮尘',
@@ -35,6 +36,7 @@ const img = {
   "HeavySnow": new URL("./HeavySnow.svg", import.meta.url),
   "PartlyCloudy": new URL("./PartlyCloudy.svg", import.meta.url),
   "Rain": new URL("./Rain.svg", import.meta.url),
+  "ModerateRain": new URL("./Rain.svg", import.meta.url),
   "RainSnow": new URL("./RainSnow.svg", import.meta.url),
   "Sand": new URL("./Sand.svg", import.meta.url),
   "Sandstorm": new URL("./Sandstorm.svg", import.meta.url),
@@ -59,6 +61,7 @@ const img = {
 
 export function handleWeatherUrl(...args): string {
   const [data, isdark] = args;
+  console.log(`lzy  data, isdark:`, data, isdark)
 
   // 使用对象映射来代替 switch 语句，提高查找效率和可维护性
   const weatherImgMap = {
@@ -70,6 +73,7 @@ export function handleWeatherUrl(...args): string {
     [WeatherConditions.ThundershowersSunny]: img.ThundershowersSunny,
     [WeatherConditions.SleetRain]: img.SleetRain,
     [WeatherConditions.Rain]: img.Rain,
+    [WeatherConditions.ModerateRain]: img.ModerateRain,
     [WeatherConditions.HeavyRain]: img.HeavyRain,
     [WeatherConditions.Foggy]: img.Foggy,
     [WeatherConditions.Dust]: img.Dust,
