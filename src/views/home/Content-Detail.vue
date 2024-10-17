@@ -40,24 +40,28 @@ const getRemarkList = async () => {
   //初始化回复评论的id
   data.forEach(remark => {
     remark.children = []
-    replyId.set(remark.comment_id, {
+    replyId.set(remark.commentId, {
       isReply: false,
-      ground_id: remark.comment_id
+      groundId: remark.commentId
     })
   })
+  console.log(data);
+  
   // 遍历评论列表，为每个评论添加回复列表
   for (let item of data) {
-    if (item.reply_id == 0) {
+    if (item.replyId == 0) {
       remarkList.value.push(item)
       console.log(remarkList.value);
     } else {
       for (let remark of data) {
-        if (remark.comment_id == item.ground_id) {
+        if (remark.commentId == item.groundId) {
           remark.children.push(item)
         }
       }
     }
   }
+  console.log(remarkList.value);
+  
 }
 await getRemarkList()
 //评论上方的诗句请求
@@ -216,7 +220,7 @@ const comSubmit = () => {
   //处理一级评论的id
   const groundVal = () => {
     for (let [_key, item] of replyId) {
-      if (item.isReply) return item.ground_id
+      if (item.isReply) return item.groundId
     }
     return 0
   }
@@ -253,9 +257,9 @@ const replyComment = (item, index) => {
   //每次选择回复都要将其他的回复id置为0
   handleReplyData()
   //将当前回复的id置为当前评论的id
-  replyId.set(item.comment_id, {
+  replyId.set(item.commentId, {
     isReply: true,
-    ground_id: index
+    groundId: index
   })
   replyArr.replyName = '@' + item.user_name
   //给textarea获取焦点
@@ -275,7 +279,7 @@ function handleReplyData() {
   for (let [key, item] of replyId) {
     replyId.set(key, {
       isReply: false,
-      ground_id: item.ground_id
+      groundId: item.groundId
     })
   }
 }

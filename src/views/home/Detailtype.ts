@@ -11,16 +11,16 @@ export interface commentsType {
 }
 
 export interface Replydata {
-  comment_id: number,
-  head_img: string,
-  user_name: string,
-  create_date: string,
+  commentId: number,
+  headImg: string,
+  userName: string,
+  createDate: string,
   content: string,
   replyPeople: string,
-  reply_id: number,
-  ground_id: number,
+  replyId: number,
+  groundId: number,
   children: Replydata[],
   browserSystem: string,
   deviceSystem: string,
-  user_ip: string
+  userIp: string
 }

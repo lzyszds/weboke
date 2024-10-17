@@ -1,0 +1,250 @@
+.notice {
+  margin: 70px auto 10px;
+  height: 40px;
+  width: 1280px;
+  max-width: var(--maxWidth);
+  border-radius: 15px;
+  background-color: var(--themeColor);
+  padding: 5px 10px;
+
+  .noticeMain {
+    background-color: #fff;
+    border: 4px solid #000;
+    width: calc(100% - 5px);
+    height: calc(100% - 8px);
+    padding: 0;
+    border-radius: 10px;
+    font-size: 1.6rem;
+    text-align: center;
+    line-height: 30px;
+
+    span {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+  }
+}
+
+.swiper_container_card {
+  display: grid;
+  grid-template-columns: 49.5% 49.5%;
+  gap: 10px;
+  width: 1280px;
+  max-width: var(--maxWidth);
+  justify-content: space-between;
+  margin: 0 auto 0;
+
+  .swiperitem {
+    width: 100%;
+    height: 330px;
+  }
+
+  .swiperCard {
+    background-color: #fff;
+    height: calc(100% - 5px);
+    border-radius: 15px;
+    border: 4px solid #000;
+    overflow: hidden;
+    position: relative;
+
+    .slogan {
+      font-size: 5rem;
+      margin-left: 30px;
+      font-weight: 600;
+      margin-bottom: 0;
+
+      p {
+        margin: 0;
+      }
+    }
+
+    .small {
+      margin-left: 40px;
+      font-size: 1.2rem;
+      top: 0;
+    }
+  }
+
+  .leftCard {}
+
+  .rightCard {
+    .swiperCard {
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+}
+
+.main_home {
+  margin: 0 auto;
+  margin-top: 20px;
+  width: 1310px;
+  max-width: calc(var(--maxWidth) + 20px);
+  display: grid;
+  grid-template-columns: auto 305px;
+  gap: 20px;
+
+  .list_main {
+    width: 100%;
+
+    .list_content {
+      display: grid;
+      gap: 10px;
+      margin-top: 20px;
+      position: relative;
+
+      &>div {
+        width: 100%;
+        height: 120px;
+        z-index: 2;
+      }
+    }
+  }
+
+  #example.example-pagination-block {
+    margin: 20px 0;
+    margin-bottom: 200px;
+    z-index: 1;
+    position: relative;
+
+    .el-pagination {
+      justify-content: center;
+    }
+
+    li,
+    button {
+      background-color: #fff;
+      border: 1px solid #eee;
+      box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+      cursor: pointer;
+      transition: .24s;
+      width: 40px;
+      height: 40px;
+
+      &:hover {
+        border: 1px solid var(--themeColor);
+        box-shadow: 0 0 10px #5161ce30;
+      }
+    }
+
+    .is-active {
+      background-color: var(--themeColor);
+      color: #fff !important;
+    }
+  }
+}
+
+@media (max-width: 1450px) {
+  .content {
+    .swiper_container_card {
+      .swiperCard {
+        .slogan {
+          font-size: 3rem;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 1250px) {
+  .content {
+    --maxWidth: 100%;
+
+    .swiper_container_card {
+      .swiperCard {
+        .slogan {
+          font-size: 3rem;
+        }
+      }
+    }
+
+    .main_home {
+      .list_main {
+        .list_content {
+          grid-template-columns: 1fr;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 1080px) {
+  .content {
+    .swiper_container_card {
+      grid-template-columns: 1fr;
+
+      .rightCard {
+        display: none;
+      }
+    }
+  }
+}
+
+@media (max-width: 991px) {
+  .content {}
+}
+
+@media (max-width: 832px) {
+  .content {
+    --maxWidth: 96% !important;
+    margin: 20px;
+
+    .main_home {
+      grid-template-columns: 1fr;
+    }
+
+    .systemInfo {
+      display: none;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .content {}
+}
+
+@media (max-width: 575px) {
+  .content {
+    margin: 0;
+
+    .notice {
+      width: auto;
+    }
+
+    .swiper_container_card {
+      width: auto;
+
+      .swiperCard {
+        p {
+          text-align: center;
+          margin: 10px 0;
+
+          &.slogan {
+            font-size: 4rem;
+          }
+        }
+
+        .skillMain {
+          transform: rotate(0);
+          bottom: 0;
+          top: auto;
+
+          .skillCard {
+            &>div {
+              width: 4rem;
+              height: 4rem;
+            }
+          }
+        }
+      }
+    }
+
+    .main_home {
+      width: auto;
+    }
+  }
+}

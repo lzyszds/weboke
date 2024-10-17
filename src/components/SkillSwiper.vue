@@ -1,5 +1,4 @@
 <script setup lang='ts'>
-import { color } from 'echarts';
 import LzyIcon from './LzyIcon.vue';
 
 const skillData = ref<any>([
@@ -106,12 +105,12 @@ onMounted(() => {
 
   <div class="skillMain">
     <div class="skill-item">
-      <div class="skillCard" v-for="(item, index) in skillData">
+      <div class="skillCard" v-for="(item, _index) in skillData">
         <div :style="'background-color:' + itemc.color" v-for="(itemc, index) in item" :key="index">
           <LzyIcon :name="itemc.icon" height="70" />
         </div>
       </div>
-      <div class="skillCard" v-for="(item, index) in skillData">
+      <div class="skillCard" v-for="(item, _index) in skillData">
         <div :style="'background-color:' + itemc.color" v-for="(itemc, index) in item" :key="index">
           <LzyIcon :name="itemc.icon" height="70" />
         </div>
