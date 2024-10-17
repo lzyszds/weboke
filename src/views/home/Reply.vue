@@ -8,7 +8,7 @@ interface Props {
   replydata: Replydata[],
   replyId: Map<number, {
     isReply: boolean,
-    ground_id: number
+    groundId: number
   }>
 }
 
@@ -28,10 +28,10 @@ const emit = defineEmits(['replying', 'remReply'])
 const replyComment = (item: Replydata,) => {
   console.log(item);
   //判断是否是回复评论
-  if (item.reply_id == 0) {
-    emit('replying', item, item.comment_id)
+  if (item.replyId == 0) {
+    emit('replying', item, item.commentId)
   } else {
-    emit('replying', item, item.ground_id)
+    emit('replying', item, item.groundId)
   }
 }
 //取消回复评论方法
@@ -47,18 +47,18 @@ const remReplyComment = (item, index) => {
   <div class="reply">
     <div class="item" v-for="(item, index) in replydata" :key="index">
       <div class="item-left">
-        <img :src="'/firstHonoApi/static' + item.head_img" alt="">
+        <img :src="'/firstHonoApi/static' + item.headImg" alt="">
       </div>
       <div class="item-right">
         <div class="item-right-top">
-          <span class="item-right-top-name">{{ item.user_name }}</span>
-          <span class="item-right-top-time">{{ timeAgo(item.create_date) }}</span>
-          <button v-if="!replyId.get(item.comment_id)!.isReply" class="item-right-top-reply"
+          <span class="item-right-top-name">{{ item.userName }}</span>
+          <span class="item-right-top-time">{{ timeAgo(item.createDate) }}</span>
+          <button v-if="!replyId.get(item.commentId)!.isReply" class="item-right-top-reply"
             @click="replyComment(item)">回复</button>
           <button v-else class="item-right-top-reply" @click="remReplyComment(item, index)">取消回复</button>
           <span class="item-right-info">
             <span>
-              <LzyIcon name="iconoir:train" width="15px" />{{ item.user_ip }}
+              <LzyIcon name="iconoir:train" width="15px" />{{ item.userIp }}
             </span>
             <span>
               <LzyIcon name="iconoir:brain-warning" width="15px" />{{ item.deviceSystem }}
